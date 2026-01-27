@@ -45,3 +45,11 @@ jobs:
               repo: context.repo.repo,
               body: '**Preview 배포 완료**\n\n Preview URL: ${{ steps.deploy.outputs.url }}'
             })
+
+permissions:
+  contents: read
+  pages: write
+  deployments: write
+  id-token: write
+  issues: write
+  pull-requests: write
