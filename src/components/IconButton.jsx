@@ -1,3 +1,7 @@
+/**
+ * IconButton 컴포넌트
+ */
+
 import React from 'react';
 
 const ICONS = {
