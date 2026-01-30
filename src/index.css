@@ -46,7 +46,7 @@ body {
 
 .app {
   width: 100%;
-  max-width: 390px; /* ⭐ Figma 기준 */
+  max-width: 392px; /* ⭐ Figma 기준 */
 
   min-height: 100dvh;
   margin: 0 auto;
