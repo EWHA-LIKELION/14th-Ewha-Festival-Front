@@ -1,43 +1,43 @@
 @import 'tailwindcss';
 
 /* =====================
-   Reset
+   Base (Reset + Global)
 ===================== */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-html,
-body {
-  width: 100%;
-  min-height: 100dvh;
-}
+  html,
+  body {
+    width: 100%;
+    min-height: 100dvh;
+  }
 
-body {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Apple SD Gothic Neo',
-    'Noto Sans KR',
-    sans-serif;
+  body {
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      'Apple SD Gothic Neo',
+      'Noto Sans KR',
+      sans-serif;
 
-  /* PC에서 모바일 화면 구분용 배경 */
-  background-color: #f4f4f5;
-
-  color: #111111;
-  overflow-x: hidden;
+    background-color: #f4f4f5;
+    color: #111111;
+    overflow-x: hidden;
+  }
 }
 
 /* =====================
-   App Layout (Figma 390px 기준)
+   App Layout (NOT base)
 ===================== */
 
 #root {
@@ -46,14 +46,13 @@ body {
 
 .app {
   width: 100%;
-  max-width: 392px; /* ⭐ Figma 기준 */
+  max-width: 392px;
 
   min-height: 100dvh;
   margin: 0 auto;
 
   background-color: #ffffff;
 
-  /* 👇 PC에서 모바일 화면 구분 */
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.04),
     0 10px 25px rgba(0, 0, 0, 0.08);
