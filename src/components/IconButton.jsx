@@ -21,7 +21,7 @@ const ICONS = {
   likelion: '/icons/logo-likelion.svg',
 };
 
-function IconButton({ name, size = '24', alt = '', className = '', onClick }) {
+function IconButton({ name, size = 'min-w-fit', alt = '', className = '', onClick }) {
   return (
     <button type="button" onClick={onClick} className={className}>
       <img src={ICONS[name]} alt={alt || name} width={size} height={size} />
