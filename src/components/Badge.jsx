@@ -7,7 +7,7 @@ import React from 'react';
 function Badge({ variant = 'ongoing' }) {
   const variants = {
     ongoing: { text: '공연중' },
-    ended: { text: '종료' },
+    closed: { text: '종료' },
   };
 
   return (
