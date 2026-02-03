@@ -19,7 +19,7 @@
     min-height: 100dvh;
   }
 
-  body {
+  html {
     font-family:
       'Pretendard',
       system-ui,
@@ -30,10 +30,23 @@
       'Apple SD Gothic Neo',
       'Noto Sans KR',
       sans-serif;
+  }
 
-    background-color: #f4f4f5;
+  body {
+    background-color: #f4f4f5; /* PC 배경 */
     color: #111111;
     overflow-x: hidden;
+  }
+}
+
+/* =====================
+   사용자 지정 토큰
+===================== */
+
+/* border-1.5 */
+@layer utilities {
+  .border-1\.5 {
+    border-width: 1.5px;
   }
 }
 
@@ -52,9 +65,9 @@
   min-height: 100dvh;
   margin: 0 auto;
 
-  background-color: #ffffff;
+  background-color: #ffffff; /* 모바일 화면 */
 
-  box-shadow:
+  box-shadow: /* 모바일 화면 구분용 그림자 */
     0 0 0 1px rgba(0, 0, 0, 0.04),
     0 10px 25px rgba(0, 0, 0, 0.08);
 
