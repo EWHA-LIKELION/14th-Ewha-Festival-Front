@@ -48,6 +48,11 @@
   .border-1\.5 {
     border-width: 1.5px;
   }
+
+  .backdrop-blur-token-lg {
+    backdrop-filter: blur(calc(16px / 2));
+    -webkit-backdrop-filter: blur(calc(16px / 2));
+  }
 }
 
 /* =====================

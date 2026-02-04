@@ -1,8 +1,4 @@
 {
-  /* =====================
-    Fill → bg-
-  ===================== */
-
   "fill normal strong": {
     "prefix": "fill-normal-strong",
     "body": "bg-gray-100",
@@ -33,10 +29,6 @@
     "body": "bg-emerald-500",
     "description": "Fill/Primary/Normal",
   },
-
-  /* =====================
-    Text → text-
-  ===================== */
 
   "text normal strong": {
     "prefix": "text-normal-strong",
@@ -69,10 +61,6 @@
     "description": "Text/Primary/Strong",
   },
 
-  /* =====================
-     Line → border-
-  ===================== */
-
   "line normal strong": {
     "prefix": "line-normal-strong",
     "body": "border-gray-300",
@@ -93,10 +81,6 @@
     "body": "border-emerald-500",
     "description": "Line/Primary/Normal",
   },
-
-  /* =====================
-     Icon → text- (currentColor)
-  ===================== */
 
   "icon normal strong": {
     "prefix": "icon-normal-strong",
@@ -124,9 +108,22 @@
     "description": "Icon/Primary",
   },
 
-  /* =====================
-     System → bg-
-  ===================== */
+  "background normal": {
+    "prefix": "background-normal",
+    "body": "bg-white",
+    "description": "Background/Normal",
+  },
+
+  "material strong": {
+    "prefix": "material-strong",
+    "body": "text-black/50",
+    "description": "Material/Strong",
+  },
+  "material normal": {
+    "prefix": "material-normal",
+    "body": "text-black/25",
+    "description": "Material/Normal",
+  },
 
   "system strong": {
     "prefix": "system-strong-text",
@@ -142,5 +139,16 @@
     "prefix": "system-assistive-text",
     "body": "bg-red-100",
     "description": "System/Assistive",
+  },
+
+  "secondary cyan default": {
+    "prefix": "secondary-cyan-default",
+    "body": "bg-cyan-400",
+    "description": "Secondary/Cyan/Default",
+  },
+  "secondary cyan lighten": {
+    "prefix": "secondary-cyan-lighten",
+    "body": "bg-cyan-100",
+    "description": "Secondary/Cyan/Lighten",
   },
 }
