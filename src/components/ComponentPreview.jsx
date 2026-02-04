@@ -8,17 +8,18 @@ import Alert from '@/components/Alert';
 const ComponentPreview = () => {
   return (
     <>
-      <div>
+      <div className="flex flex-col items-center justify-center gap-4 bg-gray-200 p-4">
         <Alert
           variant="delete"
-          title="세트리스트"
+          title="공지"
           text={
             <>
-              세트리스트를 삭제할까요? <br />
-              삭제한 세트리스트는 복구되지 않아요.
+              공지를 삭제할까요? <br />
+              삭제한 공지는 복구되지 않아요.
             </>
           }
         />
+        <Alert variant="login" title="공지" text={<>언제든지 다시 로그인하실 수 있어요.</>} />
       </div>
     </>
   );
