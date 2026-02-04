@@ -49,6 +49,11 @@
     border-width: 1.5px;
   }
 
+  .backdrop-blur-token-lg {
+    backdrop-filter: blur(calc(16px / 2));
+    -webkit-backdrop-filter: blur(calc(16px / 2));
+  }
+
   /* 버튼 공통 스타일 */
   button {
     cursor: pointer;
