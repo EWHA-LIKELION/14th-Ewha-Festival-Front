@@ -1,0 +1,146 @@
+{
+  /* =====================
+     Fill → bg-
+  ===================== */
+
+  "fill normal strong": {
+    "prefix": "fill-normal-strong",
+    "body": "bg-gray-100",
+    "description": "Fill/Normal/Strong",
+  },
+  "fill normal normal": {
+    "prefix": "fill-normal-normal",
+    "body": "bg-white",
+    "description": "Fill/Normal/Normal",
+  },
+  "fill interaction inactive": {
+    "prefix": "fill-interaction-inactive",
+    "body": "bg-gray-100",
+    "description": "Fill/Interaction/Inactive",
+  },
+  "fill interaction hover": {
+    "prefix": "fill-interaction-hover",
+    "body": "bg-white",
+    "description": "Fill/Interaction/Hover",
+  },
+  "fill primary assistive": {
+    "prefix": "fill-primary-assistive",
+    "body": "bg-emerald-50",
+    "description": "Fill/Primary/Assistive",
+  },
+  "fill primary normal": {
+    "prefix": "fill-primary-normal",
+    "body": "bg-emerald-500",
+    "description": "Fill/Primary/Normal",
+  },
+
+  /* =====================
+     Text → text-
+  ===================== */
+
+  "text normal strong": {
+    "prefix": "text-normal-strong",
+    "body": "text-gray-900",
+    "description": "Text/Normal/Strong",
+  },
+  "text normal normal": {
+    "prefix": "text-normal-normal",
+    "body": "text-gray-500",
+    "description": "Text/Normal/Normal",
+  },
+  "text normal assistive": {
+    "prefix": "text-normal-assistive",
+    "body": "text-gray-300",
+    "description": "Text/Normal/Assistive",
+  },
+  "text normal inverse": {
+    "prefix": "text-normal-inverse",
+    "body": "text-white",
+    "description": "Text/Normal/Inverse",
+  },
+  "text primary normal": {
+    "prefix": "text-primary-normal",
+    "body": "text-emerald-500",
+    "description": "Text/Primary/Normal",
+  },
+  "text primary strong": {
+    "prefix": "text-primary-strong",
+    "body": "text-emerald-700",
+    "description": "Text/Primary/Strong",
+  },
+
+  /* =====================
+     Line → border-
+  ===================== */
+
+  "line normal strong": {
+    "prefix": "line-normal-strong",
+    "body": "border-gray-300",
+    "description": "Line/Normal/Strong",
+  },
+  "line normal normal": {
+    "prefix": "line-normal-normal",
+    "body": "border-gray-200",
+    "description": "Line/Normal/Normal",
+  },
+  "line normal assistive": {
+    "prefix": "line-normal-assistive",
+    "body": "border-gray-100",
+    "description": "Line/Normal/Assistive",
+  },
+  "line primary normal": {
+    "prefix": "line-primary-normal",
+    "body": "border-emerald-500",
+    "description": "Line/Primary/Normal",
+  },
+
+  /* =====================
+     Icon → text- (currentColor)
+  ===================== */
+
+  "icon normal strong": {
+    "prefix": "icon-normal-strong",
+    "body": "text-gray-600",
+    "description": "Icon/Normal/Strong",
+  },
+  "icon normal normal": {
+    "prefix": "icon-normal-normal",
+    "body": "text-gray-400",
+    "description": "Icon/Normal/Normal",
+  },
+  "icon normal assistive": {
+    "prefix": "icon-normal-assistive",
+    "body": "text-gray-300",
+    "description": "Icon/Normal/Assistive",
+  },
+  "icon normal inverse": {
+    "prefix": "icon-normal-inverse",
+    "body": "text-white",
+    "description": "Icon/Normal/Inverse",
+  },
+  "icon primary": {
+    "prefix": "icon-primary",
+    "body": "text-emerald-500",
+    "description": "Icon/Primary",
+  },
+
+  /* =====================
+     System → bg-
+  ===================== */
+
+  "system strong": {
+    "prefix": "system-strong-text",
+    "body": "bg-red-500",
+    "description": "System/Strong",
+  },
+  "system normal": {
+    "prefix": "system-normal-text",
+    "body": "bg-red-400",
+    "description": "System/Normal",
+  },
+  "system assistive": {
+    "prefix": "system-assistive-text",
+    "body": "bg-red-100",
+    "description": "System/Assistive",
+  },
+}
