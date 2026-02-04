@@ -3,11 +3,13 @@
  */
 
 import React from 'react';
+import Footer from '@/components/Footer';
 
 const ComponentPreview = () => {
   return (
     <>
       <div>ComponentPreview</div>
+      <Footer />
     </>
   );
 };
