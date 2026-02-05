@@ -108,12 +108,18 @@
     "description": "Icon/Primary",
   },
 
+  /* =====================
+     Background → bg-
+  ===================== */
   "background normal": {
     "prefix": "background-normal",
     "body": "bg-white",
     "description": "Background/Normal",
   },
 
+  /* =====================
+     Material → text-
+  ===================== */
   "material strong": {
     "prefix": "material-strong",
     "body": "text-black/50",
@@ -124,6 +130,10 @@
     "body": "text-black/25",
     "description": "Material/Normal",
   },
+
+  /* =====================
+     System → bg-
+  ===================== */
 
   "system strong": {
     "prefix": "system-strong-text",
@@ -141,6 +151,9 @@
     "description": "System/Assistive",
   },
 
+  /* =====================
+     Secondary → bg-
+  ===================== */
   "secondary cyan default": {
     "prefix": "secondary-cyan-default",
     "body": "bg-cyan-400",

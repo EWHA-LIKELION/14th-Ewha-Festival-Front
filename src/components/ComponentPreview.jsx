@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import Footer from '@/components/Footer';
 import Alert from '@/components/Alert';
 import Toast from '@/components/Toast';
 
@@ -20,9 +21,10 @@ const ComponentPreview = () => {
             </>
           }
         />
-        <Alert variant="login" title="공지" text={<>언제든지 다시 로그인하실 수 있어요.</>} />
+        <Alert variant="login" />
         <Toast text="리스트가 등록되었어요." />
       </div>
+      <Footer />
     </>
   );
 };
