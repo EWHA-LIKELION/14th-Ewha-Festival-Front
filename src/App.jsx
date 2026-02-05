@@ -1,17 +1,23 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import NavigationBarLayout from '@/layouts/NavigationBarLayout';
 import ComponentPreview from '@/components/ComponentPreview';
 
 function App() {
   return (
     <main className="app">
       <Routes>
-        <Route index element={<div>Home</div>} />
+        <Route element={<NavigationBarLayout />}>
+          <Route index element={<div className="h-300 bg-gray-500">Home</div>} />
+          <Route path="map" element={<div>Map</div>} />
+          {/* query string: /map?type=부스공연&slot=건물&booth=부스 */}
+          <Route path="my" element={<div>My</div>} />
+          <Route path="my/scrap" element={<div>Scrap</div>} />
+        </Route>
         <Route path="credit" element={<div>Credit</div>} />
         <Route path="introduction" element={<div>Introduction</div>} />
         <Route path="notice" element={<div>Notice</div>} />
-        <Route path="map" element={<div>Map</div>} />
-        {/* query string: /map?type=부스공연&slot=건물&booth=부스 */}
+
         <Route path="search" element={<div>Search</div>} />
         <Route path="admin">
           <Route path="confirm" element={<div>Confirm</div>} />
