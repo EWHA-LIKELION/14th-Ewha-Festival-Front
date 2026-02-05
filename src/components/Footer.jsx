@@ -17,10 +17,10 @@ const Footer = () => {
     window.open('https://github.com/EWHA-LIKELION', '_blank');
   };
   return (
-    <div className="to-bg-white absolute right-0 bottom-0 left-0 flex w-full flex-col justify-center gap-4 bg-gradient-to-t from-emerald-50 px-11 py-5 text-center text-emerald-500">
+    <div className="flex w-full flex-col items-center gap-4 bg-white bg-gradient-to-t from-emerald-50 px-11 py-5 text-center text-emerald-500">
       <button
         onClick={goCreditPage}
-        className="mx-auto w-fit text-sm font-medium underline underline-offset-2"
+        className="w-fit text-sm font-medium underline underline-offset-2"
       >
         만든이들
       </button>
