@@ -22,7 +22,7 @@ const ShowCard = ({
     >
       {/* 공연 이미지 */}
       <img
-        src={thumbnail}
+        src={thumbnail || '/images/showcard-default.png'}
         className="flex aspect-square w-22 items-center justify-center rounded-md border border-gray-100"
       />
 

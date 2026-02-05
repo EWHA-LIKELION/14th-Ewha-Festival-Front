@@ -19,12 +19,12 @@ const ComponentPreview = () => {
     status: 'closed',
     description:
       '학생 부스 소개글 학생 부스 소개글 학생 부스 소개글 학생 부스 소개글 학생 부스 소개글 학생 부스 소개글',
-    thumbnail: '/images/boothcard-test.jpg',
-    images: ['/images/boothcard-test.jpg', '/images/boothcard-default.png'],
+    thumbnail: '',
+    images: [],
   };
 
   const showMockData = {
-    thumbnail: '/images/boothcard-test.jpg',
+    thumbnail: '',
     name: '공연명',
     category: '밴드',
     time: '수 10:00-10:30',
@@ -39,7 +39,7 @@ const ComponentPreview = () => {
     description:
       '메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명',
     price: '100,000',
-    image: '/images/boothcard-test.jpg',
+    image: '',
   };
 
   const [selected, setSelected] = useState(false);

@@ -7,11 +7,14 @@ import IconButton from '@/components/IconButton';
 
 const MenuCard = ({ name, description, price, image, onClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isDefaultImage = !image;
 
   return (
     <>
       <div
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          if (!isDefaultImage) setIsModalOpen(true);
+        }}
         className="flex w-98 flex-col items-center justify-center bg-white px-5"
       >
         <div className="flex w-98 justify-center gap-4 py-5">
@@ -29,7 +32,7 @@ const MenuCard = ({ name, description, price, image, onClick }) => {
             </h3>
           </div>
           <img
-            src={image || '/images/boothcard-default.png'}
+            src={image || '/images/showcard-default.png'}
             className="flex aspect-square w-22 items-center justify-center rounded-md border border-gray-100"
           />
         </div>
@@ -47,8 +50,11 @@ const MenuCard = ({ name, description, price, image, onClick }) => {
             />
 
             {/* 이미지 */}
-            <div className="h-auto w-full max-w-98">
-              <img src={image} className="w-full object-contain" />
+            <div className="w-full max-w-98">
+              <img
+                src={image || '/images/showcard-default.png'}
+                className="h-auto w-full object-cover"
+              />
             </div>
           </div>
         </div>

@@ -49,7 +49,7 @@ const BoothCard = ({
         {/* 썸네일 */}
         {thumbnail && (
           <img
-            src={thumbnail}
+            src={thumbnail || '/images/boothcard-default.png'}
             className="aspect-square h-19 w-19 items-center justify-center rounded-md border border-gray-100 object-cover"
           />
         )}
@@ -58,7 +58,7 @@ const BoothCard = ({
         {images.slice(0, 3).map((img, idx) => (
           <img
             key={idx}
-            src={img}
+            src={img || '/images/boothcard-default.png'}
             className="aspect-square h-19 w-19 items-center justify-center rounded-md border border-gray-100 object-cover"
           />
         ))}
