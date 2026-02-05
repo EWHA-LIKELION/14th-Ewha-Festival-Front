@@ -9,10 +9,12 @@ function App() {
       <Routes>
         <Route element={<NavigationBarLayout />}>
           <Route index element={<div className="h-300 bg-gray-500">Home</div>} />
-          <Route path="map" element={<div>Map</div>} />
-          {/* query string: /map?type=부스공연&slot=건물&booth=부스 */}
           <Route path="my" element={<div>My</div>} />
           <Route path="my/scrap" element={<div>Scrap</div>} />
+        </Route>
+        <Route element={<NavigationBarLayout noPadding />}>
+          <Route path="map" element={<div className="h-300 bg-gray-500">Map</div>} />
+          {/* query string: /map?type=부스공연&slot=건물&booth=부스 */}
         </Route>
         <Route path="credit" element={<div>Credit</div>} />
         <Route path="introduction" element={<div>Introduction</div>} />
