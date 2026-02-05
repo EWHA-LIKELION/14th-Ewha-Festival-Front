@@ -11,22 +11,22 @@ const NavigationBar = () => {
 
   const navItems = [
     {
-      iconActive: '/public/icons/icon-home-selected.svg',
-      iconInactive: '/public/icons/icon-home-unselected.svg',
+      iconActive: '/icons/icon-home-selected.svg',
+      iconInactive: '/icons/icon-home-unselected.svg',
       label: '홈',
       path: '/',
       isActive: matchHome,
     },
     {
-      iconActive: '/public/icons/icon-location-selected.svg',
-      iconInactive: '/public/icons/icon-location-unselected.svg',
+      iconActive: '/icons/icon-location-selected.svg',
+      iconInactive: '/icons/icon-location-unselected.svg',
       label: '부스/공연',
       path: '/map',
       isActive: matchMap,
     },
     {
-      iconActive: '/public/icons/icon-my-selected.svg',
-      iconInactive: '/public/icons/icon-my-unselected.svg',
+      iconActive: '/icons/icon-my-selected.svg',
+      iconInactive: '/icons/icon-my-unselected.svg',
       label: '마이',
       path: '/my',
       isActive: matchMy,
