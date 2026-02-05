@@ -48,6 +48,22 @@
   .border-1\.5 {
     border-width: 1.5px;
   }
+
+  /* 버튼 공통 스타일 */
+  button {
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+  button:hover {
+    filter: brightness(0.9);
+  }
+  button:disabled,
+  button[disabled],
+  button:disabled:hover,
+  button[disabled]:hover {
+    filter: none;
+    cursor: not-allowed;
+  }
 }
 
 /* =====================
@@ -59,6 +75,7 @@
 }
 
 .app {
+  position: relative;
   width: 100%;
   max-width: 392px;
 
