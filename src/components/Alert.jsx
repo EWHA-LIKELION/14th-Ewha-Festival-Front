@@ -17,12 +17,13 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
 
         {/* 타이틀 */}
         <h2 className="mt-0.5 text-center text-lg leading-6 font-semibold tracking-normal text-gray-900">
-          {isDelete ? `${title} 삭제` : '로그아웃하시겠어요?'}
+          {isDelete && `${title} 삭제`}
+          {!isDelete && '로그아웃하시겠어요?'}
         </h2>
 
         {/* 문구 */}
         <p className="text-center text-sm leading-5 font-normal tracking-normal text-gray-500">
-          {text}
+          {isDelete ? text : '언제든지 다시 로그인하실 수 있어요.'}
         </p>
       </div>
 

@@ -19,7 +19,7 @@ const ComponentPreview = () => {
             </>
           }
         />
-        <Alert variant="login" title="공지" text={<>언제든지 다시 로그인하실 수 있어요.</>} />
+        <Alert variant="login" />
       </div>
     </>
   );
