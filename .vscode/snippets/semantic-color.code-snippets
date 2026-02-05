@@ -125,6 +125,29 @@
   },
 
   /* =====================
+     Background → bg-
+  ===================== */
+  "background normal": {
+    "prefix": "background-normal",
+    "body": "bg-white",
+    "description": "Background/Normal",
+  },
+
+  /* =====================
+     Material → text-
+  ===================== */
+  "material strong": {
+    "prefix": "material-strong",
+    "body": "text-black/50",
+    "description": "Material/Strong",
+  },
+  "material normal": {
+    "prefix": "material-normal",
+    "body": "text-black/25",
+    "description": "Material/Normal",
+  },
+
+  /* =====================
      System → bg-
   ===================== */
 
@@ -142,5 +165,19 @@
     "prefix": "system-assistive-text",
     "body": "bg-red-100",
     "description": "System/Assistive",
+  },
+
+  /* =====================
+     Secondary → bg-
+  ===================== */
+  "secondary cyan default": {
+    "prefix": "secondary-cyan-default",
+    "body": "bg-cyan-400",
+    "description": "Secondary/Cyan/Default",
+  },
+  "secondary cyan lighten": {
+    "prefix": "secondary-cyan-lighten",
+    "body": "bg-cyan-100",
+    "description": "Secondary/Cyan/Lighten",
   },
 }
