@@ -35,7 +35,7 @@ const NavigationBar = () => {
 
   return (
     <div
-      className="fixed bottom-0 left-1/2 z-50 flex h-13 w-[392px] -translate-x-1/2 justify-between border-t border-gray-100 bg-white pt-1.5 text-xs font-medium"
+      className="fixed bottom-0 left-1/2 z-50 flex h-13 w-[392px] -translate-x-1/2 justify-between border-t border-gray-100 bg-white px-7 pt-1.5 text-xs font-medium"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       {navItems.map((item) => {
