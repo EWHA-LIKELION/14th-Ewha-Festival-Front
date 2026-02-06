@@ -2,28 +2,30 @@
  * 공통 컴포넌트 프리뷰 페이지
  */
 
-import React from 'react';
+import { useState } from 'react';
 import Footer from '@/components/Footer';
-import Alert from '@/components/Alert';
-import Toast from '@/components/Toast';
+import { ToastManager } from '@/components/Toast';
 
 const ComponentPreview = () => {
+  const [isToastOpen, setIsToastOpen] = useState(false);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center gap-4 bg-gray-200 p-4">
-        <Alert
-          variant="delete"
-          title="공지"
-          text={
-            <>
-              공지를 삭제할까요? <br />
-              삭제한 공지는 복구되지 않아요.
-            </>
-          }
+        <button
+          onClick={() => setIsToastOpen(true)}
+          className="rounded bg-black px-4 py-2 text-white"
+        >
+          토스트 열기
+        </button>
+
+        <ToastManager
+          text="리스트가 등록되었어요."
+          isOpen={isToastOpen}
+          onClose={() => setIsToastOpen(false)}
         />
-        <Alert variant="login" />
-        <Toast text="리스트가 등록되었어요." />
       </div>
+
       <Footer />
     </>
   );
