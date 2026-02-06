@@ -9,6 +9,7 @@ import ShowCard from '@/components/Card/ShowCard';
 import MenuCard from './Card/MenuCard';
 import TrashCard from './Card/TrashCard';
 import ReviewCard from './Card/ReviewCard';
+import ImageCard from './Card/ImageCard';
 
 const ComponentPreview = () => {
   const boothMockData = {
@@ -56,6 +57,11 @@ const ComponentPreview = () => {
     showDelete: 'true',
   };
 
+  const imageMockData = {
+    name: '부스 공연 이름 부스 공연 이름',
+    image: '/images/boothcard-test.jpg',
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center gap-4 bg-gray-200 p-4">
@@ -69,6 +75,7 @@ const ComponentPreview = () => {
           onClick={() => setSelected(!selected)}
         />
         <ReviewCard {...reviewMockData} />
+        <ImageCard {...imageMockData} />
         <Footer />
       </div>
     </>
