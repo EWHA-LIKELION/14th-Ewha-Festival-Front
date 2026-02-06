@@ -43,7 +43,7 @@ const ShowCard = ({
           </div>
           {/* 스크랩 위치 */}
         </div>
-        <p className="line-clamp-2 overflow-hidden text-sm leading-5 font-normal tracking-normal text-ellipsis text-gray-500">
+        <p className="line-clamp-2 overflow-hidden text-xs leading-5 font-normal tracking-normal text-ellipsis text-gray-500">
           {description}
         </p>
       </div>
