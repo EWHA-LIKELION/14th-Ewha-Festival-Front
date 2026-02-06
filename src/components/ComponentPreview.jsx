@@ -39,7 +39,7 @@ const ComponentPreview = () => {
     description:
       '메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명 메뉴 설명',
     price: '100,000',
-    image: '',
+    image: '/images/boothcard-test.jpg',
   };
 
   const [selected, setSelected] = useState(false);

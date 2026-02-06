@@ -3,9 +3,9 @@
  */
 
 import { useState } from 'react';
-import IconButton from '@/components/IconButton';
+import ImageModal from '../ImageModal';
 
-const MenuCard = ({ name, description, price, image, onClick }) => {
+const MenuCard = ({ name, description, price, image }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isDefaultImage = !image;
 
@@ -38,26 +38,8 @@ const MenuCard = ({ name, description, price, image, onClick }) => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="relative" onClick={(e) => e.stopPropagation()}>
-            {/* x 버튼 */}
-            <IconButton
-              name="xmarkwhite"
-              size={20}
-              onClick={() => setIsModalOpen(false)}
-              className="absolute -top-[20vh] right-5 z-60"
-            />
-
-            {/* 이미지 */}
-            <div className="w-full max-w-98">
-              <img
-                src={image || '/images/showcard-default.png'}
-                className="h-auto w-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
+      {isModalOpen && !isDefaultImage && (
+        <ImageModal image={image} onClose={() => setIsModalOpen(false)} />
       )}
     </>
   );
