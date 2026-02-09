@@ -1,5 +1,5 @@
 /**
- * Divider 컴포넌트 (Public 페이지용과 Admin 페이지용 구분)
+ * Divider 컴포넌트 (PublicDivider, AdminDivider(width: short/long))
  */
 import React from 'react';
 
