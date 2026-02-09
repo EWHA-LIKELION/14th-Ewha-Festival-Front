@@ -1,3 +1,6 @@
+/**
+ * Footer 컴포넌트
+ */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@/components/IconButton';
@@ -12,6 +15,9 @@ const Footer = () => {
   };
   const goLikelionInstagram = () => {
     window.open('https://www.instagram.com/likelion_ewha/', '_blank');
+  };
+  const goLikelionKakaotalk = () => {
+    window.open('https://pf.kakao.com/_htxexfd', '_blank');
   };
   const goLikelionGithub = () => {
     window.open('https://github.com/EWHA-LIKELION', '_blank');
@@ -28,6 +34,7 @@ const Footer = () => {
       <div className="flex justify-center gap-4">
         <IconButton name="likelion" alt="likelion-website" onClick={goLikelionWebsite} />
         <IconButton name="instagram" alt="likelion-instagram" onClick={goLikelionInstagram} />
+        <IconButton name="kakaotalk" alt="likelion-kakaotalk" onClick={goLikelionKakaotalk} />
         <IconButton name="github" alt="likelion-github" onClick={goLikelionGithub} />
       </div>
       <p className="text-xs font-normal text-black/25">
