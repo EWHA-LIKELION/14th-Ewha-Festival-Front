@@ -3,13 +3,17 @@
  */
 
 import React from 'react';
-import Footer from '@/components/Footer';
+import { PublicDivider, AdminDivider } from '@/components/Divider';
 
 const ComponentPreview = () => {
   return (
     <>
-      <div>ComponentPreview</div>
-      <Footer />
+      <br />
+      <PublicDivider />
+      <br />
+      <AdminDivider />
+      <br />
+      <AdminDivider width="long" />
     </>
   );
 };
