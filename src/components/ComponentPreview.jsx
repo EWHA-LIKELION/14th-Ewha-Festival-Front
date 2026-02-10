@@ -3,13 +3,15 @@
  */
 
 import React from 'react';
-import DropDown from '@/components/DropDown';
+import Footer from '@/components/Footer';
+import { Accordion, AdminAccordion } from '@/components/Accordion';
 
 const ComponentPreview = () => {
   return (
     <>
-      <div className="flex h-100 items-center justify-center">
-        <DropDown />
+      <div className="flex flex-col gap-3 p-4">
+        <Accordion title="Title of accordion" time="2" isUpdate content="Content text" />
+        <AdminAccordion title="Title of accordion">children content</AdminAccordion>
       </div>
     </>
   );
