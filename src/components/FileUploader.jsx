@@ -2,37 +2,13 @@
  * FileUploader 컴포넌트 ( variant: thumbnail, detail)
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import IconButton from '@/components/IconButton';
-
-/* 공통 hook */
-const useImageUploader = (initialImage = null) => {
-  const [image, setImage] = useState(initialImage);
-
-  useEffect(() => {
-    setImage(initialImage);
-  }, [initialImage]);
-
-  const onSelectFile = (file) => {
-    if (!file) return;
-
-    const url = URL.createObjectURL(file);
-    setImage((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return url;
-    });
-  };
-
-  const clearImage = () => {
-    setImage(null);
-  };
-
-  return { image, onSelectFile, clearImage };
-};
+import { useImageUploader } from '@/hooks';
 
 /* 상세 이미지 */
 export const DetailImageUploader = ({ initialImage, onRemove }) => {
-  const { image, onSelectFile } = useImageUploader(initialImage);
+  const { image, onSelectFile, clearImage } = useImageUploader(initialImage);
   const inputRef = useRef(null);
 
   return (
@@ -51,7 +27,11 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
       {/* 고정 영역 */}
       <div
         className="aspect-square w-15 overflow-hidden rounded-lg border border-gray-100 bg-white"
-        onClick={() => inputRef.current?.click()}
+        onClick={() => {
+          if (!image) {
+            inputRef.current?.click();
+          }
+        }}
       >
         {image ? (
           <img src={image} className="h-full w-full object-cover" />
@@ -68,7 +48,7 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
           className="absolute top-0.5 right-1"
           onClick={(e) => {
             e.stopPropagation();
-            onRemove?.();
+            onRemove?.(clearImage);
           }}
         >
           <IconButton name="xmarkgrey" size={16} />
@@ -80,7 +60,7 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
 
 /* 썸네일 이미지 */
 export const ThumbnailImageUploader = ({ initialImage, onRemove }) => {
-  const { image, onSelectFile } = useImageUploader(initialImage);
+  const { image, onSelectFile, clearImage } = useImageUploader(initialImage);
   const inputRef = useRef(null);
 
   return (
@@ -102,18 +82,17 @@ export const ThumbnailImageUploader = ({ initialImage, onRemove }) => {
       />
 
       {/* 버튼 영역 (아래 텍스트 버튼) */}
-      <div
-        className="absolute bottom-0 flex h-12 w-full cursor-pointer items-center justify-center bg-black/50"
-        onClick={() => !image && inputRef.current?.click()} // 이미지 없을 때 클릭 시 파일 선택
-      >
+      <div className="absolute bottom-0 flex h-12 w-full cursor-pointer items-center justify-center bg-black/50">
         {!image ? (
-          <span className="text-center text-base leading-5 font-semibold tracking-normal text-white">
+          <button
+            onClick={() => inputRef.current?.click()}
+            className="text-center text-base leading-5 font-semibold tracking-normal text-white"
+          >
             사진 업로드
-          </span>
+          </button>
         ) : (
           <button
-            type="button"
-            onClick={onRemove}
+            onClick={() => onRemove?.(clearImage)}
             className="text-center text-base leading-6 font-semibold tracking-normal text-white"
           >
             사진 삭제
