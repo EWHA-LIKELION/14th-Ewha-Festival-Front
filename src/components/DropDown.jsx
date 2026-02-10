@@ -38,7 +38,7 @@ const DropDown = () => {
     <div ref={dropdownRef} className="relative inline-block">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-32 items-center justify-end gap-3 text-sm font-normal text-gray-500 focus:outline-none"
+        className="flex w-32 items-center justify-end gap-3 pr-0.5 text-sm font-normal text-gray-500 focus:outline-none"
       >
         {selectedLabel}
         <div className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}>
