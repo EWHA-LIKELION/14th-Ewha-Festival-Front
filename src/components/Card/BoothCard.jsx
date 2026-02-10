@@ -47,21 +47,21 @@ const BoothCard = ({
       {/* 이미지 미리보기 */}
       <div className="mt-2.5 flex items-center gap-1.5 p-0">
         {/* 썸네일 */}
-        {thumbnail && (
-          <img
-            src={thumbnail || '/images/boothcard-default.png'}
-            className="aspect-square h-19 w-19 items-center justify-center rounded-md border border-gray-100 object-cover"
-          />
-        )}
+        <img
+          src={thumbnail || '/images/boothcard-default.png'}
+          className="aspect-square h-19 w-19 items-center justify-center rounded-md border border-gray-100 object-cover"
+        />
 
-        {/* 메뉴 이미지 최대 3개 */}
-        {images.slice(0, 3).map((img, idx) => (
-          <img
-            key={idx}
-            src={img || '/images/boothcard-default.png'}
-            className="aspect-square h-19 w-19 items-center justify-center rounded-md border border-gray-100 object-cover"
-          />
-        ))}
+        {/* 메뉴 이미지 최대 3개, 없는 경우 디폴트 이미지 1개 */}
+        {(images.length ? images : ['/images/boothcard-default.png'])
+          .slice(0, 3)
+          .map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              className="aspect-square h-19 w-19 rounded-md border border-gray-100 object-cover"
+            />
+          ))}
       </div>
     </div>
   );
