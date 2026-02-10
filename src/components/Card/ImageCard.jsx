@@ -1,5 +1,5 @@
 /**
- * Alert 컴포넌트 ( variant: delete-삭제, logout-로그아웃)
+ * ImageCard 컴포넌트
  */
 
 import React from 'react';

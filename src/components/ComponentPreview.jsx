@@ -52,7 +52,8 @@ const ComponentPreview = () => {
 
   const reviewMockData = {
     name: '익명1',
-    review: '기대됩니다~!! 멋사 파이팅',
+    review:
+      '기대됩니다~!! 멋사 파이팅 기대됩니다~!! 멋사 파이팅 기대됩니다~!! 멋사 파이팅 기대됩니다~!! 멋사 파이팅',
     ago: '2시간 전',
     showDelete: 'true',
   };
