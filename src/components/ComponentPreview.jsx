@@ -4,26 +4,21 @@
 
 import React from 'react';
 import Footer from '@/components/Footer';
-import Radio from '@/components/Radio';
+import Checkbox from '@/components/Checkbox';
 
 const ComponentPreview = () => {
   return (
     <>
-      <div>ComponentPreview</div>
-      <div className="p-4">
-      <br/>
-      <Radio label="라디오 버튼" selected={false} error={false} showLabel={true} onChange={() => {}}/>
-      <br/>
-      <Radio label="라디오 버튼" selected={true} error={false} showLabel={true} onChange={() => {}}/>
-      <br/>
-      <Radio label="라디오 버튼" selected={false} error={true} showLabel={true} onChange={() => {}}/>
-      <br/>
-      <Radio label="" selected={false} error={false} showLabel={false} onChange={() => {}}/>
-      <br/>
-      <Radio label="" selected={true} error={false} showLabel={false} onChange={() => {}}/>
-      <br/>
-      <Radio label="" selected={false} error={true} showLabel={false} onChange={() => {}}/>
-        </div>
+      <div className="flex flex-col p-4 gap-3">
+      <div className="mb-2">ComponentPreview</div>
+        <Checkbox label="Checkbox label" />
+        <Checkbox label="Checkbox label" isSelected={true} />
+        <Checkbox label="Checkbox label" isError={true} />
+        <br/>
+        <Checkbox />
+        <Checkbox isSelected={true} />
+        <Checkbox isError={true}/>
+      </div>
     </>
   );
 };
