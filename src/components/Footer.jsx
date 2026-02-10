@@ -37,7 +37,7 @@ const Footer = () => {
         <IconButton name="kakaotalk" alt="likelion-kakaotalk" onClick={goLikelionKakaotalk} />
         <IconButton name="github" alt="likelion-github" onClick={goLikelionGithub} />
       </div>
-      <p className="text-xs font-normal text-black/25">
+      <p className="text-xs font-normal whitespace-nowrap text-black/25">
         Copyright ⓒ LIKELION EWHA 14th. All Rights Reserved.
       </p>
     </div>
