@@ -25,7 +25,7 @@ const SearchBar = ({ isMap = false, onSearch }) => {
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
@@ -38,7 +38,7 @@ const SearchBar = ({ isMap = false, onSearch }) => {
         placeholder="부스/공연명, 메뉴명, 부스번호 검색"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyDown}
         className={`h-12 w-full rounded-full ${isMap ? 'bg-white shadow-[0_4px_12px_0_rgba(0,0,0,0.12)]' : 'bg-gray-100'} px-12.5 py-3 text-base font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none ${inputValue ? 'pr-22.5' : ''}`}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
