@@ -4,20 +4,15 @@
 
 import React from 'react';
 import Footer from '@/components/Footer';
-import Checkbox from '@/components/Checkbox';
+import Timepicker from '@/components/Timepicker';
 
 const ComponentPreview = () => {
   return (
     <>
-      <div className="flex flex-col p-4 gap-3">
-      <div className="mb-2">ComponentPreview</div>
-        <Checkbox label="Checkbox label" />
-        <Checkbox label="Checkbox label" isSelected={true} />
-        <Checkbox label="Checkbox label" isError={true} />
-        <br/>
-        <Checkbox />
-        <Checkbox isSelected={true} />
-        <Checkbox isError={true}/>
+      <div>ComponentPreview</div>
+      <div className="p-4">
+        <Timepicker isActive={true} />
+        <Timepicker isActive={false} />
       </div>
     </>
   );
