@@ -19,21 +19,30 @@ const Toast = ({ text = '' }) => {
  */
 
 export const ToastManager = ({ text, isOpen, duration = 3000, onClose }) => {
+  const [visible, setVisible] = React.useState(false);
+
   useEffect(() => {
     if (!isOpen) return;
 
+    setVisible(true);
+
     const timer = setTimeout(() => {
-      onClose?.();
+      setVisible(false);
+      setTimeout(() => onClose?.(), 200);
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [isOpen, duration, onclose]);
+  }, [isOpen, duration, onClose]);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center">
-      <Toast text={text} />
+      <div
+        className={`transition-all duration-200 ease-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} `}
+      >
+        <Toast text={text} />
+      </div>
     </div>
   );
 };
