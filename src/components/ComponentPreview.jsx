@@ -6,6 +6,8 @@ import React from 'react';
 import { PublicDivider, AdminDivider } from '@/components/Divider';
 
 const ComponentPreview = () => {
+  const [isToastOpen, setIsToastOpen] = useState(false);
+
   return (
     <>
       <br />
