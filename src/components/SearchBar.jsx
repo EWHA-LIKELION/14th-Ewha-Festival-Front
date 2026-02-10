@@ -49,20 +49,20 @@ const SearchBar = ({ isMap = false, onSearch }) => {
         color={!(isFocused || inputValue) ? '#99A1AF' : '#4A5565'}
         className="absolute top-1/2 right-2.5 -translate-y-1/2"
       />
-      {(isFocused || inputValue) && (
-        <IconButton
-          name="chevronleft"
-          onClick={handleBack}
-          className="absolute top-1/2 left-1 -translate-y-1/2"
-        />
-      )}
-      {inputValue && (
-        <IconButton
-          name="xmarkgrey"
-          className="absolute top-1/2 right-12.5 -translate-y-1/2"
-          onClick={() => setInputValue('')}
-        />
-      )}
+      <IconButton
+        name="chevronleft"
+        onClick={handleBack}
+        className={`absolute top-1/2 left-1 -translate-y-1/2 transition-opacity duration-100 ${
+          isFocused || inputValue ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      />
+      <IconButton
+        name="xmarkgrey"
+        className={`absolute top-1/2 right-12.5 -translate-y-1/2 transition-opacity duration-100 ${
+          inputValue ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={() => setInputValue('')}
+      />
     </div>
   );
 };
