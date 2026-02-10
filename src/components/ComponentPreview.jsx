@@ -3,19 +3,12 @@
  */
 
 import React from 'react';
-import { PublicDivider, AdminDivider } from '@/components/Divider';
+import Footer from '@/components/Footer';
 
 const ComponentPreview = () => {
-  const [isToastOpen, setIsToastOpen] = useState(false);
-
   return (
     <>
-      <br />
-      <PublicDivider />
-      <br />
-      <AdminDivider />
-      <br />
-      <AdminDivider width="long" />
+      <Footer />
     </>
   );
 };
