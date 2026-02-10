@@ -10,6 +10,8 @@ import MenuCard from './Card/MenuCard';
 import TrashCard from './Card/TrashCard';
 import ReviewCard from './Card/ReviewCard';
 import ImageCard from './Card/ImageCard';
+import NoticeCard from './Card/NoticeCard';
+import SetlistCard from './Card/SetlistCard';
 
 const ComponentPreview = () => {
   const boothMockData = {
@@ -65,18 +67,12 @@ const ComponentPreview = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center gap-4 bg-gray-200 p-4">
+      <div className="flex flex-col items-center justify-center gap-4 bg-gray-100 p-4">
         <BoothCard {...boothMockData} />
         <ShowCard {...showMockData} />
-        <MenuCard {...menuMockData} />
-        <TrashCard
-          title={trashMockData.title}
-          description={trashMockData.description}
-          selected={selected}
-          onClick={() => setSelected(!selected)}
-        />
         <ReviewCard {...reviewMockData} />
-        <ImageCard {...imageMockData} />
+        <NoticeCard variant="instagram" title="공지" />
+        <SetlistCard setlist="Whiplash - aespa" />
         <Footer />
       </div>
     </>
