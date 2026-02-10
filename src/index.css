@@ -33,7 +33,7 @@
   }
 
   body {
-    background-color: #f4f4f5; /* PC 배경 */
+    background-color: #f4f4f5; /* [🔥추후 삭제] PC 배경 */
     color: #111111;
     overflow-x: hidden;
   }
@@ -89,7 +89,7 @@
 
   background-color: #ffffff; /* 모바일 화면 */
 
-  box-shadow: /* 모바일 화면 구분용 그림자 */
+  box-shadow: /* [🔥추후 삭제] 모바일 화면 구분용 그림자 */
     0 0 0 1px rgba(0, 0, 0, 0.04),
     0 10px 25px rgba(0, 0, 0, 0.08);
 
