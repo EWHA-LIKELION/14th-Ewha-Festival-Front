@@ -3,15 +3,17 @@
  */
 
 import React from 'react';
-import DropDown from '@/components/DropDown';
+import SearchBar from '@/components/SearchBar';
 
 const ComponentPreview = () => {
   return (
-    <>
-      <div className="flex h-100 items-center justify-center">
-        <DropDown />
-      </div>
-    </>
+    <div className="flex flex-col items-center">
+      <br />
+      <SearchBar />
+      <br />
+      <SearchBar isMap />
+      <br />
+    </div>
   );
 };
 
