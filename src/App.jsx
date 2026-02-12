@@ -25,8 +25,8 @@ function App() {
           <Route path="confirm" element={<div>Confirm</div>} />
           <Route path="booth/:id" element={<div>My Booth</div>} />
           <Route path="booth/:id/edit" element={<div>Booth Edit</div>} />
-          <Route path="performance/:id" element={<div>My Performance</div>} />
-          <Route path="performance/:id/edit" element={<div>Performance Edit</div>} />
+          <Route path="show/:id" element={<div>My Show</div>} />
+          <Route path="show/:id/edit" element={<div>Show Edit</div>} />
         </Route>
         {/* 공통 컴포넌트 퍼블리싱 기간이 끝나면 아래 라우트는 삭제 */}
         <Route path="component-preview" element={<ComponentPreview />} />
