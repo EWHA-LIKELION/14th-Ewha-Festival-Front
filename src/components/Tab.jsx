@@ -47,13 +47,16 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
                 >
                   {label}
                 </span>
-                <div
-                  className={`h-0.5 w-20 ${isActive ? UNDERLINE_STYLE.active : UNDERLINE_STYLE.inactive}`}
-                />
               </button>
             );
           })}
         </div>
+
+        {/* 이동하는 언더라인 인디케이터 */}
+        <div
+          className="absolute top-8.5 h-0.5 w-20 bg-[#00bc7d] transition-[left] duration-300 ease-in-out"
+          style={{ left: `${activeIndex * 5}rem` }}
+        />
       </div>
     );
   }
