@@ -5,6 +5,8 @@
 import React from 'react';
 
 const ICONS = {
+  back: '/icons/icon-back.svg',
+  forward: '/icons/icon-forward.svg',
   bookmark: '/icons/icon-bookmark.svg',
   chevronleft: '/icons/icon-chevronleft.svg',
   pencil: '/icons/icon-pencil.svg',
