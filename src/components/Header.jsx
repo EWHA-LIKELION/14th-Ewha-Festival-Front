@@ -53,7 +53,7 @@ const Header = ({
 
   return (
     <header
-      className={`flex h-18 w-[392px] items-center px-2 ${backgroundStyles[background]}`}
+      className={`fixed top-0 left-1/2 z-10 flex h-18 w-[392px] -translate-x-1/2 items-center px-2 ${backgroundStyles[background]}`}
       style={background === 'gradient' ? { paddingTop: 'env(safe-area-inset-top)' } : undefined}
     >
       {/* Left 영역 */}
