@@ -3,16 +3,12 @@
  */
 
 import React from 'react';
-import SearchBar from '@/components/SearchBar';
+import Header from '@/components/Header';
 
 const ComponentPreview = () => {
   return (
-    <div className="flex flex-col items-center">
-      <br />
-      <SearchBar />
-      <br />
-      <SearchBar isMap />
-      <br />
+    <div className="flex h-600 flex-col items-center gap-5">
+      <Header left="back" center="title" right="edit" background="gradient" />
     </div>
   );
 };

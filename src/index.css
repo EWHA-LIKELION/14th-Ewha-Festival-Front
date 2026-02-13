@@ -87,7 +87,6 @@
 .app {
   position: relative;
   width: 100%;
-  max-width: 392px;
 
   min-height: 100dvh;
   margin: 0 auto;
@@ -99,4 +98,10 @@
     0 10px 25px rgba(0, 0, 0, 0.08);
 
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (min-width: 768px) {
+  .app {
+    width: 392px;
+  }
 }
