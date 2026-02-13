@@ -7,7 +7,7 @@ import Header from '@/components/Header';
 
 const ComponentPreview = () => {
   return (
-    <div className="flex h-600 flex-col items-center gap-5 bg-gray-400">
+    <div className="flex h-600 flex-col items-center gap-5">
       <Header left="back" center="title" right="edit" background="gradient" />
     </div>
   );
