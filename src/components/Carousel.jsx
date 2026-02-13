@@ -102,7 +102,7 @@ const Carousel = ({ items = [] }) => {
             />
 
             {/* 그라데이션 오버레이 */}
-            <div className="absolute right-0 bottom-0 left-0 h-1/2 bg-linear-to-t from-emerald-500 opacity-70" />
+            <div className="absolute right-0 bottom-0 left-0 h-full bg-linear-to-t from-emerald-500 opacity-70" />
 
             {/* 텍스트 콘텐츠 */}
             <div className="relative z-10 flex h-full flex-col justify-end p-5">
