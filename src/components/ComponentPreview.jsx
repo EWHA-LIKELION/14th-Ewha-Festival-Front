@@ -3,8 +3,8 @@
  */
 
 import React, { useState } from 'react';
-import InlineBottomsheet from '@/components/BottomsheetDrag';
-import ScrimBottomsheet from '@/components/BottomsheetScrim';
+import BottomsheetDrag from '@/components/BottomsheetDrag';
+import BottomsheetScrim from '@/components/BottomsheetScrim';
 
 const ComponentPreview = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,21 +81,21 @@ const ComponentPreview = () => {
 
       {isOpen &&
         (hasScrim ? (
-          <ScrimBottomsheet size={size} onClose={() => setIsOpen(false)}>
+          <BottomsheetScrim size={size} onClose={() => setIsOpen(false)}>
             <div className="flex h-full items-center justify-center p-4">
               <p className="text-sm text-gray-500">
                 size: {currentSize} / hasScrim: {hasScrim.toString()}
               </p>
             </div>
-          </ScrimBottomsheet>
+          </BottomsheetScrim>
         ) : (
-          <InlineBottomsheet size={size} onSizeChange={(newSize) => setCurrentSize(newSize)}>
+          <BottomsheetDrag size={size} onSizeChange={(newSize) => setCurrentSize(newSize)}>
             <div className="flex h-full items-center justify-center p-4">
               <p className="text-sm text-gray-500">
                 size: {currentSize} / hasScrim: {hasScrim.toString()}
               </p>
             </div>
-          </InlineBottomsheet>
+          </BottomsheetDrag>
         ))}
     </>
   );
