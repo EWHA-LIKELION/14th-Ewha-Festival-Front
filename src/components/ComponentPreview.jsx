@@ -3,8 +3,8 @@
  */
 
 import React, { useState } from 'react';
-import InlineBottomsheet from '@/components/InlineBottomsheet';
-import ScrimBottomsheet from '@/components/ScrimBottomsheet';
+import InlineBottomsheet from '@/components/BottomsheetInline';
+import ScrimBottomsheet from '@/components/BottomsheetScrim';
 
 const ComponentPreview = () => {
   const [isOpen, setIsOpen] = useState(false);
