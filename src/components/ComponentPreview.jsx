@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react';
-import InlineBottomsheet from '@/components/BottomsheetInline';
+import InlineBottomsheet from '@/components/BottomsheetDrag';
 import ScrimBottomsheet from '@/components/BottomsheetScrim';
 
 const ComponentPreview = () => {
