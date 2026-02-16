@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Scrim from '@/components/Scrim';
+/**
+ * Scrim 있는 Bottomsheet
+ */
 
+import React, { useState, useEffect, useCallback } from 'react';
 
 const SHEET_HEIGHT_CLASS = {
   small: 'h-[18.25rem]',
@@ -10,7 +12,7 @@ const SHEET_HEIGHT_CLASS = {
 
 const TRANSITION_DURATION = 300;
 
-const ScrimBottomsheet = ({ size = 'medium', onClose, children }) => {
+const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -51,4 +53,4 @@ const ScrimBottomsheet = ({ size = 'medium', onClose, children }) => {
   );
 };
 
-export default ScrimBottomsheet;
+export default BottomsheetScrim;

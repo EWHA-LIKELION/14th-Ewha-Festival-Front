@@ -1,3 +1,7 @@
+/**
+ * 드래그 되고 Scrim 없는 ㅍBottomsheet
+ */
+
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 const SNAP_HEIGHTS = {
@@ -5,8 +9,6 @@ const SNAP_HEIGHTS = {
   medium: 468,
   large: 628,
 };
-
-const SIZE_ORDER = ['small', 'medium', 'large', 'full'];
 
 const FULL_THRESHOLD = SNAP_HEIGHTS.large + 60;
 
@@ -19,7 +21,7 @@ const getNearestSize = (height) => {
   );
 };
 
-const InlineBottomsheet = ({ size = 'medium', onSizeChange, children }) => {
+const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
   const [currentSize, setCurrentSize] = useState(size);
   const [dragHeight, setDragHeight] = useState(null);
   const isDragging = dragHeight !== null;
@@ -100,4 +102,4 @@ const InlineBottomsheet = ({ size = 'medium', onSizeChange, children }) => {
   );
 };
 
-export default InlineBottomsheet;
+export default BottomsheetDrag;
