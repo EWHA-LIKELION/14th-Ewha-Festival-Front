@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import IconButton from '@/components/IconButton';
+import Button from '@/components/Button';
 
 const SearchBar = ({ isMap = false, onSearch }) => {
   const navigate = useNavigate();
@@ -39,27 +39,33 @@ const SearchBar = ({ isMap = false, onSearch }) => {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'bg-white shadow-[0_4px_12px_0_rgba(0,0,0,0.12)]' : 'bg-gray-100'} py-3 text-base font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none ${
+        className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'shadow-down-lg bg-white' : 'bg-gray-100'} py-3 text-base font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none ${
           isFocused || inputValue ? 'px-12.5 ' : 'px-5'
         }`}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
-      <IconButton
-        name="search"
+      <Button
+        leftIcon="/icons/icon-search.svg"
+        variant={!(isFocused || inputValue) ? 'text-gray' : 'text-black'}
+        size="md"
         onClick={handleSearch}
-        color={!(isFocused || inputValue) ? '#99A1AF' : '#4A5565'}
         className="absolute top-1/2 right-2.5 -translate-y-1/2"
       />
-      <IconButton
-        name="chevronleft"
+      <Button
+        leftIcon="/icons/icon-chevronleft.svg"
+        variant="text-black"
+        size="md"
         onClick={handleBack}
         className={`absolute top-1/2 left-1 -translate-y-1/2 transition-opacity duration-100 ${
           isFocused || inputValue ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       />
-      <IconButton
-        name="xmarkgrey"
+      <Button
+        leftIcon="/icons/icon-xmarkgrey.svg"
+        variant="text-grey"
+        size="md"
+        iconColor
         className={`absolute top-1/2 right-12.5 -translate-y-1/2 transition-opacity duration-100 ${
           inputValue ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
