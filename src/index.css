@@ -100,7 +100,7 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 441px) {
   .app {
     width: 392px;
   }
