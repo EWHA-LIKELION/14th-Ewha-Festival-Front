@@ -17,13 +17,13 @@
 
 import React from 'react';
 
-const size = {
+const SIZE = {
   sm: 'px-4 py-1.5 gap-1.5 text-sm font-medium',
   md: 'px-4 py-2 gap-1.5 text-base font-medium',
   lg: 'px-5 py-3 gap-1.5 text-base font-medium',
 };
 
-const style = {
+const STYLE = {
   'bg-green': 'bg-emerald-500 text-white',
   'bg-red': 'bg-red-400 text-white',
   'bg-gray': 'bg-gray-100 text-gray-500',
@@ -50,8 +50,8 @@ const Button = ({
   className = '',
   ...props
 }) => {
-  const sizeClass = size[sizeType];
-  const styleClass = style[variant];
+  const sizeClass = SIZE[sizeType];
+  const styleClass = STYLE[variant];
 
   // 배경색이 있는 경우만 rounded 추가
   const hasBg = variant.startsWith('bg-');
@@ -95,7 +95,7 @@ const Button = ({
       : 'w-5 h-5';
 
   // 텍스트 색상에 맞추어 아이콘 색상 변경 및 렌더링
-  const renderIcon = (icon, iconAlt) => {
+  const renderIcon = (icon) => {
     if (typeof icon === 'string') {
       // iconColor가 true일 경우 원본 이미지 그대로 사용
       if (iconColor) {
