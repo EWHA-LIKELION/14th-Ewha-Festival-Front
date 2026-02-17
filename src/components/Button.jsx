@@ -31,9 +31,9 @@ const style = {
   'bg-pink': 'bg-red-100 text-red-400',
   'text-black': 'text-gray-900',
   'text-gray': 'text-gray-500',
-  'underline-green': 'text-emerald-500 underline underline-offset-2',
-  'underline-gray': 'text-gray-500 underline underline-offset-2',
-  'underline-white': 'text-white underline underline-offset-2',
+  'underline-green': 'text-emerald-500 underline underline-offset-2 !p-0',
+  'underline-gray': 'text-gray-500 underline underline-offset-2 !p-0',
+  'underline-white': 'text-white underline underline-offset-2 !p-0',
 };
 
 const Button = ({
@@ -45,6 +45,7 @@ const Button = ({
   leftIcon, //아이콘 이미지 경로 또는 JSX 요소
   rightIcon, //아이콘 이미지 경로 또는 JSX 요소
   iconColor = false, //true일 경우 아이콘 원본 색상 유지
+  iconAlt,
   children,
   className = '',
   ...props
@@ -94,11 +95,11 @@ const Button = ({
       : 'w-5 h-5';
 
   // 텍스트 색상에 맞추어 아이콘 색상 변경 및 렌더링
-  const renderIcon = (icon) => {
+  const renderIcon = (icon, iconAlt) => {
     if (typeof icon === 'string') {
       // iconColor가 true일 경우 원본 이미지 그대로 사용
       if (iconColor) {
-        return <img src={icon} alt="" className={iconSize} />;
+        return <img src={icon} alt={iconAlt || ''} className={iconSize} />;
       }
 
       let iconColorClass = '';
