@@ -5,6 +5,7 @@
 import React from 'react';
 import Button from '@/components/Button';
 import SearchBar from '@/components/SearchBar';
+import Footer from '@/components/Footer';
 
 const ComponentPreview = () => {
   return (
@@ -129,6 +130,7 @@ const ComponentPreview = () => {
         Button
       </Button>
       <br />
+      <Footer />
     </div>
   );
 };
