@@ -4,6 +4,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@/components/IconButton';
+import Button from '@/components/Button';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -24,18 +25,23 @@ const Footer = () => {
   };
   return (
     <div className="flex w-full flex-col items-center gap-4 bg-linear-to-t from-emerald-50 to-white py-5 text-center text-emerald-500">
-      <button
-        onClick={goCreditPage}
-        className="w-fit text-sm font-medium underline underline-offset-2"
-      >
+      <Button size="sm" variant="underline-green" onClick={goCreditPage}>
         만든이들
-      </button>
+      </Button>
       <p className="text-xs font-normal">멋쟁이사자처럼 14기 | LIKELION EWHA 14th</p>
       <div className="flex justify-center gap-4">
-        <IconButton name="likelion" alt="likelion-website" onClick={goLikelionWebsite} />
-        <IconButton name="instagram" alt="likelion-instagram" onClick={goLikelionInstagram} />
-        <IconButton name="kakaotalk" alt="likelion-kakaotalk" onClick={goLikelionKakaotalk} />
-        <IconButton name="github" alt="likelion-github" onClick={goLikelionGithub} />
+        <button onClick={goLikelionWebsite}>
+          <img src="/icons/logo-likelion.svg" alt="likelion-website" />
+        </button>
+        <button onClick={goLikelionInstagram}>
+          <img src="/icons/logo-instagram.svg" alt="likelion-instagram" />
+        </button>
+        <button onClick={goLikelionKakaotalk}>
+          <img src="/icons/logo-kakaotalk.svg" alt="likelion-kakaotalk" />
+        </button>
+        <button onClick={goLikelionGithub}>
+          <img src="/icons/logo-github.svg" alt="likelion-github" />
+        </button>
       </div>
       <p className="text-xs font-normal whitespace-nowrap text-black/25">
         Copyright ⓒ LIKELION EWHA 14th. All Rights Reserved.
