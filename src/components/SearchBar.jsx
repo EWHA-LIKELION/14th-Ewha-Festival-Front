@@ -2,14 +2,18 @@
  * SearchBar 컴포넌트 (isMap: 지도용 스타일)
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Button';
 
-const SearchBar = ({ isMap = false, onSearch }) => {
+const SearchBar = ({ isMap = false, onSearch, searchValue }) => {
   const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    setInputValue(searchValue || '');
+  }, [searchValue]);
 
   const handleBack = () => {
     if (window.history.length > 1) {

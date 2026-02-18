@@ -89,6 +89,14 @@
   }
   .shadow-up-lg {
     box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.12);
+
+  /* 스크롤바 숨김 */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
@@ -103,7 +111,6 @@
 .app {
   position: relative;
   width: 100%;
-  max-width: 392px;
 
   min-height: 100dvh;
   margin: 0 auto;
@@ -115,4 +122,10 @@
     0 10px 25px rgba(0, 0, 0, 0.08);
 
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (min-width: 441px) {
+  .app {
+    width: 392px;
+  }
 }
