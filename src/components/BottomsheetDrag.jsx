@@ -34,6 +34,25 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
     setCurrentSize(size);
   }, [size]);
 
+  // full 상태일 때 닫히는 방법이 따로 없는 것 같아서.. 뒤로가기 시 large로 전환되도록 구현
+  useEffect(() => {
+    if (currentSize !== 'full') return;
+
+    window.history.pushState({ bottomsheetFull: true }, '');
+
+    const handlePopState = (e) => {
+      if (currentSize === 'full') {
+        setCurrentSize('large');
+        onSizeChange?.('large');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [currentSize, onSizeChange]);
+
   const handlePointerDown = useCallback(
     (e) => {
       e.preventDefault();
