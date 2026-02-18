@@ -11,8 +11,8 @@ const ComponentPreview = () => {
     <>
       <div>ComponentPreview</div>
       <div className="p-4">
-        <Timepicker isActive={true} />
-        <Timepicker isActive={false} />
+        <Timepicker isSelected={true} />
+        <Timepicker isSelected={false} />
       </div>
     </>
   );
