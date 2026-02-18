@@ -4,7 +4,7 @@
 
 import React from 'react';
 import Badge from '@/components/Badge';
-import Scrap from '@/components/Scrap';
+import ScrapButton from '@/components/ScrapButton';
 
 const BoothCard = ({
   name,
@@ -38,7 +38,7 @@ const BoothCard = ({
           </h3>
         </div>
         {/* 스크랩 들어갈 자리 */}
-        <Scrap />
+        <ScrapButton />
       </div>
 
       {/* 부스 소개글 */}

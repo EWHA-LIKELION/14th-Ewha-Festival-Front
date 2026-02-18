@@ -1,10 +1,10 @@
 /**
- * Scrap 컴포넌트
+ * ScrapButton 컴포넌트
  */
 
 import React, { useState } from 'react';
 
-const Scrap = ({ initialScrapped = false, count = 0, onToggle }) => {
+const ScrapButton = ({ initialScrapped = false, count = 0, onToggle }) => {
   const [isScrapped, setIsScrapped] = useState(initialScrapped);
   const [scrapCount, setScrapCount] = useState(count);
 
@@ -40,4 +40,4 @@ const Scrap = ({ initialScrapped = false, count = 0, onToggle }) => {
   );
 };
 
-export default Scrap;
+export default ScrapButton;
