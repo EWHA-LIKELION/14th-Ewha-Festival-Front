@@ -43,7 +43,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
                 className="flex h-9 w-20 flex-col items-center gap-2"
               >
                 <span
-                  className={`text-center text-[1.125rem] leading-6 font-semibold tracking-[0rem] ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
+                  className={`whitespace-nowrap text-center text-[1.125rem] leading-6 font-semibold tracking-[0rem] ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
                 >
                   {label}
                 </span>
@@ -72,7 +72,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
             key={label}
             type="button"
             onClick={() => handleTabClick(index)}
-            className={`text-center text-[1.125rem] leading-6 font-semibold tracking-[0rem] ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
+            className={`whitespace-nowrap text-center text-[1.125rem] leading-6 font-semibold tracking-[0rem] ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
           >
             {label}
           </button>
