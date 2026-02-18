@@ -9,7 +9,7 @@ export const Accordion = ({ title, time, isUpdate = false, content }) => {
   return (
     <div className="flex w-72 flex-col gap-2 rounded-xl border border-gray-200 bg-white p-4 text-left font-normal text-gray-900 hover:brightness-100 focus:outline-none">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center justify-between text-base font-semibold"
       >
         {title}
@@ -20,7 +20,7 @@ export const Accordion = ({ title, time, isUpdate = false, content }) => {
       {isOpen && <p className="text-sm">{content}</p>}
       <div className="text-xs text-gray-300">
         <p>
-          {time}시간 전 {isUpdate && '(수정됨)'}
+          {time}전 {isUpdate && '(수정됨)'}
         </p>
       </div>
     </div>
@@ -32,7 +32,7 @@ export const AdminAccordion = ({ title, children }) => {
   return (
     <div className="flex w-full flex-col items-center justify-center px-5 py-7 text-sm font-normal text-gray-900 focus:outline-none">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen((prev) => !prev)}
         className="flex w-full items-center justify-between text-base font-semibold"
       >
         {title}
