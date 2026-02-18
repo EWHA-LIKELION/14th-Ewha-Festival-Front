@@ -108,24 +108,18 @@
     "description": "Icon/Primary",
   },
 
-<<<<<<< HEAD
   /* =====================
      Background → bg-
   ===================== */
-=======
->>>>>>> 0db98a9b34c6f07c89248735e5ebd9724281a595
   "background normal": {
     "prefix": "background-normal",
     "body": "bg-white",
     "description": "Background/Normal",
   },
 
-<<<<<<< HEAD
   /* =====================
      Material → text-
   ===================== */
-=======
->>>>>>> 0db98a9b34c6f07c89248735e5ebd9724281a595
   "material strong": {
     "prefix": "material-strong",
     "body": "text-black/50",
@@ -136,13 +130,10 @@
     "body": "text-black/25",
     "description": "Material/Normal",
   },
-<<<<<<< HEAD
 
   /* =====================
      System → bg-
   ===================== */
-=======
->>>>>>> 0db98a9b34c6f07c89248735e5ebd9724281a595
 
   "system strong": {
     "prefix": "system-strong-text",
@@ -160,12 +151,9 @@
     "description": "System/Assistive",
   },
 
-<<<<<<< HEAD
   /* =====================
      Secondary → bg-
   ===================== */
-=======
->>>>>>> 0db98a9b34c6f07c89248735e5ebd9724281a595
   "secondary cyan default": {
     "prefix": "secondary-cyan-default",
     "body": "bg-cyan-400",
