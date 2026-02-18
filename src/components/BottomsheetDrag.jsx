@@ -90,12 +90,14 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
       }`}
       style={sheetStyle}
     >
-      <div
-        className="flex h-6 shrink-0 cursor-grab touch-none flex-col items-center justify-end px-4 pt-2 active:cursor-grabbing"
-        onPointerDown={handlePointerDown}
-      >
-        <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />
-      </div>
+      {!isFull && (
+        <div
+          className="flex h-6 shrink-0 cursor-grab touch-none flex-col items-center justify-end px-4 pt-2 active:cursor-grabbing"
+          onPointerDown={handlePointerDown}
+        >
+          <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />
+        </div>
+      )}
 
       <div className="w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
     </div>
