@@ -89,6 +89,7 @@
   }
   .shadow-up-lg {
     box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.12);
+  }
 
   /* 스크롤바 숨김 */
   .scrollbar-hide::-webkit-scrollbar {
@@ -111,7 +112,6 @@
 .app {
   position: relative;
   width: 100%;
-
   min-height: 100dvh;
   margin: 0 auto;
 
