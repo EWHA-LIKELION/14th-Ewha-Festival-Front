@@ -3,35 +3,135 @@
  */
 
 import React from 'react';
-import BoothCard from '@/components/Card/BoothCard';
-
-const mockBooth = {
-  name: '떡볶이 연구소',
-  category: '푸드트럭',
-  days: '9/20 - 9/22',
-  location: '정문 광장',
-  description: '매운맛 단계 선택 가능! 치즈폭탄 떡볶이와 쿨피스까지 완벽 조합 🍽️',
-  thumbnail: '/images/boothcard-default.png',
-  images: ['/images/boothcard-default.png', '/images/boothcard-default.png'],
-};
+import Button from '@/components/Button';
+import SearchBar from '@/components/SearchBar';
+import Footer from '@/components/Footer';
 
 const ComponentPreview = () => {
   return (
-    <>
-      <div className="flex h-100 items-center justify-center">
-        <BoothCard
-          name={mockBooth.name}
-          category={mockBooth.category}
-          days={mockBooth.days}
-          location={mockBooth.location}
-          description={mockBooth.description}
-          thumbnail={mockBooth.thumbnail}
-          images={mockBooth.images}
-          status={mockBooth.status}
-          onClick={() => alert('카드 클릭!')}
-        />
-      </div>
-    </>
+    <div className="flex flex-col items-center bg-amber-200">
+      <br />
+      <SearchBar />
+      <br />
+      <SearchBar isMap />
+      <br />
+      <h1>[IconOnlyButton]</h1>
+      <br />
+      <Button leftIcon="/icons/icon-search.svg"></Button>
+      <br />
+      <Button variant="bg-gray" size="md" circle leftIcon="/icons/icon-search.svg"></Button>
+      <br />
+      <Button variant="text-gray" size="sm" circle leftIcon="/icons/icon-search.svg"></Button>
+      <br />
+      <br />
+      <h1>[IconOnlyButton Disabled]</h1>
+      <br />
+      <Button disabled leftIcon="/icons/icon-search.svg"></Button>
+      <br />
+      <Button
+        disabled
+        variant="bg-gray"
+        size="md"
+        circle
+        leftIcon="/icons/icon-search.svg"
+      ></Button>
+      <br />
+      <Button
+        disabled
+        variant="text-black"
+        size="sm"
+        circle
+        leftIcon="/icons/icon-search.svg"
+      ></Button>
+      <br />
+      <br />
+      <h1>[Button]</h1>
+      <br />
+      <Button leftIcon="/icons/icon-search.svg" rightIcon="/icons/icon-search.svg">
+        Button
+      </Button>
+      <br />
+      <Button
+        variant="bg-white"
+        shadow
+        circle
+        leftIcon="/icons/icon-search.svg"
+        rightIcon="/icons/icon-search.svg"
+      >
+        Button
+      </Button>
+      <br />
+      <Button variant="underline-green">Button</Button>
+      <br />
+      <Button
+        variant="bg-red"
+        size="md"
+        leftIcon="/icons/icon-search.svg"
+        rightIcon="/icons/icon-search.svg"
+      >
+        Button
+      </Button>
+      <br />
+      <Button
+        variant="bg-gray"
+        size="md"
+        circle
+        leftIcon="/icons/icon-search.svg"
+        rightIcon="/icons/icon-search.svg"
+      >
+        Button
+      </Button>
+      <br />
+      <Button variant="underline-gray" size="md">
+        Button
+      </Button>
+      <br />
+      <Button
+        variant="bg-gray"
+        size="sm"
+        leftIcon="/icons/icon-search.svg"
+        rightIcon="/icons/icon-search.svg"
+      >
+        Button
+      </Button>
+      <br />
+      <Button
+        variant="bg-pink"
+        size="sm"
+        circle
+        leftIcon="/icons/icon-search.svg"
+        rightIcon="/icons/icon-search.svg"
+      >
+        Button
+      </Button>
+      <br />
+      <Button variant="underline-white" size="sm">
+        Button
+      </Button>
+      <br />
+      <br />
+      <h1>[Button Disabled]</h1>
+      <br />
+      <Button disabled leftIcon="/icons/icon-search.svg" rightIcon="/icons/icon-search.svg">
+        Button
+      </Button>
+      <br />
+      <Button
+        variant="text-black"
+        disabled
+        size="md"
+        leftIcon="/icons/icon-search.svg"
+        rightIcon="/icons/icon-search.svg"
+      >
+        Button
+      </Button>
+      <br />
+      <Button variant="underline-green" disabled size="sm">
+        Button
+      </Button>
+      <br />
+      <Footer />
+    </div>
   );
 };
 

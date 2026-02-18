@@ -47,7 +47,7 @@ const DropDown = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1.5 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-[4px_4px_10px_0_rgba(0,0,0,0.09)]">
+        <div className="shadow-down-md absolute z-10 mt-1.5 w-full overflow-hidden rounded-lg border border-gray-200 bg-white">
           {options.map((option) => (
             <button
               key={option.value}
