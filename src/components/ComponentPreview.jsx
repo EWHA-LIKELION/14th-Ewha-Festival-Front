@@ -8,6 +8,7 @@ import Chip from '@/components/Chip';
 import FilterBar from '@/components/FilterBar';
 
 const ComponentPreview = () => {
+  //확인용
   const handleClick = () => console.log('chip clicked');
   const handleDelete = () => console.log('chip deleted');
   const handleFilterClick = (key) => console.log('filter click:', key);

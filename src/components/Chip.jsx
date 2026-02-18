@@ -10,10 +10,11 @@
 
 import React from 'react';
 
-const BASE_STYLE = 'inline-flex w-fit items-center justify-center rounded-3xl border h-8';
+const BASE_STYLE =
+  'inline-flex w-fit items-center justify-center whitespace-nowrap rounded-3xl border h-8';
 
-const SIZE_MD = 'px-4 py-2'; // bottomsheet, state, recent
-const SIZE_SM = 'px-3 py-2'; // filter, toggle
+const SIZE_MD = 'px-4 py-2';
+const SIZE_SM = 'px-3 py-2';
 
 const ACTIVE_CHIP = 'border-[#00bc7d] bg-emerald-50';
 const INACTIVE_CHIP = 'border-gray-200 bg-white';
@@ -34,6 +35,7 @@ function Chip({
 }) {
   const isSmall = variant === 'filter' || variant === 'toggle';
   const isActive = variant === 'recent' ? false : isSelected;
+  const isClickable = !!onClick;
 
   // 표시 텍스트 결정하가ㅣ
   const getDisplayText = () => {
@@ -55,18 +57,25 @@ function Chip({
   const hasDeleteIcon = variant === 'recent' || (variant === 'filter' && isSelected);
   const gapClass = hasDeleteIcon ? 'gap-0.5' : 'gap-1';
 
+  const chipClass = `${BASE_STYLE} ${sizeClass} ${gapClass} ${isActive ? ACTIVE_CHIP : INACTIVE_CHIP} ${isClickable ? 'cursor-pointer' : ''}`;
+  const Tag = isClickable ? 'button' : 'div';
+
   return (
-    <div
-      className={`${BASE_STYLE} ${sizeClass} ${gapClass} ${isActive ? ACTIVE_CHIP : INACTIVE_CHIP} ${onClick ? 'cursor-pointer' : ''}`}
-      onClick={onClick}
-    >
+    <Tag {...(isClickable && { type: 'button' })} className={chipClass} onClick={onClick}>
       <span className={textStyle}>{displayText}</span>
       {hasDeleteIcon && (
-        <button
-          type="button"
+        <span
+          role="button"
+          tabIndex={0}
           onClick={(e) => {
             e.stopPropagation();
             onDelete?.();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.stopPropagation();
+              onDelete?.();
+            }
           }}
           className={`flex shrink-0 items-center justify-center ${isActive ? 'text-[#00bc7d]' : 'text-[#6a7282]'}`}
         >
@@ -80,9 +89,9 @@ function Chip({
             <path d="M4 4L12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             <path d="M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
-        </button>
+        </span>
       )}
-    </div>
+    </Tag>
   );
 }
 
