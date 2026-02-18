@@ -3,13 +3,31 @@
  */
 
 import React from 'react';
+import Badge from '@/components/Badge';
 import Button from '@/components/Button';
 import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 
 const ComponentPreview = () => {
   return (
-    <div className="flex flex-col items-center bg-amber-200">
+    <div className="flex flex-col items-center">
+      <br />
+      <h1>[Badge]</h1>
+      <br />
+      <div className="flex gap-4">
+        <Badge state="closed" size="md" />
+        <Badge state="closed" size="sm" />
+      </div>
+      <br />
+      <div className="flex gap-4">
+        <Badge state="operating" size="md" />
+        <Badge state="performing" size="sm" />
+      </div>
+      <br />
+      <div className="flex gap-4">
+        <Badge state="upcoming" size="sm" />
+      </div>
+      <br />
       <br />
       <SearchBar />
       <br />
