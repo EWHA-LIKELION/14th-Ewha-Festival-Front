@@ -3,37 +3,32 @@
  */
 
 import React from 'react';
-import Carousel from '@/components/Carousel';
+import BoothCard from '@/components/Card/BoothCard';
+
+const mockBooth = {
+  name: '떡볶이 연구소',
+  category: '푸드트럭',
+  days: '9/20 - 9/22',
+  location: '정문 광장',
+  description: '매운맛 단계 선택 가능! 치즈폭탄 떡볶이와 쿨피스까지 완벽 조합 🍽️',
+  thumbnail: '/images/boothcard-default.png',
+  images: ['/images/boothcard-default.png', '/images/boothcard-default.png'],
+};
 
 const ComponentPreview = () => {
   return (
     <>
       <div className="flex h-100 items-center justify-center">
-        <Carousel
-          items={[
-            {
-              image: 'images/boothcard-test.jpg',
-              title: '첫 번째 제목',
-              description: '첫 번째 설명',
-              link: '/',
-            },
-            {
-              image: 'images/carousel-test1.png',
-              title: '두 번째 제목',
-              description: '두 번째 설명',
-              link: 'https://likelion.ewha.university/',
-            },
-            {
-              image: 'images/carousel-test2.png',
-              title: '세 번째 제목',
-              description: '세 번째 설명',
-            },
-            {
-              image: 'images/carousel-test1.png',
-              title: '네 번째 제목',
-              description: '네 번째 설명',
-            },
-          ]}
+        <BoothCard
+          name={mockBooth.name}
+          category={mockBooth.category}
+          days={mockBooth.days}
+          location={mockBooth.location}
+          description={mockBooth.description}
+          thumbnail={mockBooth.thumbnail}
+          images={mockBooth.images}
+          status={mockBooth.status}
+          onClick={() => alert('카드 클릭!')}
         />
       </div>
     </>
