@@ -16,14 +16,14 @@ const BASE_STYLE =
 const SIZE_MD = 'px-4 py-2';
 const SIZE_SM = 'px-3 py-2';
 
-const ACTIVE_CHIP = 'border-[#00bc7d] bg-emerald-50';
+const ACTIVE_CHIP = 'border-emerald-500 bg-emerald-50';
 const INACTIVE_CHIP = 'border-gray-200 bg-white';
 
-const ACTIVE_TEXT_MD = 'text-sm font-medium leading-5 tracking-normal text-center text-[#00bc7d]';
-const INACTIVE_TEXT_MD = 'text-sm font-normal leading-5 tracking-normal text-center text-[#6a7282]';
+const ACTIVE_TEXT_MD = 'text-sm font-medium leading-5 tracking-normal text-center text-emerald-500';
+const INACTIVE_TEXT_MD = 'text-sm font-normal leading-5 tracking-normal text-center text-gray-500';
 
-const ACTIVE_TEXT_SM = 'text-xs font-medium leading-4 tracking-normal text-center text-[#00bc7d]';
-const INACTIVE_TEXT_SM = 'text-xs font-medium leading-4 tracking-normal text-center text-[#6a7282]';
+const ACTIVE_TEXT_SM = 'text-xs font-medium leading-4 tracking-normal text-center text-emerald-500';
+const INACTIVE_TEXT_SM = 'text-xs font-medium leading-4 tracking-normal text-center text-gray-500';
 
 function Chip({
   variant = 'bottomsheet',
@@ -77,11 +77,10 @@ function Chip({
               onDelete?.();
             }
           }}
-          className={`flex shrink-0 items-center justify-center ${isActive ? 'text-[#00bc7d]' : 'text-[#6a7282]'}`}
+          className={`flex shrink-0 items-center justify-center ${isActive ? 'text-emerald-500' : 'text-gray-500'}`}
         >
           <svg
-            width="16"
-            height="16"
+            className="size-4"
             viewBox="0 0 16 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
