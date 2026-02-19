@@ -8,13 +8,8 @@
 import React from 'react';
 
 const TAB_STYLE = {
-  active: 'text-[#00bc7d]',
-  inactive: 'text-[#b5bbc5]',
-};
-
-const UNDERLINE_STYLE = {
-  active: 'bg-[#00bc7d]',
-  inactive: 'bg-[#f3f4f6]',
+  active: 'text-emerald-500',
+  inactive: 'text-gray-400',
 };
 
 function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
@@ -28,7 +23,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
     return (
       <div className="relative h-9 w-88">
         {/* 전체 너비 배경 라인 */}
-        <div className="absolute top-8 left-0 h-0.5 w-88 bg-[#f3f4f6]" />
+        <div className="absolute top-8 left-0 h-0.5 w-88 bg-gray-100" />
 
         {/* 탭 아이템 목록 */}
         <div className="absolute top-0 left-0 flex items-start gap-0">
@@ -43,7 +38,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
                 className="flex h-9 w-20 flex-col items-center gap-2"
               >
                 <span
-                  className={`whitespace-nowrap text-center text-[1.125rem] leading-6 font-semibold tracking-[0rem] ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
+                  className={`text-center text-lg leading-6 font-semibold whitespace-nowrap ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
                 >
                   {label}
                 </span>
@@ -54,7 +49,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
 
         {/* 이동하는 언더라인 인디케이터 */}
         <div
-          className="absolute top-8.5 h-0.5 w-20 bg-[#00bc7d] transition-[left] duration-300 ease-in-out"
+          className="absolute top-8 z-10 h-0.5 w-20 bg-emerald-500 transition-[left] duration-300 ease-in-out"
           style={{ left: `${activeIndex * 5}rem` }}
         />
       </div>
@@ -72,7 +67,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
             key={label}
             type="button"
             onClick={() => handleTabClick(index)}
-            className={`whitespace-nowrap text-center text-[1.125rem] leading-6 font-semibold tracking-[0rem] ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
+            className={`text-center text-lg leading-6 font-semibold whitespace-nowrap ${isActive ? TAB_STYLE.active : TAB_STYLE.inactive}`}
           >
             {label}
           </button>
