@@ -40,10 +40,10 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
 
     window.history.pushState({ bottomsheetFull: true }, '');
 
-    const handlePopState = (e) => {
+    const handlePopState = () => {
       if (currentSize === 'full') {
-        setCurrentSize('large');
-        onSizeChange?.('large');
+        setCurrentSize('medium');
+        onSizeChange?.('medium');
       }
     };
 
@@ -104,7 +104,7 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
 
   return (
     <div
-      className={`fixed bottom-0 left-1/2 z-50 flex w-full max-w-98 -translate-x-1/2 flex-col overflow-clip bg-white shadow-[0px_-2px_10px_0px_rgba(0,0,0,0.09)] ${
+      className={`shadow-up-md fixed bottom-0 left-1/2 z-50 flex w-full max-w-98 -translate-x-1/2 flex-col overflow-clip bg-white ${
         isFull ? 'rounded-none' : 'rounded-t-3xl'
       }`}
       style={sheetStyle}
