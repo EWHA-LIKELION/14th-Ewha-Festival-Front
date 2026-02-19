@@ -16,8 +16,8 @@ function Badge({ state = 'closed', size = 'md' }) {
   };
 
   const sizes = {
-    md: 'text-[14px] leading-[20px]',
-    sm: 'text-[12px] leading-[16px]',
+    md: 'text-3.5 leading-5',
+    sm: 'text-3 leading-4',
   };
 
   const { text, color } = states[state];
