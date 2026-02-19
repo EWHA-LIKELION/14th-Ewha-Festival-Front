@@ -33,6 +33,7 @@ const ComponentPreview = () => {
           text="카테고리"
           selectedValue="밴드"
           isSelected={true}
+          onClick={handleClick}
           onDelete={handleDelete}
         />
         <Chip
@@ -40,6 +41,7 @@ const ComponentPreview = () => {
           text="주관"
           selectedValue="학생"
           isSelected={true}
+          onClick={handleClick}
           onDelete={handleDelete}
         />
         <Chip
@@ -47,6 +49,7 @@ const ComponentPreview = () => {
           text="위치"
           selectedValue="생활환경관"
           isSelected={true}
+          onClick={handleClick}
           onDelete={handleDelete}
         />
         <Chip
@@ -54,6 +57,7 @@ const ComponentPreview = () => {
           text="요일"
           selectedValue="수"
           isSelected={true}
+          onClick={handleClick}
           onDelete={handleDelete}
         />
 
