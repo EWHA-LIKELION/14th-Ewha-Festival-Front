@@ -33,25 +33,6 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
     setCurrentSize(size);
   }, [size]);
 
-  // full 상태일 때 닫히는 방법이 따로 없는 것 같아서.. 뒤로가기 시 large로 전환되도록 구현
-  useEffect(() => {
-    if (currentSize !== 'full') return;
-
-    window.history.pushState({ bottomsheetFull: true }, '');
-
-    const handlePopState = () => {
-      if (currentSize === 'full') {
-        setCurrentSize('medium');
-        onSizeChange?.('medium');
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [currentSize, onSizeChange]);
-
   const handlePointerDown = useCallback(
     (e) => {
       e.preventDefault();
@@ -108,14 +89,12 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
       }`}
       style={sheetStyle}
     >
-      {!isFull && (
-        <div
-          className="flex h-6 shrink-0 cursor-grab touch-none flex-col items-center justify-end px-4 pt-2 active:cursor-grabbing"
-          onPointerDown={handlePointerDown}
-        >
-          <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />
-        </div>
-      )}
+      <div
+        className="flex h-6 shrink-0 cursor-grab touch-none flex-col items-center justify-end px-4 pt-2 active:cursor-grabbing"
+        onPointerDown={handlePointerDown}
+      >
+        {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />}
+      </div>
 
       <div className="w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
     </div>
