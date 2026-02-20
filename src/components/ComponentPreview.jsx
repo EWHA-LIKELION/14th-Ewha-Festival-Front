@@ -3,153 +3,24 @@
  */
 
 import React from 'react';
-import Badge from '@/components/Badge';
-import Button from '@/components/Button';
-import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
+import { Accordion, AdminAccordion } from '@/components/Accordion';
 
 const ComponentPreview = () => {
+  //확인용
+  const handleClick = () => console.log('chip clicked');
+  const handleDelete = () => console.log('chip deleted');
+  const handleFilterClick = (key) => console.log('filter click:', key);
+  const handleFilterDelete = (key) => console.log('filter delete:', key);
+  const handleSettingClick = () => console.log('setting clicked');
+
   return (
-    <div className="flex flex-col items-center">
-      <br />
-      <h1>[Badge]</h1>
-      <br />
-      <div className="flex gap-4">
-        <Badge state="closed" size="md" />
-        <Badge state="closed" size="sm" />
+    <>
+      <div className="flex flex-col gap-3 p-4">
+        <Accordion title="Title of accordion" time="2" isUpdate content="Content text" />
+        <AdminAccordion title="Title of accordion">children content</AdminAccordion>
       </div>
-      <br />
-      <div className="flex gap-4">
-        <Badge state="operating" size="md" />
-        <Badge state="performing" size="sm" />
-      </div>
-      <br />
-      <div className="flex gap-4">
-        <Badge state="upcoming" size="sm" />
-      </div>
-      <br />
-      <br />
-      <SearchBar />
-      <br />
-      <SearchBar isMap />
-      <br />
-      <h1>[IconOnlyButton]</h1>
-      <br />
-      <Button leftIcon="/icons/icon-search.svg"></Button>
-      <br />
-      <Button variant="bg-gray" size="md" circle leftIcon="/icons/icon-search.svg"></Button>
-      <br />
-      <Button variant="text-gray" size="sm" circle leftIcon="/icons/icon-search.svg"></Button>
-      <br />
-      <br />
-      <h1>[IconOnlyButton Disabled]</h1>
-      <br />
-      <Button disabled leftIcon="/icons/icon-search.svg"></Button>
-      <br />
-      <Button
-        disabled
-        variant="bg-gray"
-        size="md"
-        circle
-        leftIcon="/icons/icon-search.svg"
-      ></Button>
-      <br />
-      <Button
-        disabled
-        variant="text-black"
-        size="sm"
-        circle
-        leftIcon="/icons/icon-search.svg"
-      ></Button>
-      <br />
-      <br />
-      <h1>[Button]</h1>
-      <br />
-      <Button leftIcon="/icons/icon-search.svg" rightIcon="/icons/icon-search.svg">
-        Button
-      </Button>
-      <br />
-      <Button
-        variant="bg-white"
-        shadow
-        circle
-        leftIcon="/icons/icon-search.svg"
-        rightIcon="/icons/icon-search.svg"
-      >
-        Button
-      </Button>
-      <br />
-      <Button variant="underline-green">Button</Button>
-      <br />
-      <Button
-        variant="bg-red"
-        size="md"
-        leftIcon="/icons/icon-search.svg"
-        rightIcon="/icons/icon-search.svg"
-      >
-        Button
-      </Button>
-      <br />
-      <Button
-        variant="bg-gray"
-        size="md"
-        circle
-        leftIcon="/icons/icon-search.svg"
-        rightIcon="/icons/icon-search.svg"
-      >
-        Button
-      </Button>
-      <br />
-      <Button variant="underline-gray" size="md">
-        Button
-      </Button>
-      <br />
-      <Button
-        variant="bg-gray"
-        size="sm"
-        leftIcon="/icons/icon-search.svg"
-        rightIcon="/icons/icon-search.svg"
-      >
-        Button
-      </Button>
-      <br />
-      <Button
-        variant="bg-pink"
-        size="sm"
-        circle
-        leftIcon="/icons/icon-search.svg"
-        rightIcon="/icons/icon-search.svg"
-      >
-        Button
-      </Button>
-      <br />
-      <Button variant="underline-white" size="sm">
-        Button
-      </Button>
-      <br />
-      <br />
-      <h1>[Button Disabled]</h1>
-      <br />
-      <Button disabled leftIcon="/icons/icon-search.svg" rightIcon="/icons/icon-search.svg">
-        Button
-      </Button>
-      <br />
-      <Button
-        variant="text-black"
-        disabled
-        size="md"
-        leftIcon="/icons/icon-search.svg"
-        rightIcon="/icons/icon-search.svg"
-      >
-        Button
-      </Button>
-      <br />
-      <Button variant="underline-green" disabled size="sm">
-        Button
-      </Button>
-      <br />
-      <Footer />
-    </div>
+    </>
   );
 };
 
