@@ -11,6 +11,8 @@ const SNAP_HEIGHTS = {
   full: window.innerHeight,
 };
 
+const FULL_THRESHOLD = (SNAP_HEIGHTS.large + window.innerHeight) / 2;
+
 const getNearestSize = (height) => {
   if (height >= FULL_THRESHOLD) return 'full';
   return ['small', 'medium', 'large'].reduce(
