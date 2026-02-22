@@ -2,6 +2,14 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
 
 /* =====================
+   Theme (Design Tokens)
+===================== */
+
+@theme {
+  --gray-200: #ecedf1;
+}
+
+/* =====================
    Base (Reset + Global)
 ===================== */
 
@@ -34,28 +42,12 @@
   }
 
   body {
-    background-color: #f4f4f5; /* [🔥추후 삭제] PC 배경 */
+    background-color: #f4f4f5; /* [🔥추후 삭제] PC 환경 배경 */
     color: #111111;
     overflow-x: hidden;
   }
-}
 
-/* =====================
-   사용자 지정 토큰
-===================== */
-
-/* border-1.5 */
-@layer utilities {
-  .border-1\.5 {
-    border-width: 1.5px;
-  }
-
-  .backdrop-blur-token-lg {
-    backdrop-filter: blur(calc(16px / 2));
-    -webkit-backdrop-filter: blur(calc(16px / 2));
-  }
-
-  /* 버튼 공통 스타일 */
+  /* 버튼 전역 스타일 (hover, disabled 상태) */
   button {
     cursor: pointer;
     transition: filter 0.2s;
@@ -70,7 +62,25 @@
     filter: none;
     cursor: not-allowed;
   }
+}
 
+/* =====================
+   Utilities (Custom)
+===================== */
+
+@layer utilities {
+  /* 커스텀 border width */
+  .border-1\.5 {
+    border-width: 1.5px;
+  }
+
+  /* 커스텀 backdrop blur */
+  .backdrop-blur-token-lg {
+    backdrop-filter: blur(calc(16px / 2));
+    -webkit-backdrop-filter: blur(calc(16px / 2));
+  }
+
+  /* 아래 방향 그림자 */
   .shadow-down-sm {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
   }
@@ -81,6 +91,7 @@
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.12);
   }
 
+  /* 위 방향 그림자 */
   .shadow-up-sm {
     box-shadow: 0 -1px 3px 0 rgba(0, 0, 0, 0.06);
   }
@@ -91,7 +102,7 @@
     box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.12);
   }
 
-  /* 스크롤바 숨김 */
+  /* 스크롤바 숨김 (크로스 브라우저) */
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -102,7 +113,7 @@
 }
 
 /* =====================
-   App Layout (NOT base)
+   App Container Layout
 ===================== */
 
 #root {
@@ -115,15 +126,17 @@
   min-height: 100dvh;
   margin: 0 auto;
 
-  background-color: #ffffff; /* 모바일 화면 */
+  background-color: #ffffff;
 
-  box-shadow: /* [🔥추후 삭제] 모바일 화면 구분용 그림자 */
+  /* [🔥추후 삭제] 모바일 화면 구분용 그림자 */
+  box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.04),
     0 10px 25px rgba(0, 0, 0, 0.08);
 
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* 데스크탑: 고정 너비 */
 @media (min-width: 441px) {
   .app {
     width: 392px;
