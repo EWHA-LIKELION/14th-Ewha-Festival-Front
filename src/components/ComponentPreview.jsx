@@ -20,6 +20,25 @@ const ComponentPreview = () => {
         <Accordion title="Title of accordion" time="2" isUpdate content="Content text" />
         <AdminAccordion title="Title of accordion">children content</AdminAccordion>
       </div>
+
+      {isOpen &&
+        (hasScrim ? (
+          <BottomsheetScrim size={size} onClose={() => setIsOpen(false)}>
+            <div className="flex h-full items-center justify-center p-4">
+              <p className="text-sm text-gray-500">
+                size: {currentSize} / hasScrim: {hasScrim.toString()}
+              </p>
+            </div>
+          </BottomsheetScrim>
+        ) : (
+          <BottomsheetDrag size={size} onSizeChange={(newSize) => setCurrentSize(newSize)}>
+            <div className="flex h-full items-center justify-center p-4">
+              <p className="text-sm text-gray-500">
+                size: {currentSize} / hasScrim: {hasScrim.toString()}
+              </p>
+            </div>
+          </BottomsheetDrag>
+        ))}
     </>
   );
 };
