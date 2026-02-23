@@ -3,31 +3,15 @@
  * 피그마 디자인에 맞춘 커스텀 버튼 + 투명(원래 ㅡ숨겨져 있었는데 투명으로 변경했음) time input 방식
  */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 function Timepicker({
-  startTime: startTimeProp = '09:00',
-  endTime: endTimeProp = '18:00',
+  startTime = '09:00',
+  endTime = '18:00',
   isSelected = true,
   onStartChange,
   onEndChange,
 }) {
-  const [startTime, setStartTime] = useState(startTimeProp);
-  const [endTime, setEndTime] = useState(endTimeProp);
-
-  useEffect(() => setStartTime(startTimeProp), [startTimeProp]);
-  useEffect(() => setEndTime(endTimeProp), [endTimeProp]);
-
-  const handleStartChange = (value) => {
-    setStartTime(value);
-    onStartChange?.(value);
-  };
-
-  const handleEndChange = (value) => {
-    setEndTime(value);
-    onEndChange?.(value);
-  };
-
   const textColor = isSelected ? 'text-gray-500' : 'text-[#b5bbc5]';
 
   return (
@@ -38,7 +22,7 @@ function Timepicker({
         <input
           type="time"
           value={startTime}
-          onChange={(e) => handleStartChange(e.target.value)}
+          onChange={(e) => onStartChange?.(e.target.value)}
           className="absolute inset-0 cursor-pointer opacity-0"
         />
       </div>
@@ -51,7 +35,7 @@ function Timepicker({
         <input
           type="time"
           value={endTime}
-          onChange={(e) => handleEndChange(e.target.value)}
+          onChange={(e) => onEndChange?.(e.target.value)}
           className="absolute inset-0 cursor-pointer opacity-0"
         />
       </div>
