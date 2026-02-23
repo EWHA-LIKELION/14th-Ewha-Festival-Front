@@ -8,7 +8,7 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
   const isDelete = variant === 'delete';
 
   return (
-    <div className="alert-shadow z-50 flex w-80 flex-col items-center justify-center gap-4 rounded-2xl bg-white p-6">
+    <div className="shadow-up-sm z-50 flex w-80 flex-col items-center justify-center gap-4 rounded-2xl bg-white p-6">
       <div
         className={`flex flex-col items-center justify-center gap-2 ${isDelete ? 'p-0' : 'p-4'}`}
       >

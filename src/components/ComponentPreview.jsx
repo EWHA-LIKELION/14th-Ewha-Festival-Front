@@ -2,81 +2,23 @@
  * 공통 컴포넌트 프리뷰 페이지
  */
 
-import React, { useState } from 'react';
-import BottomsheetDrag from '@/components/BottomsheetDrag';
-import BottomsheetScrim from '@/components/BottomsheetScrim';
+import React from 'react';
+import Footer from '@/components/Footer';
+import { Accordion, AdminAccordion } from '@/components/Accordion';
 
 const ComponentPreview = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [size, setSize] = useState('medium');
-  const [hasScrim, setHasScrim] = useState(false);
-  const [currentSize, setCurrentSize] = useState(size);
-
-  const handleOpen = (s, scrim) => {
-    setSize(s);
-    setCurrentSize(s);
-    setHasScrim(scrim);
-    setIsOpen(true);
-  };
+  //확인용
+  const handleClick = () => console.log('chip clicked');
+  const handleDelete = () => console.log('chip deleted');
+  const handleFilterClick = (key) => console.log('filter click:', key);
+  const handleFilterDelete = (key) => console.log('filter delete:', key);
+  const handleSettingClick = () => console.log('setting clicked');
 
   return (
     <>
-      <div className="flex flex-col gap-4 p-4">
-        <h2 className="text-lg font-semibold">Bottomsheet</h2>
-
-        <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium">Scrim 없음</p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => handleOpen('small', false)}
-              className="spacing-2 rounded-lg bg-gray-200 px-4 text-sm"
-            >
-              Small
-            </button>
-            <button
-              type="button"
-              onClick={() => handleOpen('medium', false)}
-              className="rounded-lg bg-gray-200 px-4 py-2 text-sm"
-            >
-              Medium
-            </button>
-            <button
-              type="button"
-              onClick={() => handleOpen('large', false)}
-              className="rounded-lg bg-gray-200 px-4 py-2 text-sm"
-            >
-              Large
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <p className="font-medium0 text-sm">Scrim 있음</p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => handleOpen('small', true)}
-              className="rounded-lg bg-gray-200 px-4 py-2 text-sm"
-            >
-              Small
-            </button>
-            <button
-              type="button"
-              onClick={() => handleOpen('medium', true)}
-              className="rounded-lg bg-gray-200 px-4 py-2 text-sm"
-            >
-              Medium
-            </button>
-            <button
-              type="button"
-              onClick={() => handleOpen('large', true)}
-              className="rounded-lg bg-gray-200 px-4 py-2 text-sm"
-            >
-              Large
-            </button>
-          </div>
-        </div>
+      <div className="flex flex-col gap-3 p-4">
+        <Accordion title="Title of accordion" time="2" isUpdate content="Content text" />
+        <AdminAccordion title="Title of accordion">children content</AdminAccordion>
       </div>
 
       {isOpen &&
