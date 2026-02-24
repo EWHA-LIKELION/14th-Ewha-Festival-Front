@@ -4,33 +4,41 @@
 
 import React, { useState } from 'react';
 import Footer from '@/components/Footer';
-import Timepicker from '@/components/Timepicker';
+import { Accordion, AdminAccordion } from '@/components/Accordion';
 
 const ComponentPreview = () => {
-  const [startTime1, setStartTime1] = useState('09:00');
-  const [endTime1, setEndTime1] = useState('18:00');
-  const [startTime2, setStartTime2] = useState('09:00');
-  const [endTime2, setEndTime2] = useState('18:00');
+  //확인용
+  const handleClick = () => console.log('chip clicked');
+  const handleDelete = () => console.log('chip deleted');
+  const handleFilterClick = (key) => console.log('filter click:', key);
+  const handleFilterDelete = (key) => console.log('filter delete:', key);
+  const handleSettingClick = () => console.log('setting clicked');
 
   return (
     <>
-      <div>ComponentPreview</div>
-      <div className="p-4">
-        <Timepicker
-          startTime={startTime1}
-          endTime={endTime1}
-          isSelected={true}
-          onStartChange={setStartTime1}
-          onEndChange={setEndTime1}
-        />
-        <Timepicker
-          startTime={startTime2}
-          endTime={endTime2}
-          isSelected={false}
-          onStartChange={setStartTime2}
-          onEndChange={setEndTime2}
-        />
+      <div className="flex flex-col gap-3 p-4">
+        <Accordion title="Title of accordion" time="2" isUpdate content="Content text" />
+        <AdminAccordion title="Title of accordion">children content</AdminAccordion>
       </div>
+
+      {isOpen &&
+        (hasScrim ? (
+          <BottomsheetScrim size={size} onClose={() => setIsOpen(false)}>
+            <div className="flex h-full items-center justify-center p-4">
+              <p className="text-sm text-gray-500">
+                size: {currentSize} / hasScrim: {hasScrim.toString()}
+              </p>
+            </div>
+          </BottomsheetScrim>
+        ) : (
+          <BottomsheetDrag size={size} onSizeChange={(newSize) => setCurrentSize(newSize)}>
+            <div className="flex h-full items-center justify-center p-4">
+              <p className="text-sm text-gray-500">
+                size: {currentSize} / hasScrim: {hasScrim.toString()}
+              </p>
+            </div>
+          </BottomsheetDrag>
+        ))}
     </>
   );
 };

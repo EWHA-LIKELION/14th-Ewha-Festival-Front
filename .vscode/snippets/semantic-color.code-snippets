@@ -1,8 +1,4 @@
 {
-  /* =====================
-    Fill → bg-
-  ===================== */
-
   "fill normal strong": {
     "prefix": "fill-normal-strong",
     "body": "bg-gray-100",
@@ -33,10 +29,6 @@
     "body": "bg-emerald-500",
     "description": "Fill/Primary/Normal",
   },
-
-  /* =====================
-    Text → text-
-  ===================== */
 
   "text normal strong": {
     "prefix": "text-normal-strong",
@@ -69,10 +61,6 @@
     "description": "Text/Primary/Strong",
   },
 
-  /* =====================
-     Line → border-
-  ===================== */
-
   "line normal strong": {
     "prefix": "line-normal-strong",
     "body": "border-gray-300",
@@ -93,10 +81,6 @@
     "body": "border-emerald-500",
     "description": "Line/Primary/Normal",
   },
-
-  /* =====================
-     Icon → text- (currentColor)
-  ===================== */
 
   "icon normal strong": {
     "prefix": "icon-normal-strong",

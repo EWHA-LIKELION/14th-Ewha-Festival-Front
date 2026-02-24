@@ -5,19 +5,19 @@
 import React from 'react';
 
 const ICONS = {
+  back: '/icons/icon-back.svg',
+  forward: '/icons/icon-forward.svg',
   bookmark: '/icons/icon-bookmark.svg',
-  chevronleft: '/icons/icon-chevronleft.svg',
   pencil: '/icons/icon-pencil.svg',
-  search: '/icons/icon-search.svg',
   trash: '/icons/icon-trash.svg',
   greenarrow: '/icons/icon-greenarrow.svg',
-  xmarkgrey: '/icons/icon-xmarkgrey.svg',
   xmarkblack: '/icons/icon-xmarkblack.svg',
   xmarkwhite: '/icons/icon-xmarkwhite.svg',
   github: '/icons/logo-github.svg',
   instagram: '/icons/logo-instagram.svg',
   instagramcolor: '/icons/logo-instagramcolor.svg',
   kakaotalk: '/icons/logo-kakaotalk.svg',
+  kakaotalkcolor: '/icons/logo-kakaotalkcolor.svg',
   likelion: '/icons/logo-likelion.svg',
 };
 
