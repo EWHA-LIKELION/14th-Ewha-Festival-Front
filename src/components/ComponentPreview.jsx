@@ -2,7 +2,7 @@
  * 공통 컴포넌트 프리뷰 페이지
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Footer from '@/components/Footer';
 import { Accordion, AdminAccordion } from '@/components/Accordion';
 
