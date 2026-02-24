@@ -2,39 +2,43 @@
  * 공통 컴포넌트 프리뷰 페이지
  */
 
-import React, { useState } from 'react';
-import Tab from '@/components/Tab';
+import React from 'react';
+import Footer from '@/components/Footer';
+import { Accordion, AdminAccordion } from '@/components/Accordion';
 
 const ComponentPreview = () => {
-  const [activeIndex1, setActiveIndex1] = useState(0);
-  const [activeIndex2, setActiveIndex2] = useState(0);
-  const [activeIndex3, setActiveIndex3] = useState(0);
-  const [activeIndex4, setActiveIndex4] = useState(0);
+  //확인용
+  const handleClick = () => console.log('chip clicked');
+  const handleDelete = () => console.log('chip deleted');
+  const handleFilterClick = (key) => console.log('filter click:', key);
+  const handleFilterDelete = (key) => console.log('filter delete:', key);
+  const handleSettingClick = () => console.log('setting clicked');
+
   return (
     <>
-      <div className="p-8">
-        <div>Type 1 탭</div>
-        <br />
-        <Tab tabs={['부스', '공연']} activeIndex={activeIndex1} onChange={setActiveIndex1} />
-        <br />
-        <br />
-        <br />
-        <div>Type 2 탭</div>
-        <br />
-        <Tab
-          variant="underline"
-          tabs={['리스트', '후기']}
-          activeIndex={activeIndex3}
-          onChange={setActiveIndex3}
-        />
-        <br />
-        <Tab
-          variant="underline"
-          tabs={['세트리스트', '후기']}
-          activeIndex={activeIndex4}
-          onChange={setActiveIndex4}
-        />
+      <div className="flex flex-col gap-3 p-4">
+        <Accordion title="Title of accordion" time="2" isUpdate content="Content text" />
+        <AdminAccordion title="Title of accordion">children content</AdminAccordion>
       </div>
+
+      {isOpen &&
+        (hasScrim ? (
+          <BottomsheetScrim size={size} onClose={() => setIsOpen(false)}>
+            <div className="flex h-full items-center justify-center p-4">
+              <p className="text-sm text-gray-500">
+                size: {currentSize} / hasScrim: {hasScrim.toString()}
+              </p>
+            </div>
+          </BottomsheetScrim>
+        ) : (
+          <BottomsheetDrag size={size} onSizeChange={(newSize) => setCurrentSize(newSize)}>
+            <div className="flex h-full items-center justify-center p-4">
+              <p className="text-sm text-gray-500">
+                size: {currentSize} / hasScrim: {hasScrim.toString()}
+              </p>
+            </div>
+          </BottomsheetDrag>
+        ))}
     </>
   );
 };

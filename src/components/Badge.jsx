@@ -1,18 +1,32 @@
 /**
- * Badge 컴포넌트 (variant 종류 : 2가지)
+ * Badge 컴포넌트
+ *
+ * @param {'closed' | 'performing' | 'operating' | 'upcoming'} state - 배지 상태
+ * @param {'md' | 'sm'} size - 배지 크기
  */
 
 import React from 'react';
 
-function Badge({ variant = 'ongoing' }) {
-  const variants = {
-    ongoing: { text: '공연중' },
-    closed: { text: '종료' },
+function Badge({ state = 'closed', size = 'md' }) {
+  const states = {
+    closed: { text: '종료', color: 'text-red-400' },
+    performing: { text: '공연중', color: 'text-emerald-500' },
+    operating: { text: '운영중', color: 'text-gray-500' },
+    upcoming: { text: '공연전', color: 'text-gray-500' },
   };
 
+  const sizes = {
+    md: 'text-sm leading-5',
+    sm: 'text-xs leading-4',
+  };
+
+  const { text, color } = states[state];
+
   return (
-    <span className="inline-flex min-w-fit items-center justify-center rounded-[18px] bg-[#5d5a88] p-2.5 px-2.5 py-1 text-[12px] leading-normal font-medium tracking-[-0.012px] text-white">
-      {variants[variant].text}
+    <span
+      className={`inline-flex items-center justify-center font-semibold tracking-normal ${color} ${sizes[size]}`}
+    >
+      {text}
     </span>
   );
 }

@@ -18,9 +18,9 @@ function Checkbox({ label, isSelected = false, isError = false, onChange }) {
         className="sr-only"
       />
 
-      <div className="flex h-6 w-6 shrink-0 items-center justify-center">
+      <div className="flex size-6 shrink-0 items-center justify-center">
         {isSelected ? (
-          <div className="flex h-4.5 w-4.5 items-center justify-center rounded-sm bg-emerald-500">
+          <div className="flex size-4.5 items-center justify-center rounded-sm bg-emerald-500">
             <svg
               width="12"
               height="9"
@@ -39,7 +39,7 @@ function Checkbox({ label, isSelected = false, isError = false, onChange }) {
           </div>
         ) : (
           <div
-            className={`h-4.5 w-4.5 rounded-sm border bg-white ${
+            className={`size-4.5 rounded-sm border bg-white ${
               isError ? 'border-red-400' : 'border-gray-200'
             }`}
           />
