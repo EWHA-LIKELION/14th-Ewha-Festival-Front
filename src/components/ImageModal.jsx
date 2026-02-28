@@ -15,7 +15,7 @@ const ImageModal = ({ image, onClose }) => {
           </button>
 
           {/* 이미지 */}
-          <div className="w-full max-w-98">
+          <div className="reactive-width w-full">
             <img
               src={image || '/images/showcard-default.png'}
               className="h-auto w-full object-cover"
