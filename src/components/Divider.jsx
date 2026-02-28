@@ -1,14 +1,12 @@
 /**
- * Divider 컴포넌트 (PublicDivider, AdminDivider(width: short/long))
+ * Divider 컴포넌트
+ *
+ * @param {boolean} isAdmin - 관리자 페이지 여부. true면 연한 회색(border-gray-200), false면 기본 회색(border-gray-100) 적용
  */
 import React from 'react';
 
-export const PublicDivider = () => {
-  return <hr className="w-88 border-gray-100" />;
+const Divider = (isAdmin = 'false') => {
+  return <hr className={`w-full ${isAdmin ? `border-gray-200` : `border-gray-100`}`} />;
 };
 
-//AdminDivider width type 2가지(short/long)
-export const AdminDivider = ({ width = 'short' }) => {
-  const widthClass = width === 'long' ? 'w-98' : 'w-88';
-  return <hr className={`border-gray-200 ${widthClass}`} />;
-};
+export default Divider;
