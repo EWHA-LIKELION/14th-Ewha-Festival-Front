@@ -44,7 +44,7 @@ const Header = ({
 
   // 배경 스타일
   const backgroundStyles = {
-    white: 'bg-white shadow-[0_1px_3px_0_rgba(0,0,0,0.06)]',
+    white: 'bg-white shadow-down-sm',
     transparent: 'bg-transparent',
     gradient: 'bg-linear-to-b from-[#292929]/50',
   };
@@ -53,13 +53,15 @@ const Header = ({
 
   return (
     <header
-      className={`fixed top-0 left-1/2 z-10 flex h-18 w-full -translate-x-1/2 items-center px-2 md:w-[392px] ${backgroundStyles[background]}`}
+      className={`reactive-width flex h-18 w-full px-2 ${backgroundStyles[background]} ${
+        background === 'gradient' ? 'absolute top-0 left-0 z-5' : ''
+      }`}
       style={background === 'gradient' ? { paddingTop: 'env(safe-area-inset-top)' } : undefined}
     >
       {/* Left 영역 */}
       <div className="flex items-center justify-start">
         {left === 'back' && (
-          <button onClick={handleBack} className="p-3">
+          <button onClick={handleBack} onPointerDown={(e) => e.stopPropagation()} className="p-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -83,6 +85,7 @@ const Header = ({
             alt="logo"
             className="h-10" // 추후 수정 예정
             onClick={() => navigate('/')}
+            onPointerDown={(e) => e.stopPropagation()}
           />
         )}
       </div>
@@ -100,7 +103,7 @@ const Header = ({
       {/* Right 영역 */}
       <div className="flex items-center justify-end">
         {right === 'search' && (
-          <button onClick={goSearch} className="p-3">
+          <button onClick={goSearch} onPointerDown={(e) => e.stopPropagation()} className="p-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -126,7 +129,7 @@ const Header = ({
           </button>
         )}
         {right === 'edit' && (
-          <button onClick={onEdit} className="p-3">
+          <button onClick={onEdit} onPointerDown={(e) => e.stopPropagation()} className="p-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -161,6 +164,7 @@ const Header = ({
         {right === 'save' && (
           <button
             onClick={onSave}
+            onPointerDown={(e) => e.stopPropagation()}
             className="mr-3 h-8 rounded-full bg-emerald-500 px-4 text-sm font-medium text-white"
           >
             저장
