@@ -123,6 +123,7 @@
 .app {
   position: relative;
   width: 100%;
+  min-width: 320px;
   min-height: 100dvh;
   margin: 0 auto;
 
@@ -136,9 +137,15 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* 반응형 너비: 최소 320px 보장 */
+.reactive-width {
+  min-width: 320px;
+}
+
 /* 데스크탑: 고정 너비 */
 @media (min-width: 441px) {
-  .app {
+  .app,
+  .reactive-width {
     width: 392px;
   }
 }

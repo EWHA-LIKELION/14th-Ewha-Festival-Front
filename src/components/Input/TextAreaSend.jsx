@@ -38,7 +38,7 @@ const TextAreaSend = ({ placeholder, onSend }) => {
   const hasValue = value.trim().length > 0;
 
   return (
-    <div className="relative w-88 rounded-3xl bg-gray-100 px-4 py-3">
+    <div className="relative w-full rounded-3xl bg-gray-100 px-4 py-3">
       <textarea
         ref={textareaRef}
         value={value}

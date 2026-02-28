@@ -18,7 +18,7 @@ const ShowCard = ({
   return (
     <div
       onClick={onClick}
-      className="flex w-88 items-start gap-3 rounded-xl border border-gray-200 bg-white p-4"
+      className="flex w-full items-start gap-3 rounded-xl border border-gray-200 bg-white p-4"
     >
       {/* 공연 이미지 */}
       <img
@@ -30,7 +30,7 @@ const ShowCard = ({
       <div className="flex flex-col items-start gap-1">
         <div className="flex items-start justify-between">
           <div className="flex flex-col items-start gap-1">
-            <div className="flex items-start gap-1.5">
+            <div className="flex items-center gap-1.5">
               <h2 className="text-lg leading-6 font-semibold tracking-normal text-gray-900">
                 {name}
               </h2>
