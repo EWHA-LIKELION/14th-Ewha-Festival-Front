@@ -5,7 +5,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 const SNAP_HEIGHTS = {
-  small: 148,
+  small: 95,
   medium: 468,
   large: 628,
   full: window.innerHeight,
@@ -86,19 +86,21 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
 
   return (
     <div
-      className={`shadow-up-md fixed bottom-0 left-1/2 z-50 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white ${
+      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-5 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white pb-15 ${
         isFull ? 'rounded-none' : 'rounded-t-3xl'
       }`}
       style={sheetStyle}
     >
       <div
-        className="flex h-6 shrink-0 cursor-grab touch-none flex-col items-center justify-end px-4 pt-2 active:cursor-grabbing"
+        className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-3 active:cursor-grabbing ${
+          isFull ? 'absolute top-0 z-10 flex w-full' : 'flex shrink-0'
+        }`}
         onPointerDown={handlePointerDown}
       >
         {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />}
       </div>
 
-      <div className="w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
+      <div className="relative w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
     </div>
   );
 };
