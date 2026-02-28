@@ -3,7 +3,6 @@
  */
 
 import { useRef } from 'react';
-import IconButton from '@/components/IconButton';
 import { useImageUploader } from '@/hooks';
 
 /* 상세 이미지 */
@@ -44,15 +43,15 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
 
       {/* 삭제 버튼 */}
       {image && (
-        <div
-          className="absolute top-0.5 right-1"
+        <button
+          className="absolute top-1 right-1 p-0.5"
           onClick={(e) => {
             e.stopPropagation();
             onRemove?.(clearImage);
           }}
         >
-          <IconButton name="xmarkgrey" size={16} />
-        </div>
+          <img src="/icons/icon-xmarkblack.svg" alt="삭제" width="16" height="16" />
+        </button>
       )}
     </div>
   );
@@ -64,7 +63,7 @@ export const ThumbnailImageUploader = ({ initialImage, onRemove }) => {
   const inputRef = useRef(null);
 
   return (
-    <div className="relative h-62.5 w-89.5">
+    <div className="relative h-62.5 w-full">
       <input
         ref={inputRef}
         type="file"

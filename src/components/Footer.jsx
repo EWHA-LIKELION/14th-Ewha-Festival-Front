@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import IconButton from '@/components/IconButton';
 import Button from '@/components/Button';
 
 const Footer = () => {

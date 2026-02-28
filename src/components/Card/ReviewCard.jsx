@@ -3,12 +3,11 @@
  */
 
 import React from 'react';
-import IconButton from '@/components/IconButton';
 
 const ReviewCard = ({ name, review, ago, showDelete = false, onClick }) => {
   return (
-    <div className="flex w-88 flex-col items-start justify-center gap-2.5 rounded-xl border border-gray-200 bg-white px-5 pt-2.5 pb-4">
-      <div className="flex items-start gap-2 self-stretch">
+    <div className="flex w-full flex-col items-start justify-center gap-2.5 rounded-xl border border-gray-200 bg-white px-5 pt-2.5 pb-4">
+      <div className="flex items-start justify-between gap-2 self-stretch">
         <div className="flex w-66 flex-col items-start gap-1.5 pt-2">
           <h2 className="line-clamp-1 overflow-hidden text-sm leading-5 font-semibold tracking-normal text-ellipsis text-gray-900">
             {name}
@@ -18,9 +17,11 @@ const ReviewCard = ({ name, review, ago, showDelete = false, onClick }) => {
             {review}
           </h3>
         </div>
-        <div className="h-10 w-10 items-center justify-center p-2.5">
+        <div className="items-center justify-center pt-2">
           {showDelete && (
-            <IconButton name="trash" size={20} className="justify-center" onClick={onClick} />
+            <button onClick={onClick}>
+              <img src="/icons/icon-trash.svg" alt="삭제" width="20" height="20" />
+            </button>
           )}
         </div>
       </div>

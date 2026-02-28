@@ -4,7 +4,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import IconButton from '@/components/IconButton';
 
 const Carousel = ({ items = [] }) => {
   const navigate = useNavigate();
@@ -124,8 +123,12 @@ const Carousel = ({ items = [] }) => {
 
       {/* 버튼 레이어 */}
       <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-between px-3">
-        <IconButton name="back" onClick={handlePrev} className="pointer-events-auto" />
-        <IconButton name="forward" onClick={handleNext} className="pointer-events-auto" />
+        <button onClick={handlePrev} className="pointer-events-auto">
+          <img src="/icons/icon-back.svg" alt="back" />
+        </button>
+        <button onClick={handleNext} className="pointer-events-auto">
+          <img src="/icons/icon-forward.svg" alt="forward" />
+        </button>
       </div>
     </div>
   );
