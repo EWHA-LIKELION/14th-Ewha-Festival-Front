@@ -74,7 +74,7 @@ const NavigationBar = () => {
 
   return (
     <div
-      className="reactive-width fixed bottom-0 left-1/2 z-10 flex h-15 w-full -translate-x-1/2 items-center justify-between border-t border-gray-100 bg-white px-7 text-xs font-medium"
+      className="reactive-width fixed bottom-0 left-1/2 z-20 flex h-15 w-full -translate-x-1/2 items-center justify-between border-t border-gray-100 bg-white px-7 text-xs font-medium"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       {navItems.map((item) => {

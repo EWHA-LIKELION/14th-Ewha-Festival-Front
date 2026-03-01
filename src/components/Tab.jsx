@@ -49,7 +49,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
 
         {/* 이동하는 언더라인 인디케이터 */}
         <div
-          className="absolute top-8 z-10 h-0.5 w-20 bg-emerald-500 transition-[left] duration-300 ease-in-out"
+          className="absolute top-8 z-5 h-0.5 w-20 bg-emerald-500 transition-[left] duration-300 ease-in-out"
           style={{ left: `${activeIndex * 5}rem` }}
         />
       </div>

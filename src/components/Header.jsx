@@ -14,9 +14,10 @@
  * @param {Function} props.onSave - 저장 버튼 클릭 핸들러
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '@/components/SearchBar';
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const Header = ({
   left = 'none', // back, logo
@@ -29,18 +30,7 @@ const Header = ({
   onSave,
 }) => {
   const navigate = useNavigate();
-
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
-  };
-
-  const goSearch = () => {
-    navigate('/search');
-  };
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   // 배경 스타일
   const backgroundStyles = {
@@ -51,11 +41,21 @@ const Header = ({
 
   const iconColor = background === 'gradient' ? '#FFF' : '#4A5565';
 
+  const handleBack = () => {
+    if (background === 'gradient') {
+      setSheetSize('medium');
+      return;
+    }
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <header
-      className={`reactive-width flex h-18 w-full px-2 ${backgroundStyles[background]} ${
-        background === 'gradient' ? 'absolute top-0 left-0 z-5' : ''
-      }`}
+      className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full px-2 ${backgroundStyles[background]}`}
       style={background === 'gradient' ? { paddingTop: 'env(safe-area-inset-top)' } : undefined}
     >
       {/* Left 영역 */}

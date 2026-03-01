@@ -104,7 +104,7 @@ const Carousel = ({ items = [] }) => {
             <div className="absolute right-0 bottom-0 left-0 h-full bg-linear-to-t from-emerald-500 opacity-70" />
 
             {/* 텍스트 콘텐츠 */}
-            <div className="relative z-10 flex h-full flex-col justify-end p-5">
+            <div className="relative z-5 flex h-full flex-col justify-end p-5">
               <div className="flex flex-col gap-1.5">
                 <p className="text-2xl font-semibold text-white">{item.title}</p>
                 <p className="text-base font-medium text-white">{item.description}</p>
@@ -115,14 +115,14 @@ const Carousel = ({ items = [] }) => {
       </div>
 
       {/* 페이지 카운터 */}
-      <div className="absolute top-3 right-3 z-10 flex h-6 w-8 items-center justify-center rounded-xl bg-gray-700/60">
+      <div className="absolute top-3 right-3 z-5 flex h-6 w-8 items-center justify-center rounded-xl bg-gray-700/60">
         <p className="text-xs font-normal text-white">
           {displayIndex}/{items.length}
         </p>
       </div>
 
       {/* 버튼 레이어 */}
-      <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-between px-3">
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-between px-3">
         <button onClick={handlePrev} className="pointer-events-auto">
           <img src="/icons/icon-back.svg" alt="back" />
         </button>
