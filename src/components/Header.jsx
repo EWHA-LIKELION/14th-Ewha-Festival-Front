@@ -53,6 +53,10 @@ const Header = ({
     }
   };
 
+  const goSearch = () => {
+    navigate('/search');
+  };
+
   return (
     <header
       className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full px-2 ${backgroundStyles[background]}`}
