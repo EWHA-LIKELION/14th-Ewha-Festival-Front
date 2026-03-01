@@ -87,7 +87,7 @@ const BottomsheetDrag = ({ children }) => {
       style={sheetStyle}
     >
       <div
-        className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-3 active:cursor-grabbing ${
+        className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-1 active:cursor-grabbing ${
           isFull ? 'absolute top-0 z-15 flex w-full' : 'flex shrink-0'
         }`}
         onPointerDown={handlePointerDown}
