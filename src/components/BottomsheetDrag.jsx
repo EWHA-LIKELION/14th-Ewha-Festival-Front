@@ -2,10 +2,11 @@
  * 드래그 되고 Scrim 없는 ㅍBottomsheet
  */
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback } from 'react';
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const SNAP_HEIGHTS = {
-  small: 148,
+  small: 95,
   medium: 468,
   large: 628,
   full: window.innerHeight,
@@ -22,25 +23,20 @@ const getNearestSize = (height) => {
   );
 };
 
-const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
-  const [currentSize, setCurrentSize] = useState(size);
-  const [dragHeight, setDragHeight] = useState(null);
+const BottomsheetDrag = ({ children }) => {
+  const { sheetSize, setSheetSize } = useBottomsheetStore();
+  const [dragHeight, setDragHeight] = React.useState(null);
   const isDragging = dragHeight !== null;
 
   const startYRef = useRef(0);
   const startHeightRef = useRef(0);
   const dragHeightRef = useRef(null);
 
-  useEffect(() => {
-    setCurrentSize(size);
-  }, [size]);
-
   const handlePointerDown = useCallback(
     (e) => {
       e.preventDefault();
       startYRef.current = e.clientY;
-      startHeightRef.current =
-        currentSize === 'full' ? window.innerHeight : SNAP_HEIGHTS[currentSize];
+      startHeightRef.current = sheetSize === 'full' ? window.innerHeight : SNAP_HEIGHTS[sheetSize];
 
       const handlePointerMove = (moveEvent) => {
         const delta = startYRef.current - moveEvent.clientY;
@@ -53,8 +49,7 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
         const height = dragHeightRef.current;
         if (height !== null) {
           const nearest = getNearestSize(height);
-          setCurrentSize(nearest);
-          onSizeChange?.(nearest);
+          setSheetSize(nearest);
         }
         dragHeightRef.current = null;
         setDragHeight(null);
@@ -65,10 +60,10 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
       document.addEventListener('pointermove', handlePointerMove);
       document.addEventListener('pointerup', handlePointerUp);
     },
-    [currentSize, onSizeChange],
+    [sheetSize, setSheetSize],
   );
 
-  const isFull = currentSize === 'full';
+  const isFull = sheetSize === 'full';
 
   const sheetStyle = (() => {
     if (isDragging) {
@@ -79,26 +74,28 @@ const BottomsheetDrag = ({ size = 'medium', onSizeChange, children }) => {
       return { height: '100dvh', transition: 'height 0.3s ease' };
     }
     return {
-      height: `${SNAP_HEIGHTS[currentSize]}px`,
+      height: `${SNAP_HEIGHTS[sheetSize]}px`,
       transition: 'height 0.3s ease',
     };
   })();
 
   return (
     <div
-      className={`shadow-up-md fixed bottom-0 left-1/2 z-50 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white ${
+      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white pb-15 ${
         isFull ? 'rounded-none' : 'rounded-t-3xl'
       }`}
       style={sheetStyle}
     >
       <div
-        className="flex h-6 shrink-0 cursor-grab touch-none flex-col items-center justify-end px-4 pt-2 active:cursor-grabbing"
+        className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-1 active:cursor-grabbing ${
+          isFull ? 'absolute top-0 z-15 flex w-full' : 'flex shrink-0'
+        }`}
         onPointerDown={handlePointerDown}
       >
         {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />}
       </div>
 
-      <div className="w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
+      <div className="relative w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
     </div>
   );
 };

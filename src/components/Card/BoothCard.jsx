@@ -20,12 +20,12 @@ const BoothCard = ({
   return (
     <div
       onClick={onClick}
-      className="g-0 flex w-88 flex-col items-start rounded-xl border border-gray-200 bg-white p-4"
+      className="g-0 flex w-full flex-col items-start rounded-xl border border-gray-200 bg-white p-4"
     >
       {/* 부스명 및 위치 */}
       <div className="flex w-full items-start justify-between p-0">
         <div className="flex flex-col items-start gap-1 p-0">
-          <div className="flex items-start gap-1.5">
+          <div className="flex items-center gap-1.5">
             <h2 className="text-lg leading-6 font-semibold tracking-normal text-gray-900">
               {name}
             </h2>

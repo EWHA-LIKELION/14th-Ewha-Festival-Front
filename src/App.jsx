@@ -15,6 +15,8 @@ function App() {
         <Route element={<NavigationBarLayout noPadding />}>
           <Route path="map" element={<div className="h-300 bg-gray-500">Map</div>} />
           {/* query string: /map?type=부스공연&slot=건물&booth=부스 */}
+          {/* 공통 컴포넌트 퍼블리싱 기간이 끝나면 아래 라우트는 삭제 */}
+          <Route path="component-preview" element={<ComponentPreview />} />
         </Route>
         <Route path="credit" element={<div>Credit</div>} />
         <Route path="introduction" element={<div>Introduction</div>} />
@@ -28,8 +30,6 @@ function App() {
           <Route path="show/:id" element={<div>My Show</div>} />
           <Route path="show/:id/edit" element={<div>Show Edit</div>} />
         </Route>
-        {/* 공통 컴포넌트 퍼블리싱 기간이 끝나면 아래 라우트는 삭제 */}
-        <Route path="component-preview" element={<ComponentPreview />} />
       </Routes>
     </main>
   );
