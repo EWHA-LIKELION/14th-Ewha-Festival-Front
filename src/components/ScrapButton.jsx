@@ -3,10 +3,13 @@
  */
 
 import React, { useState } from 'react';
+import useAuthStore from '@/store/useAuthStore';
 
 const ScrapButton = ({ initialScrapped = false, count = 0, onToggle }) => {
   const [isScrapped, setIsScrapped] = useState(initialScrapped);
   const [scrapCount, setScrapCount] = useState(count);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
 
   const formatCount = (num) => {
     if (!num) return '00';
@@ -15,6 +18,11 @@ const ScrapButton = ({ initialScrapped = false, count = 0, onToggle }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
+
+    if (!isLoggedIn) {
+      openLoginSheet();
+      return;
+    }
 
     const next = !isScrapped;
     setIsScrapped(next);
