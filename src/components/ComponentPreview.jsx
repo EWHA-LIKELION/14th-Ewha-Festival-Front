@@ -47,7 +47,7 @@ const ComponentPreview = () => {
             />
           </>
         )}
-        <div className="p-6">
+        <div>
           <h2 className="mb-4 text-xl font-bold">바텀시트 콘텐츠</h2>
           <p className="mb-4">바텀시트를 full 높이로 드래그하면 헤더가 나타납니다.</p>
           <p className="mb-4">현재 크기: {sheetSize}</p>
