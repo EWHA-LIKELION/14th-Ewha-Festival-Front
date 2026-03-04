@@ -82,10 +82,16 @@ const NavigationBar = () => {
           <button
             key={item.label}
             onClick={() => navigate(item.path)}
-            className="flex h-fit w-20 flex-col items-center justify-center gap-1 text-xs font-medium"
+            className="flex h-fit w-20 flex-col items-center justify-center gap-1 text-xs"
           >
             <div className={item.isActive ? 'text-emerald-500' : 'text-gray-400'}>{item.icon}</div>
-            <p className={item.isActive ? 'text-emerald-500' : 'text-gray-500'}>{item.label}</p>
+            <p
+              className={
+                item.isActive ? 'font-medium text-emerald-500' : 'font-normal text-gray-500'
+              }
+            >
+              {item.label}
+            </p>
           </button>
         );
       })}
