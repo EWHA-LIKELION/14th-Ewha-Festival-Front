@@ -1,5 +1,5 @@
 /**
- * 드래그 되고 Scrim 없는 ㅍBottomsheet
+ * 드래그 되고 Scrim 없는 Bottomsheet
  */
 
 import React, { useRef, useCallback } from 'react';
