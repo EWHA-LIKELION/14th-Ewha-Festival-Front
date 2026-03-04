@@ -2,14 +2,19 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import NavigationBarLayout from '@/layouts/NavigationBarLayout';
 import ComponentPreview from '@/components/ComponentPreview';
+import LoginSheet from '@/features/LoginSheet';
+import useAuthStore from '@/store/useAuthStore';
+import MyPage from '@/pages/my/MyPage';
 
 function App() {
+  const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
+
   return (
     <main className="app">
       <Routes>
         <Route element={<NavigationBarLayout />}>
           <Route index element={<div className="h-300 bg-gray-500">Home</div>} />
-          <Route path="my" element={<div>My</div>} />
+          <Route path="my" element={<MyPage />} />
           <Route path="my/scrap" element={<div>Scrap</div>} />
         </Route>
         <Route element={<NavigationBarLayout noPadding />}>
@@ -31,6 +36,9 @@ function App() {
           <Route path="show/:id/edit" element={<div>Show Edit</div>} />
         </Route>
       </Routes>
+
+      {/* 로그인 바텀시트 — 전역에서 openLoginSheet()으로 호출 */}
+      {showLoginSheet && <LoginSheet />}
     </main>
   );
 }
