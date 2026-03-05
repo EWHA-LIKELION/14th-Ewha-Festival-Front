@@ -6,32 +6,10 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
-import Tab from '@/components/Tab';
-import { DetailImageUploader, ThumbnailImageUploader } from '@/components/FileUploader';
-import ImageModal from '@/components/ImageModal';
-import ReviewCard from '@/components/Card/ReviewCard';
-import Divider from '@/components/Divider';
-import SearchBar from '@/components/SearchBar';
-import Carousel from '@/components/Carousel';
-import TextAreaSend from '@/components/Input/TextAreaSend';
-import TrashCard from '@/components/Card/TrashCard';
 import BoothCard from '@/components/Card/BoothCard';
-import MenuCard from '@/components/Card/MenuCard';
-import NoticeCard from '@/components/Card/NoticeCard';
-import SetlistCard from '@/components/Card/SetlistCard';
-import ShowCard from '@/components/Card/ShowCard';
 
 const ComponentPreview = () => {
   const sheetSize = useBottomsheetStore((s) => s.sheetSize);
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [modalImage, setModalImage] = useState('');
-  const [textTabIndex, setTextTabIndex] = useState(0);
-  const [underlineTabIndex, setUnderlineTabIndex] = useState(0);
-
-  const handleImageClick = (imageSrc) => {
-    setModalImage(imageSrc);
-    setShowImageModal(true);
-  };
 
   return (
     <>
@@ -47,7 +25,7 @@ const ComponentPreview = () => {
             />
           </>
         )}
-        <div>
+        <div className="h-200 p-5">
           {/* BoothCard 프리뷰 */}
           <div className="mb-8">
             <h3 className="mb-3 text-lg font-semibold">BoothCard</h3>
