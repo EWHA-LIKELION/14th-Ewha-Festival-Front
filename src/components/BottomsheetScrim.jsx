@@ -29,12 +29,12 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
     <>
       <div
         onClick={handleClose}
-        className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300"
+        className="fixed inset-0 z-30 bg-black/50 transition-opacity duration-300"
         style={{ opacity: visible ? 1 : 0 }}
       />
 
       <div
-        className={`shadow-up-md fixed bottom-0 left-1/2 z-50 flex w-full flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out ${SHEET_HEIGHT_CLASS[size]}`}
+        className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-35 flex w-full flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out ${SHEET_HEIGHT_CLASS[size]}`}
         style={{ transform: `translateX(-50%) translateY(${visible ? '0%' : '100%'})` }}
       >
         <div className="flex h-8 shrink-0 flex-col items-center justify-end px-4 pt-2">

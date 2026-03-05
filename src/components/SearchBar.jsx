@@ -36,7 +36,7 @@ const SearchBar = ({ isMap = false, onSearch, searchValue }) => {
   };
 
   return (
-    <div className="relative w-88">
+    <div className="relative w-full">
       <input
         type="text"
         placeholder="부스/공연명, 메뉴명, 부스번호 검색"
