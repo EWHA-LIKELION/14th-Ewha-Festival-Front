@@ -47,7 +47,7 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
           </button>
         </div>
 
-        <div className="w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
+        <div className="w-full flex-1 overflow-x-clip overflow-y-auto p-5">{children}</div>
       </div>
     </>
   );
