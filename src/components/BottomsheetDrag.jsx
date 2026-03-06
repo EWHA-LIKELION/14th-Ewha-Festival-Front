@@ -73,6 +73,12 @@ const BottomsheetDrag = ({ children }) => {
     if (isFull) {
       return { height: '100dvh', transition: 'height 0.3s ease' };
     }
+    if (sheetSize === 'small') {
+      return {
+        height: `calc(${SNAP_HEIGHTS.small}px + env(safe-area-inset-bottom))`,
+        transition: 'height 0.3s ease',
+      };
+    }
     return {
       height: `${SNAP_HEIGHTS[sheetSize]}px`,
       transition: 'height 0.3s ease',
@@ -81,10 +87,10 @@ const BottomsheetDrag = ({ children }) => {
 
   return (
     <div
-      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white pb-15 ${
+      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white ${
         isFull ? 'rounded-none' : 'rounded-t-3xl'
       }`}
-      style={sheetStyle}
+      style={{ ...sheetStyle, paddingBottom: 'calc(3.75rem + env(safe-area-inset-bottom))' }}
     >
       <div
         className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-1 active:cursor-grabbing ${
