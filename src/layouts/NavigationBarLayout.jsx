@@ -9,12 +9,7 @@ const NavigationBarLayout = ({ noPadding = false }) => {
   return (
     <>
       {/* 페이지 콘텐츠 */}
-      <div
-        className={noPadding ? '' : 'pb-13'}
-        style={
-          noPadding ? undefined : { paddingBottom: 'calc(3.25rem + env(safe-area-inset-bottom))' }
-        }
-      >
+      <div className={noPadding ? '' : 'pb-15'}>
         <Outlet />
       </div>
 
