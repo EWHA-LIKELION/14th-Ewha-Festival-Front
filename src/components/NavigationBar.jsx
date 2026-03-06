@@ -73,28 +73,31 @@ const NavigationBar = () => {
   ];
 
   return (
-    <div
-      className="reactive-width fixed bottom-0 left-1/2 z-20 flex min-h-15 w-full -translate-x-1/2 items-center justify-between border-t border-gray-100 bg-white px-7 text-xs font-medium"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
-    >
-      {navItems.map((item) => {
-        return (
-          <button
-            key={item.label}
-            onClick={() => navigate(item.path)}
-            className="flex h-fit w-20 flex-col items-center justify-center gap-1 text-xs"
-          >
-            <div className={item.isActive ? 'text-emerald-500' : 'text-gray-400'}>{item.icon}</div>
-            <p
-              className={
-                item.isActive ? 'font-medium text-emerald-500' : 'font-normal text-gray-500'
-              }
+    <div className="reactive-width fixed bottom-0 left-1/2 z-20 w-full -translate-x-1/2 bg-white">
+      <div className="flex min-h-15 items-center justify-between border-t border-gray-100 px-7 text-xs font-medium">
+        {navItems.map((item) => {
+          return (
+            <button
+              key={item.label}
+              onClick={() => navigate(item.path)}
+              className="flex h-fit w-20 flex-col items-center justify-center gap-1 text-xs"
             >
-              {item.label}
-            </p>
-          </button>
-        );
-      })}
+              <div className={item.isActive ? 'text-emerald-500' : 'text-gray-400'}>
+                {item.icon}
+              </div>
+              <p
+                className={
+                  item.isActive ? 'font-medium text-emerald-500' : 'font-normal text-gray-500'
+                }
+              >
+                {item.label}
+              </p>
+            </button>
+          );
+        })}
+      </div>
+      {/* safe area 여백 — iPhone PWA 홈 인디케이터 영역 */}
+      <div style={{ height: 'env(safe-area-inset-bottom)' }} />
     </div>
   );
 };
