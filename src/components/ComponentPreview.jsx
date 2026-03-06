@@ -21,11 +21,15 @@ const ComponentPreview = () => {
               src="/images/boothcard-test.jpg"
               alt=""
               className="w-full"
-              style={{ height: '240px', objectFit: 'cover', marginTop: '-4.5rem' }}
+              style={{
+                height: '240px',
+                objectFit: 'cover',
+                marginTop: 'calc(-4.5rem - env(safe-area-inset-top))',
+              }}
             />
           </>
         )}
-        <div className="h-200 p-5">
+        <div className="h-200 bg-gray-300 p-5">
           {/* BoothCard 프리뷰 */}
           <div className="mb-8">
             <h3 className="mb-3 text-lg font-semibold">BoothCard</h3>

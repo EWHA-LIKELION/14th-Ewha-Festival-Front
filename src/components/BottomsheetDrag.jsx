@@ -6,7 +6,7 @@ import React, { useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const SNAP_HEIGHTS = {
-  small: 95,
+  small: 87,
   medium: 468,
   large: 628,
   full: window.innerHeight,
@@ -74,17 +74,21 @@ const BottomsheetDrag = ({ children }) => {
       return { height: '100dvh', transition: 'height 0.3s ease' };
     }
     return {
-      height: `${SNAP_HEIGHTS[sheetSize]}px`,
+      height: `calc(${SNAP_HEIGHTS[sheetSize]}px + env(safe-area-inset-bottom))`,
       transition: 'height 0.3s ease',
     };
   })();
 
   return (
     <div
-      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white pb-15 ${
-        isFull ? 'rounded-none' : 'rounded-t-3xl'
+      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col bg-white ${
+        isFull ? 'rounded-none' : 'overflow-clip rounded-t-3xl'
       }`}
-      style={sheetStyle}
+      style={{
+        ...sheetStyle,
+        paddingTop: isFull ? 'env(safe-area-inset-top)' : undefined,
+        paddingBottom: 'calc(3.75rem + env(safe-area-inset-bottom))',
+      }}
     >
       <div
         className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-1 active:cursor-grabbing ${
@@ -95,7 +99,9 @@ const BottomsheetDrag = ({ children }) => {
         {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />}
       </div>
 
-      <div className="relative w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
+      <div className={`relative w-full flex-1 overflow-y-auto ${isFull ? '' : 'overflow-x-clip'}`}>
+        {children}
+      </div>
     </div>
   );
 };
