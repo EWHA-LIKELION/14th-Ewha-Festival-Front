@@ -62,7 +62,7 @@ const Header = ({
       className={`reactive-width sticky top-0 left-0 z-10 flex min-h-18 w-full px-2 ${backgroundStyles[background]}`}
       style={
         background === 'gradient'
-          ? { marginTop: '-env(safe-area-inset-top)', paddingTop: 'env(safe-area-inset-top)' }
+          ? { marginTop: 'calc(-1 * env(safe-area-inset-top))', paddingTop: 'env(safe-area-inset-top)' }
           : undefined
       }
     >
