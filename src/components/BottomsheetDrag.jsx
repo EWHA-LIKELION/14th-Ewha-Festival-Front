@@ -84,7 +84,11 @@ const BottomsheetDrag = ({ children }) => {
       className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white ${
         isFull ? 'rounded-none' : 'rounded-t-3xl'
       }`}
-      style={{ ...sheetStyle, paddingBottom: 'calc(3.75rem + env(safe-area-inset-bottom))' }}
+      style={{
+        ...sheetStyle,
+        paddingTop: isFull ? 'env(safe-area-inset-top)' : undefined,
+        paddingBottom: 'calc(3.75rem + env(safe-area-inset-bottom))',
+      }}
     >
       <div
         className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-1 active:cursor-grabbing ${
