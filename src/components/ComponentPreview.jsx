@@ -29,7 +29,7 @@ const ComponentPreview = () => {
             />
           </>
         )}
-        <div className="h-200 p-5">
+        <div className="h-200 bg-gray-300 p-5">
           {/* BoothCard 프리뷰 */}
           <div className="mb-8">
             <h3 className="mb-3 text-lg font-semibold">BoothCard</h3>
