@@ -59,7 +59,7 @@ const Header = ({
 
   return (
     <header
-      className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full px-2 ${backgroundStyles[background]}`}
+      className={`reactive-width sticky top-0 left-0 z-10 flex min-h-18 w-full px-2 ${backgroundStyles[background]}`}
       style={background === 'gradient' ? { paddingTop: 'env(safe-area-inset-top)' } : undefined}
     >
       {/* Left 영역 */}
