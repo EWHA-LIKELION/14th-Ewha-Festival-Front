@@ -6,7 +6,7 @@ import React, { useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const SNAP_HEIGHTS = {
-  small: 95,
+  small: 87,
   medium: 468,
   large: 628,
   full: window.innerHeight,
@@ -99,9 +99,7 @@ const BottomsheetDrag = ({ children }) => {
         {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />}
       </div>
 
-      <div
-        className={`relative w-full flex-1 overflow-y-auto ${isFull ? '' : 'overflow-x-clip'}`}
-      >
+      <div className={`relative w-full flex-1 overflow-y-auto ${isFull ? '' : 'overflow-x-clip'}`}>
         {children}
       </div>
     </div>
