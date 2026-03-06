@@ -73,14 +73,8 @@ const BottomsheetDrag = ({ children }) => {
     if (isFull) {
       return { height: '100dvh', transition: 'height 0.3s ease' };
     }
-    if (sheetSize === 'small') {
-      return {
-        height: `calc(${SNAP_HEIGHTS.small}px + env(safe-area-inset-bottom))`,
-        transition: 'height 0.3s ease',
-      };
-    }
     return {
-      height: `${SNAP_HEIGHTS[sheetSize]}px`,
+      height: `calc(${SNAP_HEIGHTS[sheetSize]}px + env(safe-area-inset-bottom))`,
       transition: 'height 0.3s ease',
     };
   })();
