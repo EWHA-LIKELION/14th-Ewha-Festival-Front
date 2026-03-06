@@ -21,7 +21,11 @@ const ComponentPreview = () => {
               src="/images/boothcard-test.jpg"
               alt=""
               className="w-full"
-              style={{ height: '240px', objectFit: 'cover', marginTop: '-4.5rem' }}
+              style={{
+                height: '240px',
+                objectFit: 'cover',
+                marginTop: 'calc(-4.5rem - env(safe-area-inset-top))',
+              }}
             />
           </>
         )}
