@@ -99,7 +99,11 @@ const BottomsheetDrag = ({ children }) => {
         {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />}
       </div>
 
-      <div className="relative w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
+      <div
+        className={`relative w-full flex-1 overflow-y-auto ${isFull ? '' : 'overflow-x-clip'}`}
+      >
+        {children}
+      </div>
     </div>
   );
 };
