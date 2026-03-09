@@ -6,7 +6,47 @@
 ===================== */
 
 @theme {
-  --gray-200: #ecedf1;
+  /* gray */
+  --color-gray-200: #ecedf1;
+
+  /* zinc */
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #9f9fa9;
+  --color-zinc-500: #71717b;
+  --color-zinc-600: #52525c;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+
+  /* red */
+  --color-red-50: #fef2f2;
+  --color-red-100: #ffe2e2;
+  --color-red-200: #ffc9c9;
+  --color-red-300: #ffa2a2;
+  --color-red-400: #ff5b5e;
+  --color-red-500: #ff5b55;
+  --color-red-600: #e7000b;
+  --color-red-700: #c10007;
+  --color-red-800: #9f0712;
+  --color-red-900: #82181a;
+  --color-red-950: #460809;
+
+  /* emerald */
+  --color-emerald-50: #f5fff5;
+  --color-emerald-100: #d7ffda;
+  --color-emerald-200: #baffbe;
+  --color-emerald-300: #9cffa2;
+  --color-emerald-400: #94ca97;
+  --color-emerald-500: #6cc571;
+  --color-emerald-600: #56a85b;
+  --color-emerald-700: #428b47;
+  --color-emerald-800: #316e34;
+  --color-emerald-900: #215124;
+  --color-emerald-950: #0e3610;
 }
 
 /* =====================
