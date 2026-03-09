@@ -10,8 +10,8 @@ import Chip from '@/components/Chip';
 
 const FILTER_BUTTON_BASE =
   'flex shrink-0 items-center justify-center rounded-3xl border p-2 size-8';
-const FILTER_BUTTON_ACTIVE = 'border-emerald-500 bg-emerald-50 text-emerald-500';
-const FILTER_BUTTON_INACTIVE = 'border-gray-200 bg-white text-gray-500';
+const FILTER_BUTTON_ACTIVE = 'border-emerald-600 bg-emerald-50 text-emerald-600';
+const FILTER_BUTTON_INACTIVE = 'border-zinc-200 bg-white text-zinc-500';
 
 function FilterBar({
   type = 'booth',

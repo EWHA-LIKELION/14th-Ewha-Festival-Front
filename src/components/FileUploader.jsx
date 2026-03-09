@@ -25,7 +25,7 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
 
       {/* 고정 영역 */}
       <div
-        className="aspect-square w-15 overflow-hidden rounded-lg border border-gray-100 bg-white"
+        className="aspect-square w-15 overflow-hidden rounded-lg border border-zinc-100 bg-white"
         onClick={() => {
           if (!image) {
             inputRef.current?.click();

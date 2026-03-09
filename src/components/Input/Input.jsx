@@ -22,7 +22,7 @@ const Input = ({
 }) => {
   const isWhiteVariant = variant === 'square_white';
   const [isFocused, setIsFocused] = useState(false);
-  const subTextColor = error ? 'text-red-500' : 'text-gray-500';
+  const subTextColor = error ? 'text-red-500' : 'text-zinc-500';
   const hasHelper = !!helperText;
   const hasCounter = !!maxLength;
   const showBottom = hasHelper || hasCounter;
@@ -35,9 +35,9 @@ const Input = ({
   const borderColor = error
     ? 'border border-red-500'
     : isFocused
-      ? 'border border-emerald-500'
+      ? 'border border-emerald-600'
       : isWhiteVariant
-        ? 'border border-gray-200'
+        ? 'border border-zinc-200'
         : 'border-0';
 
   const handleKeyDown = (e) => {
@@ -64,7 +64,7 @@ const Input = ({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onKeyDown={handleKeyDown}
-        className={`box-border h-12 w-full bg-gray-100 px-4 py-3 text-base leading-6 font-normal tracking-normal placeholder-gray-300 outline-none focus:outline-none ${borderColor} ${VARIANT_CLASS[variant]} `}
+        className={`box-border h-12 w-full bg-zinc-100 px-4 py-3 text-base leading-6 font-normal tracking-normal placeholder-zinc-300 outline-none focus:outline-none ${borderColor} ${VARIANT_CLASS[variant]} `}
       />
 
       {showBottom && (

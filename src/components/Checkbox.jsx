@@ -20,7 +20,7 @@ function Checkbox({ label, isSelected = false, isError = false, onChange }) {
 
       <div className="flex size-6 shrink-0 items-center justify-center">
         {isSelected ? (
-          <div className="flex size-4.5 items-center justify-center rounded-sm bg-emerald-500">
+          <div className="flex size-4.5 items-center justify-center rounded-sm bg-emerald-600">
             <svg
               width="12"
               height="9"
@@ -40,14 +40,14 @@ function Checkbox({ label, isSelected = false, isError = false, onChange }) {
         ) : (
           <div
             className={`size-4.5 rounded-sm border bg-white ${
-              isError ? 'border-red-400' : 'border-gray-200'
+              isError ? 'border-red-400' : 'border-zinc-200'
             }`}
           />
         )}
       </div>
 
       {label && (
-        <span className="py-px text-sm leading-5 tracking-normal text-gray-900">{label}</span>
+        <span className="py-px text-sm leading-5 tracking-normal text-zinc-800">{label}</span>
       )}
     </label>
   );

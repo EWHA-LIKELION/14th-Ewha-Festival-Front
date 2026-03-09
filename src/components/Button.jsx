@@ -24,15 +24,15 @@ const SIZE = {
 };
 
 const STYLE = {
-  'bg-green': 'bg-emerald-500 text-white',
+  'bg-green': 'bg-emerald-600 text-white',
   'bg-red': 'bg-red-400 text-white',
-  'bg-gray': 'bg-gray-100 text-gray-500',
-  'bg-white': 'bg-white text-gray-500 border border-gray-100',
+  'bg-gray': 'bg-zinc-100 text-zinc-500',
+  'bg-white': 'bg-white text-zinc-500 border border-zinc-100',
   'bg-pink': 'bg-red-100 text-red-400',
-  'text-black': 'text-gray-900',
-  'text-gray': 'text-gray-500',
-  'underline-green': 'text-emerald-500 underline underline-offset-2 !p-0',
-  'underline-gray': 'text-gray-500 underline underline-offset-2 !p-0',
+  'text-black': 'text-zinc-800',
+  'text-gray': 'text-zinc-500',
+  'underline-green': 'text-emerald-600 underline underline-offset-2 !p-0',
+  'underline-gray': 'text-zinc-500 underline underline-offset-2 !p-0',
   'underline-white': 'text-white underline underline-offset-2 !p-0',
 };
 
@@ -67,7 +67,7 @@ const Button = ({
 
   // disabled 상태 스타일
   const disabledClass = disabled
-    ? `!text-gray-300 cursor-not-allowed ${hasBg ? '!bg-gray-100' : ''}`
+    ? `!text-zinc-300 cursor-not-allowed ${hasBg ? '!bg-zinc-100' : ''}`
     : '';
 
   // shadow 스타일
@@ -104,21 +104,21 @@ const Button = ({
 
       let iconColorClass = '';
 
-      // disabled일 때는 gray-300
+      // disabled일 때는 zinc-300
       if (disabled) {
-        iconColorClass = '!text-gray-300';
+        iconColorClass = '!text-zinc-300';
       }
-      // text-gray일 때: 아이콘 gray-400
+      // text-gray일 때: 아이콘 zinc-400
       else if (variant === 'text-gray') {
-        iconColorClass = '!text-gray-400';
+        iconColorClass = '!text-zinc-400';
       }
-      // bg-gray일 때: 텍스트와 함께 있으면 gray-400, 아이콘만 있으면 gray-600
+      // bg-gray일 때: 텍스트와 함께 있으면 zinc-400, 아이콘만 있으면 zinc-600
       else if (variant === 'bg-gray') {
-        iconColorClass = hasOnlyIcon ? '!text-gray-600' : '!text-gray-400';
+        iconColorClass = hasOnlyIcon ? '!text-zinc-600' : '!text-zinc-400';
       }
-      // text-gray 900인 경우 아이콘은 gray-600 (bg-gray가 아닌 다른 경우)
-      else if (styleClass.includes('text-gray-900')) {
-        iconColorClass = '!text-gray-600';
+      // text-black(text-zinc-800)인 경우 아이콘은 gray-600 (bg-gray가 아닌 다른 경우)
+      else if (styleClass.includes('text-zinc-800')) {
+        iconColorClass = '!text-zinc-600';
       }
 
       return (

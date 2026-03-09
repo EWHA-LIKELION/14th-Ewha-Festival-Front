@@ -40,7 +40,7 @@ const SearchBar = ({ isMap = false }) => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
-        className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'shadow-down-lg bg-white' : 'bg-gray-100'} py-3 text-base font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none ${
+        className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'shadow-down-lg bg-white' : 'bg-zinc-100'} py-3 text-base font-normal text-zinc-800 placeholder:text-zinc-300 focus:outline-none ${
           isFocused || searchQuery ? 'px-12.5 ' : 'px-5'
         }`}
         onFocus={() => setIsFocused(true)}

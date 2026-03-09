@@ -10,9 +10,9 @@ import React from 'react';
 function Badge({ state = 'closed', size = 'md' }) {
   const states = {
     closed: { text: '종료', color: 'text-red-400' },
-    performing: { text: '공연중', color: 'text-emerald-500' },
-    operating: { text: '운영중', color: 'text-gray-500' },
-    upcoming: { text: '공연전', color: 'text-gray-500' },
+    performing: { text: '공연중', color: 'text-emerald-600' },
+    operating: { text: '운영중', color: 'text-zinc-500' },
+    upcoming: { text: '공연전', color: 'text-zinc-500' },
   };
 
   const sizes = {
