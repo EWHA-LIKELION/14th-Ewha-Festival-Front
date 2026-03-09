@@ -30,9 +30,6 @@ const useSearchStore = create(
         set((state) => ({
           recentSearches: state.recentSearches.filter((item) => item !== query),
         })),
-
-      // 전체 삭제
-      clearRecentSearches: () => set({ recentSearches: [] }),
     }),
     {
       name: 'search-store',

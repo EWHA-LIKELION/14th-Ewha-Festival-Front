@@ -28,14 +28,7 @@ const SearchPage = () => {
       <Header center="search" />
       <section className="flex w-full flex-col justify-center gap-9 p-5">
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <h1 className="text-lg font-semibold text-gray-900">최근 검색어</h1>
-            {recentSearches.length > 0 && (
-              <button onClick={handleClearAll} className="text-sm font-normal text-gray-400">
-                전체삭제
-              </button>
-            )}
-          </div>
+          <h1 className="text-lg font-semibold text-gray-900">최근 검색어</h1>
           <div
             className={`flex min-h-18 w-full ${recentSearches.length > 0 ? 'items-start' : 'items-center justify-center'}`}
           >
