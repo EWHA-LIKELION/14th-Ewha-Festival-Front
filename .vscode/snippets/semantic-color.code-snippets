@@ -1,17 +1,30 @@
 {
+  /* =====================
+     Fill → bg-
+  ===================== */
   "fill normal strong": {
     "prefix": "fill-normal-strong",
-    "body": "bg-gray-100",
+    "body": "bg-zinc-100",
     "description": "Fill/Normal/Strong",
   },
   "fill normal normal": {
     "prefix": "fill-normal-normal",
-    "body": "bg-white",
+    "body": "bg-zinc-50",
     "description": "Fill/Normal/Normal",
+  },
+  "fill primary normal": {
+    "prefix": "fill-primary-normal",
+    "body": "bg-emerald-600",
+    "description": "Fill/Primary/Normal",
+  },
+  "fill primary assistive": {
+    "prefix": "fill-primary-assistive",
+    "body": "bg-emerald-50",
+    "description": "Fill/Primary/Assistive",
   },
   "fill interaction inactive": {
     "prefix": "fill-interaction-inactive",
-    "body": "bg-gray-100",
+    "body": "bg-zinc-100",
     "description": "Fill/Interaction/Inactive",
   },
   "fill interaction hover": {
@@ -19,30 +32,23 @@
     "body": "bg-white",
     "description": "Fill/Interaction/Hover",
   },
-  "fill primary assistive": {
-    "prefix": "fill-primary-assistive",
-    "body": "bg-emerald-50",
-    "description": "Fill/Primary/Assistive",
-  },
-  "fill primary normal": {
-    "prefix": "fill-primary-normal",
-    "body": "bg-emerald-500",
-    "description": "Fill/Primary/Normal",
-  },
 
+  /* =====================
+     Text → text-
+  ===================== */
   "text normal strong": {
     "prefix": "text-normal-strong",
-    "body": "text-gray-900",
+    "body": "text-zinc-800",
     "description": "Text/Normal/Strong",
   },
   "text normal normal": {
     "prefix": "text-normal-normal",
-    "body": "text-gray-500",
+    "body": "text-zinc-500",
     "description": "Text/Normal/Normal",
   },
   "text normal assistive": {
     "prefix": "text-normal-assistive",
-    "body": "text-gray-300",
+    "body": "text-zinc-300",
     "description": "Text/Normal/Assistive",
   },
   "text normal inverse": {
@@ -50,51 +56,67 @@
     "body": "text-white",
     "description": "Text/Normal/Inverse",
   },
-  "text primary normal": {
-    "prefix": "text-primary-normal",
-    "body": "text-emerald-500",
-    "description": "Text/Primary/Normal",
-  },
   "text primary strong": {
     "prefix": "text-primary-strong",
-    "body": "text-emerald-700",
+    "body": "text-emerald-800",
     "description": "Text/Primary/Strong",
   },
+  "text primary normal": {
+    "prefix": "text-primary-normal",
+    "body": "text-emerald-600",
+    "description": "Text/Primary/Normal",
+  },
+  "text primary assistive": {
+    "prefix": "text-primary-assistive",
+    "body": "text-emerald-500",
+    "description": "Text/Primary/Assistive",
+  },
 
+  /* =====================
+     Line → border-
+  ===================== */
   "line normal strong": {
     "prefix": "line-normal-strong",
-    "body": "border-gray-300",
+    "body": "border-zinc-300",
     "description": "Line/Normal/Strong",
   },
   "line normal normal": {
     "prefix": "line-normal-normal",
-    "body": "border-gray-200",
+    "body": "border-zinc-200",
     "description": "Line/Normal/Normal",
   },
   "line normal assistive": {
     "prefix": "line-normal-assistive",
-    "body": "border-gray-100",
+    "body": "border-zinc-100",
     "description": "Line/Normal/Assistive",
   },
   "line primary normal": {
     "prefix": "line-primary-normal",
-    "body": "border-emerald-500",
+    "body": "border-emerald-600",
     "description": "Line/Primary/Normal",
   },
+  "line primary assistive": {
+    "prefix": "line-primary-assistive",
+    "body": "border-emerald-400",
+    "description": "Line/Primary/Assistive",
+  },
 
+  /* =====================
+     Icon → text-
+  ===================== */
   "icon normal strong": {
     "prefix": "icon-normal-strong",
-    "body": "text-gray-600",
+    "body": "text-zinc-600",
     "description": "Icon/Normal/Strong",
   },
   "icon normal normal": {
     "prefix": "icon-normal-normal",
-    "body": "text-gray-400",
+    "body": "text-zinc-400",
     "description": "Icon/Normal/Normal",
   },
   "icon normal assistive": {
     "prefix": "icon-normal-assistive",
-    "body": "text-gray-300",
+    "body": "text-zinc-300",
     "description": "Icon/Normal/Assistive",
   },
   "icon normal inverse": {
@@ -104,7 +126,7 @@
   },
   "icon primary": {
     "prefix": "icon-primary",
-    "body": "text-emerald-500",
+    "body": "text-emerald-600",
     "description": "Icon/Primary",
   },
 
