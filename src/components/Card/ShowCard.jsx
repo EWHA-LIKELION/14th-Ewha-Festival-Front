@@ -18,12 +18,12 @@ const ShowCard = ({
   return (
     <div
       onClick={onClick}
-      className="flex w-full items-start gap-3 rounded-xl border border-gray-200 bg-white p-4"
+      className="flex w-full items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4"
     >
       {/* 공연 이미지 */}
       <img
         src={thumbnail || '/images/showcard-default.png'}
-        className="flex aspect-square w-22 items-center justify-center rounded-md border border-gray-100"
+        className="flex aspect-square w-22 items-center justify-center rounded-md border border-zinc-100"
       />
 
       {/* 공연명 및 정보 */}
@@ -31,19 +31,19 @@ const ShowCard = ({
         <div className="flex items-start justify-between">
           <div className="flex flex-col items-start gap-1">
             <div className="flex items-center gap-1.5">
-              <h2 className="text-lg leading-6 font-semibold tracking-normal text-gray-900">
+              <h2 className="text-lg leading-6 font-semibold tracking-normal text-zinc-800">
                 {name}
               </h2>
 
               {status && <Badge variant={status} />}
             </div>
-            <h3 className="text-xs leading-4 font-medium tracking-normal text-emerald-700">
+            <h3 className="text-xs leading-4 font-medium tracking-normal text-emerald-800">
               {category} | {time} | {location}
             </h3>
           </div>
           {/* 스크랩 위치 */}
         </div>
-        <p className="line-clamp-2 overflow-hidden text-xs leading-5 font-normal tracking-normal text-ellipsis text-gray-500">
+        <p className="line-clamp-2 overflow-hidden text-xs leading-5 font-normal tracking-normal text-ellipsis text-zinc-500">
           {description}
         </p>
       </div>

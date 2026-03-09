@@ -74,7 +74,7 @@ const NavigationBar = () => {
 
   return (
     <div className="reactive-width fixed bottom-0 left-1/2 z-20 w-full -translate-x-1/2 bg-white">
-      <div className="flex min-h-15 items-center justify-between border-t border-gray-100 px-7 text-xs font-medium">
+      <div className="flex min-h-15 items-center justify-between border-t border-zinc-100 px-7 text-xs font-medium">
         {navItems.map((item) => {
           return (
             <button
@@ -82,12 +82,12 @@ const NavigationBar = () => {
               onClick={() => navigate(item.path)}
               className="flex h-fit w-20 flex-col items-center justify-center gap-1 text-xs"
             >
-              <div className={item.isActive ? 'text-emerald-500' : 'text-gray-400'}>
+              <div className={item.isActive ? 'text-emerald-600' : 'text-zinc-400'}>
                 {item.icon}
               </div>
               <p
                 className={
-                  item.isActive ? 'font-medium text-emerald-500' : 'font-normal text-gray-500'
+                  item.isActive ? 'font-medium text-emerald-600' : 'font-normal text-zinc-500'
                 }
               >
                 {item.label}

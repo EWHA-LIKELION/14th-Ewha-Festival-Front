@@ -16,13 +16,13 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
         {isDelete && <img src="/icons/icon-alert.svg" />}
 
         {/* 타이틀 */}
-        <h2 className="mt-0.5 text-center text-lg leading-6 font-semibold tracking-normal text-gray-900">
+        <h2 className="mt-0.5 text-center text-lg leading-6 font-semibold tracking-normal text-zinc-800">
           {isDelete && `${title} 삭제`}
           {!isDelete && '로그아웃하시겠어요?'}
         </h2>
 
         {/* 문구 */}
-        <p className="text-center text-sm leading-5 font-normal tracking-normal text-gray-500">
+        <p className="text-center text-sm leading-5 font-normal tracking-normal text-zinc-500">
           {isDelete ? text : '언제든지 다시 로그인하실 수 있어요.'}
         </p>
       </div>
@@ -31,7 +31,7 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
         <button
           type="button"
           onClick={onCancel}
-          className="flex w-32.5 items-center justify-center gap-1.5 rounded-lg bg-gray-100 p-3 text-center text-base leading-6 font-medium tracking-normal text-gray-500"
+          className="flex w-32.5 items-center justify-center gap-1.5 rounded-lg bg-zinc-100 p-3 text-center text-base leading-6 font-medium tracking-normal text-zinc-500"
         >
           취소
         </button>
@@ -39,7 +39,7 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
           type="button"
           onClick={onConfirm}
           className={`flex w-32.5 items-center justify-center gap-1.5 rounded-lg p-3 text-center text-base leading-6 font-medium tracking-normal ${
-            isDelete ? 'bg-red-400 text-white' : 'bg-emerald-500 text-white'
+            isDelete ? 'bg-red-400 text-white' : 'bg-emerald-600 text-white'
           }`}
         >
           {isDelete ? '삭제' : '확인'}

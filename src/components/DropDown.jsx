@@ -38,7 +38,7 @@ const DropDown = () => {
     <div ref={dropdownRef} className="relative inline-block">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-32 items-center justify-end gap-3 pr-0.5 text-sm font-normal text-gray-500 focus:outline-none"
+        className="flex w-32 items-center justify-end gap-3 pr-0.5 text-sm font-normal text-zinc-500 focus:outline-none"
       >
         {selectedLabel}
         <div className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}>
@@ -47,15 +47,15 @@ const DropDown = () => {
       </button>
 
       {isOpen && (
-        <div className="shadow-down-md absolute z-10 mt-1.5 w-full overflow-hidden rounded-lg border border-gray-200 bg-white">
+        <div className="shadow-down-md absolute z-10 mt-1.5 w-full overflow-hidden rounded-lg border border-zinc-200 bg-white">
           {options.map((option) => (
             <button
               key={option.value}
               onClick={() => handleSelect(option.value)}
               className={`h-12 w-full px-5 text-left text-sm transition-colors hover:brightness-100 ${
                 selectedValue === option.value
-                  ? 'bg-gray-50 font-semibold text-gray-900 hover:bg-gray-100'
-                  : 'font-normal text-gray-500 hover:bg-gray-50'
+                  ? 'bg-zinc-50 font-semibold text-zinc-800 hover:bg-zinc-100'
+                  : 'font-normal text-zinc-500 hover:bg-zinc-50'
               }`}
             >
               {option.label}

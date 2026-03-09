@@ -38,14 +38,14 @@ const TextAreaSend = ({ placeholder, onSend }) => {
   const hasValue = value.trim().length > 0;
 
   return (
-    <div className="relative w-full rounded-3xl bg-gray-100 px-4 py-3">
+    <div className="relative w-full rounded-3xl bg-zinc-100 px-4 py-3">
       <textarea
         ref={textareaRef}
         value={value}
         rows={1}
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
-        className="scrollbar-hide w-full resize-none overflow-y-auto bg-transparent pr-10 text-base leading-6 text-gray-900 placeholder-gray-400 outline-none"
+        className="scrollbar-hide w-full resize-none overflow-y-auto bg-transparent pr-10 text-base leading-6 text-zinc-800 placeholder-zinc-400 outline-none"
         style={{
           height: `${lineHeight}px`,
           maxHeight: `${maxHeight}px`,
