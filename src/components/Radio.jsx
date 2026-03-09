@@ -45,7 +45,7 @@ function Radio({ label = '', selected = false, error = false, showLabel = true, 
   return (
     <button type="button" onClick={handleRadioClick} className="flex items-center gap-2">
       <span className="flex size-6 shrink-0 items-center justify-center">{RADIO_ICON[state]}</span>
-      <span className="text-sm leading-5 font-normal tracking-normal text-gray-900">{label}</span>
+      <span className="text-sm leading-5 font-normal tracking-normal text-zinc-800">{label}</span>
     </button>
   );
 }

@@ -47,10 +47,8 @@ function Timepicker({
     onEndChange?.(newEnd);
   };
 
-  const textColor = isSelected ? 'text-gray-500' : 'text-[#b5bbc5]';
-  const borderClass = hasError
-    ? 'border-red-500'
-    : 'border-gray-100';
+  const textColor = isSelected ? 'text-zinc-500' : 'text-zinc-300';
+  const borderClass = hasError ? 'border-red-500' : 'border-zinc-100';
 
   return (
     <div className="flex items-center gap-2">

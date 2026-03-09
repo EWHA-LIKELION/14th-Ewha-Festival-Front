@@ -8,8 +8,8 @@
 import React from 'react';
 
 const TAB_STYLE = {
-  active: 'text-emerald-500',
-  inactive: 'text-gray-400',
+  active: 'text-emerald-600',
+  inactive: 'text-zinc-400',
 };
 
 function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
@@ -23,7 +23,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
     return (
       <div className="relative h-9 w-full">
         {/* 전체 너비 배경 라인 */}
-        <div className="absolute top-8 left-0 h-0.5 w-full bg-gray-100" />
+        <div className="absolute top-8 left-0 h-0.5 w-full bg-zinc-100" />
 
         {/* 탭 아이템 목록 */}
         <div className="absolute top-0 left-0 flex items-start gap-0">
@@ -49,7 +49,7 @@ function Tab({ variant = 'text', tabs = [], activeIndex = 0, onChange }) {
 
         {/* 이동하는 언더라인 인디케이터 */}
         <div
-          className="absolute top-8 z-5 h-0.5 w-20 bg-emerald-500 transition-[left] duration-300 ease-in-out"
+          className="absolute top-8 z-5 h-0.5 w-20 bg-emerald-600 transition-[left] duration-300 ease-in-out"
           style={{ left: `${activeIndex * 5}rem` }}
         />
       </div>
