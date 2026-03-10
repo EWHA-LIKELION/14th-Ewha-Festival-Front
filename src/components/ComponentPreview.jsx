@@ -16,7 +16,8 @@ const ComponentPreview = () => {
       <BottomsheetDrag>
         {sheetSize === 'full' && (
           <>
-            <Header left="back" background="gradient" />
+            <Header left="logo" right="search" />
+            {/* <Header left="back" right="search" /> */}
             <img
               src="/images/boothcard-test.jpg"
               alt=""
@@ -27,7 +28,7 @@ const ComponentPreview = () => {
         )}
         <div className="h-200 p-5">
           {/* BoothCard 프리뷰 */}
-          <div className="mb-8">
+          <div className="my-8">
             <h3 className="mb-3 text-lg font-semibold">BoothCard</h3>
             <BoothCard
               name="라이크라이언 떡볶이"
