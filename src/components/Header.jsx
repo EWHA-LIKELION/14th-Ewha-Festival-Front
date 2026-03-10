@@ -57,7 +57,7 @@ const Header = ({
 
   return (
     <header
-      className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full ${center === 'search' ? 'px-5' : 'px-2'} ${backgroundStyles[background]}`}
+      className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full ${center === 'search' ? 'px-5' : 'px-3'} ${backgroundStyles[background]}`}
       style={
         background === 'gradient'
           ? { paddingTop: 'env(safe-area-inset-top)', backgroundBlendMode: 'color-burn' }
@@ -87,9 +87,9 @@ const Header = ({
         )}
         {left === 'logo' && (
           <img
-            src="/icons/icon-logo.svg" // 추후 업데이트 예정
+            src="/icons/icon-logo.svg"
             alt="logo"
-            className="h-10" // 추후 수정 예정
+            className="pl-2"
             onClick={() => navigate('/')}
             onPointerDown={(e) => e.stopPropagation()}
           />
