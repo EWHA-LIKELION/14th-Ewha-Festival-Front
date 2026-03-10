@@ -115,7 +115,7 @@ const Carousel = ({ items = [] }) => {
       </div>
 
       {/* 페이지 카운터 */}
-      <div className="absolute top-3 right-3 z-5 flex h-6 w-8 items-center justify-center rounded-xl bg-gray-700/60">
+      <div className="absolute top-3 right-3 z-5 flex h-6 w-8 items-center justify-center rounded-xl bg-zinc-700/60">
         <p className="text-xs font-normal text-white">
           {displayIndex}/{items.length}
         </p>

@@ -36,10 +36,10 @@ const Header = ({
   const backgroundStyles = {
     white: 'bg-white shadow-down-sm',
     transparent: 'bg-transparent',
-    gradient: 'bg-linear-to-b from-[#292929]/50',
+    gradient: 'bg-linear-to-b from-[#292929]/50 to-[#4D4D4D]/0',
   };
 
-  const iconColor = background === 'gradient' ? '#FFF' : '#4A5565';
+  const iconColor = background === 'gradient' ? '#FFFFFF' : '#52525C';
 
   const handleBack = () => {
     if (background === 'gradient') {
@@ -60,7 +60,11 @@ const Header = ({
   return (
     <header
       className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full px-2 ${backgroundStyles[background]}`}
-      style={background === 'gradient' ? { paddingTop: 'env(safe-area-inset-top)' } : undefined}
+      style={
+        background === 'gradient'
+          ? { paddingTop: 'env(safe-area-inset-top)', backgroundBlendMode: 'color-burn' }
+          : undefined
+      }
     >
       {/* Left 영역 */}
       <div className="flex items-center justify-start">
@@ -97,7 +101,7 @@ const Header = ({
       {/* Center 영역 */}
       <div className="flex flex-1 items-center justify-center">
         {center === 'title' && (
-          <h1 className="w-full text-left text-lg font-semibold text-gray-900">{centerTitle}</h1>
+          <h1 className="w-full text-left text-lg font-semibold text-zinc-800">{centerTitle}</h1>
         )}
         {center === 'search' && (
           <SearchBar isMap={background === 'transparent'} searchValue={searchValue} />
@@ -169,7 +173,7 @@ const Header = ({
           <button
             onClick={onSave}
             onPointerDown={(e) => e.stopPropagation()}
-            className="mr-3 h-8 rounded-full bg-emerald-500 px-4 text-sm font-medium text-white"
+            className="mr-3 h-8 rounded-full bg-emerald-600 px-4 text-sm font-medium text-white"
           >
             저장
           </button>

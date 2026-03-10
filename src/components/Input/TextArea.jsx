@@ -38,7 +38,7 @@ const TextArea = forwardRef(
   ) => {
     const isLeft = labelPosition === 'left';
 
-    const subTextColor = error ? 'text-red-500' : 'text-gray-500';
+    const subTextColor = error ? 'text-red-500' : 'text-zinc-500';
 
     const hasHelper = !!helperText;
     const hasCounter = !!maxLength;
@@ -53,11 +53,11 @@ const TextArea = forwardRef(
       <div className={isLeft ? 'flex items-start gap-2' : 'flex flex-col gap-2'}>
         {label && (
           <div className={`flex min-w-fit gap-1 ${isLeft ? 'items-start' : 'items-center'}`}>
-            <span className={`${SIZE[size].label} font-semibold tracking-normal text-gray-900`}>
+            <span className={`${SIZE[size].label} font-semibold tracking-normal text-zinc-800`}>
               {label}
             </span>
             {required && (
-              <span className="text-xs leading-4 font-normal tracking-normal text-emerald-500">
+              <span className="text-xs leading-4 font-normal tracking-normal text-emerald-600">
                 *필수
               </span>
             )}
@@ -76,7 +76,7 @@ const TextArea = forwardRef(
               onChange?.(next);
             }}
             placeholder={placeholder}
-            className={`box-border w-full resize-none rounded-lg border bg-white px-4 py-3 text-base leading-6 font-normal tracking-normal text-gray-900 placeholder-gray-300 outline-none focus:outline-none ${error ? 'border-red-500' : 'border-gray-100'} ${SIZE[size].minHeight} ${className} `}
+            className={`box-border w-full resize-none rounded-lg border bg-white px-4 py-3 text-base leading-6 font-normal tracking-normal text-zinc-800 placeholder-zinc-300 outline-none focus:outline-none ${error ? 'border-red-500' : 'border-zinc-100'} ${SIZE[size].minHeight} ${className} `}
           />
 
           {showBottom && (
