@@ -31,12 +31,12 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
         </p>
       </div>
 
-      <div className="flex gap-3 p-0">
+      <div className="flex w-full gap-3 p-0">
         {!isError && (
           <button
             type="button"
             onClick={onCancel}
-            className="flex w-32.5 items-center justify-center gap-1.5 rounded-lg bg-zinc-100 p-3 text-center text-base leading-6 font-medium tracking-normal text-zinc-500"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-zinc-100 p-3 text-center text-base leading-6 font-medium tracking-normal text-zinc-500"
           >
             취소
           </button>
@@ -45,7 +45,7 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
         <button
           type="button"
           onClick={onConfirm}
-          className={`flex w-32.5 items-center justify-center gap-1.5 rounded-lg p-3 text-center text-base leading-6 font-medium tracking-normal ${
+          className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg p-3 text-center text-base leading-6 font-medium tracking-normal ${
             isDelete || isError ? 'bg-red-400 text-white' : 'bg-emerald-600 text-white'
           }`}
         >

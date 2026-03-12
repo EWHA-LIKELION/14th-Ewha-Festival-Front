@@ -1,6 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import NavigationBarLayout from '@/layouts/NavigationBarLayout';
+import { ToastManager } from '@/components/Toast';
+import useToastStore from '@/store/useToastStore';
 import ComponentPreview from '@/components/ComponentPreview';
 import LoginSheet from '@/features/LoginSheet';
 import useAuthStore from '@/store/useAuthStore';
@@ -9,6 +11,7 @@ import AdminConfirmPage from './pages/admin/AdminConfirmPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
+  const { text, isOpen, closeToast } = useToastStore();
 
   return (
     <main className="app">
@@ -40,6 +43,8 @@ function App() {
 
       {/* 로그인 바텀시트 — 전역에서 openLoginSheet()으로 호출 */}
       {showLoginSheet && <LoginSheet />}
+
+      <ToastManager text={text} isOpen={isOpen} onClose={closeToast} />
     </main>
   );
 }
