@@ -8,6 +8,7 @@
  * @param {function} onImageClick - 이미지 클릭 시 호출되는 함수 (image 인자 전달)
  */
 import React from 'react';
+import Divider from '@/components/Divider';
 
 const MenuCard = ({ name, description, price, image, onImageClick }) => {
   const isDefaultImage = !image;
@@ -38,6 +39,7 @@ const MenuCard = ({ name, description, price, image, onImageClick }) => {
           className="flex aspect-square w-22 items-center justify-center rounded-md border border-zinc-100"
         />
       </div>
+      <Divider />
     </div>
   );
 };
