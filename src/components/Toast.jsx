@@ -37,9 +37,9 @@ export const ToastManager = ({ text, isOpen, duration = 3000, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2">
       <div
-        className={`transition-all duration-200 ease-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} `}
+        className={`transition-all duration-300 ease-out ${visible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} `}
       >
         <Toast text={text} />
       </div>
