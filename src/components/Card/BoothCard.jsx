@@ -20,7 +20,7 @@ const BoothCard = ({
   // 메뉴리스트에서 이미지 추출
   const menuImages = menuList
     ?.slice(0, 3)
-    .map((menu) => menu.image || '/images/boothcard-default.png');
+    .map((menu) => menu.image || '/images/default-image-xsmall.png');
 
   return (
     <div
@@ -55,7 +55,7 @@ const BoothCard = ({
       <div className="mt-2.5 flex items-center gap-2 p-0">
         {/* 썸네일 */}
         <img
-          src={thumbnail || '/images/boothcard-default.png'}
+          src={thumbnail || '/images/default-image-xsmall.png'}
           className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
         />
 

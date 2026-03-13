@@ -3,7 +3,6 @@
  */
 
 import React, { useState } from 'react';
-import useBottomsheetStore from '@/store/useBottomsheetStore';
 import BoothCard from '@/components/Card/BoothCard';
 import ShowCard from '@/components/Card/ShowCard';
 import MenuCard from '@/components/Card/MenuCard';
@@ -31,16 +30,7 @@ const ComponentPreview = () => {
         ]}
         status="open"
       />
-      <BoothCard
-        name=""
-        category=""
-        days=""
-        location="학생회관 앞"
-        description=""
-        thumbnail=""
-        status=""
-        onClick={() => {}}
-      />
+      <BoothCard />
       <ShowCard
         name="라이크라이언 떡볶이"
         category="밴드"
@@ -51,6 +41,7 @@ const ComponentPreview = () => {
         status="operating"
         onClick={() => {}}
       />
+      <ShowCard />
       <MenuCard
         name="메뉴명"
         description="매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다."
@@ -61,6 +52,7 @@ const ComponentPreview = () => {
           setShowModal(true);
         }}
       />
+      <MenuCard />
       <ReviewCard
         name="익명 n"
         review="Content text Content text Content text Content text Content text Content text Content text Content text Content text Content text "

@@ -23,7 +23,7 @@ const ShowCard = ({
     >
       {/* 공연 이미지 */}
       <img
-        src={thumbnail || '/images/showcard-default.png'}
+        src={thumbnail || '/images/default-image-xsmall.png'}
         className="flex aspect-square h-20 w-20 items-center justify-center rounded-md border border-zinc-100"
       />
 
@@ -33,13 +33,13 @@ const ShowCard = ({
           <div className="flex flex-col items-start gap-1">
             <div className="flex items-center gap-1">
               <h2 className="text-lg leading-6 font-semibold tracking-normal text-zinc-800">
-                {name}
+                {name || '공연명'}
               </h2>
 
               {status && <Badge variant={status} />}
             </div>
             <h3 className="text-xs leading-4 font-medium tracking-normal text-emerald-800">
-              {category} | {time} | {location}
+              {category || '카테고리'} | {time || '요일'} | {location || '위치'}
             </h3>
           </div>
           <ScrapButton />
