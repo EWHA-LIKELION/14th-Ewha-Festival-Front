@@ -228,7 +228,11 @@ const MyBoothPage = () => {
         {/* 공지 */}
         <div className="w-full px-5">
           {booth?.notices && booth.notices.length > 0 ? (
-            <NoticeCard title={booth.notices[0].title} onClick={() => navigate('/notice')} />
+            <NoticeCard
+              title={booth.notices[0].title}
+              onClick={() => navigate('/공지')}
+              style={{ cursor: 'pointer' }}
+            />
           ) : (
             <NoticeCard title="등록된 공지가 없어요." />
           )}
