@@ -91,7 +91,12 @@ const MyBoothPage = () => {
       <img
         src={booth?.thumbnail || '/images/default-image-large.png'}
         className="flex aspect-49/30 w-full items-center justify-center object-cover"
-        onClick={() => booth?.thumbnail && setShowModal(true)}
+        onClick={() => {
+          if (booth?.thumbnail) {
+            setSelectedImage(booth.thumbnail);
+            setShowModal(true);
+          }
+        }}
       />
 
       <div className="flex w-full flex-col items-center gap-9 pt-5">
@@ -297,14 +302,18 @@ const MyBoothPage = () => {
                     </div>
                   )}
                 </div>
-
-                <div className="bottom-0 left-0 mt-36 flex w-full flex-col items-center justify-center gap-2.5 border-t border-zinc-100 bg-white py-4">
-                  <TextAreaSend placeholder="후기는 익명으로 남겨져요." />
-                </div>
               </>
             )}
           </div>
         </div>
+
+        {activeTab === 1 && (
+          <div className="sticky bottom-0 w-full border-t border-zinc-100 bg-white py-4">
+            <div className="px-5">
+              <TextAreaSend placeholder="후기는 익명으로 남겨져요." />
+            </div>
+          </div>
+        )}
       </div>
 
       {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
