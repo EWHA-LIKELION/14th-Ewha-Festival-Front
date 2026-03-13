@@ -5,6 +5,7 @@ import ComponentPreview from '@/components/ComponentPreview';
 import LoginSheet from '@/features/LoginSheet';
 import useAuthStore from '@/store/useAuthStore';
 import MyPage from '@/pages/my/MyPage';
+import MyBoothPage from './pages/admin/MyBoothPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
@@ -30,7 +31,7 @@ function App() {
         <Route path="search" element={<div>Search</div>} />
         <Route path="admin">
           <Route path="confirm" element={<div>Confirm</div>} />
-          <Route path="booth/:id" element={<div>My Booth</div>} />
+          <Route path="booth/:id" element={<MyBoothPage />} />
           <Route path="booth/:id/edit" element={<div>Booth Edit</div>} />
           <Route path="show/:id" element={<div>My Show</div>} />
           <Route path="show/:id/edit" element={<div>Show Edit</div>} />
