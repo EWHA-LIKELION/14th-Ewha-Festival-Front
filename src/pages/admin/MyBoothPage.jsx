@@ -87,11 +87,11 @@ const MyBoothPage = () => {
 
   return (
     <div className="relative">
-      <Header className="absolute top-0" left="back" right="edit" background="gradient" />
+      <Header className="absolute top-0" left="back" right="edit" background="white" />
       <img
         src={booth?.thumbnail || '/images/default-image-large.png'}
-        className="-mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
-        onClick={() => setShowModal(true)}
+        className="flex aspect-49/30 w-full items-center justify-center object-cover"
+        onClick={() => booth?.thumbnail && setShowModal(true)}
       />
 
       <div className="flex w-full flex-col items-center gap-9 pt-5">
@@ -105,21 +105,28 @@ const MyBoothPage = () => {
               <ScrapButton />
             </div>
 
-            <div className="flex items-center gap-1">
-              <p className="text-sm leading-5 font-normal tracking-normal text-zinc-500">
-                {booth?.category}
-              </p>
-              {booth?.state && (
-                <>
-                  <img src="/icons/icon-eclipse-gray.svg" />
-                  <Badge state={booth.state} size="md" />
-                </>
-              )}
-            </div>
+            {(booth?.category || booth?.state) && (
+              <div className="flex items-center gap-1">
+                {booth?.category && (
+                  <p className="text-sm leading-5 font-normal tracking-normal text-zinc-500">
+                    {booth.category}
+                  </p>
+                )}
 
-            <p className="line-clamp-2 max-h-10 self-stretch text-sm leading-5 font-normal tracking-normal text-zinc-500">
-              {booth?.description}
-            </p>
+                {booth?.state && (
+                  <>
+                    {booth?.category && <img src="/icons/icon-eclipse-gray.svg" />}
+                    <Badge state={booth.state} size="md" />
+                  </>
+                )}
+              </div>
+            )}
+
+            {booth?.description && (
+              <p className="line-clamp-2 max-h-10 self-stretch text-sm leading-5 font-normal tracking-normal text-zinc-500">
+                {booth.description}
+              </p>
+            )}
           </div>
 
           <Divider />
