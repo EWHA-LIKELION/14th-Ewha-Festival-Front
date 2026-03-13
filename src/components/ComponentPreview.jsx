@@ -9,7 +9,6 @@ import ShowCard from '@/components/Card/ShowCard';
 import MenuCard from '@/components/Card/MenuCard';
 import ImageModal from '@/components/ImageModal';
 import ReviewCard from '@/components/Card/ReviewCard';
-import ImageCard from '@/components/Card/ImageCard';
 
 const ComponentPreview = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,17 +18,27 @@ const ComponentPreview = () => {
     <div className="flex flex-col items-center justify-center gap-2">
       <BoothCard
         name="라이크라이언 떡볶이"
-        category=""
+        category="분식"
         days="3/1~3/3"
         location="학생회관 앞"
-        description="매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다."
+        description="매콤달콤 떡볶이!"
         thumbnail="/images/boothcard-test.jpg"
-        images={[
-          '/images/boothcard-test.jpg',
-          '/images/carousel-test1.png',
-          '/images/carousel-test2.png',
+        menuList={[
+          { name: '떡볶이', description: '...', image: '/images/boothcard-test.jpg' },
+          { name: '순대', description: '...' },
+          { name: '튀김', description: '...', image: '/images/boothcard-test.jpg' },
+          { name: '튀김', description: '...', image: '/images/boothcard-test.jpg' },
         ]}
         status="open"
+      />
+      <BoothCard
+        name=""
+        category=""
+        days=""
+        location="학생회관 앞"
+        description=""
+        thumbnail=""
+        status=""
         onClick={() => {}}
       />
       <ShowCard

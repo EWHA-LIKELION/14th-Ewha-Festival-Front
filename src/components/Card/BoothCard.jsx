@@ -13,10 +13,15 @@ const BoothCard = ({
   location,
   description,
   thumbnail,
-  images = [],
+  menuList = [],
   status = '',
   onClick,
 }) => {
+  // 메뉴리스트에서 이미지 추출
+  const menuImages = menuList
+    ?.slice(0, 3)
+    .map((menu) => menu.image || '/images/boothcard-default.png');
+
   return (
     <div
       onClick={onClick}
@@ -27,14 +32,14 @@ const BoothCard = ({
         <div className="flex flex-col items-start gap-1 p-0">
           <div className="flex items-center gap-1.5">
             <h2 className="text-lg leading-6 font-semibold tracking-normal text-zinc-800">
-              {name}
+              {name || '부스명'}
             </h2>
 
             {status && <Badge variant={status} />}
           </div>
 
           <h3 className="text-sm leading-5 font-medium tracking-normal text-emerald-800">
-            {category || '-'} | {days || '-'} | {location || '-'}
+            {category || '카테고리'} | {days || '요일'} | {location || '위치'}
           </h3>
         </div>
         {/* 스크랩 들어갈 자리 */}
@@ -51,17 +56,16 @@ const BoothCard = ({
         {/* 썸네일 */}
         <img
           src={thumbnail || '/images/boothcard-default.png'}
-          className="aspect-square h-20 w-20 items-center justify-center rounded-md border border-zinc-100 object-cover"
+          className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
         />
 
-        {/* 메뉴 이미지 최대 3개, 없는 경우 디폴트 이미지 1개 */}
-        {(images.length ? images : ['/images/boothcard-default.png'])
-          .slice(0, 3)
-          .map((img, idx) => (
+        {/* 상세리스트 있을 때만 */}
+        {menuImages.length > 0 &&
+          menuImages.map((img, idx) => (
             <img
               key={idx}
               src={img}
-              className="aspect-square h-20 w-20 rounded-md border border-zinc-100 object-cover"
+              className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
             />
           ))}
       </div>
