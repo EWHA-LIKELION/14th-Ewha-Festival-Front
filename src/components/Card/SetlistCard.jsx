@@ -4,13 +4,13 @@
 
 import React from 'react';
 
-const SetlistCard = ({ setlist }) => {
+const SetlistCard = ({ title, artist }) => {
   return (
     <div className="flex w-full items-center justify-start rounded-xl border border-zinc-200 bg-white p-4">
       <div className="flex items-center gap-2.5">
         <img src="/icons/icon-setlist.svg" />
         <h2 className="line-clamp-1 overflow-hidden text-sm leading-5 font-medium tracking-normal text-ellipsis text-zinc-800">
-          {setlist}
+          {title} - {artist}
         </h2>
       </div>
     </div>
