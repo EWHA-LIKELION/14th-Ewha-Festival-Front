@@ -9,7 +9,6 @@
  * @param {string} props.centerTitle - center가 'title'일 때 표시할 제목
  * @param {string} props.right - 우측 영역: 'search'(검색 이동), 'edit'(수정), 'save'(저장), 'none'(기본)
  * @param {string} props.background - 배경 스타일: 'white'(기본), 'transparent', 'gradient'
- * @param {string} props.searchValue - 검색바 초기값 (검색 페이지 → 결과 페이지 전환 시 사용)
  * @param {Function} props.onEdit - 수정 버튼 클릭 핸들러
  * @param {Function} props.onSave - 저장 버튼 클릭 핸들러
  */
@@ -25,7 +24,6 @@ const Header = ({
   centerTitle = '', // center가 'title'일 때 표시할 제목
   right = 'none', // search, edit, save
   background = 'white', // white, transparent, gradient
-  searchValue, //검색바 입력 값 (검색페이지 -> 검색결과페이지로 넘어갈 때 필요)
   onEdit,
   onSave,
 }) => {
@@ -36,10 +34,10 @@ const Header = ({
   const backgroundStyles = {
     white: 'bg-white shadow-down-sm',
     transparent: 'bg-transparent',
-    gradient: 'bg-linear-to-b from-[#292929]/50',
+    gradient: 'bg-linear-to-b from-[#292929]/50 to-[#4D4D4D]/0',
   };
 
-  const iconColor = background === 'gradient' ? '#FFF' : '#4A5565';
+  const iconColor = background === 'gradient' ? '#FFFFFF' : '#52525C';
 
   const handleBack = () => {
     if (background === 'gradient') {
@@ -59,10 +57,10 @@ const Header = ({
 
   return (
     <header
-      className={`reactive-width sticky top-0 left-0 z-10 flex min-h-18 w-full px-2 ${backgroundStyles[background]}`}
+      className={`reactive-width sticky top-0 left-0 z-10 flex min-h-18 w-full ${center === 'search' ? 'px-5' : 'px-3'} ${backgroundStyles[background]}`}
       style={
         background === 'gradient'
-          ? { marginTop: 'calc(-1 * env(safe-area-inset-top))', paddingTop: 'env(safe-area-inset-top)' }
+          ? { marginTop: 'calc(-1 * env(safe-area-inset-top))', paddingTop: 'env(safe-area-inset-top)', backgroundBlendMode: 'color-burn'}
           : undefined
       }
     >
@@ -89,9 +87,9 @@ const Header = ({
         )}
         {left === 'logo' && (
           <img
-            src="/icons/icon-logo.svg" // 추후 업데이트 예정
+            src="/icons/icon-logo.svg"
             alt="logo"
-            className="h-10" // 추후 수정 예정
+            className="pl-2"
             onClick={() => navigate('/')}
             onPointerDown={(e) => e.stopPropagation()}
           />
@@ -101,11 +99,9 @@ const Header = ({
       {/* Center 영역 */}
       <div className="flex flex-1 items-center justify-center">
         {center === 'title' && (
-          <h1 className="w-full text-left text-lg font-semibold text-gray-900">{centerTitle}</h1>
+          <h1 className="w-full text-left text-lg font-semibold text-zinc-800">{centerTitle}</h1>
         )}
-        {center === 'search' && (
-          <SearchBar isMap={background === 'transparent'} searchValue={searchValue} />
-        )}
+        {center === 'search' && <SearchBar isMap={background === 'transparent'} />}
       </div>
 
       {/* Right 영역 */}
@@ -173,7 +169,7 @@ const Header = ({
           <button
             onClick={onSave}
             onPointerDown={(e) => e.stopPropagation()}
-            className="mr-3 h-8 rounded-full bg-emerald-500 px-4 text-sm font-medium text-white"
+            className="mr-3 h-8 rounded-full bg-emerald-600 px-4 text-sm font-medium text-white"
           >
             저장
           </button>

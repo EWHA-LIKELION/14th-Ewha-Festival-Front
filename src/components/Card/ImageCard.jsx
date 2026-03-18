@@ -8,8 +8,8 @@ const ImageCard = ({ image, name }) => {
   return (
     <div className="flex w-21 flex-col items-start gap-1.5">
       <img
-        src={image}
-        className="flex h-21 flex-col items-start rounded-lg border border-gray-100"
+        src={image || '/images/default-image-xsmall.png'}
+        className="flex h-21 flex-col items-start rounded-lg border border-zinc-100"
       />
 
       <h2 className="line-clamp-1 self-stretch overflow-hidden text-xs leading-4 font-medium tracking-normal text-ellipsis">

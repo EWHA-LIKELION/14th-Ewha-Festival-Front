@@ -38,14 +38,14 @@ const TextAreaSend = ({ placeholder, onSend }) => {
   const hasValue = value.trim().length > 0;
 
   return (
-    <div className="relative w-full rounded-3xl bg-gray-100 px-4 py-3">
+    <div className="relative flex w-full items-center rounded-3xl bg-zinc-100 px-4 py-3">
       <textarea
         ref={textareaRef}
         value={value}
         rows={1}
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
-        className="scrollbar-hide w-full resize-none overflow-y-auto bg-transparent pr-10 text-base leading-6 text-gray-900 placeholder-gray-400 outline-none"
+        className="scrollbar-hide box-border flex w-full resize-none items-center overflow-y-auto bg-transparent py-0 pr-10 text-base leading-6 text-zinc-800 placeholder-zinc-400 outline-none"
         style={{
           height: `${lineHeight}px`,
           maxHeight: `${maxHeight}px`,
@@ -56,7 +56,7 @@ const TextAreaSend = ({ placeholder, onSend }) => {
         <img
           src="/icons/icon-send.svg"
           onClick={handleSend}
-          className="absolute right-3 bottom-3 cursor-pointer"
+          className="absolute right-3 bottom-2 cursor-pointer"
         />
       )}
     </div>

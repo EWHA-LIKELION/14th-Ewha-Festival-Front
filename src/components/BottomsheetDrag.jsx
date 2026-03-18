@@ -96,7 +96,7 @@ const BottomsheetDrag = ({ children }) => {
         }`}
         onPointerDown={handlePointerDown}
       >
-        {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-gray-300" />}
+        {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-zinc-300" />}
       </div>
 
       <div className={`relative w-full flex-1 overflow-y-auto ${isFull ? '' : 'overflow-x-clip'}`}>

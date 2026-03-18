@@ -41,7 +41,7 @@ const ScrapButton = ({ initialScrapped = false, count = 0, onToggle }) => {
       />
 
       {/* 숫자도 상태 반영 */}
-      <p className={`text-xs leading-4 ${isScrapped ? 'text-emerald-500' : 'text-gray-300'}`}>
+      <p className={`text-xs leading-4 ${isScrapped ? 'text-emerald-600' : 'text-zinc-300'}`}>
         {formatCount(scrapCount)}
       </p>
     </button>

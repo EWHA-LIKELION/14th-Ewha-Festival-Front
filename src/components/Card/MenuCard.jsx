@@ -8,6 +8,7 @@
  * @param {function} onImageClick - 이미지 클릭 시 호출되는 함수 (image 인자 전달)
  */
 import React from 'react';
+import Divider from '@/components/Divider';
 
 const MenuCard = ({ name, description, price, image, onImageClick }) => {
   const isDefaultImage = !image;
@@ -20,24 +21,25 @@ const MenuCard = ({ name, description, price, image, onImageClick }) => {
       className="flex w-full flex-col items-center justify-center bg-white"
     >
       <div className="flex w-full justify-between gap-4 py-5">
-        <div className="flex max-w-62 flex-col items-start justify-center gap-2">
+        <div className="flex flex-col items-start justify-between gap-2">
           <div className="flex flex-col items-start gap-1">
-            <h2 className="line-clamp-1 overflow-hidden text-base leading-6 font-medium tracking-normal text-ellipsis text-gray-900">
-              {name}
+            <h2 className="line-clamp-1 overflow-hidden text-base leading-6 font-medium tracking-normal text-ellipsis text-zinc-800">
+              {name || '메뉴명'}
             </h2>
-            <p className="line-clamp-2 overflow-hidden text-xs leading-4 font-normal tracking-normal text-ellipsis text-gray-500">
+            <p className="line-clamp-2 overflow-hidden text-xs leading-4 font-normal tracking-normal text-ellipsis text-zinc-500">
               {description}
             </p>
           </div>
-          <h3 className="line-clamp-1 overflow-hidden text-sm leading-5 font-semibold tracking-normal text-ellipsis text-gray-900">
-            {price.toLocaleString()}원
+          <h3 className="line-clamp-1 overflow-hidden text-sm leading-5 font-semibold tracking-normal text-ellipsis text-zinc-800">
+            {(price ?? 0).toLocaleString()}원
           </h3>
         </div>
         <img
-          src={image || '/images/showcard-default.png'}
-          className="flex aspect-square w-22 items-center justify-center rounded-md border border-gray-100"
+          src={image || '/images/default-image-medium.png'}
+          className="flex aspect-square w-22 items-center justify-center rounded-md border border-zinc-100"
         />
       </div>
+      <Divider />
     </div>
   );
 };
