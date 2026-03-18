@@ -4,10 +4,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-const SHEET_HEIGHT_CLASS = {
-  small: 'h-73',
-  medium: 'h-96',
-  large: 'h-138',
+const SHEET_HEIGHT = {
+  small: '18.25rem',
+  medium: '24rem',
+  large: '34.5rem',
 };
 
 const TRANSITION_DURATION = 300;
@@ -34,8 +34,11 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
       />
 
       <div
-        className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-35 flex w-full flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out ${SHEET_HEIGHT_CLASS[size]}`}
-        style={{ transform: `translateX(-50%) translateY(${visible ? '0%' : '100%'})` }}
+        className="reactive-width shadow-up-md fixed bottom-0 left-1/2 z-35 flex w-full flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out"
+        style={{
+          height: `calc(${SHEET_HEIGHT[size]} + env(safe-area-inset-bottom))`,
+          transform: `translateX(-50%) translateY(${visible ? '0%' : '100%'})`,
+        }}
       >
         <div className="flex h-8 shrink-0 flex-col items-center justify-end px-4 pt-2">
           <button

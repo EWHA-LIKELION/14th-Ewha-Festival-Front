@@ -10,7 +10,7 @@ const ImageModal = ({ image, onClose }) => {
       <div className="relative" onClick={onClose}>
         <div className="relative" onClick={(e) => e.stopPropagation()}>
           {/* x 버튼 */}
-          <button onClick={onClose} className="absolute -top-[20vh] right-5 z-50 p-2">
+          <button onClick={onClose} className="absolute -top-[21vh] right-5 z-50 p-2">
             <img src="/icons/icon-xmarkwhite.svg" alt="닫기" width="20" height="20" />
           </button>
 
