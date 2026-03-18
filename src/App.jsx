@@ -11,6 +11,8 @@ import MyBoothPage from '@/pages/admin/MyBoothPage';
 import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 import MyShowPage from '@/pages/admin/MyShowPage';
 import SearchPage from '@/pages/SearchPage';
+import BarrierFreeSheet from '@/features/BarrierFreeSheet';
+import TrashSheet from '@/features/TrashSheet';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
@@ -25,8 +27,12 @@ function App() {
           <Route path="my/scrap" element={<div>Scrap</div>} />
         </Route>
         <Route element={<NavigationBarLayout noPadding />}>
-          <Route path="map" element={<div className="h-300 bg-zinc-500">Map</div>} />
-          {/* query string: /map?type=부스공연&slot=건물&booth=부스 */}
+          <Route path="booths" element={<div>BoothListSheet</div>} />
+          <Route path="booths/:id" element={<div>BoothDetailSheet</div>} />
+          <Route path="shows" element={<div>ShowListSheet</div>} />
+          <Route path="shows/:id" element={<div>ShowDetailSheet</div>} />
+          <Route path="trash" element={<TrashSheet />} />
+          <Route path="barrier-free" element={<BarrierFreeSheet />} />
           {/* 공통 컴포넌트 퍼블리싱 기간이 끝나면 아래 라우트는 삭제 */}
           <Route path="component-preview" element={<ComponentPreview />} />
         </Route>
