@@ -9,6 +9,7 @@ import useAuthStore from '@/store/useAuthStore';
 import MyPage from '@/pages/my/MyPage';
 import MyBoothPage from '@/pages/admin/MyBoothPage';
 import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
+import MyShowPage from '@/pages/admin/MyShowPage';
 import SearchPage from '@/pages/SearchPage';
 import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 
@@ -41,7 +42,7 @@ function App() {
           <Route path="confirm" element={<AdminConfirmPage />} />
           <Route path="booth/:id" element={<div>My Booth</div>} />
           <Route path="booth/:id/edit" element={<div>Booth Edit</div>} />
-          <Route path="show/:id" element={<div>My Show</div>} />
+          <Route path="show/:id" element={<MyShowPage />} />
           <Route path="show/:id/edit" element={<div>Show Edit</div>} />
         </Route>
       </Routes>
