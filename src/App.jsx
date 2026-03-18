@@ -7,9 +7,10 @@ import ComponentPreview from '@/components/ComponentPreview';
 import LoginSheet from '@/features/LoginSheet';
 import useAuthStore from '@/store/useAuthStore';
 import MyPage from '@/pages/my/MyPage';
+import MyBoothPage from '@/pages/admin/MyBoothPage';
+import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 import MyShowPage from '@/pages/admin/MyShowPage';
 import SearchPage from '@/pages/SearchPage';
-import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
@@ -35,6 +36,8 @@ function App() {
 
         <Route path="search" element={<SearchPage />} />
         <Route path="admin">
+          <Route path="confirm" element={<div>Confirm</div>} />
+          <Route path="booth/:id" element={<MyBoothPage />} />
           <Route path="confirm" element={<AdminConfirmPage />} />
           <Route path="booth/:id" element={<div>My Booth</div>} />
           <Route path="booth/:id/edit" element={<div>Booth Edit</div>} />
