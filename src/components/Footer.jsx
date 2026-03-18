@@ -23,25 +23,10 @@ const Footer = () => {
     window.open('https://github.com/EWHA-LIKELION', '_blank');
   };
   return (
-    <div className="relative w-full overflow-hidden">
-      {/* 맨 아래: 그라데이션 */}
-      <div className="absolute inset-0 bg-linear-to-t from-[#E3F3DC] to-white" />
-
-      {/* footer-grain 이미지 20% 투명도 */}
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-20"
-        style={{ backgroundImage: 'url(/images/footer-grain.png)' }}
-      />
-
-      {/* 그라데이션 from-white to-transparent 90% */}
-      <div className="absolute inset-0 bg-linear-to-t from-transparent to-white opacity-90" />
-
-      {/* footer-background.svg */}
-      {/* <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/icons/footer-background.svg)' }}
-      /> */}
-
+    <div
+      className="relative inset-0 w-full overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: 'url(/icons/footer-background.svg)' }}
+    >
       {/* 컨텐츠 */}
       <div className="relative z-10 flex w-full flex-col items-center gap-4 py-5 text-center text-lime-700">
         <button
