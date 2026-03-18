@@ -7,6 +7,7 @@ import ComponentPreview from '@/components/ComponentPreview';
 import LoginSheet from '@/features/LoginSheet';
 import useAuthStore from '@/store/useAuthStore';
 import MyPage from '@/pages/my/MyPage';
+import SearchPage from '@/pages/SearchPage';
 import AdminConfirmPage from './pages/admin/AdminConfirmPage';
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
         <Route path="introduction" element={<div>Introduction</div>} />
         <Route path="notice" element={<div>Notice</div>} />
 
-        <Route path="search" element={<div>Search</div>} />
+        <Route path="search" element={<SearchPage />} />
         <Route path="admin">
           <Route path="confirm" element={<AdminConfirmPage />} />
           <Route path="booth/:id" element={<div>My Booth</div>} />
