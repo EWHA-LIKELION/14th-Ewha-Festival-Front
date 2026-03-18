@@ -9,6 +9,8 @@ import useAuthStore from '@/store/useAuthStore';
 import MyPage from '@/pages/my/MyPage';
 import MyBoothPage from '@/pages/admin/MyBoothPage';
 import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
+import SearchPage from '@/pages/SearchPage';
+import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
@@ -32,7 +34,7 @@ function App() {
         <Route path="introduction" element={<div>Introduction</div>} />
         <Route path="notice" element={<div>Notice</div>} />
 
-        <Route path="search" element={<div>Search</div>} />
+        <Route path="search" element={<SearchPage />} />
         <Route path="admin">
           <Route path="confirm" element={<div>Confirm</div>} />
           <Route path="booth/:id" element={<MyBoothPage />} />
