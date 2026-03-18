@@ -57,10 +57,10 @@ const Header = ({
 
   return (
     <header
-      className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full ${center === 'search' ? 'px-5' : 'px-3'} ${backgroundStyles[background]}`}
+      className={`reactive-width sticky top-0 left-0 z-10 flex min-h-18 w-full ${center === 'search' ? 'px-5' : 'px-3'} ${backgroundStyles[background]}`}
       style={
         background === 'gradient'
-          ? { paddingTop: 'env(safe-area-inset-top)', backgroundBlendMode: 'color-burn' }
+          ? { marginTop: 'calc(-1 * env(safe-area-inset-top))', paddingTop: 'env(safe-area-inset-top)', backgroundBlendMode: 'color-burn'}
           : undefined
       }
     >
