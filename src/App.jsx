@@ -11,7 +11,6 @@ import MyBoothPage from '@/pages/admin/MyBoothPage';
 import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 import MyShowPage from '@/pages/admin/MyShowPage';
 import SearchPage from '@/pages/SearchPage';
-import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
