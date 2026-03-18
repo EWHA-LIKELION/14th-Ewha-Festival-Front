@@ -7,8 +7,8 @@ import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const SNAP_HEIGHTS = {
   small: 87,
-  medium: 468,
-  large: 628,
+  medium: 385,
+  large: 589,
   full: window.innerHeight,
 };
 
@@ -92,7 +92,7 @@ const BottomsheetDrag = ({ children }) => {
     >
       <div
         className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-1 active:cursor-grabbing ${
-          isFull ? 'absolute top-0 z-15 flex w-full' : 'flex shrink-0'
+          isFull ? 'absolute top-0 z-20 flex w-full' : 'flex shrink-0'
         }`}
         onPointerDown={handlePointerDown}
       >
