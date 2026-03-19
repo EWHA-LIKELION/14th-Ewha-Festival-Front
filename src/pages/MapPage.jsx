@@ -4,7 +4,7 @@
 
 import { useEffect, useRef } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, useMatch, Outlet } from 'react-router-dom';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const savedTransform = { scale: 1, positionX: 0, positionY: 0 };
@@ -16,6 +16,9 @@ const MapPage = () => {
   const navigate = useNavigate();
   const mapRef = useRef(null);
   const transformRef = useRef(null);
+
+  const matchTrash = useMatch('/map/trash');
+  const matchBarrierFree = useMatch('/map/barrierfree');
 
   const goList = () => {
     setSheetSize('full');
@@ -42,19 +45,23 @@ const MapPage = () => {
       <div className="fixed top-18 z-5 flex gap-2 bg-transparent px-5">
         <button
           onClick={goTrash}
-          className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm leading-none font-normal text-zinc-800"
+          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-normal transition-all duration-200 ${matchTrash ? 'bg-red-500 text-white' : 'bg-white text-zinc-800'}`}
         >
-          <img src="/icons/icon-map-trash.svg" alt="trash" className="h-4 w-4 shrink-0" />
+          <img
+            src="/icons/icon-map-trash.svg"
+            alt="trash"
+            className={`h-4 w-4 shrink-0 ${matchTrash ? 'brightness-0 invert' : ''}`}
+          />
           쓰레기통
         </button>
         <button
           onClick={goBarrierFree}
-          className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm leading-none font-normal text-zinc-800"
+          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-normal transition-all duration-200 ${matchBarrierFree ? 'bg-cyan-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
             src="/icons/icon-map-barrierfree.svg"
             alt="barrierfree"
-            className="h-4 w-4 shrink-0"
+            className={`h-4 w-4 shrink-0 ${matchBarrierFree ? 'brightness-0 invert' : ''}`}
           />
           배리어프리
         </button>
