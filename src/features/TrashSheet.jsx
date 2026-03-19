@@ -6,7 +6,6 @@ import { useState } from 'react';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
-import Button from '@/components/Button';
 import FilterBar from '@/components/FilterBar';
 import TrashCard from '@/components/Card/TrashCard';
 
@@ -18,13 +17,8 @@ const description = '00 부스 옆';
 
 const BarrierFreeSheet = () => {
   const sheetSize = useBottomsheetStore((s) => s.sheetSize);
-  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const [selected, setSelected] = useState(false);
-
-  const goMap = () => {
-    setSheetSize('medium');
-  };
 
   const handleSelectTrash = () => {
     setSelected(!selected); // ‼️ 추후 수정
@@ -52,13 +46,6 @@ const BarrierFreeSheet = () => {
             </div>
           </div>
         </div>
-        {sheetSize === 'full' && (
-          <div className="fixed bottom-28 flex w-full justify-center">
-            <Button onClick={goMap} circle shadow leftIcon="/icons/icon-map-pin.svg" iconAlt="map">
-              지도보기
-            </Button>
-          </div>
-        )}
       </BottomsheetDrag>
     </>
   );

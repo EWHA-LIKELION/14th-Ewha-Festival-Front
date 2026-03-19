@@ -5,14 +5,9 @@
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
-import Button from '@/components/Button';
 
 const BarrierFreeSheet = () => {
   const sheetSize = useBottomsheetStore((s) => s.sheetSize);
-  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
-  const goMap = () => {
-    setSheetSize('medium');
-  };
 
   return (
     <>
@@ -50,13 +45,6 @@ const BarrierFreeSheet = () => {
             </p>
           </div>
         </div>
-        {sheetSize === 'full' && (
-          <div className="fixed bottom-28 flex w-full justify-center">
-            <Button onClick={goMap} circle shadow leftIcon="/icons/icon-map-pin.svg" iconAlt="map">
-              지도보기
-            </Button>
-          </div>
-        )}
       </BottomsheetDrag>
     </>
   );
