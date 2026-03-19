@@ -2,20 +2,15 @@
  * NavigationBar 컴포넌트
  */
 import React from 'react';
-import { useNavigate, useMatch, useLocation } from 'react-router-dom';
+import { useNavigate, useMatch } from 'react-router-dom';
 
 const NavigationBar = () => {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   // Hooks를 최상위에서 호출하여 순서 보장
   const matchHome = useMatch({ path: '/', end: true });
   const matchMy = useMatch('/my/*');
-  const matchMap =
-    pathname.startsWith('/booths') ||
-    pathname.startsWith('/shows') ||
-    pathname.startsWith('/trash') ||
-    pathname.startsWith('/barrier-free');
+  const matchMap = useMatch('/map/*');
 
   const navItems = [
     {
@@ -53,7 +48,7 @@ const NavigationBar = () => {
         </svg>
       ),
       label: '부스/공연',
-      path: '/booths',
+      path: '/map/booths',
       isActive: matchMap,
     },
     {
