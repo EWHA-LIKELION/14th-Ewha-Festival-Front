@@ -2,7 +2,7 @@
  * DropDown 컴포넌트
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const DropDown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,16 +38,30 @@ const DropDown = () => {
     <div ref={dropdownRef} className="relative inline-block">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-32 items-center justify-end gap-3 pr-0.5 text-sm font-normal text-zinc-500 focus:outline-none"
+        className="flex items-center gap-1 text-sm font-normal text-zinc-500 focus:outline-none"
       >
         {selectedLabel}
         <div className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}>
-          <img src="icons/icon-chevrondown.svg" alt="chevron" width="16" height="16" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <path
+              d="M14 5L8 11L2 5"
+              stroke="#9F9FA9"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </div>
       </button>
 
       {isOpen && (
-        <div className="shadow-down-md absolute z-10 mt-1.5 w-full overflow-hidden rounded-lg border border-zinc-200 bg-white">
+        <div className="shadow-down-md absolute right-0 z-10 mt-1.5 w-32 overflow-hidden rounded-lg border border-zinc-200 bg-white">
           {options.map((option) => (
             <button
               key={option.value}
