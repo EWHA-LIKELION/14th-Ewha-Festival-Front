@@ -17,8 +17,17 @@ const SearchBar = ({ isMap = false }) => {
   const { executeSearch } = useSearch();
 
   const handleBack = () => {
+    clearSearchQuery();
     setSheetSize('medium');
     navigate('/map/booths');
+    // 지도 초기화
+  };
+
+  const handleClear = () => {
+    clearSearchQuery();
+    setSheetSize('medium');
+    navigate('/map/booths');
+    // 지도 유지
   };
 
   const handleSearch = () => {
@@ -75,7 +84,7 @@ const SearchBar = ({ isMap = false }) => {
         className={`absolute top-1/2 right-12.5 -translate-y-1/2 transition-opacity duration-100 ${
           searchQuery ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
-        onClick={clearSearchQuery}
+        onClick={handleClear}
       />
     </div>
   );
