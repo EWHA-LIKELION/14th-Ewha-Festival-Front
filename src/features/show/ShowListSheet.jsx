@@ -10,7 +10,7 @@ import Header from '@/components/Header';
 import Tab from '@/components/Tab';
 import FilterBar from '@/components/FilterBar';
 import ShowCard from '@/components/Card/ShowCard';
-import CheckBox from '@/components/CheckBox';
+import Checkbox from '@/components/Checkbox';
 import DropDown from '@/components/DropDown';
 
 const totalNum = 1;
@@ -42,7 +42,7 @@ const BoothListSheet = () => {
               총 {totalNum}개
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1">
-                  종료 제외 <CheckBox isSelected={excludeClosed} onChange={setExcludeClosed} />
+                  종료 제외 <Checkbox isSelected={excludeClosed} onChange={setExcludeClosed} />
                 </div>
                 <DropDown />
               </div>
