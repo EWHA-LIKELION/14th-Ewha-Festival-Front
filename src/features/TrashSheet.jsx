@@ -32,7 +32,7 @@ const CATEGORY_LABELS = {
 };
 
 const BarrierFreeSheet = () => {
-  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
+  const isFull = useBottomsheetStore((s) => s.isFull());
 
   const [selected, setSelected] = useState(false);
 
@@ -49,11 +49,11 @@ const BarrierFreeSheet = () => {
 
   return (
     <>
-      {sheetSize !== 'full' && <Header left="back" background="transparent" />}
+      <div className={isFull ? 'relative z-10' : 'relative z-20'}>
+        <Header left="back" background="transparent" />
+      </div>
       <BottomsheetDrag>
-        {sheetSize === 'full' && (
-          <Header left="back" center="title" centerTitle="쓰레기통" isSheet />
-        )}
+        {isFull && <Header left="back" center="title" centerTitle="쓰레기통" isSheet />}
         <div className="flex flex-col gap-4 p-5">
           <FilterBar type="trash" />
           <p className="text-sm font-normal text-zinc-500">총 {trashData.length}개</p>

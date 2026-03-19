@@ -7,15 +7,15 @@ import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
 
 const BarrierFreeSheet = () => {
-  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
+  const isFull = useBottomsheetStore((s) => s.isFull());
 
   return (
     <>
-      {sheetSize !== 'full' && <Header left="back" background="transparent" />}
+      <div className={isFull ? 'relative z-10' : 'relative z-20'}>
+        <Header left="back" background="transparent" />
+      </div>
       <BottomsheetDrag>
-        {sheetSize === 'full' && (
-          <Header left="back" center="title" centerTitle="배리어프리" isSheet />
-        )}
+        {isFull && <Header left="back" center="title" centerTitle="배리어프리" isSheet />}
         <div className="flex flex-col gap-10 p-5">
           <div className="flex flex-col gap-1">
             <h1 className="text-base font-semibold">이용 대상</h1>
