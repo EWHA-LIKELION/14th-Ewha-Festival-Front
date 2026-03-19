@@ -6,7 +6,6 @@
  * - trash       : [설정] [카테고리] [위치]
  */
 
-import React from 'react';
 import Chip from '@/components/Chip';
 
 const FILTER_BUTTON_BASE =
