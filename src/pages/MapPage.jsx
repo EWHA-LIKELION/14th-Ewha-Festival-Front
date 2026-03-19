@@ -10,7 +10,6 @@ import useBottomsheetStore from '@/store/useBottomsheetStore';
 const savedTransform = { scale: 1, positionX: 0, positionY: 0 };
 
 const MapPage = () => {
-  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const navigate = useNavigate();
@@ -88,21 +87,19 @@ const MapPage = () => {
 
       <Outlet />
 
-      {sheetSize === 'small' && (
-        <div className="reactive-width fixed bottom-28 left-1/2 -translate-x-1/2">
-          <div className="flex justify-center">
-            <button
-              onClick={goList}
-              className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-5 py-3 text-base leading-6 font-medium text-emerald-600"
-            >
-              <img src="/icons/icon-map-list.svg" alt="list" />
-              목록보기
-            </button>
-          </div>
-          {/* safe area 여백 — iPhone PWA 홈 인디케이터 영역 */}
-          <div style={{ height: 'env(safe-area-inset-bottom)' }} />
+      <div className="reactive-width fixed bottom-28 left-1/2 -translate-x-1/2">
+        <div className="flex justify-center">
+          <button
+            onClick={goList}
+            className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-5 py-3 text-base leading-6 font-medium text-emerald-600"
+          >
+            <img src="/icons/icon-map-list.svg" alt="list" />
+            목록보기
+          </button>
         </div>
-      )}
+        {/* safe area 여백 — iPhone PWA 홈 인디케이터 영역 */}
+        <div style={{ height: 'env(safe-area-inset-bottom)' }} />
+      </div>
     </div>
   );
 };
