@@ -4,10 +4,10 @@ import { Routes, Route } from 'react-router-dom';
 import NavigationBarLayout from '@/layouts/NavigationBarLayout';
 
 // 전역 상태 관리
-import LoginSheet from '@/features/LoginSheet';
 import useAuthStore from '@/store/useAuthStore';
-import { ToastManager } from '@/components/Toast';
+import LoginSheet from '@/features/LoginSheet';
 import useToastStore from '@/store/useToastStore';
+import { ToastManager } from '@/components/Toast';
 
 // 홈 & 기타 페이지
 import SearchPage from '@/pages/SearchPage';
@@ -42,7 +42,6 @@ function App() {
           {/* 홈 */}
           <Route path="/" element={<div className="h-300 bg-zinc-500">Home</div>} />
           <Route path="credit" element={<div>Credit</div>} />
-          <Route path="notice" element={<div>Notice</div>} />
           <Route path="search" element={<SearchPage />} />
 
           {/* 마이 */}
