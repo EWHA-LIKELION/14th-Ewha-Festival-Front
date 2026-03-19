@@ -100,7 +100,8 @@ const BottomsheetDrag = ({ children }) => {
         {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-zinc-300" />}
       </div>
 
-      <div className={`relative w-full flex-1 overflow-y-auto ${isFull ? '' : 'overflow-x-clip'}`}>
+      {/* 헤더 영역 padding */}
+      <div className={`relative w-full flex-1 overflow-y-auto ${isFull ? 'pt-18' : ''}`}>
         {children}
       </div>
 

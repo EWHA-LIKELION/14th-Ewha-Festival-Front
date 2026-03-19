@@ -31,7 +31,7 @@ const BarrierFreeSheet = () => {
         {sheetSize === 'full' && (
           <Header left="back" center="title" centerTitle="쓰레기통" isSheet />
         )}
-        <div className={`${sheetSize === 'full' && 'pt-23'} flex flex-col gap-4 p-5`}>
+        <div className="flex flex-col gap-4 p-5">
           <FilterBar type="trash" />
           <p className="text-sm font-normal text-zinc-500">총 {totalNumber}개</p>
           <div className="flex flex-col gap-10">

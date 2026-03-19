@@ -16,7 +16,7 @@ const BarrierFreeSheet = () => {
         {sheetSize === 'full' && (
           <Header left="back" center="title" centerTitle="배리어프리" isSheet />
         )}
-        <div className={`${sheetSize === 'full' && 'pt-23'} flex flex-col gap-10 p-5`}>
+        <div className="flex flex-col gap-10 p-5">
           <div className="flex flex-col gap-1">
             <h1 className="text-base font-semibold">이용 대상</h1>
             <p className="py-1 text-sm font-normal">
