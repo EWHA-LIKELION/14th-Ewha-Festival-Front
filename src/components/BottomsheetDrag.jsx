@@ -25,9 +25,8 @@ const getNearestSize = (height) => {
 };
 
 const BottomsheetDrag = ({ children }) => {
-  const { sheetSize, setSheetSize } = useBottomsheetStore();
+  const { sheetSize, setSheetSize, isDragging, setIsDragging } = useBottomsheetStore();
   const [dragHeight, setDragHeight] = React.useState(null);
-  const isDragging = dragHeight !== null;
 
   const startYRef = useRef(0);
   const startHeightRef = useRef(0);
@@ -44,6 +43,7 @@ const BottomsheetDrag = ({ children }) => {
         const newHeight = Math.max(SNAP_HEIGHTS.small, startHeightRef.current + delta);
         dragHeightRef.current = newHeight;
         setDragHeight(newHeight);
+        setIsDragging(true);
       };
 
       const handlePointerUp = () => {
@@ -54,6 +54,7 @@ const BottomsheetDrag = ({ children }) => {
         }
         dragHeightRef.current = null;
         setDragHeight(null);
+        setIsDragging(false);
         document.removeEventListener('pointermove', handlePointerMove);
         document.removeEventListener('pointerup', handlePointerUp);
       };
@@ -61,13 +62,14 @@ const BottomsheetDrag = ({ children }) => {
       document.addEventListener('pointermove', handlePointerMove);
       document.addEventListener('pointerup', handlePointerUp);
     },
-    [sheetSize, setSheetSize],
+    [sheetSize, setSheetSize, setIsDragging],
   );
 
-  const isFull = sheetSize === 'full';
+  const isFull = sheetSize === 'full' && !isDragging;
+  const isActuallyDragging = dragHeight !== null;
 
   const sheetStyle = (() => {
-    if (isDragging) {
+    if (isActuallyDragging) {
       const clamped = Math.min(dragHeight, window.innerHeight);
       return { height: `${clamped}px`, transition: 'none' };
     }
