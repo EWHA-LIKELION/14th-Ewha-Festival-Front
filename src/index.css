@@ -85,6 +85,7 @@
     background-color: #f4f4f5; /* [🔥추후 삭제] PC 환경 배경 */
     color: #111111;
     overflow-x: hidden;
+    touch-action: pan-x pan-y; /* 스크롤은 허용, 핀치줌만 차단 */
   }
 
   /* 버튼 전역 스타일 (hover, disabled 상태) */
