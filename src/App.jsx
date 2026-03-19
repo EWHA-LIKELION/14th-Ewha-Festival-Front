@@ -19,6 +19,7 @@ import MyPage from '@/pages/my/MyPage';
 // 지도
 import MapPage from '@/pages/MapPage';
 import BoothListSheet from '@/features/booth/BoothListSheet';
+import ShowListSheet from '@/features/show/ShowListSheet';
 import TrashSheet from '@/features/TrashSheet';
 import BarrierFreeSheet from '@/features/BarrierFreeSheet';
 
@@ -53,7 +54,7 @@ function App() {
             <Route path="booths" element={<BoothListSheet />} />
             <Route path="booths/:id" element={<div>BoothDetailSheet</div>} />
             <Route path="booths/:id/notice" element={<NoticePage />} />
-            <Route path="shows" element={<div>ShowListSheet</div>} />
+            <Route path="shows" element={<ShowListSheet />} />
             <Route path="shows/:id" element={<div>ShowDetailSheet</div>} />
             <Route path="shows/:id/notice" element={<NoticePage />} />
             <Route path="trash" element={<TrashSheet />} />
