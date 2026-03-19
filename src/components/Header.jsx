@@ -55,7 +55,7 @@ const Header = ({
 
   return (
     <header
-      className={`reactive-width fixed top-0 z-15 flex h-18 w-full ${center === 'search' ? 'px-5' : 'px-3'} ${backgroundStyles[background]}`}
+      className={`reactive-width fixed top-0 z-15 flex h-18 ${center === 'search' ? 'px-5' : 'px-3'} ${backgroundStyles[background]}`}
     >
       {/* Left 영역 */}
       <div className="flex items-center justify-start">

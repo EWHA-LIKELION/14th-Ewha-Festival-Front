@@ -180,6 +180,7 @@
 
 /* 반응형 너비: 최소 320px 보장 */
 .reactive-width {
+  width: 100%;
   min-width: 320px;
 }
 
