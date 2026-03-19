@@ -5,7 +5,7 @@ import ComponentPreview from '@/components/ComponentPreview';
 import LoginSheet from '@/features/LoginSheet';
 import useAuthStore from '@/store/useAuthStore';
 import MyPage from '@/pages/my/MyPage';
-import BoothEditPage from './pages/admin/BoothEditPage';
+import BoothEditPage from '@/pages/admin/BoothEditPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
