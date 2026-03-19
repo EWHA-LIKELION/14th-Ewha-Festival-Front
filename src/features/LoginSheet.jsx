@@ -18,7 +18,7 @@ const LoginSheet = () => {
   };
 
   return (
-    <BottomsheetScrim size="small" onClose={closeLoginSheet}>
+    <BottomsheetScrim size="login" onClose={closeLoginSheet}>
       <div className="flex h-full w-full flex-col items-center py-5">
         <h2 className="w-full pb-1 text-left text-xl font-semibold text-zinc-800">
           로그인하고 계속 이용해보세요!

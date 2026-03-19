@@ -1,0 +1,148 @@
+[
+  {
+    "category": "Trash",
+    "location": "MAIN_GATE",
+    "number": 1,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "GRASS_GROUND",
+    "number": 2,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "SPORT_TRACK",
+    "number": 3,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "HYUUT_GIL",
+    "number": 4,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "WELCH_RYANG_AUDITORIUM",
+    "number": 5,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "EWHA_POSCO_BUILDING",
+    "number": 6,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "STUDENT_UNION",
+    "number": 7,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "HUMAN_ECOLOGY_BUILDING",
+    "number": 8,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "HAK_GWAN",
+    "number": 9,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Trash",
+    "location": "EDUCATION_BUILDING",
+    "number": 10,
+    "description": "00 부스 옆"
+  },
+
+  {
+    "category": "Dish",
+    "location": "MAIN_GATE",
+    "number": 1,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "GRASS_GROUND",
+    "number": 2,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "SPORT_TRACK",
+    "number": 3,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "HYUUT_GIL",
+    "number": 4,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "WELCH_RYANG_AUDITORIUM",
+    "number": 5,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "EWHA_POSCO_BUILDING",
+    "number": 6,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "STUDENT_UNION",
+    "number": 7,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "HUMAN_ECOLOGY_BUILDING",
+    "number": 8,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "HAK_GWAN",
+    "number": 9,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Dish",
+    "location": "EDUCATION_BUILDING",
+    "number": 10,
+    "description": "00 부스 옆"
+  },
+
+  {
+    "category": "Gas",
+    "location": "WELCH_RYANG_AUDITORIUM",
+    "number": 1,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Gas",
+    "location": "EWHA_POSCO_BUILDING",
+    "number": 2,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Gas",
+    "location": "STUDENT_UNION",
+    "number": 3,
+    "description": "00 부스 옆"
+  },
+  {
+    "category": "Gas",
+    "location": "HUMAN_ECOLOGY_BUILDING",
+    "number": 4,
+    "description": "00 부스 옆"
+  }
+]

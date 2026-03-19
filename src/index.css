@@ -85,6 +85,7 @@
     background-color: #f4f4f5; /* [🔥추후 삭제] PC 환경 배경 */
     color: #111111;
     overflow-x: hidden;
+    touch-action: pan-x pan-y; /* 스크롤은 허용, 핀치줌만 차단 */
   }
 
   /* 버튼 전역 스타일 (hover, disabled 상태) */
@@ -179,6 +180,7 @@
 
 /* 반응형 너비: 최소 320px 보장 */
 .reactive-width {
+  width: 100%;
   min-width: 320px;
 }
 

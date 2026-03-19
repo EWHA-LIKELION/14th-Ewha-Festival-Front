@@ -5,9 +5,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 const SHEET_HEIGHT = {
-  small: '18.25rem',
-  medium: '24rem',
-  large: '34.5rem',
+  large: '592px',
+  show: '384px', // 공연 필터
+  trash: '376px', // 쓰레기 필터
+  login: '292px',
 };
 
 const TRANSITION_DURATION = 300;
@@ -46,7 +47,21 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
             onClick={handleClose}
             className="flex size-6 items-center justify-center"
           >
-            <img src="/icons/icon-chevrondown.svg" alt="닫기" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M3 7.5L12 16.5L21 7.5"
+                stroke="#D4D4D8"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </button>
         </div>
 
