@@ -35,16 +35,20 @@ const MapPage = () => {
       <div className="fixed top-18 z-5 flex gap-2 bg-transparent px-5">
         <button
           onClick={goTrash}
-          className="shadow-down-lg flex flex-nowrap gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-normal text-zinc-800"
+          className="shadow-down-lg flex gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-normal text-zinc-800"
         >
-          <img src="/icons/icon-map-trash.svg" alt="trash" />
+          <img src="/icons/icon-map-trash.svg" alt="trash" className="h-4 w-4 shrink-0" />
           쓰레기통
         </button>
         <button
           onClick={goBarrierFree}
-          className="shadow-down-lg flex flex-nowrap gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-normal text-zinc-800"
+          className="shadow-down-lg flex gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-normal text-zinc-800"
         >
-          <img src="/icons/icon-map-barrierfree.svg" alt="barrierfree" />
+          <img
+            src="/icons/icon-map-barrierfree.svg"
+            alt="barrierfree"
+            className="h-4 w-4 shrink-0"
+          />
           배리어프리
         </button>
       </div>
