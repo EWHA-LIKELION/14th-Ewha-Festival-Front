@@ -2,66 +2,47 @@
  * 공통 컴포넌트 프리뷰 페이지
  */
 
-import React, { useState } from 'react';
+import BottomsheetDrag from '@/components/BottomsheetDrag';
+import useBottomsheetStore from '@/store/useBottomsheetStore';
+import Header from '@/components/Header';
 import BoothCard from '@/components/Card/BoothCard';
-import ShowCard from '@/components/Card/ShowCard';
-import MenuCard from '@/components/Card/MenuCard';
-import ImageModal from '@/components/ImageModal';
-import ReviewCard from '@/components/Card/ReviewCard';
 
 const ComponentPreview = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
-      <BoothCard
-        name="라이크라이언 떡볶이"
-        category="분식"
-        days="3/1~3/3"
-        location="학생회관 앞"
-        description="매콤달콤 떡볶이!"
-        thumbnail="/images/boothcard-test.jpg"
-        menuList={[
-          { name: '떡볶이', description: '...', image: '/images/boothcard-test.jpg' },
-          { name: '순대', description: '...' },
-          { name: '튀김', description: '...', image: '/images/boothcard-test.jpg' },
-          { name: '튀김', description: '...', image: '/images/boothcard-test.jpg' },
-        ]}
-        status="open"
-      />
-      <BoothCard />
-      <ShowCard
-        name="라이크라이언 떡볶이"
-        category="밴드"
-        days="3/1~3/3"
-        location="학생회관 앞"
-        description="매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다."
-        thumbnail="/images/boothcard-test.jpg"
-        status="operating"
-        onClick={() => {}}
-      />
-      <ShowCard />
-      <MenuCard
-        name="메뉴명"
-        description="매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다.매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다."
-        image="/images/boothcard-test.jpg"
-        price={10000}
-        onImageClick={(img) => {
-          setSelectedImage(img);
-          setShowModal(true);
-        }}
-      />
-      <MenuCard />
-      <ReviewCard
-        name="익명 n"
-        review="Content text Content text Content text Content text Content text Content text Content text Content text Content text Content text "
-        ago="2시간 전"
-        showDelete="false"
-      />
-
-      {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
-    </div>
+    <BottomsheetDrag>
+      {sheetSize === 'full' && (
+        <>
+          <Header left="back" />
+          <img
+            src="/images/boothcard-test.jpg"
+            alt=""
+            className="w-full"
+            style={{ height: '240px', objectFit: 'cover' }}
+          />
+        </>
+      )}
+      {/* BoothCard 프리뷰 */}
+      <div className="mb-8 p-5">
+        <h3 className="mb-3 text-lg font-semibold">BoothCard</h3>
+        <BoothCard
+          name="라이크라이언 떡볶이"
+          category="음식"
+          days="3/1~3/3"
+          location="학생회관 앞"
+          description="매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다."
+          thumbnail="/images/boothcard-test.jpg"
+          images={[
+            '/images/boothcard-test.jpg',
+            '/images/carousel-test1.png',
+            '/images/carousel-test2.png',
+          ]}
+          status="open"
+          onClick={() => {}}
+        />
+      </div>
+    </BottomsheetDrag>
   );
 };
 
