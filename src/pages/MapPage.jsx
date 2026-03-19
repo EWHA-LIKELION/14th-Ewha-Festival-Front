@@ -5,14 +5,21 @@
 import { useEffect, useRef } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, Outlet } from 'react-router-dom';
-import Button from '@/components/Button';
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const savedTransform = { scale: 1, positionX: 0, positionY: 0 };
 
 const MapPage = () => {
+  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
+
   const navigate = useNavigate();
   const mapRef = useRef(null);
   const transformRef = useRef(null);
+
+  const goList = () => {
+    setSheetSize('full');
+  };
 
   useEffect(() => {
     const preventZoom = (e) => {
@@ -35,14 +42,14 @@ const MapPage = () => {
       <div className="fixed top-18 z-5 flex gap-2 bg-transparent px-5">
         <button
           onClick={goTrash}
-          className="shadow-down-lg flex gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-normal text-zinc-800"
+          className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm leading-none font-normal text-zinc-800"
         >
           <img src="/icons/icon-map-trash.svg" alt="trash" className="h-4 w-4 shrink-0" />
           쓰레기통
         </button>
         <button
           onClick={goBarrierFree}
-          className="shadow-down-lg flex gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-normal text-zinc-800"
+          className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm leading-none font-normal text-zinc-800"
         >
           <img
             src="/icons/icon-map-barrierfree.svg"
@@ -54,7 +61,7 @@ const MapPage = () => {
       </div>
       <TransformWrapper
         ref={transformRef}
-        wheel={{ activationKeys: [], step: 0.5 }}
+        wheel={{ activationKeys: [], step: 1000 }}
         pinch={{ disabled: false }}
         panning={{ disabled: false }}
         limitToBounds={false}
@@ -73,6 +80,18 @@ const MapPage = () => {
       </TransformWrapper>
 
       <Outlet />
+
+      {sheetSize === 'small' && (
+        <div className="reactive-width fixed bottom-28 flex justify-center">
+          <button
+            onClick={goList}
+            className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-5 py-3 text-base leading-6 font-medium text-emerald-600"
+          >
+            <img src="/icons/icon-map-list.svg" alt="list" />
+            목록보기
+          </button>
+        </div>
+      )}
     </div>
   );
 };
