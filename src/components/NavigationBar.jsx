@@ -9,8 +9,8 @@ const NavigationBar = () => {
 
   // Hooks를 최상위에서 호출하여 순서 보장
   const matchHome = useMatch({ path: '/', end: true });
-  const matchMap = useMatch('/map/*');
   const matchMy = useMatch('/my/*');
+  const matchMap = useMatch('/map/*');
 
   const navItems = [
     {
@@ -48,7 +48,7 @@ const NavigationBar = () => {
         </svg>
       ),
       label: '부스/공연',
-      path: '/map',
+      path: '/map/booths',
       isActive: matchMap,
     },
     {
@@ -82,13 +82,13 @@ const NavigationBar = () => {
               onClick={() => navigate(item.path)}
               className="flex h-fit w-20 flex-col items-center justify-center gap-1 text-xs"
             >
-              <div className={item.isActive ? 'text-emerald-600' : 'text-zinc-400'}>
+              <div
+                className={`transition-all duration-200 ${item.isActive ? 'text-emerald-600' : 'text-zinc-400'}`}
+              >
                 {item.icon}
               </div>
               <p
-                className={
-                  item.isActive ? 'font-medium text-emerald-600' : 'font-normal text-zinc-500'
-                }
+                className={`transition-all duration-200 ${item.isActive ? 'font-medium text-emerald-600' : 'font-normal text-zinc-500'}`}
               >
                 {item.label}
               </p>

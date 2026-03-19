@@ -1,8 +1,9 @@
 /**
- * FilterBar 컴포넌트 (type 종류: 2가지 - booth, performance)
+ * FilterBar 컴포넌트 (type 종류: 3가지 - booth, show)
  *
  * - booth       : [설정] [주관] [카테고리] [요일] [위치]
- * - performance : [설정] [카테고리] [요일] [위치]
+ * - show        : [설정] [카테고리] [요일] [위치]
+ * - trash       : [설정] [카테고리] [위치]
  */
 
 import React from 'react';
@@ -58,14 +59,16 @@ function FilterBar({
           onClick={() => onFilterClick?.('category')}
           onDelete={() => onFilterDelete?.('category')}
         />
-        <Chip
-          variant="filter"
-          text="요일"
-          selectedValue={day?.value}
-          isSelected={!!day?.value}
-          onClick={() => onFilterClick?.('day')}
-          onDelete={() => onFilterDelete?.('day')}
-        />
+        {(type === 'booth' || type === 'show') && (
+          <Chip
+            variant="filter"
+            text="요일"
+            selectedValue={day?.value}
+            isSelected={!!day?.value}
+            onClick={() => onFilterClick?.('day')}
+            onDelete={() => onFilterDelete?.('day')}
+          />
+        )}
         <Chip
           variant="filter"
           text="위치"

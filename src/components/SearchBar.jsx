@@ -2,18 +2,17 @@
  * SearchBar 컴포넌트 (isMap: 지도용 스타일)
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Button';
+import useSearchStore from '@/store/useSearchStore';
+import { useSearch } from '@/hooks';
 
-const SearchBar = ({ isMap = false, onSearch, searchValue }) => {
+const SearchBar = ({ isMap = false }) => {
   const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-
-  useEffect(() => {
-    setInputValue(searchValue || '');
-  }, [searchValue]);
+  const { searchQuery, setSearchQuery, clearSearchQuery } = useSearchStore();
+  const { executeSearch } = useSearch();
 
   const handleBack = () => {
     if (window.history.length > 1) {
@@ -24,9 +23,7 @@ const SearchBar = ({ isMap = false, onSearch, searchValue }) => {
   };
 
   const handleSearch = () => {
-    if (onSearch && inputValue.trim()) {
-      onSearch(inputValue);
-    }
+    executeSearch(searchQuery);
   };
 
   const handleKeyDown = (e) => {
@@ -40,18 +37,18 @@ const SearchBar = ({ isMap = false, onSearch, searchValue }) => {
       <input
         type="text"
         placeholder="부스/공연명, 메뉴명, 부스번호 검색"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'shadow-down-lg bg-white' : 'bg-zinc-100'} py-3 text-base font-normal text-zinc-800 placeholder:text-zinc-300 focus:outline-none ${
-          isFocused || inputValue ? 'px-12.5 ' : 'px-5'
+          isFocused || searchQuery ? 'px-12.5 ' : 'px-5'
         }`}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
       <Button
         leftIcon="/icons/icon-search.svg"
-        variant={!(isFocused || inputValue) ? 'text-gray' : 'text-black'}
+        variant={!(isFocused || searchQuery) ? 'text-gray' : 'text-black'}
         size="md"
         onClick={handleSearch}
         className="absolute top-1/2 right-2.5 -translate-y-1/2"
@@ -62,7 +59,7 @@ const SearchBar = ({ isMap = false, onSearch, searchValue }) => {
         size="md"
         onClick={handleBack}
         className={`absolute top-1/2 left-1 -translate-y-1/2 transition-opacity duration-100 ${
-          isFocused || inputValue ? 'opacity-100' : 'pointer-events-none opacity-0'
+          isFocused || searchQuery ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       />
       <Button
@@ -71,9 +68,9 @@ const SearchBar = ({ isMap = false, onSearch, searchValue }) => {
         size="md"
         iconColor
         className={`absolute top-1/2 right-12.5 -translate-y-1/2 transition-opacity duration-100 ${
-          inputValue ? 'opacity-100' : 'pointer-events-none opacity-0'
+          searchQuery ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
-        onClick={() => setInputValue('')}
+        onClick={clearSearchQuery}
       />
     </div>
   );

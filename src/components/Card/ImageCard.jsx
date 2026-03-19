@@ -8,7 +8,7 @@ const ImageCard = ({ image, name }) => {
   return (
     <div className="flex w-21 flex-col items-start gap-1.5">
       <img
-        src={image}
+        src={image || '/images/default-image-xsmall.png'}
         className="flex h-21 flex-col items-start rounded-lg border border-zinc-100"
       />
 

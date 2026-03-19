@@ -4,10 +4,11 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-const SHEET_HEIGHT_CLASS = {
-  small: 'h-73',
-  medium: 'h-96',
-  large: 'h-138',
+const SHEET_HEIGHT = {
+  large: '592px',
+  show: '384px', // 공연 필터
+  trash: '376px', // 쓰레기 필터
+  login: '292px',
 };
 
 const TRANSITION_DURATION = 300;
@@ -34,8 +35,11 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
       />
 
       <div
-        className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-35 flex w-full flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out ${SHEET_HEIGHT_CLASS[size]}`}
-        style={{ transform: `translateX(-50%) translateY(${visible ? '0%' : '100%'})` }}
+        className="reactive-width shadow-up-md fixed bottom-0 left-1/2 z-35 flex w-full flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out"
+        style={{
+          height: `calc(${SHEET_HEIGHT[size]} + env(safe-area-inset-bottom))`,
+          transform: `translateX(-50%) translateY(${visible ? '0%' : '100%'})`,
+        }}
       >
         <div className="flex h-8 shrink-0 flex-col items-center justify-end px-4 pt-2">
           <button
@@ -43,7 +47,21 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
             onClick={handleClose}
             className="flex size-6 items-center justify-center"
           >
-            <img src="/icons/icon-chevrondown.svg" alt="닫기" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M3 7.5L12 16.5L21 7.5"
+                stroke="#D4D4D8"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </button>
         </div>
 

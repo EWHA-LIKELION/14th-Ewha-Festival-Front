@@ -4,11 +4,12 @@
 
 import React, { useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
+import Button from '@/components/Button';
 
 const SNAP_HEIGHTS = {
-  small: 95,
-  medium: 468,
-  large: 628,
+  small: 87,
+  medium: 385,
+  large: 589,
   full: window.innerHeight,
 };
 
@@ -74,28 +75,52 @@ const BottomsheetDrag = ({ children }) => {
       return { height: '100dvh', transition: 'height 0.3s ease' };
     }
     return {
-      height: `${SNAP_HEIGHTS[sheetSize]}px`,
+      height: `calc(${SNAP_HEIGHTS[sheetSize]}px + env(safe-area-inset-bottom))`,
       transition: 'height 0.3s ease',
     };
   })();
 
   return (
     <div
-      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col overflow-clip bg-white pb-15 ${
-        isFull ? 'rounded-none' : 'rounded-t-3xl'
+      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col bg-white ${
+        isFull ? 'rounded-none' : 'overflow-clip rounded-t-3xl'
       }`}
-      style={sheetStyle}
+      style={{
+        ...sheetStyle,
+        paddingTop: isFull ? 'env(safe-area-inset-top)' : undefined,
+        paddingBottom: 'calc(3.75rem + env(safe-area-inset-bottom))',
+      }}
     >
       <div
         className={`cursor-grab touch-none flex-col items-center px-4 pt-5 pb-1 active:cursor-grabbing ${
-          isFull ? 'absolute top-0 z-15 flex w-full' : 'flex shrink-0'
+          isFull ? 'absolute top-0 z-20 flex w-full' : 'flex shrink-0'
         }`}
         onPointerDown={handlePointerDown}
       >
         {!isFull && <div className="h-0.75 w-6.5 rounded-full bg-zinc-300" />}
       </div>
 
-      <div className="relative w-full flex-1 overflow-x-clip overflow-y-auto">{children}</div>
+      {/* 헤더 영역 padding */}
+      <div className={`relative w-full flex-1 overflow-y-auto ${isFull ? 'pt-18' : ''}`}>
+        {children}
+      </div>
+
+      {isFull && (
+        <div className="reactive-width fixed bottom-28 left-1/2 -translate-x-1/2">
+          <div className="flex justify-center">
+            <Button
+              onClick={() => setSheetSize('medium')}
+              circle
+              shadow
+              leftIcon="/icons/icon-map-pin.svg"
+              iconAlt="map"
+            >
+              지도보기
+            </Button>
+          </div>
+          <div style={{ height: 'env(safe-area-inset-bottom)' }} />
+        </div>
+      )}
     </div>
   );
 };

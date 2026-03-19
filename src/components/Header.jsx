@@ -8,13 +8,12 @@
  * @param {string} props.center - 중앙 영역: 'title'(페이지 제목), 'search'(검색바), 'none'(기본)
  * @param {string} props.centerTitle - center가 'title'일 때 표시할 제목
  * @param {string} props.right - 우측 영역: 'search'(검색 이동), 'edit'(수정), 'save'(저장), 'none'(기본)
- * @param {string} props.background - 배경 스타일: 'white'(기본), 'transparent', 'gradient'
- * @param {string} props.searchValue - 검색바 초기값 (검색 페이지 → 결과 페이지 전환 시 사용)
+ * @param {string} props.background - 배경 스타일: 'white'(기본), 'transparent'
  * @param {Function} props.onEdit - 수정 버튼 클릭 핸들러
  * @param {Function} props.onSave - 저장 버튼 클릭 핸들러
+ * @param {Boolean} props.isSheet - 뒤로가기 버튼 클릭 핸들러 결정용
  */
 
-import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '@/components/SearchBar';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
@@ -24,10 +23,10 @@ const Header = ({
   center = 'none', // title, search
   centerTitle = '', // center가 'title'일 때 표시할 제목
   right = 'none', // search, edit, save
-  background = 'white', // white, transparent, gradient
-  searchValue, //검색바 입력 값 (검색페이지 -> 검색결과페이지로 넘어갈 때 필요)
+  background = 'white', // white, transparent
   onEdit,
   onSave,
+  isSheet = false,
 }) => {
   const navigate = useNavigate();
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
@@ -36,17 +35,14 @@ const Header = ({
   const backgroundStyles = {
     white: 'bg-white shadow-down-sm',
     transparent: 'bg-transparent',
-    gradient: 'bg-linear-to-b from-[#292929]/50 to-[#4D4D4D]/0',
   };
 
-  const iconColor = background === 'gradient' ? '#FFFFFF' : '#52525C';
+  const iconColor = '#52525C';
 
   const handleBack = () => {
-    if (background === 'gradient') {
+    if (isSheet) {
       setSheetSize('medium');
-      return;
-    }
-    if (window.history.length > 1) {
+    } else if (window.history.length > 1) {
       navigate(-1);
     } else {
       navigate('/');
@@ -59,12 +55,7 @@ const Header = ({
 
   return (
     <header
-      className={`reactive-width sticky top-0 left-0 z-10 flex h-18 w-full px-2 ${backgroundStyles[background]}`}
-      style={
-        background === 'gradient'
-          ? { paddingTop: 'env(safe-area-inset-top)', backgroundBlendMode: 'color-burn' }
-          : undefined
-      }
+      className={`reactive-width fixed top-0 z-15 flex h-18 ${center === 'search' ? 'px-5' : 'px-3'} ${backgroundStyles[background]}`}
     >
       {/* Left 영역 */}
       <div className="flex items-center justify-start">
@@ -89,9 +80,9 @@ const Header = ({
         )}
         {left === 'logo' && (
           <img
-            src="/icons/icon-logo.svg" // 추후 업데이트 예정
+            src="/icons/icon-logo.svg"
             alt="logo"
-            className="h-10" // 추후 수정 예정
+            className="pl-2"
             onClick={() => navigate('/')}
             onPointerDown={(e) => e.stopPropagation()}
           />
@@ -103,9 +94,7 @@ const Header = ({
         {center === 'title' && (
           <h1 className="w-full text-left text-lg font-semibold text-zinc-800">{centerTitle}</h1>
         )}
-        {center === 'search' && (
-          <SearchBar isMap={background === 'transparent'} searchValue={searchValue} />
-        )}
+        {center === 'search' && <SearchBar isMap={background === 'transparent'} />}
       </div>
 
       {/* Right 영역 */}
