@@ -8,21 +8,44 @@ import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
 import FilterBar from '@/components/FilterBar';
 import TrashCard from '@/components/Card/TrashCard';
+import trashData from '@/data/trashData.json';
 
-const totalNumber = 0;
-const location = '생활환경관';
-const category = '쓰레기통';
-const number = '1';
-const description = '00 부스 옆';
+// location 한글 변환
+const LOCATION_LABELS = {
+  MAIN_GATE: '정문',
+  GRASS_GROUND: '잔디광장',
+  SPORT_TRACK: '스포츠트랙',
+  HYUUT_GIL: '휴웃길',
+  WELCH_RYANG_AUDITORIUM: '대강당',
+  EWHA_POSCO_BUILDING: '포스코관',
+  STUDENT_UNION: '학생문화관',
+  HUMAN_ECOLOGY_BUILDING: '생활환경관',
+  HAK_GWAN: '학관',
+  EDUCATION_BUILDING: '교육관',
+};
+
+// category 한글 변환
+const CATEGORY_LABELS = {
+  Trash: '쓰레기통',
+  Dish: '다회용기',
+  Gas: '부탄가스',
+};
 
 const BarrierFreeSheet = () => {
   const sheetSize = useBottomsheetStore((s) => s.sheetSize);
 
   const [selected, setSelected] = useState(false);
 
-  const handleSelectTrash = () => {
-    setSelected(!selected); // ‼️ 추후 수정
+  const handleSelectTrash = (item) => {
+    setSelected(`${item.category}-${item.number}`);
   };
+
+  // location별 그룹핑
+  const grouped = trashData.reduce((acc, item) => {
+    if (!acc[item.location]) acc[item.location] = [];
+    acc[item.location].push(item);
+    return acc;
+  }, {});
 
   return (
     <>
@@ -33,17 +56,22 @@ const BarrierFreeSheet = () => {
         )}
         <div className="flex flex-col gap-4 p-5">
           <FilterBar type="trash" />
-          <p className="text-sm font-normal text-zinc-500">총 {totalNumber}개</p>
+          <p className="text-sm font-normal text-zinc-500">총 {trashData.length}개</p>
           <div className="flex flex-col gap-10">
-            <div className="flex flex-col gap-2">
-              <h1 className="text-lg font-semibold">{location}</h1>
-              <TrashCard
-                title={`${category} ${number}`}
-                description={description}
-                selected={selected}
-                onClick={handleSelectTrash}
-              />
-            </div>
+            {Object.entries(grouped).map(([location, items]) => (
+              <div key={location} className="flex flex-col gap-2">
+                <h1 className="text-lg font-semibold">{LOCATION_LABELS[location] ?? location}</h1>
+                {items.map((item) => (
+                  <TrashCard
+                    key={`${item.category}-${item.number}`}
+                    title={`${CATEGORY_LABELS[item.category] ?? item.category} ${item.number}`}
+                    description={item.description}
+                    selected={selected === `${item.category}-${item.number}`}
+                    onClick={() => handleSelectTrash(item)}
+                  />
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </BottomsheetDrag>
