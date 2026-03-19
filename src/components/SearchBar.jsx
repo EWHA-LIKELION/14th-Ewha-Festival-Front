@@ -6,20 +6,19 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Button';
 import useSearchStore from '@/store/useSearchStore';
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 import { useSearch } from '@/hooks';
 
 const SearchBar = ({ isMap = false }) => {
   const navigate = useNavigate();
-  const [isFocused, setIsFocused] = useState(false);
-  const { searchQuery, setSearchQuery, clearSearchQuery } = useSearchStore();
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
+  const { searchQuery, setSearchQuery, clearSearchQuery, isFocused, setIsFocused } =
+    useSearchStore();
   const { executeSearch } = useSearch();
 
   const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/'); //이전 페이지가 없으면 home으로
-    }
+    setSheetSize('medium');
+    navigate('/map/booths');
   };
 
   const handleSearch = () => {
@@ -32,6 +31,11 @@ const SearchBar = ({ isMap = false }) => {
     }
   };
 
+  const handleInputClick = () => {
+    setIsFocused(true);
+    navigate('/search');
+  };
+
   return (
     <div className="relative w-full">
       <input
@@ -40,6 +44,7 @@ const SearchBar = ({ isMap = false }) => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
+        onClick={handleInputClick}
         className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'shadow-down-lg bg-white' : 'bg-zinc-100'} py-3 text-base font-normal text-zinc-800 placeholder:text-zinc-300 focus:outline-none ${
           isFocused || searchQuery ? 'px-12.5 ' : 'px-5'
         }`}
