@@ -26,7 +26,7 @@ const SearchPage = () => {
   return (
     <>
       <Header center="search" />
-      <section className="flex w-full flex-col justify-center gap-9 p-5">
+      <section className="flex w-full flex-col justify-center gap-9 p-5 pt-23">
         <div className="flex flex-col gap-3">
           <h1 className="text-lg font-semibold text-gray-900">최근 검색어</h1>
           <div
