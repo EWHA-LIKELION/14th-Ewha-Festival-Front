@@ -52,7 +52,7 @@ const BarrierFreeSheet = () => {
         </div>
         {sheetSize === 'full' && (
           <div className="fixed bottom-28 flex w-full justify-center">
-            <Button onClick={goMap} circle shadow leftIcon="/icons/icon-map.svg" iconAlt="map">
+            <Button onClick={goMap} circle shadow leftIcon="/icons/icon-map-pin.svg" iconAlt="map">
               지도보기
             </Button>
           </div>
