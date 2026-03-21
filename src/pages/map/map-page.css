@@ -25,19 +25,19 @@ svg [id^='Map icon button']:hover {
 }
 
 /* active - 배경 주황색 */
-[id^='Map icon button'].is-active > path[fill='#FEFCE8'],
-[id^='Map icon button'].is-active path[fill='#FEFCE8'] {
+[id^='Map icon button'].is-active > path[fill='#fefce8' i],
+[id^='Map icon button'].is-active path[fill='#fefce8' i] {
   fill: #fd9a00 !important;
 }
 
 /* active - 텍스트 흰색 */
-[id^='Map icon button'].is-active > path[fill='#FD9A00'],
-[id^='Map icon button'].is-active path[fill='#FD9A00'] {
+[id^='Map icon button'].is-active > path[fill='#fd9a00' i],
+[id^='Map icon button'].is-active path[fill='#fd9a00' i] {
   fill: #ffffff !important;
 }
 
 /* active - 테두리 (Map icon button 한정) */
-[id^='Map icon button'].is-active > path[stroke='#FEF3C6'],
-[id^='Map icon button'].is-active path[stroke='#FEF3C6'] {
+[id^='Map icon button'].is-active > path[stroke='#fef3c6' i],
+[id^='Map icon button'].is-active path[stroke='#fef3c6' i] {
   stroke: #fd9a00 !important;
 }
