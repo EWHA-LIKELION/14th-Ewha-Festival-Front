@@ -17,7 +17,7 @@ import NoticePage from '@/pages/NoticePage';
 import MyPage from '@/pages/my/MyPage';
 
 // 지도
-import MapPage from '@/pages/MapPage';
+import MapPage from '@/pages/map/MapPage';
 import BoothListSheet from '@/features/booth/BoothListSheet';
 import ShowListSheet from '@/features/show/ShowListSheet';
 import TrashSheet from '@/features/TrashSheet';
