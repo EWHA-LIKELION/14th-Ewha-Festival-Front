@@ -1,5 +1,5 @@
 /**
- * 쓰레기통 바텀시트
+ * 기타시설 바텀시트
  */
 
 import { useState } from 'react';
@@ -31,7 +31,7 @@ const CATEGORY_LABELS = {
   Gas: '부탄가스',
 };
 
-const BarrierFreeSheet = () => {
+const EtcSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
 
   const [selected, setSelected] = useState(false);
@@ -53,7 +53,7 @@ const BarrierFreeSheet = () => {
         <Header left="back" background="transparent" />
       </div>
       <BottomsheetDrag>
-        {isFull && <Header left="back" center="title" centerTitle="쓰레기통" isSheet />}
+        {isFull && <Header left="back" center="title" centerTitle="기타시설" isSheet />}
         <div className="flex flex-col gap-4 p-5">
           <FilterBar type="trash" />
           <p className="text-sm font-normal text-zinc-500">총 {trashData.length}개</p>
@@ -79,4 +79,4 @@ const BarrierFreeSheet = () => {
   );
 };
 
-export default BarrierFreeSheet;
+export default EtcSheet;

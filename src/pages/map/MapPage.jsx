@@ -22,7 +22,7 @@ const MapPage = () => {
   const [buildingSvg, setBuildingSvg] = useState('');
   const [boothSvg, setBoothSvg] = useState('');
 
-  const matchTrash = useMatch('/map/trash');
+  const matchTrash = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
 
   const goList = () => {
@@ -37,8 +37,8 @@ const MapPage = () => {
     return () => document.removeEventListener('wheel', preventZoom);
   }, []);
 
-  const goTrash = () => {
-    navigate('/map/trash');
+  const goEtc = () => {
+    navigate('/map/etc');
   };
 
   const goBarrierFree = () => {
@@ -116,15 +116,15 @@ const MapPage = () => {
     <div ref={mapRef} className="relative h-dvh w-full">
       <div className="fixed top-18 z-5 flex gap-2 bg-transparent px-5">
         <button
-          onClick={goTrash}
-          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-normal transition-all duration-200 ${matchTrash ? 'bg-red-500 text-white' : 'bg-white text-zinc-800'}`}
+          onClick={goEtc}
+          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-normal transition-all duration-200 ${matchTrash ? 'bg-red-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
-            src="/icons/icon-map-trash.svg"
-            alt="trash"
+            src="/icons/icon-map-etc.svg"
+            alt="etc"
             className={`h-4 w-4 shrink-0 ${matchTrash ? 'brightness-0 invert' : ''}`}
           />
-          쓰레기통
+          기타시설
         </button>
         <button
           onClick={goBarrierFree}

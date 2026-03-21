@@ -20,7 +20,7 @@ import MyPage from '@/pages/my/MyPage';
 import MapPage from '@/pages/map/MapPage';
 import BoothListSheet from '@/features/booth/BoothListSheet';
 import ShowListSheet from '@/features/show/ShowListSheet';
-import TrashSheet from '@/features/TrashSheet';
+import EtcSheet from '@/features/EtcSheet';
 import BarrierFreeSheet from '@/features/BarrierFreeSheet';
 
 // 컴포넌트 프리뷰
@@ -56,7 +56,7 @@ function App() {
             <Route path="shows" element={<ShowListSheet />} />
             <Route path="shows/:id" element={<div>ShowDetailSheet</div>} />
             <Route path="shows/:id/notice" element={<NoticePage />} />
-            <Route path="trash" element={<TrashSheet />} />
+            <Route path="etc" element={<EtcSheet />} />
             <Route path="barrierfree" element={<BarrierFreeSheet />} />
           </Route>
 
