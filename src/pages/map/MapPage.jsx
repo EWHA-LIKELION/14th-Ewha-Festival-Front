@@ -2,7 +2,8 @@
  * 지도
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet } from 'react-router-dom';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
@@ -15,6 +16,11 @@ const MapPage = () => {
   const navigate = useNavigate();
   const mapRef = useRef(null);
   const transformRef = useRef(null);
+  const buildingLayerRef = useRef(null);
+  const boothLayerRef = useRef(null);
+
+  const [buildingSvg, setBuildingSvg] = useState('');
+  const [boothSvg, setBoothSvg] = useState('');
 
   const matchTrash = useMatch('/map/trash');
   const matchBarrierFree = useMatch('/map/barrierfree');
@@ -38,6 +44,73 @@ const MapPage = () => {
   const goBarrierFree = () => {
     navigate('/map/barrierfree');
   };
+
+  // SVG 불러오기
+  useEffect(() => {
+    fetch('/map/map-building.svg')
+      .then((res) => res.text())
+      .then((data) => setBuildingSvg(data));
+    fetch('/map/map-booth.svg')
+      .then((res) => res.text())
+      .then((data) => setBoothSvg(data));
+  }, []);
+
+  // 건물 클릭 이벤트
+  useEffect(() => {
+    if (!buildingLayerRef.current) return;
+
+    const handleClick = (e) => {
+      e.stopPropagation();
+      if (!(e.target instanceof SVGElement)) return;
+
+      const target = e.target.closest('[id^="building-"]');
+      if (!target) return;
+
+      if (target.classList.contains('is-active')) {
+        target.classList.remove('is-active');
+        return;
+      }
+
+      // building active 초기화 (booth가 아닌 building에서 초기화)
+      buildingLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
+        el.classList.remove('is-active');
+      });
+
+      target.classList.add('is-active');
+      console.log(`🏢 건물 클릭: ${target.id}`);
+    };
+
+    buildingLayerRef.current.addEventListener('click', handleClick);
+    return () => buildingLayerRef.current?.removeEventListener('click', handleClick);
+  }, [buildingSvg]);
+
+  // 부스 클릭 이벤트
+  useEffect(() => {
+    if (!boothLayerRef.current) return;
+
+    const handleClick = (e) => {
+      e.stopPropagation();
+      if (!(e.target instanceof SVGElement)) return;
+
+      const target = e.target.closest('[id^="Map icon button"]');
+      if (!target) return;
+
+      if (target.classList.contains('is-active')) {
+        target.classList.remove('is-active');
+        return;
+      }
+
+      boothLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
+        el.classList.remove('is-active');
+      });
+
+      target.classList.add('is-active');
+      console.log(`🎪 부스 클릭: ${target.id}`);
+    };
+
+    boothLayerRef.current.addEventListener('click', handleClick);
+    return () => boothLayerRef.current?.removeEventListener('click', handleClick);
+  }, [boothSvg]);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
@@ -70,7 +143,8 @@ const MapPage = () => {
         wheel={{ activationKeys: [], step: 1000 }}
         pinch={{ disabled: false }}
         panning={{ disabled: false }}
-        limitToBounds={false}
+        limitToBounds={true}
+        maxScale={50}
         initialScale={savedTransform.scale}
         initialPositionX={savedTransform.positionX}
         initialPositionY={savedTransform.positionY}
@@ -81,7 +155,30 @@ const MapPage = () => {
         }}
       >
         <TransformComponent wrapperClass="w-full h-dvh" contentClass="w-full h-dvh">
-          <img src="/icons/map.svg" alt="map" className="h-dvh w-full object-contain" />
+          <div className="relative h-dvh w-full">
+            <img
+              src="/map/map-background.svg"
+              alt="map-background"
+              className="h-full w-full object-contain"
+            />
+            <div
+              ref={buildingLayerRef}
+              className="absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
+              dangerouslySetInnerHTML={{ __html: buildingSvg }}
+              style={{ pointerEvents: 'auto' }}
+            />
+            <img
+              src="/map/map-label.svg"
+              alt="map-label"
+              className="pointer-events-none absolute inset-0 h-full w-full object-contain"
+            />
+            <div
+              ref={boothLayerRef}
+              className="absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
+              dangerouslySetInnerHTML={{ __html: boothSvg }}
+              style={{ pointerEvents: 'auto' }}
+            />
+          </div>
         </TransformComponent>
       </TransformWrapper>
 
