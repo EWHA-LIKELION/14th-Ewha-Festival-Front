@@ -52,9 +52,9 @@ const DropDown = () => {
             <path
               d="M14 5L8 11L2 5"
               stroke="#9F9FA9"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </div>
