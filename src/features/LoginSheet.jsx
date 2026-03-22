@@ -2,20 +2,11 @@
  * 로그인 바텀시트
  */
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import BottomsheetScrim from '@/components/BottomsheetScrim';
-import Button from '@/components/Button';
 import useAuthStore from '@/store/useAuthStore';
 
 const LoginSheet = () => {
-  const navigate = useNavigate();
   const closeLoginSheet = useAuthStore((s) => s.closeLoginSheet);
-
-  const goAdminConfirm = () => {
-    closeLoginSheet();
-    navigate('/admin/confirm');
-  };
 
   return (
     <BottomsheetScrim size="login" onClose={closeLoginSheet}>
@@ -30,9 +21,6 @@ const LoginSheet = () => {
           <img src="/icons/logo-kakaotalk-login.svg" alt="kakaotalk-logo" />
           <p className="text-base font-medium text-black/85">카카오 로그인</p>
         </button>
-        <Button variant="underline-gray" size="sm" onClick={goAdminConfirm}>
-          관리자이신가요?
-        </Button>
       </div>
     </BottomsheetScrim>
   );
