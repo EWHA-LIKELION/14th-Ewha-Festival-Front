@@ -2,12 +2,18 @@
  * 베리어프리 바텀시트
  */
 
+import { useEffect } from 'react';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
 
 const BarrierFreeSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
+
+  useEffect(() => {
+    setSheetSize('medium');
+  }, [setSheetSize]);
 
   return (
     <>

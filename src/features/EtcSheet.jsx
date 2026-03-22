@@ -2,7 +2,7 @@
  * 기타시설 바텀시트
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
@@ -33,8 +33,12 @@ const CATEGORY_LABELS = {
 
 const EtcSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
-
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
   const [selected, setSelected] = useState(false);
+
+  useEffect(() => {
+    setSheetSize('medium');
+  }, [setSheetSize]);
 
   const handleSelectTrash = (item) => {
     setSelected(`${item.category}-${item.number}`);
