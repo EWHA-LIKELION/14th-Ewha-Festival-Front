@@ -5,8 +5,6 @@
  * Tab Type 2 (variant="underline") : 텍스트 + 하단 언더라인 인디케이터 (예: 리스트 / 후기)
  */
 
-import React from 'react';
-
 const TAB_STYLE = {
   active: 'text-emerald-600',
   inactive: 'text-zinc-400',

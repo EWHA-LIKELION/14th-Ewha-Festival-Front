@@ -57,9 +57,9 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
               <path
                 d="M3 7.5L12 16.5L21 7.5"
                 stroke="#D4D4D8"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>

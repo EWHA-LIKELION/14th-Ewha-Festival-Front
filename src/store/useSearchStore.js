@@ -9,9 +9,11 @@ const useSearchStore = create(
     (set) => ({
       searchQuery: '',
       recentSearches: [],
+      isFocused: false,
 
       setSearchQuery: (query) => set({ searchQuery: query }),
       clearSearchQuery: () => set({ searchQuery: '' }),
+      setIsFocused: (focused) => set({ isFocused: focused }),
 
       // 최근 검색어 추가 (중복 제거 + 최대 10개)
       addRecentSearch: (query) =>

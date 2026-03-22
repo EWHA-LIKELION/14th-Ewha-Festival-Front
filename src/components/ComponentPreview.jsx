@@ -8,11 +8,11 @@ import Header from '@/components/Header';
 import BoothCard from '@/components/Card/BoothCard';
 
 const ComponentPreview = () => {
-  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
+  const isFull = useBottomsheetStore((s) => s.isFull());
 
   return (
     <BottomsheetDrag>
-      {sheetSize === 'full' && (
+      {isFull && (
         <>
           <Header left="back" />
           <img
