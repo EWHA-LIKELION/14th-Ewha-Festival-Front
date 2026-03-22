@@ -117,7 +117,7 @@ const MapPage = () => {
       <div className="fixed top-18 z-5 flex gap-2 bg-transparent px-5">
         <button
           onClick={goEtc}
-          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-normal transition-all duration-200 ${matchTrash ? 'bg-red-400 text-white' : 'bg-white text-zinc-800'}`}
+          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchTrash ? 'bg-red-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
             src="/icons/icon-map-etc.svg"
@@ -128,7 +128,7 @@ const MapPage = () => {
         </button>
         <button
           onClick={goBarrierFree}
-          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-normal transition-all duration-200 ${matchBarrierFree ? 'bg-cyan-400 text-white' : 'bg-white text-zinc-800'}`}
+          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchBarrierFree ? 'bg-cyan-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
             src="/icons/icon-map-barrierfree.svg"
