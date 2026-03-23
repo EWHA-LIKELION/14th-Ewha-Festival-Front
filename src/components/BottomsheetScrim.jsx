@@ -8,7 +8,7 @@ const SHEET_HEIGHT = {
   large: '592px',
   show: '384px', // 공연 필터
   trash: '376px', // 쓰레기 필터
-  login: '292px',
+  login: '256px',
 };
 
 const TRANSITION_DURATION = 300;
