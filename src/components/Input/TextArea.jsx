@@ -50,7 +50,7 @@ const TextArea = forwardRef(
       hasHelper && hasCounter ? 'justify-between' : hasHelper ? 'justify-start' : 'justify-end';
 
     return (
-      <div className={isLeft ? 'flex items-start gap-2' : 'flex flex-col gap-2'}>
+      <div className={isLeft ? 'flex w-full items-start gap-2' : 'flex w-full flex-col gap-2'}>
         {label && (
           <div className={`flex min-w-fit gap-1 ${isLeft ? 'items-start' : 'items-center'}`}>
             <span className={`${SIZE[size].label} font-semibold tracking-normal text-zinc-800`}>
@@ -64,7 +64,7 @@ const TextArea = forwardRef(
           </div>
         )}
 
-        <div className="flex flex-1 flex-col">
+        <div className="flex w-full flex-1 flex-col">
           <textarea
             ref={ref}
             value={value}
