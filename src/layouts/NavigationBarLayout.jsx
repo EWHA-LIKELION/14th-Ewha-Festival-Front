@@ -8,7 +8,7 @@ import NavigationBar from '@/components/NavigationBar';
 
 const NavigationBarLayout = () => {
   const { pathname } = useLocation();
-  const noPadding = pathname.startsWith('/map');
+  const noPadding = pathname.startsWith('/map') && !pathname.includes('/notice');
 
   return (
     <>
