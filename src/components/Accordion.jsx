@@ -30,17 +30,19 @@ export const Accordion = ({ title, time, isUpdate = false, content }) => {
 export const AdminAccordion = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="flex w-full flex-col items-center justify-center px-5 py-7 text-sm font-normal text-zinc-800 focus:outline-none">
-      <button
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between text-base font-semibold"
-      >
-        {title}
-        <div className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}>
-          <img src="icons/icon-chevrondown.svg" alt="chevron" width="20" height="20" />
-        </div>
-      </button>
+    <>
+      <div className="flex w-full flex-col items-stretch justify-center px-5 py-7 text-sm font-normal text-zinc-800 focus:outline-none">
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="flex w-full items-stretch justify-between text-base font-semibold"
+        >
+          {title}
+          <div className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+            <img src="/icons/icon-chevrondown.svg" alt="chevron" width="20" height="20" />
+          </div>
+        </button>
+      </div>
       {isOpen && <div>{children}</div>}
-    </div>
+    </>
   );
 };
