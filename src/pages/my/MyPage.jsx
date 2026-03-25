@@ -56,11 +56,11 @@ const mockData = {
 const MyPage = () => {
   const navigate = useNavigate();
   // const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const isLoggedIn = false; //🔥 추후 삭제
+  const isLoggedIn = true; //🔥 추후 삭제
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
   const logout = useAuthStore((s) => s.logout);
-  const [myData, setMyData] = useState(null);
-  // const [myData, setMyData] = useState(mockData);
+  // const [myData, setMyData] = useState(null);
+  const [myData, setMyData] = useState(mockData);
   const [alert, setAlert] = useState(false);
 
   const goScrap = () => {
