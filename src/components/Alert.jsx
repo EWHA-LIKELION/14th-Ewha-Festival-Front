@@ -2,8 +2,6 @@
  * Alert 컴포넌트 ( variant: delete-삭제, logout-로그아웃)
  */
 
-import React from 'react';
-
 const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) => {
   const isDelete = variant === 'delete';
   const isError = variant === 'error';
