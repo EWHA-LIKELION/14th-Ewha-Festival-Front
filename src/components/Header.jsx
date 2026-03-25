@@ -80,7 +80,7 @@ const Header = ({
         )}
         {left === 'logo' && (
           <img
-            src="/icons/icon-logo.svg"
+            src="/icons/logo-festival.svg"
             alt="logo"
             className="pl-2"
             onClick={() => navigate('/')}
