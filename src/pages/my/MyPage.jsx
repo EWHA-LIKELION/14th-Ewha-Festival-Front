@@ -11,6 +11,7 @@ import ImageCard from '@/components/Card/ImageCard';
 import Alert from '@/components/Alert';
 import Scrim from '@/components/Scrim';
 
+//🔥 추후 삭제
 const mockData = {
   nickname: '이대멋사',
   scrap_count: 3,
@@ -55,16 +56,18 @@ const mockData = {
 const MyPage = () => {
   const navigate = useNavigate();
   // const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const isLoggedIn = false;
+  const isLoggedIn = false; //🔥 추후 삭제
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
   const logout = useAuthStore((s) => s.logout);
   const [myData, setMyData] = useState(null);
+  // const [myData, setMyData] = useState(mockData);
   const [alert, setAlert] = useState(false);
 
   const goScrap = () => {
     if (!isLoggedIn) {
       openLoginSheet();
       // 예시: AuthAPI.getMyPage().then(setMyData);
+      return;
     }
     navigate('scrap');
   };
@@ -72,8 +75,13 @@ const MyPage = () => {
   const goAdminConfirm = () => {
     if (!isLoggedIn) {
       openLoginSheet();
+      return;
     }
     navigate('/admin/confirm');
+  };
+
+  const goFestivalKakaotalk = () => {
+    window.open('https://pf.kakao.com/_Rjvxon', '_blank');
   };
 
   useEffect(() => {
@@ -177,6 +185,7 @@ const MyPage = () => {
             shadow
             leftIcon="/icons/logo-kakaotalk.svg"
             iconAlt="kakaotalk"
+            onClick={goFestivalKakaotalk}
           >
             축준위에게 문의하기
           </Button>
