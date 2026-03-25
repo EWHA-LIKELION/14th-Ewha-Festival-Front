@@ -2,7 +2,6 @@
  * 로그인, 로그아웃
  */
 
-import Cookies from 'js-cookie';
 import api from '@/apis/api';
 
 /**
