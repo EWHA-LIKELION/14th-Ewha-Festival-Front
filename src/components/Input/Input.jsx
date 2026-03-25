@@ -5,8 +5,8 @@
 import React, { useState } from 'react';
 
 const VARIANT_CLASS = {
-  square: 'rounded-lg',
-  round: 'rounded-full',
+  square: 'rounded-lg bg-zinc-100',
+  round: 'rounded-full bg-zinc-100',
   square_white: 'rounded-lg bg-white',
 };
 
@@ -37,7 +37,7 @@ const Input = ({
     : isFocused
       ? 'border border-emerald-600'
       : isWhiteVariant
-        ? 'border border-zinc-200'
+        ? 'border border-zinc-100'
         : 'border-0';
 
   const handleKeyDown = (e) => {
@@ -64,7 +64,7 @@ const Input = ({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onKeyDown={handleKeyDown}
-        className={`box-border h-12 w-full bg-zinc-100 px-4 py-3 text-base leading-6 font-normal tracking-normal placeholder-zinc-300 outline-none focus:outline-none ${borderColor} ${VARIANT_CLASS[variant]} `}
+        className={`box-border h-12 w-full px-4 py-3 text-base leading-6 font-normal tracking-normal placeholder-zinc-300 outline-none focus:outline-none ${borderColor} ${VARIANT_CLASS[variant]} `}
       />
 
       {showBottom && (

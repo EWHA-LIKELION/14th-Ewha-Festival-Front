@@ -2,8 +2,6 @@
  * Checkbox 컴포넌트 (중복 선택 가능)
  */
 
-import React from 'react';
-
 function Checkbox({ label, isSelected = false, isError = false, onChange }) {
   const handleCheckboxChange = () => {
     onChange?.(!isSelected);

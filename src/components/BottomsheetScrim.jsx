@@ -8,7 +8,7 @@ const SHEET_HEIGHT = {
   large: '592px',
   show: '384px', // 공연 필터
   trash: '376px', // 쓰레기 필터
-  login: '292px',
+  login: '256px',
 };
 
 const TRANSITION_DURATION = 300;
@@ -57,9 +57,9 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
               <path
                 d="M3 7.5L12 16.5L21 7.5"
                 stroke="#D4D4D8"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>

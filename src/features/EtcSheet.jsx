@@ -1,8 +1,8 @@
 /**
- * 쓰레기통 바텀시트
+ * 기타시설 바텀시트
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
@@ -31,10 +31,14 @@ const CATEGORY_LABELS = {
   Gas: '부탄가스',
 };
 
-const BarrierFreeSheet = () => {
-  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
-
+const EtcSheet = () => {
+  const isFull = useBottomsheetStore((s) => s.isFull());
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
   const [selected, setSelected] = useState(false);
+
+  useEffect(() => {
+    setSheetSize('medium');
+  }, [setSheetSize]);
 
   const handleSelectTrash = (item) => {
     setSelected(`${item.category}-${item.number}`);
@@ -49,11 +53,11 @@ const BarrierFreeSheet = () => {
 
   return (
     <>
-      {sheetSize !== 'full' && <Header left="back" background="transparent" />}
+      <div className={isFull ? 'relative z-10' : 'relative z-20'}>
+        <Header left="back" background="transparent" />
+      </div>
       <BottomsheetDrag>
-        {sheetSize === 'full' && (
-          <Header left="back" center="title" centerTitle="쓰레기통" isSheet />
-        )}
+        {isFull && <Header left="back" center="title" centerTitle="기타시설" isSheet />}
         <div className="flex flex-col gap-4 p-5">
           <FilterBar type="trash" />
           <p className="text-sm font-normal text-zinc-500">총 {trashData.length}개</p>
@@ -79,4 +83,4 @@ const BarrierFreeSheet = () => {
   );
 };
 
-export default BarrierFreeSheet;
+export default EtcSheet;
