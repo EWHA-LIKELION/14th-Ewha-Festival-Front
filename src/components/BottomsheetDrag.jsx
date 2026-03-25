@@ -4,7 +4,6 @@
 
 import React, { useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
-import Button from '@/components/Button';
 
 const SNAP_HEIGHTS = {
   small: 87,
@@ -110,15 +109,13 @@ const BottomsheetDrag = ({ children }) => {
       {isFull && (
         <div className="reactive-width fixed bottom-28 left-1/2 -translate-x-1/2">
           <div className="flex justify-center">
-            <Button
+            <button
               onClick={() => setSheetSize('medium')}
-              circle
-              shadow
-              leftIcon="/icons/icon-map-pin.svg"
-              iconAlt="map"
+              className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-emerald-600 px-5 py-2.5 text-base leading-6 font-medium text-white"
             >
+              <img src="/icons/icon-map-pin.svg" alt="map" />
               지도보기
-            </Button>
+            </button>
           </div>
           <div style={{ height: 'env(safe-area-inset-bottom)' }} />
         </div>

@@ -15,8 +15,6 @@
  * @param {Object} props.props - 기타 HTML button 속성들 (onClick, type 등)
  */
 
-import React from 'react';
-
 const SIZE = {
   sm: 'px-4 py-1.5 gap-1.5 text-sm font-medium',
   md: 'px-4 py-2 gap-1.5 text-base font-medium',
@@ -71,7 +69,7 @@ const Button = ({
     : '';
 
   // shadow 스타일
-  const shadowClass = shadow ? 'shadow-down-lg' : '';
+  const shadowClass = shadow ? 'shadow-down-sm' : '';
 
   // 아이콘만 있고 children이 없을 때 padding 조정 (py와 px를 동일하게)
   const hasOnlyIcon = !children && (leftIcon || rightIcon);
