@@ -13,6 +13,8 @@ import SearchPage from '@/pages/SearchPage';
 import BarrierFreeSheet from '@/features/BarrierFreeSheet';
 import TrashSheet from '@/features/TrashSheet';
 import MapPage from '@/pages/MapPage';
+import HomePage from '@/pages/home/HomePage';
+import KakaoRedirect from '@/pages/home/KakaoRedirect';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
@@ -23,7 +25,8 @@ function App() {
       <Routes>
         <Route element={<NavigationBarLayout />}>
           {/* 홈 */}
-          <Route path="/" element={<div className="h-300 bg-zinc-500">Home</div>} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/kakao-redirect" element={<KakaoRedirect />} />
 
           {/* 마이 */}
           <Route path="my" element={<MyPage />} />
