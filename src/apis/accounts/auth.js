@@ -2,12 +2,8 @@
  * 로그인, 로그아웃
  */
 
+import Cookies from 'js-cookie';
 import api from '@/apis/api';
-
-export const requestKakaoLogin = async () => {
-  const { data } = await api.get('/accounts/login/kakao/');
-  return data;
-};
 
 /**
  * 카카오 로그인 콜백 처리
@@ -19,18 +15,17 @@ export const requestKakaoLogin = async () => {
  */
 export const handleKakaoCallback = async (params) => {
   // params: { code, error, error_description, error_code }
-  const { data } = await api.get('/accounts/login/callback/', { params });
+  const { data } = await api.get('/accounts/login/kakao/callback/', { params });
   return data;
 };
 
 export const logout = async () => {
-  Cookies.remove('accessToken');
-  localStorage.removeItem('user');
+  useAuthStore.getState().logout();
+  localStorage.removeItem('refreshToken');
   window.location.href = '/';
 };
 
 const AuthAPI = {
-  requestKakaoLogin,
   handleKakaoCallback,
   logout,
 };
