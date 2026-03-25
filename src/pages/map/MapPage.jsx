@@ -188,7 +188,7 @@ const MapPage = () => {
         <div className="flex justify-center">
           <button
             onClick={goList}
-            className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-5 py-3 text-base leading-6 font-medium text-emerald-600"
+            className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-base leading-6 font-medium text-emerald-600"
           >
             <img src="/icons/icon-map-list.svg" alt="list" />
             목록보기
