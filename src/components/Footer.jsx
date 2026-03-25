@@ -1,9 +1,7 @@
 /**
  * Footer 컴포넌트
  */
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '@/components/Button';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -30,7 +28,7 @@ const Footer = () => {
       {/* 컨텐츠 */}
       <div className="relative z-10 flex w-full flex-col items-center gap-4 py-5 text-center text-lime-700">
         <button
-          className="gap-1.5 !p-0 px-4 py-1.5 text-sm font-medium text-lime-700 underline underline-offset-2"
+          className="gap-1.5 px-4 py-1.5 text-sm font-medium text-lime-700 underline underline-offset-2"
           onClick={goCreditPage}
         >
           만든이들
