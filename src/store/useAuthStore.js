@@ -13,12 +13,10 @@ const useAuthStore = create(
       showLoginSheet: false,
 
       login: (token) => {
-        localStorage.setItem('token', token);
         set({ token, isLoggedIn: true, showLoginSheet: false });
       },
 
       logout: () => {
-        localStorage.removeItem('token');
         set({ token: null, isLoggedIn: false });
       },
 
