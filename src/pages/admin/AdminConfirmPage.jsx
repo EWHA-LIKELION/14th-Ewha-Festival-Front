@@ -41,7 +41,7 @@ const AdminConfirmPage = () => {
     <>
       <Header left="back" center="title" centerTitle="관리자 인증하기" />
 
-      <div className="flex flex-col items-start justify-between pt-5 pr-5 pb-10 pl-5">
+      <div className="flex flex-col items-start justify-between px-5 pt-23">
         <div className="flex flex-col items-start gap-3 self-stretch">
           <h3 className="text-base leading-6 font-semibold tracking-normal text-zinc-800">
             부스/공연 번호
