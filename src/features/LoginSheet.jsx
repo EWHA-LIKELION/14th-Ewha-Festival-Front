@@ -8,9 +8,9 @@ import useAuthStore from '@/store/useAuthStore';
 const LoginSheet = () => {
   const closeLoginSheet = useAuthStore((s) => s.closeLoginSheet);
 
-  // 카카오 로그인 버튼 클릭 핸들러
   const handleKakaoLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/accounts/login/kakao/`;
+    const state = import.meta.env.DEV ? 'local' : 'prod';
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/accounts/login/kakao/?state=${state}`;
   };
 
   return (
