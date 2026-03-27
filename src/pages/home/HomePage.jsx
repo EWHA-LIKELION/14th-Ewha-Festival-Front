@@ -13,7 +13,7 @@ const HomePage = () => {
   return (
     <>
       {/* 축제 포스터 */}
-      <img src="/images/home-poster.png" alt="home-poster" />
+      <img src="/images/home-poster.png" alt="home-poster" fetchpriority="high" />
       {/* 축준위 인스타 바로가기 */}
       <button
         onClick={goFestivalInstagram}
@@ -42,12 +42,12 @@ const HomePage = () => {
         </div>
         <div className="flex flex-col gap-3">
           <div className="flex gap-3">
-            <img className="h-45" src="/images/home-booth-1.png" alt="booth-image" />
-            <img className="h-45" src="/images/home-booth-2.png" alt="booth-image" />
+            <img className="h-45" src="/images/home-booth-1.png" alt="booth-image" loading="lazy" />
+            <img className="h-45" src="/images/home-booth-2.png" alt="booth-image" loading="lazy" />
           </div>
           <div className="flex gap-3">
-            <img className="h-45" src="/images/home-booth-3.png" alt="booth-image" />
-            <img className="h-45" src="/images/home-booth-4.png" alt="booth-image" />
+            <img className="h-45" src="/images/home-booth-3.png" alt="booth-image" loading="lazy" />
+            <img className="h-45" src="/images/home-booth-4.png" alt="booth-image" loading="lazy" />
           </div>
         </div>
       </div>
@@ -98,12 +98,32 @@ const HomePage = () => {
         </div>
         <div className="flex flex-col gap-3">
           <div className="flex gap-3">
-            <img className="h-43" src="/images/home-performance-1.png" alt="performance-image" />
-            <img className="h-43" src="/images/home-performance-2.png" alt="performance-image" />
+            <img
+              className="h-43"
+              src="/images/home-performance-1.png"
+              alt="performance-image"
+              loading="lazy"
+            />
+            <img
+              className="h-43"
+              src="/images/home-performance-2.png"
+              alt="performance-image"
+              loading="lazy"
+            />
           </div>
           <div className="flex gap-3">
-            <img className="h-39.5" src="/images/home-performance-3.png" alt="performance-image" />
-            <img className="h-39.5" src="/images/home-performance-4.png" alt="performance-image" />
+            <img
+              className="h-39.5"
+              src="/images/home-performance-3.png"
+              alt="performance-image"
+              loading="lazy"
+            />
+            <img
+              className="h-39.5"
+              src="/images/home-performance-4.png"
+              alt="performance-image"
+              loading="lazy"
+            />
           </div>
         </div>
       </div>
