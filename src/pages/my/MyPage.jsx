@@ -11,56 +11,12 @@ import ImageCard from '@/components/Card/ImageCard';
 import Alert from '@/components/Alert';
 import Scrim from '@/components/Scrim';
 
-//🔥 추후 삭제
-const mockData = {
-  nickname: '이대멋사',
-  scrap_count: 3,
-  recent_scraps: [
-    {
-      id: 1,
-      name: '멋사 부스',
-    },
-    {
-      id: 2,
-      name: '멋사 공연',
-    },
-    {
-      id: 3,
-      name: '멋사 이벤트',
-    },
-    {
-      id: 4,
-      name: '멋사 안녕하세요',
-    },
-    {
-      id: 5,
-      name: '멋사 프론트엔드',
-    },
-  ],
-  managed_booths: [
-    {
-      id: 'BOOTH_GOODS_01',
-      name: '굿즈천국',
-      scrap_count: 1,
-    },
-  ],
-  managed_shows: [
-    {
-      id: 'SHOW_01',
-      name: '치어리딩',
-      scrap_count: 2,
-    },
-  ],
-};
-
 const MyPage = () => {
   const navigate = useNavigate();
-  // const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const isLoggedIn = true; //🔥 추후 삭제
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
   const logout = useAuthStore((s) => s.logout);
-  // const [myData, setMyData] = useState(null);
-  const [myData, setMyData] = useState(mockData);
+  const [myData, setMyData] = useState(null);
   const [alert, setAlert] = useState(false);
 
   const goScrap = () => {
