@@ -23,7 +23,7 @@ const Footer = () => {
   return (
     <div
       className="relative inset-0 w-full overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: 'url(/icons/footer-background.svg)' }}
+      style={{ backgroundImage: 'url(/images/footer-background.png)' }}
     >
       {/* 컨텐츠 */}
       <div className="relative z-10 flex w-full flex-col items-center gap-4 py-5 text-center text-lime-700">
