@@ -8,16 +8,15 @@ import { persist } from 'zustand/middleware';
 const useAuthStore = create(
   persist(
     (set) => ({
-      token: null,
       isLoggedIn: false,
       showLoginSheet: false,
 
-      login: (token) => {
-        set({ token, isLoggedIn: true, showLoginSheet: false });
+      login: () => {
+        set({ isLoggedIn: true, showLoginSheet: false });
       },
 
       logout: () => {
-        set({ token: null, isLoggedIn: false });
+        set({ isLoggedIn: false });
       },
 
       openLoginSheet: () => set({ showLoginSheet: true }),
@@ -25,7 +24,9 @@ const useAuthStore = create(
     }),
     {
       name: 'auth-store',
-      partialize: (state) => ({ token: state.token, isLoggedIn: state.isLoggedIn }),
+      partialize: (state) => ({
+        isLoggedIn: state.isLoggedIn,
+      }),
     },
   ),
 );
