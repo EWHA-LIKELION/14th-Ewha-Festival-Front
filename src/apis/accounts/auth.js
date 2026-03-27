@@ -15,15 +15,19 @@ export const checkLoginStatus = async () => {
 };
 
 /**
- * 로그아웃 (프론트 상태만 초기화)
- * ⚠️ 실제 쿠키 삭제는 백엔드 필요 (추후 구현)
+ * 로그아웃
+ * 백엔드 API 실패 여부와 관계없이 프론트엔드 상태는 반드시 초기화
  */
-export const logout = () => {
-  // Zustand 상태 초기화
-  useAuthStore.getState().logout();
-
-  // 홈으로 이동
-  window.location.replace('/');
+export const logout = async () => {
+  try {
+    await api.post('/accounts/logout/kakao/');
+  } catch (error) {
+    // 백엔드 로그아웃 실패해도 프론트엔드는 로그아웃 처리
+    console.error('로그아웃 API 호출 실패:', error);
+  } finally {
+    // 항상 프론트엔드 상태 초기화
+    useAuthStore.getState().logout();
+  }
 };
 
 const AuthAPI = {
