@@ -1,31 +1,33 @@
 /**
- * 로그인, 로그아웃
+ * 로그인, 로그아웃 (쿠키 기반)
  */
 
 import api from '@/apis/api';
+import useAuthStore from '@/store/useAuthStore';
 
 /**
- * 카카오 로그인 콜백 처리
- * @param {Object} params
- * @param {string} params.code - 카카오 인가 코드 (필수)
- * @param {string} [params.error] - 인증 실패 시 에러 코드
- * @param {string} [params.error_description] - 인증 실패 시 에러 메세지
- * @param {string} [params.error_code] - 세부 에러 코드
+ * 로그인 상태 확인 (쿠키 기반 인증)
+ * 카카오 로그인 후 쿠키가 정상적으로 설정되었는지 확인
  */
-export const handleKakaoCallback = async (params) => {
-  // params: { code, error, error_description, error_code }
-  const { data } = await api.get('/accounts/login/kakao/callback/', { params });
+export const checkLoginStatus = async () => {
+  const { data } = await api.get('/accounts/my-data/');
   return data;
 };
 
-export const logout = async () => {
+/**
+ * 로그아웃 (프론트 상태만 초기화)
+ * ⚠️ 실제 쿠키 삭제는 백엔드 필요 (추후 구현)
+ */
+export const logout = () => {
+  // Zustand 상태 초기화
   useAuthStore.getState().logout();
-  localStorage.removeItem('refreshToken');
-  window.location.href = '/';
+
+  // 홈으로 이동
+  window.location.replace('/');
 };
 
 const AuthAPI = {
-  handleKakaoCallback,
+  checkLoginStatus,
   logout,
 };
 
