@@ -10,6 +10,7 @@ import useToastStore from '@/store/useToastStore';
 import { ToastManager } from '@/components/Toast';
 
 // 홈 & 기타 페이지
+import HomePage from '@/pages/home/HomePage';
 import SearchPage from '@/pages/SearchPage';
 import NoticePage from '@/pages/NoticePage';
 
@@ -40,7 +41,7 @@ function App() {
       <Routes>
         <Route element={<NavigationBarLayout />}>
           {/* 홈 */}
-          <Route path="/" element={<div className="h-300 bg-zinc-500">Home</div>} />
+          <Route path="/" element={<HomePage />} />
           <Route path="credit" element={<div>Credit</div>} />
           <Route path="search" element={<SearchPage />} />
 
