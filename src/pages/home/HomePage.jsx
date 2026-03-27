@@ -17,7 +17,7 @@ const HomePage = () => {
       {/* 축준위 인스타 바로가기 */}
       <button
         onClick={goFestivalInstagram}
-        className="font-noto-serif relative flex h-21 w-full flex-col items-start justify-center bg-gradient-to-r from-[#F0F6E3] to-[#E7F0E1] px-7.5 text-green-900"
+        className="font-noto-serif relative flex h-21 w-full flex-col items-start justify-center bg-linear-to-r from-[#F0F6E3] to-[#E7F0E1] px-7.5 text-green-900"
       >
         <p className="text-xs font-medium">축준위 인스타그램에서 빠른 소식 확인</p>
         <p className="text-base font-bold">축준위 공지 바로가기</p>
