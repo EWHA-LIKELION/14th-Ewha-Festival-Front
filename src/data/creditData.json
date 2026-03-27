@@ -1,0 +1,42 @@
+[
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "대표",
+    "part": "백엔드",
+    "department": "컴공 22",
+    "name": "성혜린",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "파트장",
+    "part": "기획디자인",
+    "department": "중문 22",
+    "name": "송나영",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "파트장",
+    "part": "프론트엔드",
+    "department": "컴공 23",
+    "name": "유진서",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "파트장",
+    "part": "백엔드",
+    "department": "컴공 23",
+    "name": "설영은",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "위원장",
+    "part": "운영기획팀",
+    "department": "컴공 22",
+    "name": "설영은",
+    "task": "담당 업무"
+  }
+]
