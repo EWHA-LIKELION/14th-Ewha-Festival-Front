@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
 import Header from '@/components/Header';
 import Button from '@/components/Button';
@@ -15,14 +16,12 @@ const MyPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
-  const logout = useAuthStore((s) => s.logout);
   const [myData, setMyData] = useState(null);
   const [alert, setAlert] = useState(false);
 
   const goScrap = () => {
     if (!isLoggedIn) {
       openLoginSheet();
-      // 예시: AuthAPI.getMyPage().then(setMyData);
       return;
     }
     navigate('scrap');
@@ -154,7 +153,7 @@ const MyPage = () => {
             <Scrim />
           </div>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <Alert variant="logout" onCancel={() => setAlert(false)} onConfirm={logout} />
+            <Alert variant="logout" onCancel={() => setAlert(false)} onConfirm={AuthAPI.logout} />
           </div>
         </>
       )}
