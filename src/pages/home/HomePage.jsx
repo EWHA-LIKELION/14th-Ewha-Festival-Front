@@ -40,7 +40,16 @@ const HomePage = () => {
             가득한 즐길 거리 속으로 지금 바로 뛰어들어 보세요!
           </p>
         </div>
-        <div>{/* images */}</div>
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-3">
+            <img className="h-45" src="/images/home-booth-1.png" alt="booth-image" />
+            <img className="h-45" src="/images/home-booth-2.png" alt="booth-image" />
+          </div>
+          <div className="flex gap-3">
+            <img className="h-45" src="/images/home-booth-3.png" alt="booth-image" />
+            <img className="h-45" src="/images/home-booth-4.png" alt="booth-image" />
+          </div>
+        </div>
       </div>
       {/* Events */}
       <div
@@ -50,21 +59,21 @@ const HomePage = () => {
         <img className="h-12.5 w-39.5" src="/icons/icon-event.svg" alt="event" />
         <div className="flex flex-col gap-5 text-center text-sm font-normal text-white">
           <p>
-            <strong className="font-semibold">이화 비빔밥 한 숟갈 먹고,</strong>
+            이화 비빔밥 한 숟갈 먹고,
             <br />
-            <strong className="font-semibold">벗들과 힘을 모아 즐기는 영산 줄다리기까지</strong>
+            벗들과 힘을 모아 즐기는 영산 줄다리기까지
             <br />
             개막을 알리는 특별한 이벤트와 함께하세요.
           </p>
           <p>
-            <strong className="font-semibold">초록빛 잔디광장에서 펼쳐지는 사생대회</strong>
+            초록빛 잔디광장에서 펼쳐지는 사생대회
             <br />
             주어진 주제를 나만의 색깔로 해석해,
             <br />
             하나뿐인 작품을 자유롭게 그려보세요!
           </p>
           <p>
-            <strong className="font-semibold">따뜻한 감동으로 마음을 채울 영화 한 편</strong>
+            따뜻한 감동으로 마음을 채울 영화 한 편
             <br />
             시원한 저녁 바람과 함께 영화제를 즐겨보세요.
           </p>
@@ -87,7 +96,16 @@ const HomePage = () => {
             축제의 순간을 함께 느껴보아요!
           </p>
         </div>
-        <div>{/* images */}</div>
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-3">
+            <img className="h-43" src="/images/home-performance-1.png" alt="performance-image" />
+            <img className="h-43" src="/images/home-performance-2.png" alt="performance-image" />
+          </div>
+          <div className="flex gap-3">
+            <img className="h-39.5" src="/images/home-performance-3.png" alt="performance-image" />
+            <img className="h-39.5" src="/images/home-performance-4.png" alt="performance-image" />
+          </div>
+        </div>
       </div>
       {/* 후원사 */}
       <div className="flex flex-col gap-4 px-5 pt-10 pb-20">
