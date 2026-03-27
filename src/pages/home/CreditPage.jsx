@@ -40,8 +40,8 @@ const CreditPage = () => {
         </div>
 
         {Object.entries(groupedByOrg).map(([org, positions]) => (
-          <div className="flex flex-col items-center gap-10 pt-5 pb-20">
-            <div key={org} className="flex flex-col items-center gap-5">
+          <div key={org} className="flex flex-col items-center gap-10 pt-5 pb-20">
+            <div className="flex flex-col items-center gap-5">
               {/* organization */}
               <h1 className="text-lg font-semibold text-emerald-800">{org}</h1>
 
