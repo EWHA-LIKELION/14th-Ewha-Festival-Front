@@ -46,13 +46,13 @@ const HomePage = () => {
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex justify-between gap-3">
-            <img className="h-45" src="/images/home-booth-1.png" alt="booth-image" loading="lazy" />
-            <img className="h-45" src="/images/home-booth-2.png" alt="booth-image" loading="lazy" />
+          <div className="flex gap-3">
+            <img className="h-45 w-full rounded-r-xl object-cover" src="/images/home-booth-1.png" />
+            <img className="h-45 w-full rounded-l-xl object-cover" src="/images/home-booth-2.png" />
           </div>
-          <div className="flex justify-between gap-3">
-            <img className="h-45" src="/images/home-booth-3.png" alt="booth-image" loading="lazy" />
-            <img className="h-45" src="/images/home-booth-4.png" alt="booth-image" loading="lazy" />
+          <div className="flex gap-3">
+            <img className="h-45 w-full rounded-r-xl object-cover" src="/images/home-booth-3.png" />
+            <img className="h-45 w-full rounded-l-xl object-cover" src="/images/home-booth-4.png" />
           </div>
         </div>
       </div>
@@ -102,29 +102,29 @@ const HomePage = () => {
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex justify-between gap-3">
+          <div className="flex gap-3">
             <img
-              className="h-43"
+              className="h-43.25 w-full rounded-r-xl object-cover"
               src="/images/home-performance-1.png"
               alt="performance-image"
               loading="lazy"
             />
             <img
-              className="h-43"
+              className="h-43.25 w-full rounded-l-xl object-cover"
               src="/images/home-performance-2.png"
               alt="performance-image"
               loading="lazy"
             />
           </div>
-          <div className="flex justify-between gap-3">
+          <div className="flex gap-3">
             <img
-              className="h-39.5"
+              className="h-39.75 w-full rounded-r-xl object-cover"
               src="/images/home-performance-3.png"
               alt="performance-image"
               loading="lazy"
             />
             <img
-              className="h-39.5"
+              className="h-39.75 w-full rounded-l-xl object-cover"
               src="/images/home-performance-4.png"
               alt="performance-image"
               loading="lazy"
