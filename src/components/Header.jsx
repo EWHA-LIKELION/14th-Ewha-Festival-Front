@@ -80,9 +80,9 @@ const Header = ({
         )}
         {left === 'logo' && (
           <img
-            src="/icons/logo-festival.svg"
+            src="/images/logo-liberte.png"
             alt="logo"
-            className="pl-2"
+            className="h-7.5 pl-2"
             onClick={() => navigate('/')}
             onPointerDown={(e) => e.stopPropagation()}
           />
