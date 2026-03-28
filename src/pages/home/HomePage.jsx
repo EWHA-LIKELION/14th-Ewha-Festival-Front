@@ -46,11 +46,11 @@ const HomePage = () => {
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex gap-3">
+          <div className="flex justify-between gap-3">
             <img className="h-45" src="/images/home-booth-1.png" alt="booth-image" loading="lazy" />
             <img className="h-45" src="/images/home-booth-2.png" alt="booth-image" loading="lazy" />
           </div>
-          <div className="flex gap-3">
+          <div className="flex justify-between gap-3">
             <img className="h-45" src="/images/home-booth-3.png" alt="booth-image" loading="lazy" />
             <img className="h-45" src="/images/home-booth-4.png" alt="booth-image" loading="lazy" />
           </div>
@@ -102,7 +102,7 @@ const HomePage = () => {
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex gap-3">
+          <div className="flex justify-between gap-3">
             <img
               className="h-43"
               src="/images/home-performance-1.png"
@@ -116,7 +116,7 @@ const HomePage = () => {
               loading="lazy"
             />
           </div>
-          <div className="flex gap-3">
+          <div className="flex justify-between gap-3">
             <img
               className="h-39.5"
               src="/images/home-performance-3.png"
