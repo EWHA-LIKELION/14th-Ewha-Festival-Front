@@ -18,7 +18,7 @@ const HomePage = () => {
   return (
     <>
       {/* 축제 포스터 */}
-      <img src="/images/home-poster.png" alt="home-poster" fetchpriority="high" />
+      <img src="/images/home-poster.png" alt="home-poster" fetchPriority="high" />
       {/* 축준위 인스타 바로가기 */}
       <button
         onClick={goFestivalInstagram}
