@@ -8,7 +8,9 @@ const NavigationBar = ({ className = '' }) => {
   const navigate = useNavigate();
 
   // Hooks를 최상위에서 호출하여 순서 보장
-  const matchHome = useMatch({ path: '/', end: true });
+  const matchHomeRoot = useMatch({ path: '/', end: true });
+  const matchCredit = useMatch('/credit');
+  const matchHome = matchHomeRoot || matchCredit;
   const matchMy = useMatch('/my/*');
   const matchMap = useMatch('/map/*');
 
