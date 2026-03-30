@@ -6,15 +6,6 @@ import api from '@/apis/api';
 import useAuthStore from '@/store/useAuthStore';
 
 /**
- * 로그인 상태 확인 (쿠키 기반 인증)
- * 카카오 로그인 후 쿠키가 정상적으로 설정되었는지 확인
- */
-export const checkLoginStatus = async () => {
-  const { data } = await api.get('/accounts/my-data/');
-  return data;
-};
-
-/**
  * 로그아웃
  * 백엔드 API 실패 여부와 관계없이 프론트엔드 상태는 반드시 초기화
  */
@@ -31,7 +22,6 @@ export const logout = async () => {
 };
 
 const AuthAPI = {
-  checkLoginStatus,
   logout,
 };
 

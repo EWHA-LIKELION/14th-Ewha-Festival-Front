@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthAPI } from '@/apis';
+import { MeAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
 import Alert from '@/components/Alert';
 
@@ -17,7 +17,7 @@ const KakaoRedirect = () => {
     const checkLogin = async () => {
       try {
         // 쿠키 기반 인증 확인 (로그인 성공 여부 검증)
-        await AuthAPI.checkLoginStatus();
+        await MeAPI.getMyProfile();
 
         // 로그인 상태 업데이트 (token 필요 없음)
         login();
