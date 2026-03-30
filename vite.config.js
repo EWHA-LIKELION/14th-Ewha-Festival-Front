@@ -13,9 +13,13 @@ export default defineConfig({
     },
   },
   server: {
-    https: {
-      key: fs.readFileSync('localhost-key.pem'),
-      cert: fs.readFileSync('localhost.pem'),
-    },
+    // 로컬 개발 환경에서만 HTTPS 활성화 (.pem 파일이 있을 때만)
+    https:
+      fs.existsSync('localhost-key.pem') && fs.existsSync('localhost.pem')
+        ? {
+            key: fs.readFileSync('localhost-key.pem'),
+            cert: fs.readFileSync('localhost.pem'),
+          }
+        : false,
   },
 });
