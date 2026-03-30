@@ -39,6 +39,11 @@ const MyPage = () => {
     window.open('https://pf.kakao.com/_Rjvxon', '_blank');
   };
 
+  const handleLogout = async () => {
+    await AuthAPI.logout();
+    setAlert(false);
+  };
+
   useEffect(() => {
     if (!isLoggedIn) {
       openLoginSheet();
@@ -153,7 +158,7 @@ const MyPage = () => {
             <Scrim />
           </div>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <Alert variant="logout" onCancel={() => setAlert(false)} onConfirm={AuthAPI.logout} />
+            <Alert variant="logout" onCancel={() => setAlert(false)} onConfirm={handleLogout} />
           </div>
         </>
       )}
