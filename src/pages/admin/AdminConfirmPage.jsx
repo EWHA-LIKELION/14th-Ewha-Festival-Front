@@ -2,24 +2,39 @@
  * 관리자 코드 인증 페이지
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAlertStore from '@/store/useAlertStore';
+import useToastStore from '@/store/useToastStore';
 import Header from '@/components/Header';
 import Input from '@/components/Input/Input';
 import Button from '@/components/Button';
-import Scrim from '@/components/Scrim';
-import Alert from '@/components/Alert';
-import useToastStore from '@/store/useToastStore';
 
 const AdminConfirmPage = () => {
   const navigate = useNavigate();
   const { showToast } = useToastStore();
+  const openAlert = useAlertStore((s) => s.openAlert);
+  const closeAlert = useAlertStore((s) => s.closeAlert);
 
   const [boothNumber, setBoothNumber] = useState('');
   const [adminCode, setAdminCode] = useState('');
-  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const isDisabled = !boothNumber || !adminCode;
+
+  const showErrorAlert = () => {
+    openAlert({
+      variant: 'error',
+      title: '관리자 인증 오류',
+      text: (
+        <>
+          부스/공연 번호 혹은 관리자 코드를
+          <br />
+          다시 확인해주세요.
+        </>
+      ),
+      onConfirm: closeAlert,
+    });
+  };
 
   //추후 수정 예정
   const handleConfirm = async () => {
@@ -29,11 +44,11 @@ const AdminConfirmPage = () => {
         showToast('인증되었어요.');
         navigate('/5-1-2');
       } else {
-        setShowErrorModal(true);
+        showErrorAlert();
       }
       //db에 없을 경우 입력 값 유지
     } catch (error) {
-      setShowErrorModal(true);
+      showErrorAlert();
     }
   };
 
@@ -74,24 +89,6 @@ const AdminConfirmPage = () => {
           확인
         </Button>
       </div>
-
-      {showErrorModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <Scrim />
-          <Alert
-            variant="error"
-            title="관리자 인증 오류"
-            text={
-              <>
-                부스/공연 번호 혹은 관리자 코드를
-                <br />
-                다시 확인해주세요.
-              </>
-            }
-            onConfirm={() => setShowErrorModal(false)}
-          />
-        </div>
-      )}
     </>
   );
 };

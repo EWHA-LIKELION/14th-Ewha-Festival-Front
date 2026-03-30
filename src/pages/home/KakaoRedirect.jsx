@@ -2,16 +2,17 @@
  * 카카오 콜백 전용
  */
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MeAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
-import Alert from '@/components/Alert';
+import useAlertStore from '@/store/useAlertStore';
 
 const KakaoRedirect = () => {
   const navigate = useNavigate();
-  const [alert, setAlert] = useState(null);
   const login = useAuthStore((s) => s.login);
+  const openAlert = useAlertStore((s) => s.openAlert);
+  const closeAlert = useAlertStore((s) => s.closeAlert);
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -28,11 +29,14 @@ const KakaoRedirect = () => {
         // 백엔드 API 에러 메시지 추출
         const message = error?.response?.data?.message || error?.message;
 
-        setAlert({
+        openAlert({
           variant: 'error',
           title: '로그인 실패',
           text: message || '로그인 처리 중 오류가 발생했습니다.',
-          onConfirm: () => navigate('/', { replace: true }),
+          onConfirm: () => {
+            navigate('/', { replace: true });
+            closeAlert();
+          },
         });
       }
     };
@@ -41,21 +45,9 @@ const KakaoRedirect = () => {
   }, [navigate, login]);
 
   return (
-    <>
-      <div>로그인 처리 중입니다...</div>
-
-      {alert && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <Alert
-            variant={alert.variant}
-            title={alert.title}
-            text={alert.text}
-            onCancel={() => navigate('/', { replace: true })}
-            onConfirm={alert.onConfirm}
-          />
-        </div>
-      )}
-    </>
+    <div className="flex h-screen items-center justify-center">
+      <p className="text-base font-normal text-zinc-300">로그인 처리 중입니다...</p>
+    </div>
   );
 };
 

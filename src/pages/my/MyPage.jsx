@@ -6,18 +6,19 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthAPI, MeAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
+import useAlertStore from '@/store/useAlertStore';
 import Header from '@/components/Header';
 import Button from '@/components/Button';
 import ImageCard from '@/components/Card/ImageCard';
-import Alert from '@/components/Alert';
-import Scrim from '@/components/Scrim';
 
 const MyPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const logout = useAuthStore((s) => s.logout);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
+  const openAlert = useAlertStore((s) => s.openAlert);
+  const closeAlert = useAlertStore((s) => s.closeAlert);
   const [myData, setMyData] = useState(null);
-  const [alert, setAlert] = useState(false);
 
   const goScrap = () => {
     if (!isLoggedIn) {
@@ -39,9 +40,21 @@ const MyPage = () => {
     window.open('https://pf.kakao.com/_Rjvxon', '_blank');
   };
 
-  const handleLogout = async () => {
-    await AuthAPI.logout();
-    setAlert(false);
+  const handleLogoutClick = () => {
+    openAlert({
+      variant: 'logout',
+      onConfirm: async () => {
+        try {
+          await AuthAPI.logout();
+          logout(); // zustand 상태도 초기화
+        } catch (error) {
+          console.error('로그아웃 실패:', error);
+        } finally {
+          closeAlert();
+        }
+      },
+      onCancel: closeAlert,
+    });
   };
 
   useEffect(() => {
@@ -56,6 +69,20 @@ const MyPage = () => {
           setMyData(data);
         } catch (error) {
           console.error('마이페이지 데이터 로드 실패:', error);
+
+          // 인증 실패 (401) → 로그아웃 처리
+          if (error?.response?.status === 401) {
+            openAlert({
+              variant: 'error',
+              title: '세션 만료',
+              text: '로그인 세션이 만료되었습니다. 다시 로그인해주세요.',
+              onConfirm: () => {
+                logout();
+                closeAlert();
+                openLoginSheet();
+              },
+            });
+          }
         }
       } else {
         openLoginSheet();
@@ -64,7 +91,7 @@ const MyPage = () => {
     };
 
     fetchMyData();
-  }, [isLoggedIn, openLoginSheet]);
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -86,7 +113,7 @@ const MyPage = () => {
             size="md"
             variant="bg-gray"
             circle
-            onClick={isLoggedIn ? () => setAlert(true) : openLoginSheet}
+            onClick={isLoggedIn ? handleLogoutClick : openLoginSheet}
           >
             {isLoggedIn ? '로그아웃' : '로그인'}
           </Button>
@@ -167,17 +194,6 @@ const MyPage = () => {
           </Button>
         </div>
       </div>
-      {/* Alert */}
-      {alert && (
-        <>
-          <div className="fixed inset-0 z-40">
-            <Scrim />
-          </div>
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <Alert variant="logout" onCancel={() => setAlert(false)} onConfirm={handleLogout} />
-          </div>
-        </>
-      )}
     </>
   );
 };
