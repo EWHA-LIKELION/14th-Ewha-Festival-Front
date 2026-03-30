@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthAPI } from '@/apis';
+import { AuthAPI, MeAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
 import Header from '@/components/Header';
 import Button from '@/components/Button';
@@ -46,10 +46,25 @@ const MyPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!isLoggedIn) {
-      openLoginSheet();
-    }
   }, []);
+
+  useEffect(() => {
+    const fetchMyData = async () => {
+      if (isLoggedIn) {
+        try {
+          const data = await MeAPI.getMyProfile();
+          setMyData(data);
+        } catch (error) {
+          console.error('마이페이지 데이터 로드 실패:', error);
+        }
+      } else {
+        openLoginSheet();
+        setMyData(null); // 로그아웃 시 데이터 초기화
+      }
+    };
+
+    fetchMyData();
+  }, [isLoggedIn, openLoginSheet]);
 
   return (
     <>
