@@ -11,6 +11,7 @@ import { ToastManager } from '@/components/Toast';
 
 // 홈 & 기타 페이지
 import HomePage from '@/pages/home/HomePage';
+import KakaoRedirect from '@/pages/home/KakaoRedirect';
 import CreditPage from '@/pages/home/CreditPage';
 import SearchPage from '@/pages/SearchPage';
 import NoticePage from '@/pages/NoticePage';
@@ -47,7 +48,9 @@ function App() {
         <Route element={<NavigationBarLayout />}>
           {/* 홈 */}
           <Route path="/" element={<HomePage />} />
-          <Route path="credit" element={<CreditPage />} />
+          <Route path="/kakao-redirect" element={<KakaoRedirect />} />
+          <Route path="credit" element={<div>Credit</div>} />
+          <Route path="search" element={<SearchPage />} />
 
           {/* 마이 */}
           <Route path="my" element={<MyPage />} />

@@ -29,5 +29,11 @@ dist-ssr
 .env.*
 !.env.example
 
+# SSL/TLS certificates (로컬 HTTPS 개발용)
+*.pem
+*.key
+*.crt
+*.cert
+
 .vercel
 .vite
