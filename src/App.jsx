@@ -8,6 +8,9 @@ import useAuthStore from '@/store/useAuthStore';
 import LoginSheet from '@/features/LoginSheet';
 import useToastStore from '@/store/useToastStore';
 import { ToastManager } from '@/components/Toast';
+import useAlertStore from '@/store/useAlertStore';
+import Alert from '@/components/Alert';
+import Scrim from '@/components/Scrim';
 
 // 홈 & 기타 페이지
 import HomePage from '@/pages/home/HomePage';
@@ -37,6 +40,7 @@ import MyShowPage from '@/pages/admin/MyShowPage';
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
   const { text, isOpen, closeToast } = useToastStore();
+  const { alert, closeAlert } = useAlertStore();
 
   return (
     <main className="app">
@@ -49,7 +53,7 @@ function App() {
           {/* 홈 */}
           <Route path="/" element={<HomePage />} />
           <Route path="/kakao-redirect" element={<KakaoRedirect />} />
-          <Route path="credit" element={<div>Credit</div>} />
+          <Route path="credit" element={<CreditPage />} />
           <Route path="search" element={<SearchPage />} />
 
           {/* 마이 */}
@@ -88,6 +92,23 @@ function App() {
       {showLoginSheet && <LoginSheet />}
       {/* 토스트 */}
       <ToastManager text={text} isOpen={isOpen} onClose={closeToast} />
+      {/* Alert */}
+      {alert && (
+        <>
+          <div className="fixed inset-0 z-40">
+            <Scrim />
+          </div>
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <Alert
+              variant={alert.variant}
+              title={alert.title}
+              text={alert.text}
+              onCancel={alert.onCancel || closeAlert}
+              onConfirm={alert.onConfirm}
+            />
+          </div>
+        </>
+      )}
     </main>
   );
 }
