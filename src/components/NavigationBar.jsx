@@ -1,14 +1,16 @@
 /**
  * NavigationBar 컴포넌트
  */
-import React from 'react';
+
 import { useNavigate, useMatch } from 'react-router-dom';
 
-const NavigationBar = () => {
+const NavigationBar = ({ className = '' }) => {
   const navigate = useNavigate();
 
   // Hooks를 최상위에서 호출하여 순서 보장
-  const matchHome = useMatch({ path: '/', end: true });
+  const matchHomeRoot = useMatch({ path: '/', end: true });
+  const matchCredit = useMatch('/credit');
+  const matchHome = matchHomeRoot || matchCredit;
   const matchMy = useMatch('/my/*');
   const matchMap = useMatch('/map/*');
 
@@ -73,7 +75,9 @@ const NavigationBar = () => {
   ];
 
   return (
-    <div className="reactive-width fixed bottom-0 left-1/2 z-20 w-full -translate-x-1/2 bg-white">
+    <div
+      className={`reactive-width fixed bottom-0 left-1/2 z-20 w-full -translate-x-1/2 bg-white transition-transform duration-300 ${className}`}
+    >
       <div className="flex min-h-15 items-center justify-between border-t border-zinc-100 px-7 text-xs font-medium">
         {navItems.map((item) => {
           return (
