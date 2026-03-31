@@ -190,7 +190,7 @@ const MyPage = () => {
             iconAlt="kakaotalk"
             onClick={goFestivalKakaotalk}
           >
-            축준위에게 문의하기
+            축제준비위원회에게 문의하기
           </Button>
         </div>
       </div>
