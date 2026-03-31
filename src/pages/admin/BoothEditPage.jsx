@@ -2,7 +2,7 @@
  * 부스 수정 페이지
  */
 
-import React, { useState } from 'react';
+import useAlertStore from '@/store/useAlertStore';
 import Header from '@/components/Header';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
 import Input from '@/components/Input/Input';
@@ -13,11 +13,10 @@ import Divider from '@/components/Divider';
 import TextArea from '@/components/Input/TextArea';
 import Timepicker from '@/components/Timepicker';
 import Button from '@/components/Button';
-import Scrim from '@/components/Scrim';
-import Alert from '@/components/Alert';
 
 const BoothEditPage = () => {
-  const [modal, setModal] = useState({ isOpen: false, variant: null, title: '', text: '' });
+  const openAlert = useAlertStore((s) => s.openAlert);
+  const closeAlert = useAlertStore((s) => s.closeAlert);
 
   return (
     <>
@@ -250,8 +249,6 @@ const BoothEditPage = () => {
             </div>
           </div>
         </AdminAccordion>
-
-        {showModal}
       </div>
     </>
   );

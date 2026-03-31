@@ -2,8 +2,9 @@
  * 공연 페이지 6-3-1
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import useAlertStore from '@/store/useAlertStore';
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
 import Badge from '@/components/Badge';
@@ -14,8 +15,6 @@ import Tab from '@/components/Tab';
 import SetlistCard from '@/components/Card/SetlistCard';
 import ReviewCard from '@/components/Card/ReviewCard';
 import TextAreaSend from '@/components/Input/TextAreaSend';
-import Scrim from '@/components/Scrim';
-import Alert from '@/components/Alert';
 
 const MyShowPage = () => {
   //추후 삭제 예정
@@ -75,11 +74,12 @@ const MyShowPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const Show = ShowData.find((item) => item.id === Number(id));
+  const openAlert = useAlertStore((s) => s.openAlert);
+  const closeAlert = useAlertStore((s) => s.closeAlert);
 
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   return (
     <div className="relative">
@@ -279,7 +279,21 @@ const MyShowPage = () => {
                         review={review.review}
                         ago={review.ago}
                         showDelete={review.showDelete}
-                        onClick={() => setShowDeleteModal(true)}
+                        onClick={() => {
+                          openAlert({
+                            variant: 'delete',
+                            title: '후기',
+                            text: (
+                              <>
+                                후기를 삭제할까요?
+                                <br />
+                                삭제한 후기는 복구되지 않아요.
+                              </>
+                            ),
+                            onCancel: closeAlert,
+                            onConfirm: closeAlert,
+                          });
+                        }}
                       />
                     ))
                   ) : (
@@ -303,24 +317,6 @@ const MyShowPage = () => {
       </div>
 
       {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
-      {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <Scrim />
-          <Alert
-            variant="delete"
-            title="후기"
-            text={
-              <>
-                후기를 삭제할까요?
-                <br />
-                삭제한 후기는 복구되지 않아요.
-              </>
-            }
-            onCancel={() => setShowDeleteModal(false)}
-            onConfirm={() => setShowDeleteModal(false)}
-          />
-        </div>
-      )}
     </div>
   );
 };
