@@ -18,7 +18,12 @@ const HomePage = () => {
   return (
     <>
       {/* 축제 포스터 */}
-      <img src="/images/home-poster.png" alt="home-poster" fetchPriority="high" />
+      <img
+        className="w-full"
+        src="/images/home-poster.png"
+        alt="home-poster"
+        fetchPriority="high"
+      />
       {/* 축준위 인스타 바로가기 */}
       <button
         onClick={goFestivalInstagram}
@@ -46,11 +51,11 @@ const HomePage = () => {
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex gap-3">
+          <div className="flex gap-3 overflow-hidden">
             <img className="h-45 w-full rounded-r-xl object-cover" src="/images/home-booth-1.png" />
             <img className="h-45 w-full rounded-l-xl object-cover" src="/images/home-booth-2.png" />
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 overflow-hidden">
             <img className="h-45 w-full rounded-r-xl object-cover" src="/images/home-booth-3.png" />
             <img className="h-45 w-full rounded-l-xl object-cover" src="/images/home-booth-4.png" />
           </div>
@@ -58,7 +63,7 @@ const HomePage = () => {
       </div>
       {/* Events */}
       <div
-        className="items-centerinset-0 relative flex flex-col items-center gap-10 overflow-hidden bg-cover bg-center py-[4.44rem]"
+        className="relative inset-0 flex flex-col items-center gap-10 overflow-hidden bg-cover bg-center py-[4.44rem]"
         style={{ backgroundImage: 'url(/images/home-event-bg.png)' }}
       >
         <img className="h-12.5 w-39.5" src="/icons/icon-event.svg" alt="event" />
@@ -102,7 +107,7 @@ const HomePage = () => {
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <div className="flex gap-3">
+          <div className="flex gap-3 overflow-hidden">
             <img
               className="h-43.25 w-full rounded-r-xl object-cover"
               src="/images/home-performance-1.png"
@@ -116,7 +121,7 @@ const HomePage = () => {
               loading="lazy"
             />
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 overflow-hidden">
             <img
               className="h-39.75 w-full rounded-r-xl object-cover"
               src="/images/home-performance-3.png"
