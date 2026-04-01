@@ -90,12 +90,6 @@ const useFilterStore = create(
           },
         })),
 
-      // 모든 필터 초기화
-      resetAllFilters: () =>
-        set({
-          filters: defaultFilters,
-        }),
-
       // 특정 타입의 필터 가져오기
       getFilter: (type) => (state) => state.filters[type],
     }),
