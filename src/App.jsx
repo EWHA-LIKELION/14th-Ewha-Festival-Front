@@ -11,6 +11,8 @@ import { ToastManager } from '@/components/Toast';
 import useAlertStore from '@/store/useAlertStore';
 import Alert from '@/components/Alert';
 import Scrim from '@/components/Scrim';
+import useFilterSheetStore from '@/store/useFilterSheetStore';
+import FilterSheet from '@/features/FilterSheet';
 
 // 홈 & 기타 페이지
 import HomePage from '@/pages/home/HomePage';
@@ -39,6 +41,7 @@ import MyShowPage from '@/pages/admin/MyShowPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
+  const showFilterSheet = useFilterSheetStore((s) => s.isOpen);
   const { text, isOpen, closeToast } = useToastStore();
   const { alert, closeAlert } = useAlertStore();
 
@@ -90,8 +93,13 @@ function App() {
       {/* ⚙️ 전역 상태 관리 */}
       {/* 로그인 바텀시트 */}
       {showLoginSheet && <LoginSheet />}
+
+      {/* 필터 바텀시트 */}
+      {showFilterSheet && <FilterSheet />}
+
       {/* 토스트 */}
       <ToastManager text={text} isOpen={isOpen} onClose={closeToast} />
+
       {/* Alert */}
       {alert && (
         <>
