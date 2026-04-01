@@ -56,12 +56,6 @@
 
   {
     "category": "DISH",
-    "location": "MAIN_GATE",
-    "number": 1,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
     "location": "GRASS_GROUND",
     "number": 2,
     "description": "00 부스 옆"
