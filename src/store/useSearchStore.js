@@ -1,6 +1,7 @@
 /**
- * 검색 전역 상태 관리
+ * 검색 전역 상태 관리 store (Zustand)
  */
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
