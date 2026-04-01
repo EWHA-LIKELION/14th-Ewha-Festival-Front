@@ -2,18 +2,11 @@
  * Scrim 있는 Bottomsheet
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-
-const SHEET_HEIGHT = {
-  large: '592px',
-  show: '384px', // 공연 필터
-  trash: '376px', // 쓰레기 필터
-  login: '256px',
-};
+import { useState, useEffect, useCallback } from 'react';
 
 const TRANSITION_DURATION = 300;
 
-const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
+const BottomsheetScrim = ({ onClose, children }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -30,15 +23,12 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
     <>
       <div
         onClick={handleClose}
-        className="fixed inset-0 z-30 bg-black/50 transition-opacity duration-300"
-        style={{ opacity: visible ? 1 : 0 }}
+        className={`fixed inset-0 z-30 bg-black/50 transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0'}`}
       />
-
       <div
-        className="reactive-width shadow-up-md fixed bottom-0 left-1/2 z-35 flex w-full flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out"
+        className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-35 flex h-auto w-full -translate-x-1/2 flex-col overflow-clip rounded-t-3xl bg-white transition-transform duration-300 ease-out ${visible ? 'translate-y-0' : 'translate-y-full'}`}
         style={{
-          height: `calc(${SHEET_HEIGHT[size]} + env(safe-area-inset-bottom))`,
-          transform: `translateX(-50%) translateY(${visible ? '0%' : '100%'})`,
+          maxHeight: 'calc(90vh + env(safe-area-inset-bottom)',
         }}
       >
         <div className="flex h-8 shrink-0 flex-col items-center justify-end px-4 pt-2">
@@ -65,7 +55,7 @@ const BottomsheetScrim = ({ size = 'medium', onClose, children }) => {
           </button>
         </div>
 
-        <div className="w-full flex-1 overflow-x-clip overflow-y-auto p-5">{children}</div>
+        <div className="w-full flex-initial p-5">{children}</div>
       </div>
     </>
   );
