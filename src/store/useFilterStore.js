@@ -89,9 +89,6 @@ const useFilterStore = create(
             [type]: defaultFilters[type],
           },
         })),
-
-      // 특정 타입의 필터 가져오기
-      getFilter: (type) => (state) => state.filters[type],
     }),
     {
       name: 'filter-storage', // localStorage key
