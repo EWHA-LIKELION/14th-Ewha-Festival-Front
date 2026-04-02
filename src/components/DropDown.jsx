@@ -3,17 +3,24 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
+import { filterConfig } from '@/configs/filterConfig';
+import { getDefaultValue } from '@/utils/labelHelper';
+import useFilterStore from '@/store/useFilterStore';
 
-const DropDown = () => {
+const DropDown = ({ type = 'booth' }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('number');
   const dropdownRef = useRef(null);
 
-  const options = [
-    { value: 'number', label: '번호순' },
-    { value: 'scrap', label: '스크랩순' },
-    { value: 'name', label: '이름순' },
-  ];
+  // 전역 상태에서 현재 타입의 필터 가져오기
+  const filters = useFilterStore((state) => state.filters[type]) || {};
+  const setFilter = useFilterStore((state) => state.setFilter);
+  const config = filterConfig[type] || {};
+  const options = config.sorts || [];
+
+  // 스토어의 sort 값 또는 기본값 사용
+  const storeSort = filters.sort;
+  const defaultValue = getDefaultValue(options);
+  const selectedValue = storeSort ?? defaultValue;
 
   // 외부 클릭 감지
   useEffect(() => {
@@ -27,8 +34,9 @@ const DropDown = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelect = (value) => {
-    setSelectedValue(value);
+  const handleSelect = (newValue) => {
+    // 스토어에 직접 저장
+    setFilter(type, 'sort', newValue);
     setIsOpen(false);
   };
 

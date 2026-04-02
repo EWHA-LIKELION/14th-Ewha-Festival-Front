@@ -29,8 +29,8 @@ const HomePage = () => {
         onClick={goFestivalInstagram}
         className="font-noto-serif relative flex h-21 w-full flex-col items-start justify-center bg-linear-to-r from-[#F0F6E3] to-[#E7F0E1] px-7.5 text-green-900"
       >
-        <p className="text-xs font-medium">축준위 인스타그램에서 빠른 소식 확인</p>
-        <p className="text-base font-bold">축준위 공지 바로가기</p>
+        <p className="text-xs font-medium">인스타그램에서 빠른 소식 확인</p>
+        <p className="text-base font-bold">축제준비위원회 공지 바로가기</p>
         <img
           className="absolute right-7 bottom-0"
           src="/icons/logo-festival-pic.svg"
@@ -67,7 +67,7 @@ const HomePage = () => {
         style={{ backgroundImage: 'url(/images/home-event-bg.png)' }}
       >
         <img className="h-12.5 w-39.5" src="/icons/icon-event.svg" alt="event" />
-        <div className="flex flex-col gap-5 text-center text-sm font-normal text-white">
+        <div className="flex flex-col gap-5 text-center text-xs font-normal text-white">
           <p>
             이화 비빔밥 한 숟갈 먹고,
             <br />

@@ -14,6 +14,8 @@ import ImageCard from '@/components/Card/ImageCard';
 const MyPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const nickname = useAuthStore((s) => s.nickname);
+  const setNickname = useAuthStore((s) => s.setNickname);
   const logout = useAuthStore((s) => s.logout);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
   const openAlert = useAlertStore((s) => s.openAlert);
@@ -67,6 +69,7 @@ const MyPage = () => {
         try {
           const data = await MeAPI.getMyProfile();
           setMyData(data);
+          setNickname(data?.nickname);
         } catch (error) {
           console.error('마이페이지 데이터 로드 실패:', error);
 
@@ -86,7 +89,7 @@ const MyPage = () => {
         }
       } else {
         openLoginSheet();
-        setMyData(null); // 로그아웃 시 데이터 초기화
+        setMyData(null);
       }
     };
 
@@ -102,7 +105,7 @@ const MyPage = () => {
           <div className="flex gap-1">
             {isLoggedIn ? (
               <>
-                <p className="text-emerald-600">{myData?.nickname}</p>
+                <p className="text-emerald-600">{nickname}</p>
                 <p>님</p>
               </>
             ) : (
@@ -190,7 +193,7 @@ const MyPage = () => {
             iconAlt="kakaotalk"
             onClick={goFestivalKakaotalk}
           >
-            축준위에게 문의하기
+            축제준비위원회에게 문의하기
           </Button>
         </div>
       </div>

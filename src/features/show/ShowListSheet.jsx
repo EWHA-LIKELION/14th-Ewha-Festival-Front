@@ -36,7 +36,7 @@ const BoothListSheet = () => {
         {isFull && <Header center="search" />}
         <div className="flex flex-col gap-4 p-5">
           <Tab tabs={['부스', '공연']} activeIndex={activeTabIndex} onChange={handleTabChange} />
-          <FilterBar />
+          <FilterBar type="show" />
           <div className="flex flex-col">
             <div className="flex items-center justify-between text-sm font-normal text-zinc-500">
               총 {totalNum}개
@@ -44,7 +44,7 @@ const BoothListSheet = () => {
                 <div className="flex items-center gap-1">
                   종료 제외 <Checkbox isSelected={excludeClosed} onChange={setExcludeClosed} />
                 </div>
-                <DropDown />
+                <DropDown type="show" />
               </div>
             </div>
             {/* API 연결할 때 map으로 적용해놓겠습니다... */}
