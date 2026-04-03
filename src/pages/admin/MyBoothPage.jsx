@@ -2,9 +2,17 @@
  * 부스 관리 페이지 6-2-1
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
+import useLoadingStore from '@/store/useLoadingStore';
+
+import { BoothAPI } from '@/apis';
+import { BOOTH_CATEGORY } from '@/constants/category';
+import { BOOTH_LOCATION } from '@/constants/building';
+import { getLabel, padNumber } from '@/utils/labelHelper';
+import { formatScheduleDate } from '@/utils/dateHelper';
+
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
 import Badge from '@/components/Badge';
@@ -13,86 +21,73 @@ import Divider from '@/components/Divider';
 import NoticeCard from '@/components/Card/NoticeCard';
 import Tab from '@/components/Tab';
 import MenuCard from '@/components/Card/MenuCard';
-import ReviewCard from '@/components/Card/ReviewCard';
-import TextAreaSend from '@/components/Input/TextAreaSend';
 
 const MyBoothPage = () => {
-  //추후 삭제 예정
-  const boothData = [
-    {
-      id: 1,
-      name: '멋사 부스',
-      thumbnail: '/images/boothcard-test.jpg',
-      state: 'operating',
-      category: '음식',
-      description:
-        '학생 부스 소개글 학생 부스 소개글 학생 부스 소개글 학생 부스 소개글 학생 부스 소개글',
-      time: ['00일 (수) 10:00~12:30', '00일 (수) 13:00~15:30'],
-      location: {
-        name: '스포츠트랙 02',
-        extra: '학문관 이화상점 오른쪽에 있습니다.',
-        roadView: true,
-      },
-      sns: {
-        instagram: 'https://www.instagram.com/',
-        kakaotalk: 'https://www.kakaocorp.com/page/service/service/KakaoTalk',
-      },
-      notices: [{ id: 1, title: '공지 제목', content: '공지 내용 더미' }],
-      menu: [
-        {
-          id: 1,
-          name: '떡볶이',
-          description: '매콤달콤한 떡볶이와 다양한 간식이 준비되어 있습니다. 반복 내용 더미',
-          image: '/images/boothcard-test.jpg',
-          price: 10000,
-        },
-        {
-          id: 2,
-          name: '튀김',
-          description: '바삭한 튀김과 다양한 간식이 준비되어 있습니다. 반복 내용 더미',
-          image: '/images/boothcard-test.jpg',
-          price: 5000,
-        },
-      ],
-      reviews: [
-        { id: 1, name: '익명 n', review: '좋아요!', ago: '2시간 전', showDelete: true },
-        { id: 2, name: '익명 n', review: '맛있어요!', ago: '3시간 전', showDelete: false },
-      ],
-    },
-    {
-      id: 2,
-      name: '',
-      thumbnail: '',
-      state: '',
-      category: '',
-      description: '',
-      time: [],
-      location: {},
-      sns: [],
-      notices: [],
-      menu: [],
-      reviews: [],
-    },
-  ];
-
   const { id } = useParams();
   const navigate = useNavigate();
-  const booth = boothData.find((item) => item.id === Number(id));
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
+  const showLoading = useLoadingStore((s) => s.showLoading);
+  const hideLoading = useLoadingStore((s) => s.hideLoading);
 
+  const [booth, setBooth] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    const fetchBoothDetail = async () => {
+      try {
+        showLoading();
+        const data = await BoothAPI.getBoothById(id);
+        setBooth(data);
+      } catch (error) {
+        console.error('부스 정보를 불러오는데 실패했습니다:', error);
+        openAlert({
+          variant: 'error',
+          title: '오류',
+          text: '부스 정보를 불러올 수 없습니다.',
+          onConfirm: () => {
+            closeAlert();
+            navigate(-1);
+          },
+        });
+      } finally {
+        hideLoading();
+      }
+    };
+
+    if (id) {
+      fetchBoothDetail();
+    }
+  }, [id]);
+
+  if (!booth) {
+    return null;
+  }
+
+  const categoryText = booth.category?.map((cat) => getLabel(cat, BOOTH_CATEGORY)).join(', ') || '';
+  const scheduleText =
+    booth.schedule?.map((s) => {
+      const formattedDate = formatScheduleDate(s.date);
+      return `${formattedDate} ${s.time}`;
+    }) || [];
+  const locationName = booth.location
+    ? `${getLabel(booth.location.building, BOOTH_LOCATION)} ${padNumber(booth.location.number)}`
+    : '';
+  const snsLinks = {
+    instagram: booth.sns?.find((url) => url.includes('instagram')),
+    kakaotalk: booth.sns?.find((url) => url.includes('kakao')),
+  };
 
   return (
     <div className="relative">
       <Header className="absolute top-0" left="back" right="edit" background="white" />
       <img
-        src={booth?.thumbnail || '/images/default-image-large.png'}
-        className="flex aspect-49/30 w-full items-center justify-center object-cover"
+        src={booth.thumbnail || '/images/default-image-large.png'}
+        className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
         onClick={() => {
-          if (booth?.thumbnail) {
+          if (booth.thumbnail) {
             setSelectedImage(booth.thumbnail);
             setShowModal(true);
           }
@@ -105,29 +100,29 @@ const MyBoothPage = () => {
           <div className="flex w-full flex-col items-start gap-2 self-stretch">
             <div className="flex w-full items-center justify-between self-stretch">
               <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
-                {booth?.name || '학생 부스명'}
+                {booth.name || '부스명'}
               </h2>
-              <ScrapButton />
+              <ScrapButton count={booth.scraps_count} />
             </div>
 
-            {(booth?.category || booth?.state) && (
+            {(categoryText || booth.is_ongoing !== undefined) && (
               <div className="flex items-center gap-1">
-                {booth?.category && (
+                {categoryText && (
                   <p className="text-sm leading-5 font-normal tracking-normal text-zinc-500">
-                    {booth.category}
+                    {categoryText}
                   </p>
                 )}
 
-                {booth?.state && (
+                {booth.is_ongoing !== undefined && (
                   <>
-                    {booth?.category && <img src="/icons/icon-eclipse-gray.svg" />}
-                    <Badge state={booth.state} size="md" />
+                    {categoryText && <img src="/icons/icon-eclipse-gray.svg" />}
+                    <Badge state={booth.is_ongoing ? 'operating' : 'closed'} size="md" />
                   </>
                 )}
               </div>
             )}
 
-            {booth?.description && (
+            {booth.description && (
               <p className="line-clamp-2 max-h-10 self-stretch text-sm leading-5 font-normal tracking-normal text-zinc-500">
                 {booth.description}
               </p>
@@ -143,8 +138,8 @@ const MyBoothPage = () => {
                 시간
               </h3>
               <div className="flex flex-col items-start gap-0.5">
-                {booth?.time && booth.time.length > 0 ? (
-                  booth.time.map((t, i) => (
+                {scheduleText.length > 0 ? (
+                  scheduleText.map((t, i) => (
                     <h3
                       key={i}
                       className="text-sm leading-5 font-normal tracking-normal text-zinc-800"
@@ -167,21 +162,23 @@ const MyBoothPage = () => {
                 <div className="flex items-center gap-1.5">
                   <h3
                     className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
-                      booth?.location?.name ? 'underline decoration-solid underline-offset-2' : ''
+                      locationName ? 'underline decoration-solid underline-offset-2' : ''
                     }`}
-                    onClick={() => booth?.location?.name && navigate('/장소')}
-                    style={{ cursor: booth?.location?.name ? 'pointer' : 'default' }}
+                    onClick={() => locationName && navigate('/장소')}
+                    style={{ cursor: locationName ? 'pointer' : 'default' }}
                   >
-                    {booth?.location?.name || '-'}
+                    {locationName || '-'}
                   </h3>
 
-                  {/* 로드뷰 있을 때만 */}
-                  {booth?.location?.roadView && (
+                  {booth.roadview && (
                     <>
                       <img src="/icons/icon-eclipse-gray.svg" />
                       <h3
                         className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
-                        onClick={() => setShowModal(true)}
+                        onClick={() => {
+                          setSelectedImage(booth.roadview);
+                          setShowModal(true);
+                        }}
                         style={{ cursor: 'pointer' }}
                       >
                         로드뷰
@@ -190,9 +187,11 @@ const MyBoothPage = () => {
                   )}
                 </div>
 
-                <p className="text-xs leading-4 font-normal tracking-normal text-zinc-500">
-                  {booth?.location.extra}
-                </p>
+                {booth.location_description && (
+                  <p className="text-xs leading-4 font-normal tracking-normal text-zinc-500">
+                    {booth.location_description}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -202,34 +201,23 @@ const MyBoothPage = () => {
                 SNS
               </h3>
               <div className="flex items-center gap-2.5">
-                {/* Instagram */}
-                {booth?.sns?.instagram ? (
+                {snsLinks.instagram && (
                   <img
                     src="/icons/logo-instagramcolor.svg"
                     className="h-7 w-7 cursor-pointer rounded-md"
-                    onClick={() => {
-                      if (booth.sns.instagram.startsWith('https')) {
-                        window.open(booth.sns.instagram, '_blank');
-                      }
-                    }}
+                    onClick={() => window.open(snsLinks.instagram, '_blank')}
                   />
-                ) : null}
+                )}
 
-                {/* KakaoTalk */}
-                {booth?.sns?.kakaotalk ? (
+                {snsLinks.kakaotalk && (
                   <img
                     src="/icons/logo-kakaotalkcolor.svg"
                     className="h-7 w-7 cursor-pointer rounded-md"
-                    onClick={() => {
-                      if (booth.sns.kakaotalk.startsWith('https')) {
-                        window.open(booth.sns.kakaotalk, '_blank');
-                      }
-                    }}
+                    onClick={() => window.open(snsLinks.kakaotalk, '_blank')}
                   />
-                ) : null}
+                )}
 
-                {/* 둘 다 없는 경우*/}
-                {!booth?.sns?.instagram && !booth?.sns?.kakaotalk && (
+                {!snsLinks.instagram && !snsLinks.kakaotalk && (
                   <p className="text-sm leading-5 font-normal text-zinc-500">-</p>
                 )}
               </div>
@@ -239,9 +227,9 @@ const MyBoothPage = () => {
 
         {/* 공지 */}
         <div className="w-full px-5">
-          {booth?.notices && booth.notices.length > 0 ? (
+          {booth.latest_notice ? (
             <NoticeCard
-              title={booth.notices[0].title}
+              title={booth.latest_notice.title}
               onClick={() => navigate('/공지')}
               style={{ cursor: 'pointer' }}
             />
@@ -254,15 +242,15 @@ const MyBoothPage = () => {
         <div className="flex w-full flex-col items-center gap-2 self-stretch px-5">
           <Tab
             variant="underline"
-            tabs={['리스트', '후기']}
+            tabs={['리스트']}
             activeIndex={activeTab}
             onChange={(index) => setActiveTab(index)}
           />
           <div className="flex w-full flex-col items-center self-stretch">
             {activeTab === 0 && (
               <div className="pb-36">
-                {booth?.menu && booth.menu.length > 0 ? (
-                  booth.menu.map((item) => (
+                {booth.product && booth.product.length > 0 ? (
+                  booth.product.map((item) => (
                     <MenuCard
                       key={item.id}
                       name={item.name}
@@ -282,54 +270,9 @@ const MyBoothPage = () => {
                 )}
               </div>
             )}
-            {activeTab === 1 && (
-              <>
-                <div className="mt-2 flex w-full flex-col items-center gap-4">
-                  {booth?.reviews && booth.reviews.length > 0 ? (
-                    booth.reviews.map((review) => (
-                      <ReviewCard
-                        key={review.id}
-                        name={review.name}
-                        review={review.review}
-                        ago={review.ago}
-                        showDelete={review.showDelete}
-                        onClick={() => {
-                          openAlert({
-                            variant: 'delete',
-                            title: '후기',
-                            text: (
-                              <>
-                                후기를 삭제할까요?
-                                <br />
-                                삭제한 후기는 복구되지 않아요.
-                              </>
-                            ),
-                            onCancel: closeAlert,
-                            onConfirm: closeAlert,
-                          });
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center self-stretch py-20 text-center text-base leading-6 font-normal tracking-normal text-zinc-300">
-                      등록된 내용이 없어요.
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
           </div>
         </div>
-
-        {activeTab === 1 && (
-          <div className="sticky bottom-0 w-full border-t border-zinc-100 bg-white py-4">
-            <div className="px-5">
-              <TextAreaSend placeholder="후기는 익명으로 남겨져요." />
-            </div>
-          </div>
-        )}
       </div>
-
       {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
     </div>
   );
