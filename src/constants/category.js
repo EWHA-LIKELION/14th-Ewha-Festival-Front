@@ -8,8 +8,10 @@ export const BOOTH_CATEGORY = [
 // 공연 카테고리
 export const SHOW_CATEGORY = [
   { value: 'BAND', label: '밴드' },
+  { value: 'VOCAL', label: '보컬' },
   { value: 'DANCE', label: '댄스' },
   { value: 'THEATER', label: '연극' },
+  { value: 'ARTIST', label: '아티스트' },
 ];
 
 // 기타시설 카테고리
