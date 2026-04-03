@@ -160,29 +160,33 @@ const MyBoothPage = () => {
               </h3>
               <div className="flex flex-col items-start gap-1.5">
                 <div className="flex items-center gap-1.5">
-                  <h3
-                    className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
+                  <button
+                    className={`cursor-default text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
                       locationName ? 'underline decoration-solid underline-offset-2' : ''
                     }`}
-                    onClick={() => locationName && navigate('/장소')}
-                    style={{ cursor: locationName ? 'pointer' : 'default' }}
                   >
+                    {/* <button
+                    className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
+                      locationName
+                        ? 'underline decoration-solid underline-offset-2'
+                        : 'cursor-default'
+                    }`}
+                  > */}
                     {locationName || '-'}
-                  </h3>
+                  </button>
 
                   {booth.roadview && (
                     <>
                       <img src="/icons/icon-eclipse-gray.svg" />
-                      <h3
+                      <button
                         className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
                         onClick={() => {
                           setSelectedImage(booth.roadview);
                           setShowModal(true);
                         }}
-                        style={{ cursor: 'pointer' }}
                       >
                         로드뷰
-                      </h3>
+                      </button>
                     </>
                   )}
                 </div>
