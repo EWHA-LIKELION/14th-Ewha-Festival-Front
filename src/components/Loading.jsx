@@ -32,7 +32,7 @@ const GlobalLoading = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        {/* 스피너 (테일의 기준점) */}
+        {/* 로딩 스피너 */}
         <div className="relative inline-block overflow-visible">
           <img
             src="/icons/loading-spinner.svg"
@@ -40,7 +40,6 @@ const GlobalLoading = () => {
             className="transition-transform duration-1000 ease-linear"
             style={{ transform: `rotate(${rotation}deg)` }}
           />
-          {/* 테일 - 스피너 기준 absolute 위치, 원본 크기 유지 */}
           <img
             src="/icons/loading-tail.svg"
             alt="loading-tail"
