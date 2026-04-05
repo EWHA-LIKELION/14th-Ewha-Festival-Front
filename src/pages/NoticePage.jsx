@@ -20,6 +20,7 @@ const NoticePage = () => {
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
+  const isLoading = useLoadingStore((s) => s.isLoading);
 
   // ID로 부스/공연 구분
   const isBooth = id?.startsWith('BOOTH_');
@@ -65,21 +66,21 @@ const NoticePage = () => {
     <>
       <Header left="back" center="title" centerTitle="공지" />
       <div className="mt-18 flex flex-col gap-4 p-5">
-        {notices.length > 0 ? (
-          notices.map((notice) => (
-            <Accordion
-              key={notice.id}
-              title={notice.title}
-              time={notice.time_ago}
-              isUpdate={notice.is_updated}
-              content={notice.content}
-            />
-          ))
-        ) : (
-          <div className="flex justify-center pt-36 text-center text-base font-normal text-zinc-300">
-            등록된 공지가 없어요.
-          </div>
-        )}
+        {notices.length > 0
+          ? notices.map((notice) => (
+              <Accordion
+                key={notice.id}
+                title={notice.title}
+                time={notice.time_ago}
+                isUpdate={notice.is_updated}
+                content={notice.content}
+              />
+            ))
+          : !isLoading && (
+              <div className="flex justify-center pt-36 text-center text-base font-normal text-zinc-300">
+                등록된 공지가 없어요.
+              </div>
+            )}
       </div>
     </>
   );
