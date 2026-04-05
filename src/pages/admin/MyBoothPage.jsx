@@ -12,6 +12,7 @@ import { BOOTH_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
 import { formatScheduleDate } from '@/utils/dateHelper';
+import { mapSnsUrls } from '@/utils/snsHelper';
 
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
@@ -79,10 +80,7 @@ const MyBoothPage = () => {
   const locationName = booth.location
     ? `${getLabel(booth.location.building, BOOTH_LOCATION)} ${padNumber(booth.location.number)}`
     : '';
-  const snsLinks = {
-    instagram: booth.sns?.find((url) => url.includes('instagram')),
-    kakaotalk: booth.sns?.find((url) => url.includes('kakao')),
-  };
+  const snsLinks = mapSnsUrls(booth.sns);
 
   return (
     <>
