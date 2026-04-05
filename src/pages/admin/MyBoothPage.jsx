@@ -85,8 +85,8 @@ const MyBoothPage = () => {
   };
 
   return (
-    <div className="relative">
-      <Header className="absolute top-0" left="back" right="edit" background="white" />
+    <>
+      <Header left="back" right="edit" background="white" />
       <img
         src={booth.thumbnail || '/images/default-image-large.png'}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
@@ -169,13 +169,6 @@ const MyBoothPage = () => {
                       locationName ? 'underline decoration-solid underline-offset-2' : ''
                     }`}
                   >
-                    {/* <button
-                    className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
-                      locationName
-                        ? 'underline decoration-solid underline-offset-2'
-                        : 'cursor-default'
-                    }`}
-                  > */}
                     {locationName || '-'}
                   </button>
 
@@ -282,7 +275,7 @@ const MyBoothPage = () => {
         </div>
       </div>
       {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
-    </div>
+    </>
   );
 };
 
