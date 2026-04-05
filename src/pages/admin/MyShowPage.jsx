@@ -91,8 +91,8 @@ const MyShowPage = () => {
   };
 
   return (
-    <div className="relative">
-      <Header className="absolute top-0" left="back" right="edit" background="white" />
+    <>
+      <Header left="back" right="edit" background="white" />
       <img
         src={show.thumbnail || '/images/default-image-large.png'}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
@@ -277,7 +277,7 @@ const MyShowPage = () => {
       </div>
 
       {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
-    </div>
+    </>
   );
 };
 
