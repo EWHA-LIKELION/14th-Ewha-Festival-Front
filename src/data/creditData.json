@@ -2,7 +2,7 @@
   {
     "organization": "멋쟁이사자처럼 14기 운영진",
     "position": "대표",
-    "part": "백엔드",
+    "part": "백   엔   드",
     "department": "컴공 22",
     "name": "성혜린",
     "task": "담당 업무"
@@ -26,17 +26,370 @@
   {
     "organization": "멋쟁이사자처럼 14기 운영진",
     "position": "파트장",
-    "part": "백엔드",
-    "department": "컴공 23",
+    "part": "백   엔   드",
+    "department": "컴공 24",
     "name": "설영은",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "기획디자인",
+    "department": "디자인 22",
+    "name": "김수민",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "기획디자인",
+    "department": "융콘 24",
+    "name": "김지후",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "기획디자인",
+    "department": "경영 23",
+    "name": "이도윤",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "기획디자인",
+    "department": "융콘 23",
+    "name": "이은서",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "프론트엔드",
+    "department": "전전 22",
+    "name": "김민혜",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "프론트엔드",
+    "department": "컴공 25",
+    "name": "서예린",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "백   엔   드",
+    "department": "컴공 22",
+    "name": "김가영",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "백   엔   드",
+    "department": "컴공 24",
+    "name": "신지민",
+    "task": "담당 업무"
+  },
+  {
+    "organization": "멋쟁이사자처럼 14기 운영진",
+    "position": "팀원",
+    "part": "백   엔   드",
+    "department": "컴공 23",
+    "name": "황규리",
     "task": "담당 업무"
   },
   {
     "organization": "축제준비위원회",
     "position": "위원장",
-    "part": "운영기획팀",
-    "department": "컴공 22",
-    "name": "설영은",
-    "task": "담당 업무"
+    "part": "운 영 기 획 팀",
+    "department": "경제 23",
+    "name": "박수경",
+    "task": "축제준비위원회 총괄 운영 및 최종 의사결정,\n축제 전반 예산 관리"
+  },
+
+  {
+    "organization": "축제준비위원회",
+    "position": "팀장",
+    "part": "운 영 사 무 팀",
+    "department": "경영 25",
+    "name": "양희수",
+    "task": "운영사무팀 실무 총괄 및 프로젝트 매니징"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀장",
+    "part": "기     획     팀",
+    "department": "건반 22",
+    "name": "박지민",
+    "task": "기획팀 실무 총괄, 축제 메인 테마 및 슬로건 기획,\n개막식 등 주요 프로그램 설계"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀장",
+    "part": "대 외 협 력 팀",
+    "department": "국문 24",
+    "name": "유지우",
+    "task": "대외협력팀 실무 총괄 및 기업 스폰서십 유치,\n외부 기업 부스 입점 계약 및 관리,\n인근 상권 제휴 및 협찬 물품 수급 총괄"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀장",
+    "part": "무     대     팀",
+    "department": "데사 23",
+    "name": "양은경",
+    "task": "무대팀 실무 총괄, 학생·아티스트 공연 운영,\n공연장 안전 점검 및 관객 동선 관리"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀장",
+    "part": "홍보디자인팀",
+    "department": "커미 23",
+    "name": "김윤아",
+    "task": "홍보디자인팀 실무 총괄 및 축제 브랜딩,\n공식 포스터·MD 디자인 및 제작 관리,\nSNS 채널 운영 및 홍보 전략 수립"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "부팀장",
+    "part": "운 영 사 무 팀",
+    "department": "휴기바 24",
+    "name": "이주은",
+    "task": "부스배치도 제작, 부스 운영 가이드라인 수립"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "부팀장",
+    "part": "기     획     팀",
+    "department": "인지 22",
+    "name": "송윤진",
+    "task": "'이화의 방' 부스 기획 및 운영 관리,\n개막식 비빔밥 퍼포먼스 TF 총괄"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "부팀장",
+    "part": "대 외 협 력 팀",
+    "department": "경영 24",
+    "name": "설서영",
+    "task": "대외협력팀 및 기업 프로모션 일정 관리,\n기업 스폰서십 유치 지원 및 인근 상권 제휴 네트워크 구축"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "부팀장",
+    "part": "홍보디자인팀",
+    "department": "중문 25",
+    "name": "문수아",
+    "task": "공식 유튜브 영상 기획, MD 제작 프로세스 관리 및 최종 수합"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "운 영 사 무 팀",
+    "department": "행정 22",
+    "name": "이하경",
+    "task": "회계 총괄, 축제 예·결산안 작성 및 예산 집행 증빙 관리"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "운 영 사 무 팀",
+    "department": "사학 24",
+    "name": "김유은",
+    "task": "현장 스태프 모집·선발 및 구역별 인력 배치,\n스태프 업무 매뉴얼 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "운 영 사 무 팀",
+    "department": "국문 24",
+    "name": "신연우",
+    "task": "배리어프리존 조성 및 대체 텍스트 제작,\n축제준비위원회 후원금 관리"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "운 영 사 무 팀",
+    "department": "경영 25",
+    "name": "이가연",
+    "task": "현장 스태프 모집·선발 및 구역별 인력 배치,\n스태프 업무 매뉴얼 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "운 영 사 무 팀",
+    "department": "경영 25",
+    "name": "이세미",
+    "task": "아티스트 공연 무대 좌석 배치도 제작 및 배리어프리존 현장 운영"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "운 영 사 무 팀",
+    "department": "약학 26",
+    "name": "김효은",
+    "task": "부스배치도 제작, 부스 운영 가이드라인 수립"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "기     획     팀",
+    "department": "영문 19",
+    "name": "손정민",
+    "task": "'이화의 방' 부스 기획 및 운영 지원,\n개막식 영산줄다리기 프로그램 TF"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "기     획     팀",
+    "department": "교육 24",
+    "name": "김민서",
+    "task": "'EWHA PLATFORM 140' 부스 기획 및 운영,\n개막식 사생대회 프로그램 TF"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "기     획     팀",
+    "department": "문정 25",
+    "name": "곽승민",
+    "task": "'화답(花答)' 부스 기획 및 운영,\n개막식 사생대회 프로그램 TF"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "기     획     팀",
+    "department": "문정 25",
+    "name": "김민서",
+    "task": "'화답(花答)' 부스 기획 및 운영,\n개막식 비빔밥 퍼포먼스 TF"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "기     획     팀",
+    "department": "과교 25",
+    "name": "김소울",
+    "task": "'Last Call: 60초의 질주' 부스 기획 및 운영,\n개막식 영산줄다리기 프로그램 TF"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "기     획     팀",
+    "department": "중문 25",
+    "name": "박지원",
+    "task": "'Last Call: 60초의 질주' 부스 기획 및 운영,\n개막식 비빔밥 퍼포먼스 TF"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "대 외 협 력 팀",
+    "department": "커미 24",
+    "name": "진예원",
+    "task": "기업 스폰서십 유치 및 인근 상권 제휴 컨택,\n축제 기간 내 기업 프로모션 부스 현장 운영 및 관리"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "대 외 협 력 팀",
+    "department": "중문 25",
+    "name": "김단아",
+    "task": "기업 스폰서십 유치 및 인근 상권 제휴 컨택,\n축제 기간 내 기업 프로모션 부스 현장 운영 및 관리"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "대 외 협 력 팀",
+    "department": "국문 25",
+    "name": "이시현",
+    "task": "기업 스폰서십 유치 및 인근 상권 제휴 컨택,\n축제 기간 내 기업 프로모션 부스 현장 운영 및 관리"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "대 외 협 력 팀",
+    "department": "물리 25",
+    "name": "황혜정",
+    "task": "기업 스폰서십 유치 및 인근 상권 제휴 컨택,\n축제 기간 내 기업 프로모션 부스 현장 운영 및 관리"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "무     대     팀",
+    "department": "초교 23",
+    "name": "이지민",
+    "task": "학생 무대 기획 및 운영, 공연팀 모집·소통, 프로그램 큐시트 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "무     대     팀",
+    "department": "국제사무 23",
+    "name": "최정윤",
+    "task": "아티스트 무대 MC 섭외·소통 및 진행 대본 작성"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "무     대     팀",
+    "department": "커미 24",
+    "name": "황현진",
+    "task": "학생 무대 기획 및 운영, 공연팀 모집·소통, 프로그램 큐시트 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "무     대     팀",
+    "department": "경영 25",
+    "name": "김예빈",
+    "task": "아티스트 무대 티켓팅 실무 총괄,\n예매 시스템 구축 및 티켓 관리 문서화"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "무     대     팀",
+    "department": "컴공 25",
+    "name": "편채영",
+    "task": "영화제 프로그램 기획, 학생 상영작 모집 및 영화제 운영 기획"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "홍보디자인팀",
+    "department": "커미 24",
+    "name": "김채영",
+    "task": "공식 유튜브 영상 콘텐츠 제작 및 MD 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "홍보디자인팀",
+    "department": "경영 25",
+    "name": "정서연",
+    "task": "공식 유튜브 영상 콘텐츠 제작 및 MD 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "홍보디자인팀",
+    "department": "불문 25",
+    "name": "김한슬",
+    "task": "SNS 홍보 카드뉴스 기획·제작 및 숏폼(릴스) 콘텐츠 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "홍보디자인팀",
+    "department": "지반공 25",
+    "name": "홍서현",
+    "task": "SNS 홍보 카드뉴스 기획·제작 및 숏폼(릴스) 콘텐츠 제작"
+  },
+  {
+    "organization": "축제준비위원회",
+    "position": "팀원",
+    "part": "홍보디자인팀",
+    "department": "조소 23",
+    "name": "박서현",
+    "task": "개화제 공식 포스터 및 MD 디자인, 대동제 메인 포스터 초안 제작"
   }
 ]

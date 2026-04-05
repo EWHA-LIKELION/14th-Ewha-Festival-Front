@@ -22,3 +22,12 @@ export const getDefaultValue = (options) => {
   if (!options || options.length === 0) return null;
   return options.find((opt) => opt.isDefault)?.value || options[0]?.value;
 };
+
+/**
+ * 숫자를 두 자리 문자열로 변환 (앞에 0 추가)
+ * @param {number|string} num - 변환할 숫자
+ * @returns {string} - 두 자리 문자열 (예: 1 → "01", 10 → "10")
+ */
+export const padNumber = (num) => {
+  return String(num).padStart(2, '0');
+};

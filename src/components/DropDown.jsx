@@ -15,7 +15,7 @@ const DropDown = ({ type = 'booth' }) => {
   const filters = useFilterStore((state) => state.filters[type]) || {};
   const setFilter = useFilterStore((state) => state.setFilter);
   const config = filterConfig[type] || {};
-  const options = config.sorts || [];
+  const options = config.sort || [];
 
   // 스토어의 sort 값 또는 기본값 사용
   const storeSort = filters.sort;

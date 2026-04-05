@@ -6,20 +6,20 @@ import { FESTIVAL_DAYS } from '@/constants/day';
 
 export const filterConfig = {
   booth: {
-    hosts: HOST,
-    categories: BOOTH_CATEGORY,
-    days: FESTIVAL_DAYS,
-    locations: BOOTH_LOCATION,
-    sorts: BOOTH_SORT,
+    host: HOST,
+    category: BOOTH_CATEGORY,
+    day: FESTIVAL_DAYS,
+    location: BOOTH_LOCATION,
+    sort: BOOTH_SORT,
   },
   show: {
-    categories: SHOW_CATEGORY,
-    days: FESTIVAL_DAYS,
-    locations: SHOW_LOCATION,
-    sorts: SHOW_SORT,
+    category: SHOW_CATEGORY,
+    day: FESTIVAL_DAYS,
+    location: SHOW_LOCATION,
+    sort: SHOW_SORT,
   },
   etc: {
-    categories: ETC_CATEGORY,
-    locations: BOOTH_LOCATION,
+    category: ETC_CATEGORY,
+    location: BOOTH_LOCATION,
   },
 };

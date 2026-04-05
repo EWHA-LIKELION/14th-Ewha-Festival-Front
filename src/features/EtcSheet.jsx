@@ -63,7 +63,7 @@ const EtcSheet = () => {
       </div>
       <BottomsheetDrag>
         {isFull && <Header left="back" center="title" centerTitle="기타시설" isSheet />}
-        <div className="flex flex-col gap-4 p-5">
+        <div className="flex flex-col gap-4 px-5 pt-5">
           <FilterBar type="etc" />
           <p className="text-sm font-normal text-zinc-500">총 {filteredData.length}개</p>
           <div className="flex flex-col gap-10">
@@ -82,12 +82,12 @@ const EtcSheet = () => {
               </div>
             ))}
           </div>
-          {filteredData.length === 0 && (
-            <p className="mt-20 text-center text-base font-normal text-zinc-300">
-              검색 결과가 없어요.
-            </p>
-          )}
         </div>
+        {filteredData.length === 0 && (
+          <p className="mt-20 text-center text-base font-normal text-zinc-300">
+            검색 결과가 없어요.
+          </p>
+        )}
       </BottomsheetDrag>
     </>
   );
