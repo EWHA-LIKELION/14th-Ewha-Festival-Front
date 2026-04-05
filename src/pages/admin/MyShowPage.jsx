@@ -66,6 +66,10 @@ const MyShowPage = () => {
     return null;
   }
 
+  const goNoticePage = () => {
+    navigate(`/admin/show/${id}/notice`);
+  };
+
   const getShowState = (isOngoing) => {
     if (isOngoing === null) return 'upcoming'; // 공연 전
     if (isOngoing === true) return 'performing'; // 공연 중
@@ -240,7 +244,7 @@ const MyShowPage = () => {
           {show.latest_notice ? (
             <NoticeCard
               title={show.latest_notice.title}
-              onClick={() => navigate('/공지')}
+              onClick={goNoticePage}
               style={{ cursor: 'pointer' }}
             />
           ) : (
@@ -248,7 +252,7 @@ const MyShowPage = () => {
           )}
         </div>
 
-        {/* 리스트 & 후기 */}
+        {/* 리스트 */}
         <div className="flex w-full flex-col items-center gap-2 self-stretch px-5">
           <Tab
             variant="underline"

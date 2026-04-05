@@ -65,13 +65,14 @@ function App() {
           <Route path="map" element={<MapPage />}>
             <Route path="booths" element={<BoothListSheet />} />
             <Route path="booths/:id" element={<div>BoothDetailSheet</div>} />
-            <Route path="booths/:id/notice" element={<NoticePage />} />
             <Route path="shows" element={<ShowListSheet />} />
             <Route path="shows/:id" element={<div>ShowDetailSheet</div>} />
-            <Route path="shows/:id/notice" element={<NoticePage />} />
             <Route path="etc" element={<EtcSheet />} />
             <Route path="barrierfree" element={<BarrierFreeSheet />} />
           </Route>
+
+          <Route path="map/booths/:id/notice" element={<NoticePage />} />
+          <Route path="map/shows/:id/notice" element={<NoticePage />} />
         </Route>
 
         <Route path="admin">

@@ -66,6 +66,10 @@ const MyBoothPage = () => {
     return null;
   }
 
+  const goNoticePage = () => {
+    navigate(`/admin/booth/${id}/notice`);
+  };
+
   const categoryText = booth.category?.map((cat) => getLabel(cat, BOOTH_CATEGORY)).join(', ') || '';
   const scheduleText =
     booth.schedule?.map((s) => {
@@ -234,7 +238,7 @@ const MyBoothPage = () => {
           {booth.latest_notice ? (
             <NoticeCard
               title={booth.latest_notice.title}
-              onClick={() => navigate('/공지')}
+              onClick={goNoticePage}
               style={{ cursor: 'pointer' }}
             />
           ) : (
@@ -242,7 +246,7 @@ const MyBoothPage = () => {
           )}
         </div>
 
-        {/* 리스트 & 후기 */}
+        {/* 리스트 */}
         <div className="flex w-full flex-col items-center gap-2 self-stretch px-5">
           <Tab
             variant="underline"
