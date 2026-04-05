@@ -27,6 +27,10 @@ const NoticePage = () => {
   const isShow = id?.startsWith('SHOW_');
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const fetchNotices = async () => {
       try {
         showLoading();
