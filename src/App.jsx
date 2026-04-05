@@ -13,6 +13,7 @@ import Alert from '@/components/Alert';
 import Scrim from '@/components/Scrim';
 import useFilterSheetStore from '@/store/useFilterSheetStore';
 import FilterSheet from '@/features/FilterSheet';
+import Loading from '@/components/Loading';
 
 // 홈 & 기타 페이지
 import HomePage from '@/pages/home/HomePage';
@@ -30,9 +31,6 @@ import BoothListSheet from '@/features/booth/BoothListSheet';
 import ShowListSheet from '@/features/show/ShowListSheet';
 import EtcSheet from '@/features/EtcSheet';
 import BarrierFreeSheet from '@/features/BarrierFreeSheet';
-
-// 컴포넌트 프리뷰
-import ComponentPreview from '@/components/ComponentPreview';
 
 // 관리자
 import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
@@ -74,9 +72,6 @@ function App() {
             <Route path="etc" element={<EtcSheet />} />
             <Route path="barrierfree" element={<BarrierFreeSheet />} />
           </Route>
-
-          {/* 🔥 추후 공통컴포넌트 라우트는 삭제 */}
-          <Route path="component-preview" element={<ComponentPreview />} />
         </Route>
 
         <Route path="admin">
@@ -91,6 +86,9 @@ function App() {
       </Routes>
 
       {/* ⚙️ 전역 상태 관리 */}
+      {/* 로딩 */}
+      <Loading />
+
       {/* 로그인 바텀시트 */}
       {showLoginSheet && <LoginSheet />}
 

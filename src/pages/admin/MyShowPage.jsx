@@ -2,9 +2,17 @@
  * 공연 페이지 6-3-1
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
+import useLoadingStore from '@/store/useLoadingStore';
+
+import { ShowAPI } from '@/apis';
+import { SHOW_CATEGORY } from '@/constants/category';
+import { SHOW_LOCATION } from '@/constants/building';
+import { getLabel, padNumber } from '@/utils/labelHelper';
+import { formatScheduleDate } from '@/utils/dateHelper';
+
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
 import Badge from '@/components/Badge';
@@ -13,83 +21,80 @@ import Divider from '@/components/Divider';
 import NoticeCard from '@/components/Card/NoticeCard';
 import Tab from '@/components/Tab';
 import SetlistCard from '@/components/Card/SetlistCard';
-import ReviewCard from '@/components/Card/ReviewCard';
-import TextAreaSend from '@/components/Input/TextAreaSend';
 
 const MyShowPage = () => {
-  //추후 삭제 예정
-  const ShowData = [
-    {
-      id: 1,
-      name: '멋사 부스',
-      thumbnail: '/images/boothcard-test.jpg',
-      state: 'operating',
-      category: '아티스트',
-      description:
-        '학생 공연 소개글 학생 부스 소개글 학생 부스 소개글 학생 부스 소개글 학생 부스 소개글',
-      time: ['00일 (수) 10:00~12:30', '00일 (수) 13:00~15:30'],
-      location: {
-        name: '정문 02',
-        extra: '학문관 이화상점 오른쪽에 있습니다.',
-        roadView: false,
-      },
-      sns: {
-        instagram: 'https://www.instagram.com/',
-        kakaotalk: 'https://www.kakaocorp.com/page/service/service/KakaoTalk',
-      },
-      notices: [{ id: 1, title: '공지 제목', content: '공지 내용 더미' }],
-      setlist: [
-        {
-          id: 1,
-          title: 'Whiplash',
-          artist: 'aespa',
-        },
-        {
-          id: 2,
-          title: 'Famous',
-          artist: 'ALLDAY PROJECT',
-        },
-      ],
-      reviews: [
-        { id: 1, name: '익명 n', review: '좋아요!', ago: '2시간 전', showDelete: true },
-        { id: 2, name: '익명 n', review: '맛있어요!', ago: '3시간 전', showDelete: false },
-      ],
-    },
-    {
-      id: 2,
-      name: '',
-      thumbnail: '',
-      state: '',
-      category: '',
-      description: '',
-      time: [],
-      location: {},
-      sns: [],
-      notices: [],
-      menu: [],
-      reviews: [],
-    },
-  ];
-
   const { id } = useParams();
   const navigate = useNavigate();
-  const Show = ShowData.find((item) => item.id === Number(id));
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
+  const showLoading = useLoadingStore((s) => s.showLoading);
+  const hideLoading = useLoadingStore((s) => s.hideLoading);
 
+  const [show, setShow] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    const fetchShowDetail = async () => {
+      try {
+        showLoading();
+        const data = await ShowAPI.getShowById(id);
+        setShow(data);
+      } catch (error) {
+        console.error('공연 정보를 불러오는데 실패했습니다:', error);
+        openAlert({
+          variant: 'error',
+          title: '오류',
+          text: '공연 정보를 불러올 수 없습니다.',
+          onConfirm: () => {
+            closeAlert();
+            navigate(-1);
+          },
+        });
+      } finally {
+        hideLoading();
+      }
+    };
+
+    if (id) {
+      fetchShowDetail();
+    }
+  }, [id]);
+
+  if (!show) {
+    return null;
+  }
+
+  const getShowState = (isOngoing) => {
+    if (isOngoing === null) return 'upcoming'; // 공연 전
+    if (isOngoing === true) return 'performing'; // 공연 중
+    return 'closed'; // 공연 종료
+  };
+
+  const categoryText = show.category ? getLabel(show.category, SHOW_CATEGORY) : '';
+  const scheduleText =
+    show.schedule?.map((s) => {
+      const formattedDate = formatScheduleDate(s.date);
+      return `${formattedDate} ${s.time}`;
+    }) || [];
+  const locationName = show.location
+    ? `${getLabel(show.location.building, SHOW_LOCATION)} ${padNumber(show.location.number)}`
+    : '';
+  const snsLinks = {
+    instagram: show.sns?.find((url) => url.includes('instagram')),
+    kakaotalk: show.sns?.find((url) => url.includes('kakao')),
+  };
 
   return (
     <div className="relative">
       <Header className="absolute top-0" left="back" right="edit" background="white" />
       <img
-        src={Show?.thumbnail || '/images/default-image-large.png'}
-        className="flex aspect-49/30 w-full items-center justify-center object-cover"
+        src={show.thumbnail || '/images/default-image-large.png'}
+        className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
         onClick={() => {
-          if (Show?.thumbnail) {
-            setSelectedImage(Show.thumbnail);
+          if (show.thumbnail) {
+            setSelectedImage(show.thumbnail);
             setShowModal(true);
           }
         }}
@@ -101,31 +106,31 @@ const MyShowPage = () => {
           <div className="flex w-full flex-col items-start gap-2 self-stretch">
             <div className="flex w-full items-center justify-between self-stretch">
               <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
-                {Show?.name || '공연명'}
+                {show.name || '공연명'}
               </h2>
-              <ScrapButton />
+              <ScrapButton count={show.scraps_count} />
             </div>
 
-            {(Show?.category || Show?.state) && (
+            {(categoryText || show.is_ongoing !== undefined) && (
               <div className="flex items-center gap-1">
-                {Show?.category && (
+                {categoryText && (
                   <p className="text-sm leading-5 font-normal tracking-normal text-zinc-500">
-                    {Show.category}
+                    {categoryText}
                   </p>
                 )}
 
-                {Show?.state && (
+                {show.is_ongoing !== undefined && (
                   <>
-                    {Show?.category && <img src="/icons/icon-eclipse-gray.svg" />}
-                    <Badge state={Show.state} size="md" />
+                    {categoryText && <img src="/icons/icon-eclipse-gray.svg" />}
+                    <Badge state={getShowState(show.is_ongoing)} size="md" />
                   </>
                 )}
               </div>
             )}
 
-            {Show?.description && (
+            {show.description && (
               <p className="line-clamp-2 max-h-10 self-stretch text-sm leading-5 font-normal tracking-normal text-zinc-500">
-                {Show.description}
+                {show.description}
               </p>
             )}
           </div>
@@ -139,8 +144,8 @@ const MyShowPage = () => {
                 시간
               </h3>
               <div className="flex flex-col items-start gap-0.5">
-                {Show?.time && Show.time.length > 0 ? (
-                  Show.time.map((t, i) => (
+                {scheduleText.length > 0 ? (
+                  scheduleText.map((t, i) => (
                     <h3
                       key={i}
                       className="text-sm leading-5 font-normal tracking-normal text-zinc-800"
@@ -161,34 +166,42 @@ const MyShowPage = () => {
               </h3>
               <div className="flex flex-col items-start gap-1.5">
                 <div className="flex items-center gap-1.5">
-                  <h3
-                    className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
-                      Show?.location?.name ? 'underline decoration-solid underline-offset-2' : ''
+                  <button
+                    className={`cursor-default text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
+                      locationName ? 'underline decoration-solid underline-offset-2' : ''
                     }`}
-                    onClick={() => Show?.location?.name && navigate('/장소')}
-                    style={{ cursor: Show?.location?.name ? 'pointer' : 'default' }}
                   >
-                    {Show?.location?.name || '-'}
-                  </h3>
+                    {/* <button
+                    className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
+                      locationName
+                        ? 'underline decoration-solid underline-offset-2'
+                        : 'cursor-default'
+                    }`}
+                  > */}
+                    {locationName || '-'}
+                  </button>
 
-                  {/* 로드뷰 있을 때만 */}
-                  {Show?.location?.roadView && (
+                  {show.roadview && (
                     <>
                       <img src="/icons/icon-eclipse-gray.svg" />
-                      <h3
+                      <button
                         className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
-                        onClick={() => setShowModal(true)}
-                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          setSelectedImage(show.roadview);
+                          setShowModal(true);
+                        }}
                       >
                         로드뷰
-                      </h3>
+                      </button>
                     </>
                   )}
                 </div>
 
-                <p className="text-xs leading-4 font-normal tracking-normal text-zinc-500">
-                  {Show?.location.extra}
-                </p>
+                {show.location_description && (
+                  <p className="text-xs leading-4 font-normal tracking-normal text-zinc-500">
+                    {show.location_description}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -198,34 +211,23 @@ const MyShowPage = () => {
                 SNS
               </h3>
               <div className="flex items-center gap-2.5">
-                {/* Instagram */}
-                {Show?.sns?.instagram ? (
+                {snsLinks.instagram && (
                   <img
                     src="/icons/logo-instagramcolor.svg"
                     className="h-7 w-7 cursor-pointer rounded-md"
-                    onClick={() => {
-                      if (Show.sns.instagram.startsWith('https')) {
-                        window.open(Show.sns.instagram, '_blank');
-                      }
-                    }}
+                    onClick={() => window.open(snsLinks.instagram, '_blank')}
                   />
-                ) : null}
+                )}
 
-                {/* KakaoTalk */}
-                {Show?.sns?.kakaotalk ? (
+                {snsLinks.kakaotalk && (
                   <img
                     src="/icons/logo-kakaotalkcolor.svg"
                     className="h-7 w-7 cursor-pointer rounded-md"
-                    onClick={() => {
-                      if (Show.sns.kakaotalk.startsWith('https')) {
-                        window.open(Show.sns.kakaotalk, '_blank');
-                      }
-                    }}
+                    onClick={() => window.open(snsLinks.kakaotalk, '_blank')}
                   />
-                ) : null}
+                )}
 
-                {/* 둘 다 없는 경우*/}
-                {!Show?.sns?.instagram && !Show?.sns?.kakaotalk && (
+                {!snsLinks.instagram && !snsLinks.kakaotalk && (
                   <p className="text-sm leading-5 font-normal text-zinc-500">-</p>
                 )}
               </div>
@@ -235,9 +237,9 @@ const MyShowPage = () => {
 
         {/* 공지 */}
         <div className="w-full px-5">
-          {Show?.notices && Show.notices.length > 0 ? (
+          {show.latest_notice ? (
             <NoticeCard
-              title={Show.notices[0].title}
+              title={show.latest_notice.title}
               onClick={() => navigate('/공지')}
               style={{ cursor: 'pointer' }}
             />
@@ -250,17 +252,15 @@ const MyShowPage = () => {
         <div className="flex w-full flex-col items-center gap-2 self-stretch px-5">
           <Tab
             variant="underline"
-            tabs={['세트리스트', '후기']}
+            tabs={['세트리스트']}
             activeIndex={activeTab}
             onChange={(index) => setActiveTab(index)}
           />
           <div className="flex w-full flex-col items-start self-stretch">
             {activeTab === 0 && (
               <div className="flex w-full flex-col gap-2 pb-36">
-                {Show?.setlist && Show.setlist.length > 0 ? (
-                  Show.setlist.map((item) => (
-                    <SetlistCard key={item.id} title={item.title} artist={item.artist} />
-                  ))
+                {show.setlist && show.setlist.length > 0 ? (
+                  show.setlist.map((item) => <SetlistCard key={item.id} title={item.name} />)
                 ) : (
                   <div className="flex w-full items-center justify-center self-stretch py-20 text-center text-base leading-6 font-normal tracking-normal text-zinc-300">
                     등록된 내용이 없어요.
@@ -268,52 +268,8 @@ const MyShowPage = () => {
                 )}
               </div>
             )}
-            {activeTab === 1 && (
-              <>
-                <div className="mt-2 flex w-full flex-col items-center gap-4">
-                  {Show?.reviews && Show.reviews.length > 0 ? (
-                    Show.reviews.map((review) => (
-                      <ReviewCard
-                        key={review.id}
-                        name={review.name}
-                        review={review.review}
-                        ago={review.ago}
-                        showDelete={review.showDelete}
-                        onClick={() => {
-                          openAlert({
-                            variant: 'delete',
-                            title: '후기',
-                            text: (
-                              <>
-                                후기를 삭제할까요?
-                                <br />
-                                삭제한 후기는 복구되지 않아요.
-                              </>
-                            ),
-                            onCancel: closeAlert,
-                            onConfirm: closeAlert,
-                          });
-                        }}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex justify-center self-stretch py-20 text-center text-base leading-6 font-normal tracking-normal text-zinc-300">
-                      등록된 내용이 없어요.
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
           </div>
         </div>
-
-        {activeTab === 1 && (
-          <div className="sticky bottom-0 w-full border-t border-zinc-100 bg-white py-4">
-            <div className="px-5">
-              <TextAreaSend placeholder="후기는 익명으로 남겨져요." />
-            </div>
-          </div>
-        )}
       </div>
 
       {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}

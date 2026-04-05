@@ -42,6 +42,14 @@ const MyPage = () => {
     window.open('https://pf.kakao.com/_Rjvxon', '_blank');
   };
 
+  const goBoothManage = (boothId) => {
+    navigate(`/admin/booth/${boothId}`);
+  };
+
+  const goShowManage = (showId) => {
+    navigate(`/admin/show/${showId}`);
+  };
+
   const handleLogoutClick = () => {
     openAlert({
       variant: 'logout',
@@ -148,6 +156,7 @@ const MyPage = () => {
             {/* 부스 관리 리스트 */}
             {myData.managed_booths?.map((booth) => (
               <button
+                onClick={() => goBoothManage(booth.id)}
                 key={booth.id}
                 className="flex flex-col items-start gap-1 rounded-lg bg-zinc-100 p-5"
               >
@@ -161,6 +170,7 @@ const MyPage = () => {
             {/* 공연 관리 리스트 */}
             {myData.managed_shows?.map((show) => (
               <button
+                onClick={() => goShowManage(show.id)}
                 key={show.id}
                 className="flex flex-col items-start gap-1 rounded-lg bg-zinc-100 p-5"
               >
