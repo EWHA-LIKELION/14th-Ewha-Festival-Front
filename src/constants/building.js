@@ -4,7 +4,7 @@ export const BOOTH_LOCATION = [
   { value: 'EWHA_POSCO_BUILDING', label: '포스코관' },
   { value: 'HAK_GWAN', label: '학관' },
   { value: 'GRASS_GROUND', label: '잔디광장' },
-
+  { value: 'SENTENNIAL_MUSEUM', label: '박물관' },
   { value: 'WELCH_RYANG_AUDITORIUM', label: '대강당' },
   { value: 'HYUUT_GIL', label: '휴웃길' },
   { value: 'EDUCATION_BUILDING', label: '교육관' },
@@ -14,6 +14,6 @@ export const BOOTH_LOCATION = [
 
 export const SHOW_LOCATION = [
   { value: 'STUDENT_UNION', label: '학생문화관' },
-  { value: 'SPORT_TRACK', label: '스포츠트랙' },
   { value: 'GRASS_GROUND', label: '잔디광장' },
+  { value: 'SPORT_TRACK', label: '스포츠트랙' },
 ];

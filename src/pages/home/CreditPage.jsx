@@ -53,17 +53,28 @@ const CreditPage = () => {
                     </h2>
 
                     {/* members */}
-                    {members.map((member, index) => (
-                      <div key={index} className="flex flex-col items-center gap-1">
-                        <div className="flex gap-1 text-sm font-semibold">
-                          <span className="text-emerald-800">{member.part}</span>
-                          <span className="text-zinc-300">|</span>
-                          <span className="text-emerald-600">{member.department}</span>
-                          <span className="text-zinc-800">{member.name}</span>
+                    {members.map((member, index) => {
+                      // 팀원이고, 이전 멤버와 part가 다르면 추가 gap 적용
+                      const isPrevPartDifferent =
+                        position === '팀원' && index > 0 && members[index - 1].part !== member.part;
+                      
+                      return (
+                        <div
+                          key={index}
+                          className={`flex flex-col items-center gap-1 ${isPrevPartDifferent ? 'mt-4' : ''}`}
+                        >
+                          <div className="flex gap-1 text-sm font-semibold">
+                            <span className="whitespace-pre text-emerald-800">{member.part}</span>
+                            <span className="text-zinc-300">|</span>
+                            <span className="text-emerald-600">{member.department}</span>
+                            <span className="pl-0.5 text-zinc-800">{member.name}</span>
+                          </div>
+                          <p className="text-center text-sm whitespace-pre-line text-zinc-500">
+                            {member.task}
+                          </p>
                         </div>
-                        <p className="text-sm text-zinc-500">{member.task}</p>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 ))}
               </div>

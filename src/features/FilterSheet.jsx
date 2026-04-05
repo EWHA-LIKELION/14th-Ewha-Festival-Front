@@ -66,11 +66,11 @@ const FilterSheet = () => {
         {/* 필터 내용 */}
         <div className="space-y-6">
           {/* 주관 */}
-          {config.hosts && (
+          {config.host && (
             <div className="space-y-2">
               <h3 className="text-base font-semibold text-black">주관</h3>
               <div className="flex flex-wrap gap-2">
-                {config.hosts.map((option) => (
+                {config.host.map((option) => (
                   <Chip
                     key={option.value}
                     variant="bottomsheet"
@@ -84,11 +84,11 @@ const FilterSheet = () => {
           )}
 
           {/* 카테고리 */}
-          {config.categories && (
+          {config.category && (
             <div className="space-y-2">
               <h3 className="text-base font-semibold text-black">카테고리</h3>
               <div className="flex flex-wrap gap-2">
-                {config.categories.map((option) => (
+                {config.category.map((option) => (
                   <Chip
                     key={option.value}
                     variant="bottomsheet"
@@ -102,11 +102,11 @@ const FilterSheet = () => {
           )}
 
           {/* 요일 */}
-          {config.days && (
+          {config.day && (
             <div className="space-y-2">
               <h3 className="text-base font-semibold text-black">요일</h3>
               <div className="flex flex-wrap gap-2">
-                {config.days.map((option) => (
+                {config.day.map((option) => (
                   <Chip
                     key={option.value}
                     variant="bottomsheet"
@@ -120,11 +120,11 @@ const FilterSheet = () => {
           )}
 
           {/* 위치 */}
-          {config.locations && (
+          {config.location && (
             <div className="space-y-2">
               <h3 className="text-base font-semibold text-black">위치</h3>
               <div className="flex flex-wrap gap-2">
-                {config.locations.map((option) => (
+                {config.location.map((option) => (
                   <Chip
                     key={option.value}
                     variant="bottomsheet"
