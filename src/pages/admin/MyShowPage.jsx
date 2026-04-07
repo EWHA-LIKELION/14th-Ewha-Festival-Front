@@ -12,6 +12,7 @@ import { SHOW_CATEGORY } from '@/constants/category';
 import { SHOW_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
 import { formatScheduleDate } from '@/utils/dateHelper';
+import { mapSnsUrls } from '@/utils/snsHelper';
 
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
@@ -85,14 +86,11 @@ const MyShowPage = () => {
   const locationName = show.location
     ? `${getLabel(show.location.building, SHOW_LOCATION)} ${padNumber(show.location.number)}`
     : '';
-  const snsLinks = {
-    instagram: show.sns?.find((url) => url.includes('instagram')),
-    kakaotalk: show.sns?.find((url) => url.includes('kakao')),
-  };
+  const snsLinks = mapSnsUrls(show.sns);
 
   return (
-    <div className="relative">
-      <Header className="absolute top-0" left="back" right="edit" background="white" />
+    <>
+      <Header left="back" right="edit" background="white" />
       <img
         src={show.thumbnail || '/images/default-image-large.png'}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
@@ -277,7 +275,7 @@ const MyShowPage = () => {
       </div>
 
       {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
-    </div>
+    </>
   );
 };
 
