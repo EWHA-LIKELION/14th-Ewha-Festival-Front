@@ -14,12 +14,14 @@ const defaultFilters = {
     day: [],
     location: [],
     sort: null,
+    excludeEnded: false,
   },
   show: {
     host: [],
     category: [],
     day: [],
     sort: null,
+    excludeEnded: false,
   },
   etc: {
     category: [],
@@ -31,12 +33,14 @@ const defaultFilters = {
     day: [],
     location: [],
     sort: null,
+    excludeEnded: false,
   },
   scrap_show: {
     host: [],
     category: [],
     day: [],
     sort: null,
+    excludeEnded: false,
   },
 };
 
