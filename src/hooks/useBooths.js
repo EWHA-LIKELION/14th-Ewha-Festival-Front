@@ -136,9 +136,7 @@ const transformBoothData = (booth) => {
   const daysText = getDaysText(dates);
 
   // 위치 텍스트 (예: 잔디광장03)
-  const locationText = location?.building
-    ? `${getLocationLabel(location.building)}${location.number ? padNumber(location.number) : ''}`
-    : '위치 미정';
+  const locationText = `${getLocationLabel(location.building)}${location.number ? padNumber(location.number) : ''}`;
 
   // 상태 배지
   // 부스: true(운영 중) / false(운영 종료)

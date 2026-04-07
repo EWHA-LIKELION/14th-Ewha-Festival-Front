@@ -2,25 +2,30 @@
  * BoothCard 컴포넌트
  */
 
-import React from 'react';
 import Badge from '@/components/Badge';
 import ScrapButton from '@/components/ScrapButton';
 
-const BoothCard = ({
-  name,
-  category,
-  days,
-  location,
-  description,
-  thumbnail,
-  menuList = [],
-  status = '',
-  onClick,
-}) => {
-  // 메뉴리스트에서 이미지 추출
-  const menuImages = menuList
-    ?.slice(0, 3)
-    .map((menu) => menu.image || '/images/default-image-xsmall.png');
+const BoothCard = ({ booth, onClick }) => {
+  if (!booth) return null;
+
+  // API 응답 데이터 (이미 변환된 데이터)
+  const {
+    id,
+    name,
+    description,
+    thumbnail,
+    product_images = [],
+    is_scrapped = false,
+    scraps_count = 0,
+    // useBooths에서 변환된 필드들
+    categoryText,
+    daysText,
+    locationText,
+    badgeState,
+  } = booth;
+
+  // 이미지 리스트 (최대 3개)
+  const images = product_images.filter((img) => img).slice(0, 3);
 
   return (
     <div
@@ -35,15 +40,14 @@ const BoothCard = ({
               {name || '부스명'}
             </h2>
 
-            {status && <Badge variant={status} />}
+            <Badge state={badgeState} />
           </div>
 
           <h3 className="text-sm leading-5 font-medium tracking-normal text-emerald-800">
-            {category || '카테고리'} | {days || '요일'} | {location || '위치'}
+            {categoryText || '카테고리'} | {daysText || '요일'} | {locationText || '위치'}
           </h3>
         </div>
-        {/* 스크랩 들어갈 자리 */}
-        <ScrapButton />
+        <ScrapButton id={id} type="booth" initialScrapped={is_scrapped} count={scraps_count} />
       </div>
 
       {/* 부스 소개글 */}
@@ -55,16 +59,18 @@ const BoothCard = ({
       <div className="mt-2.5 flex items-center gap-2 p-0">
         {/* 썸네일 */}
         <img
-          src={thumbnail || '/images/default-image-xsmall.png'}
+          src={thumbnail || '/icons/default-image.svg'}
+          alt={name}
           className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
         />
 
-        {/* 상세리스트 있을 때만 */}
-        {menuImages.length > 0 &&
-          menuImages.map((img, idx) => (
+        {/* 상품 이미지 (최대 3개) */}
+        {images.length > 0 &&
+          images.map((img, idx) => (
             <img
               key={idx}
               src={img}
+              alt={`${name} 상품 ${idx + 1}`}
               className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
             />
           ))}
