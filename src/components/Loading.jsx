@@ -31,30 +31,28 @@ const GlobalLoading = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        {/* 로딩 스피너 */}
-        <div className="relative inline-block overflow-visible">
-          <img
-            src="/icons/loading-spinner.svg"
-            alt="loading-spinner"
-            className="transition-transform duration-1000 ease-linear"
-            style={{ transform: `rotate(${rotation}deg)` }}
-          />
-          <img
-            src="/icons/loading-tail.svg"
-            alt="loading-tail"
-            className="absolute top-13 right-10"
-            style={{
-              minWidth: '187px',
-              maxWidth: '187px',
-            }}
-          />
-        </div>
+      <div className="reactive-width mx-auto flex h-full items-center justify-center overflow-hidden">
+        <div className="flex flex-col items-center gap-4">
+          {/* 로딩 스피너 */}
+          <div className="relative inline-block">
+            <img
+              src="/icons/loading-spinner.svg"
+              alt="loading-spinner"
+              className="transition-transform duration-1000 ease-linear"
+              style={{ transform: `rotate(${rotation}deg)` }}
+            />
+            <img
+              src="/icons/loading-tail.svg"
+              alt="loading-tail"
+              className="absolute top-13 right-10 w-[376.928px] max-w-none"
+            />
+          </div>
 
-        {/* 로딩 텍스트 */}
-        <p className="text-sm font-medium text-emerald-600">
-          잠시만 기다려주세요{'.'.repeat(dots)}
-        </p>
+          {/* 로딩 텍스트 */}
+          <p className="text-sm font-medium text-emerald-600">
+            잠시만 기다려주세요{'.'.repeat(dots)}
+          </p>
+        </div>
       </div>
     </div>
   );
