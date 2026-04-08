@@ -2,6 +2,7 @@
  * 부스 목록 조회 hook (무한 스크롤)
  */
 
+import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { BoothAPI } from '@/apis';
 import { BOOTH_CATEGORY } from '@/constants/category';
@@ -14,10 +15,10 @@ const LIMIT = 6; // 한 페이지당 6개씩 로드
 /**
  * 부스 목록 조회 (무한 스크롤)
  * @param {Object} filters - 필터 객체 { host: [], category: [], day: [], location: [], sort: null, excludeEnded: false }
- * @returns {Object} useInfiniteQuery 결과 (변환된 데이터 포함)
+ * @returns {Object} useInfiniteQuery 결과 + 변환된 booths, totalCount
  */
 export const useBooths = (filters = {}) => {
-  return useInfiniteQuery({
+  const queryResult = useInfiniteQuery({
     queryKey: ['booths', filters],
     queryFn: async ({ pageParam = 0 }) => {
       const params = buildQueryParams(filters, pageParam);
@@ -38,6 +39,22 @@ export const useBooths = (filters = {}) => {
     initialPageParam: 0,
     staleTime: 1000 * 60 * 5, // 5분
   });
+
+  // 모든 페이지의 부스 데이터 합치기
+  const booths = useMemo(() => {
+    return queryResult.data?.pages.flatMap((page) => page.result) || [];
+  }, [queryResult.data]);
+
+  // 전체 부스 개수
+  const totalCount = useMemo(() => {
+    return queryResult.data?.pages[0]?.count || 0;
+  }, [queryResult.data]);
+
+  return {
+    ...queryResult,
+    booths, // 변환된 부스 배열
+    totalCount, // 전체 개수
+  };
 };
 
 /**
