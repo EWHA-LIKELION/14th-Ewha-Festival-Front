@@ -2,7 +2,7 @@
  * 드래그 되고 Scrim 없는 Bottomsheet
  */
 
-import React, { useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const SNAP_HEIGHTS = {
@@ -23,9 +23,9 @@ const getNearestSize = (height) => {
   );
 };
 
-const BottomsheetDrag = ({ children }) => {
+const BottomsheetDrag = ({ children, scrollContainerRef }) => {
   const { sheetSize, setSheetSize, isDragging, setIsDragging } = useBottomsheetStore();
-  const [dragHeight, setDragHeight] = React.useState(null);
+  const [dragHeight, setDragHeight] = useState(null);
 
   const startYRef = useRef(0);
   const startHeightRef = useRef(0);
@@ -102,7 +102,10 @@ const BottomsheetDrag = ({ children }) => {
       </div>
 
       {/* 헤더 영역 padding */}
-      <div className={`relative w-full flex-1 overflow-y-auto ${isFull ? 'pt-18' : ''}`}>
+      <div
+        ref={scrollContainerRef}
+        className={`relative w-full flex-1 overflow-y-auto ${isFull ? 'pt-18' : ''}`}
+      >
         {children}
       </div>
 
