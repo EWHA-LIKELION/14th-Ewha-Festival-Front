@@ -2,20 +2,28 @@
  * ShowCard 컴포넌트
  */
 
-import React from 'react';
 import Badge from '@/components/Badge';
 import ScrapButton from '@/components/ScrapButton';
 
-const ShowCard = ({
-  thumbnail,
-  name,
-  category,
-  time,
-  location,
-  description,
-  status = '',
-  onClick,
-}) => {
+const ShowCard = ({ show, onClick }) => {
+  if (!show) return null;
+
+  // API 응답 데이터 (이미 변환된 데이터)
+  const {
+    id,
+    name,
+    description,
+    thumbnail,
+    is_scrapped = false,
+    scraps_count = 0,
+    // useShows에서 변환된 필드들
+    categoryText,
+    daysText,
+    timesText,
+    locationText,
+    badgeState,
+  } = show;
+
   return (
     <div
       onClick={onClick}
@@ -23,8 +31,9 @@ const ShowCard = ({
     >
       {/* 공연 이미지 */}
       <img
-        src={thumbnail || '/images/default-image-xsmall.png'}
-        className="flex aspect-square h-20 w-20 items-center justify-center rounded-md border border-zinc-100"
+        src={thumbnail || '/icons/default-image.svg'}
+        alt={name}
+        className="flex aspect-square h-20 w-20 items-center justify-center rounded-md border border-zinc-100 object-cover"
       />
 
       {/* 공연명 및 정보 */}
@@ -36,13 +45,14 @@ const ShowCard = ({
                 {name || '공연명'}
               </h2>
 
-              {status && <Badge variant={status} />}
+              <Badge state={badgeState} />
             </div>
             <h3 className="text-xs leading-4 font-medium tracking-normal text-emerald-800">
-              {category || '카테고리'} | {time || '요일'} | {location || '위치'}
+              {categoryText || '카테고리'} | {daysText || '요일'} {timesText && ` ${timesText}`} |{' '}
+              {locationText}
             </h3>
           </div>
-          <ScrapButton />
+          <ScrapButton id={id} type="show" initialScrapped={is_scrapped} count={scraps_count} />
         </div>
         <p className="line-clamp-2 overflow-hidden text-xs leading-4 font-normal tracking-normal text-ellipsis text-zinc-500">
           {description}
