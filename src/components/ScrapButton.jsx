@@ -3,8 +3,8 @@
  * Booth와 Show 모두 지원
  */
 
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuthStore from '@/store/useAuthStore';
 import { BoothAPI, ShowAPI } from '@/apis';
 
@@ -19,6 +19,16 @@ const ScrapButton = ({
   const [scrapCount, setScrapCount] = useState(count);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
+  const queryClient = useQueryClient();
+
+  // props 변경 시 state 동기화 (새로고침 시 최신 데이터 반영)
+  useEffect(() => {
+    setIsScrapped(initialScrapped);
+  }, [initialScrapped]);
+
+  useEffect(() => {
+    setScrapCount(count);
+  }, [count]);
 
   const formatCount = (num) => {
     if (!num) return '00';
@@ -56,6 +66,13 @@ const ScrapButton = ({
 
     // 성공 시
     onSuccess: (data, variables, context) => {
+      // TanStack Query 캐시 무효화 → 데이터 다시 불러오기
+      if (type === 'show') {
+        queryClient.invalidateQueries({ queryKey: ['shows'] });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['booths'] });
+      }
+
       if (onToggle) onToggle(!context.previousScrapped);
     },
 
