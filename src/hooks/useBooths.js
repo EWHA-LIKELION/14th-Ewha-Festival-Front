@@ -143,7 +143,7 @@ export const getDaysText = (dates) => {
  * @returns {Object} - 변환된 부스 데이터 (categoryText, daysText, locationText, badgeState 추가)
  */
 const transformBoothData = (booth) => {
-  const { category = [], schedule = [], location, is_ongoing } = booth;
+  const { category = [], schedule = [], location, is_ongoing, is_scraped, scraps_count } = booth;
 
   // 카테고리 한글 변환
   const categoryText = category.map((c) => getCategoryLabel(c)).join(', ');
@@ -168,6 +168,8 @@ const transformBoothData = (booth) => {
 
   return {
     ...booth,
+    is_scrapped: is_scraped, // API 필드명(is_scraped) → 컴포넌트 필드명(is_scrapped) 변환
+    scraps_count, // 명시적으로 포함
     categoryText, // 변환된 카테고리 텍스트
     daysText, // 변환된 요일 텍스트
     locationText, // 변환된 위치 텍스트
