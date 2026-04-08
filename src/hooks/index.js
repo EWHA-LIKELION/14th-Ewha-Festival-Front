@@ -4,4 +4,5 @@
 export { default as useImageUploader } from './useImageUploader.js';
 export { useSearch } from './useSearch.js';
 export { useBooths } from './useBooths.js';
+export { useShows } from './useShows.js';
 export { useInfiniteScroll } from './useInfiniteScroll.js';
