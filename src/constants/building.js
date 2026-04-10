@@ -15,5 +15,4 @@ export const BOOTH_LOCATION = [
 export const SHOW_LOCATION = [
   { value: 'STUDENT_UNION', label: '학생문화관' },
   { value: 'GRASS_GROUND', label: '잔디광장' },
-  { value: 'SPORT_TRACK', label: '스포츠트랙' },
 ];
