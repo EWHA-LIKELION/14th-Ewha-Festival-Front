@@ -10,17 +10,14 @@ const useAuthStore = create(
     (set) => ({
       isLoggedIn: false,
       showLoginSheet: false,
-      nickname: null,
 
       login: () => {
         set({ isLoggedIn: true, showLoginSheet: false });
       },
 
       logout: () => {
-        set({ isLoggedIn: false, nickname: null });
+        set({ isLoggedIn: false });
       },
-
-      setNickname: (nickname) => set({ nickname }),
 
       openLoginSheet: () => set({ showLoginSheet: true }),
       closeLoginSheet: () => set({ showLoginSheet: false }),
@@ -29,7 +26,6 @@ const useAuthStore = create(
       name: 'auth-store',
       partialize: (state) => ({
         isLoggedIn: state.isLoggedIn,
-        nickname: state.nickname,
       }),
     },
   ),
