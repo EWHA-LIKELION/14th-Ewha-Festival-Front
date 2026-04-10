@@ -7,7 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
-import { ShowAPI } from '@/apis';
+import { useShowDetail } from '@/hooks/useShowDetail';
 import { SHOW_CATEGORY } from '@/constants/category';
 import { SHOW_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
@@ -31,37 +31,29 @@ const MyShowPage = () => {
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const [show, setShow] = useState(null);
+  const { data: show, error, isLoading } = useShowDetail(id);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    const fetchShowDetail = async () => {
-      try {
-        showLoading();
-        const data = await ShowAPI.getShowById(id);
-        setShow(data);
-      } catch (error) {
-        console.error('공연 정보를 불러오는데 실패했습니다:', error);
-        openAlert({
-          variant: 'error',
-          title: '오류',
-          text: '공연 정보를 불러올 수 없습니다.',
-          onConfirm: () => {
-            closeAlert();
-            navigate(-1);
-          },
-        });
-      } finally {
-        hideLoading();
-      }
-    };
+    if (isLoading) showLoading();
+    else hideLoading();
+  }, [isLoading]);
 
-    if (id) {
-      fetchShowDetail();
-    }
-  }, [id]);
+  useEffect(() => {
+    if (!error) return;
+    console.error('공연 정보를 불러오는데 실패했습니다:', error);
+    openAlert({
+      variant: 'error',
+      title: '오류',
+      text: '공연 정보를 불러올 수 없습니다.',
+      onConfirm: () => {
+        closeAlert();
+        navigate(-1);
+      },
+    });
+  }, [error]);
 
   if (!show) {
     return null;
