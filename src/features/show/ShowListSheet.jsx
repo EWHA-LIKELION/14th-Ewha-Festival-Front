@@ -39,6 +39,10 @@ const ShowListSheet = () => {
     setFilter('show', 'excludeEnded', value);
   };
 
+  const goShowDetail = (showId) => {
+    navigate(`/map/shows/${showId}`);
+  };
+
   // 무한 스크롤
   useInfiniteScroll({
     scrollContainerRef,
@@ -90,7 +94,9 @@ const ShowListSheet = () => {
 
             {!isLoading &&
               !isError &&
-              shows.map((show) => <ShowCard key={show.id} show={show} />)}
+              shows.map((show) => (
+                <ShowCard key={show.id} show={show} onClick={() => goShowDetail(show.id)} />
+              ))}
 
             {/* 다음 페이지 로딩 */}
             {isFetchingNextPage && (

@@ -39,6 +39,10 @@ const BoothListSheet = () => {
     setFilter('booth', 'excludeEnded', value);
   };
 
+  const goBoothDetail = (boothId) => {
+    navigate(`/map/booths/${boothId}`);
+  };
+
   // 무한 스크롤
   useInfiniteScroll({
     scrollContainerRef,
@@ -90,7 +94,9 @@ const BoothListSheet = () => {
 
             {!isLoading &&
               !isError &&
-              booths.map((booth) => <BoothCard key={booth.id} booth={booth} />)}
+              booths.map((booth) => (
+                <BoothCard key={booth.id} booth={booth} onClick={() => goBoothDetail(booth.id)} />
+              ))}
 
             {/* 다음 페이지 로딩 */}
             {isFetchingNextPage && (
