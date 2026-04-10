@@ -2,8 +2,9 @@
  * 부스/공연 공지 페이지
  */
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
@@ -15,56 +16,43 @@ import { Accordion } from '@/components/Accordion';
 const NoticePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [notices, setNotices] = useState([]);
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
-  const isLoading = useLoadingStore((s) => s.isLoading);
 
   // ID로 부스/공연 구분
   const isBooth = id?.startsWith('BOOTH_');
   const isShow = id?.startsWith('SHOW_');
+
+  const { data: notices = [], error, isLoading } = useQuery({
+    queryKey: ['notices', id],
+    queryFn: () => (isBooth ? BoothAPI.getBoothNotices(id) : ShowAPI.getShowNotices(id)),
+    enabled: !!id && (isBooth || isShow),
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    const fetchNotices = async () => {
-      try {
-        showLoading();
-        let data;
+    if (isLoading) showLoading();
+    else hideLoading();
+  }, [isLoading]);
 
-        if (isBooth) {
-          data = await BoothAPI.getBoothNotices(id);
-        } else if (isShow) {
-          data = await ShowAPI.getShowNotices(id);
-        } else {
-          throw new Error('잘못된 ID 형식입니다.');
-        }
-
-        setNotices(data);
-      } catch (error) {
-        console.error('공지 정보를 불러오는데 실패했습니다:', error);
-        openAlert({
-          variant: 'error',
-          title: '오류',
-          text: '공지 정보를 불러올 수 없습니다.',
-          onConfirm: () => {
-            closeAlert();
-            navigate(-1);
-          },
-        });
-      } finally {
-        hideLoading();
-      }
-    };
-
-    if (id) {
-      fetchNotices();
-    }
-  }, [id]);
+  useEffect(() => {
+    if (!error) return;
+    console.error('공지 정보를 불러오는데 실패했습니다:', error);
+    openAlert({
+      variant: 'error',
+      title: '오류',
+      text: '공지 정보를 불러올 수 없습니다.',
+      onConfirm: () => {
+        closeAlert();
+        navigate(-1);
+      },
+    });
+  }, [error]);
 
   return (
     <>
