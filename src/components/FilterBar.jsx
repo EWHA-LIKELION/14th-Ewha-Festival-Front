@@ -18,7 +18,10 @@ function FilterBar({ type = 'booth' }) {
   const deleteFilter = useFilterStore((state) => state.deleteFilter);
   const openSheet = useFilterSheetStore((state) => state.openSheet);
 
-  const config = filterConfig[type] || {};
+  // scrap_ 접두사 제거하여 동일한 config 사용
+  const configType = type?.replace('scrap_', '') || type;
+  const config = filterConfig[configType] || {};
+
   const { host, category, day, location } = filters;
   const hasActiveFilter = !!(
     (host && host.length > 0) ||
