@@ -111,7 +111,7 @@ const ShowDetailSheet = () => {
                 <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                   {show.name || '공연명'}
                 </h2>
-                <ScrapButton count={show.scraps_count} />
+                <ScrapButton id={id} type="show" initialScrapped={show.is_scrapped} count={show.scraps_count} />
               </div>
 
               {(categoryText || show.is_ongoing !== undefined) && (

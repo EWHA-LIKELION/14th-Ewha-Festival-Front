@@ -96,7 +96,7 @@ const MyBoothPage = () => {
               <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                 {booth.name || '부스명'}
               </h2>
-              <ScrapButton count={booth.scraps_count} />
+              <ScrapButton id={id} type="booth" initialScrapped={booth.is_scrapped} count={booth.scraps_count} />
             </div>
 
             {(categoryText || booth.is_ongoing !== undefined) && (

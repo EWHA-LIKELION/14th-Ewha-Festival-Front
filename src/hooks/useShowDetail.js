@@ -11,6 +11,7 @@ export const useShowDetail = (id) => {
     queryFn: () => ShowAPI.getShowById(id),
     enabled: !!id,
     staleTime: 1000 * 60 * 5, // 5분
+    select: (data) => ({ ...data, is_scrapped: data.is_scraped }),
   });
 };
 
