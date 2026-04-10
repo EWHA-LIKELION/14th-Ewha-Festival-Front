@@ -2,11 +2,12 @@
  * 마이페이지
  */
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthAPI, MeAPI } from '@/apis';
+import { AuthAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
 import useAlertStore from '@/store/useAlertStore';
+import { useMyProfile } from '@/hooks/useMyProfile';
 import Header from '@/components/Header';
 import Button from '@/components/Button';
 import ImageCard from '@/components/Card/ImageCard';
@@ -14,13 +15,11 @@ import ImageCard from '@/components/Card/ImageCard';
 const MyPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const nickname = useAuthStore((s) => s.nickname);
-  const setNickname = useAuthStore((s) => s.setNickname);
   const logout = useAuthStore((s) => s.logout);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
-  const [myData, setMyData] = useState(null);
+  const { data: myData, error } = useMyProfile();
 
   const goScrap = () => {
     if (!isLoggedIn) {
@@ -72,37 +71,27 @@ const MyPage = () => {
   }, []);
 
   useEffect(() => {
-    const fetchMyData = async () => {
-      if (isLoggedIn) {
-        try {
-          const data = await MeAPI.getMyProfile();
-          setMyData(data);
-          setNickname(data?.nickname);
-        } catch (error) {
-          console.error('마이페이지 데이터 로드 실패:', error);
-
-          // 인증 실패 (401) → 로그아웃 처리
-          if (error?.response?.status === 401) {
-            openAlert({
-              variant: 'error',
-              title: '세션 만료',
-              text: '로그인 세션이 만료되었습니다. 다시 로그인해주세요.',
-              onConfirm: () => {
-                logout();
-                closeAlert();
-                openLoginSheet();
-              },
-            });
-          }
-        }
-      } else {
-        openLoginSheet();
-        setMyData(null);
-      }
-    };
-
-    fetchMyData();
+    if (!isLoggedIn) {
+      openLoginSheet();
+    }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (!error) return;
+    console.error('마이페이지 데이터 로드 실패:', error);
+    if (error?.response?.status === 401) {
+      openAlert({
+        variant: 'error',
+        title: '세션 만료',
+        text: '로그인 세션이 만료되었습니다. 다시 로그인해주세요.',
+        onConfirm: () => {
+          logout();
+          closeAlert();
+          openLoginSheet();
+        },
+      });
+    }
+  }, [error]);
 
   return (
     <>
@@ -113,7 +102,7 @@ const MyPage = () => {
           <div className="flex gap-1">
             {isLoggedIn ? (
               <>
-                <p className="text-emerald-600">{nickname}</p>
+                <p className="text-emerald-600">{myData?.nickname}</p>
                 <p>님</p>
               </>
             ) : (
