@@ -13,9 +13,9 @@ import { useShows, useInfiniteScroll } from '@/hooks';
 import Header from '@/components/Header';
 import Tab from '@/components/Tab';
 import FilterBar from '@/components/FilterBar';
-import ShowCard from '@/components/Card/ShowCard';
 import Checkbox from '@/components/Checkbox';
 import DropDown from '@/components/DropDown';
+import ShowCard from '@/components/Card/ShowCard';
 
 const ShowListSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
