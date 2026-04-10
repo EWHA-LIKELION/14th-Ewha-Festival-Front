@@ -4,6 +4,25 @@ import useAuthStore from '@/store/useAuthStore';
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true, // 쿠키 자동 포함
+  paramsSerializer: {
+    // 배열을 반복 파라미터로 직렬화 (category=FOOD&category=GOODS)
+    serialize: (params) => {
+      const parts = [];
+      Object.keys(params).forEach((key) => {
+        const value = params[key];
+        if (Array.isArray(value)) {
+          // 배열인 경우 반복해서 추가
+          value.forEach((v) => {
+            parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(v)}`);
+          });
+        } else if (value !== undefined && value !== null) {
+          // 일반 값
+          parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+        }
+      });
+      return parts.join('&');
+    },
+  },
 });
 
 // 🔥 응답 인터셉터
