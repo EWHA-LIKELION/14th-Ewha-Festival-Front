@@ -49,6 +49,14 @@ const MyPage = () => {
     navigate(`/admin/show/${showId}`);
   };
 
+  const goScrapDetail = (scrapId) => {
+    if (scrapId?.includes('BOOTH')) {
+      navigate(`/map/booths/${scrapId}`);
+    } else if (scrapId?.includes('SHOW')) {
+      navigate(`/map/shows/${scrapId}`);
+    }
+  };
+
   const handleLogoutClick = () => {
     openAlert({
       variant: 'logout',
@@ -129,7 +137,12 @@ const MyPage = () => {
           {(myData?.recent_scraps?.length ?? 0) > 0 ? (
             <div className="scrollbar-hide flex gap-1.5 overflow-x-auto px-5 whitespace-nowrap">
               {myData.recent_scraps.map((scrap) => (
-                <ImageCard key={scrap.id} name={scrap.name} thumbnail={scrap.thumbnail} />
+                <ImageCard
+                  key={scrap.id}
+                  name={scrap.name}
+                  thumbnail={scrap.thumbnail}
+                  onClick={() => goScrapDetail(scrap.id)}
+                />
               ))}
             </div>
           ) : (
