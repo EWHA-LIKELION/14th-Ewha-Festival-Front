@@ -13,9 +13,9 @@ import { useBooths, useInfiniteScroll } from '@/hooks';
 import Header from '@/components/Header';
 import Tab from '@/components/Tab';
 import FilterBar from '@/components/FilterBar';
-import BoothCard from '@/components/Card/BoothCard';
 import Checkbox from '@/components/Checkbox';
 import DropDown from '@/components/DropDown';
+import BoothCard from '@/components/Card/BoothCard';
 
 const BoothListSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());

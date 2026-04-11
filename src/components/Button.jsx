@@ -3,7 +3,7 @@
  *
  * @param {Object} props
  * @param {('sm'|'md'|'lg')} [props.size='lg'] - 버튼 크기
- * @param {('bg-green'|'bg-red'|'bg-gray'|'bg-white'|'bg-pink'|'text-black'|'text-gray'|'underline-green'|'underline-gray'|'underline-white')} [props.variant='bg-green'] - 버튼 스타일 variant
+ * @param {('bg-green'|'bg-red'|'bg-gray'|'bg-white'|'bg-pink'|'text-black'|'text-gray'|'underline-green'|'underline-gray'|'underline-lightgray'|'underline-white')} [props.variant='bg-green'] - 버튼 스타일 variant
  * @param {boolean} [props.circle=false] - 둥근 버튼 여부 (true일 경우 둥근 버튼, false이면서 bg있으면 사각형 버튼)
  * @param {boolean} [props.shadow=false] - 그림자 효과 여부
  * @param {boolean} [props.disabled=false] - 비활성화 상태
@@ -31,6 +31,7 @@ const STYLE = {
   'text-gray': 'text-zinc-500',
   'underline-green': 'text-emerald-600 underline underline-offset-2 !p-0',
   'underline-gray': 'text-zinc-500 underline underline-offset-2 !p-0',
+  'underline-lightgray': 'text-zinc-300 underline underline-offset-2 !p-0',
   'underline-white': 'text-white underline underline-offset-2 !p-0',
 };
 

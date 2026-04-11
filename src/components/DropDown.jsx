@@ -14,7 +14,10 @@ const DropDown = ({ type = 'booth' }) => {
   // 전역 상태에서 현재 타입의 필터 가져오기
   const filters = useFilterStore((state) => state.filters[type]) || {};
   const setFilter = useFilterStore((state) => state.setFilter);
-  const config = filterConfig[type] || {};
+
+  // scrap_ 접두사 제거하여 동일한 config 사용
+  const configType = type?.replace('scrap_', '') || type;
+  const config = filterConfig[configType] || {};
   const options = config.sort || [];
 
   // 스토어의 sort 값 또는 기본값 사용

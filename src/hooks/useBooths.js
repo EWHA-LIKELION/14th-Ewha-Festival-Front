@@ -2,15 +2,12 @@
  * 부스 목록 조회 hook (무한 스크롤)
  */
 
-import { useMemo } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { BoothAPI } from '@/apis';
 import { BOOTH_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { FESTIVAL_DAYS } from '@/constants/day';
 import { getLabel, padNumber } from '@/utils/labelHelper';
-
-const LIMIT = 6; // 한 페이지당 6개씩 로드
+import { useInfiniteList } from '@/hooks/useInfiniteList';
 
 /**
  * 부스 목록 조회 (무한 스크롤)
@@ -18,89 +15,15 @@ const LIMIT = 6; // 한 페이지당 6개씩 로드
  * @returns {Object} useInfiniteQuery 결과 + 변환된 booths, totalCount
  */
 export const useBooths = (filters = {}) => {
-  const queryResult = useInfiniteQuery({
-    queryKey: ['booths', filters],
-    queryFn: async ({ pageParam = 0 }) => {
-      const params = buildQueryParams(filters, pageParam);
-      const data = await BoothAPI.getBooths(params);
-
-      // API 응답 데이터를 변환하여 반환
-      return {
-        ...data,
-        result: data.result.map(transformBoothData),
-      };
-    },
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.next) {
-        return allPages.length * LIMIT;
-      }
-      return undefined;
-    },
-    initialPageParam: 0,
-    staleTime: 1000 * 60 * 5, // 5분
+  const { items: booths, totalCount, ...rest } = useInfiniteList({
+    queryKey: 'booths',
+    apiFn: BoothAPI.getBooths,
+    dataKey: 'result',
+    transform: transformBoothData,
+    limit: 6,
+    filters,
   });
-
-  // 모든 페이지의 부스 데이터 합치기
-  const booths = useMemo(() => {
-    return queryResult.data?.pages.flatMap((page) => page.result) || [];
-  }, [queryResult.data]);
-
-  // 전체 부스 개수
-  const totalCount = useMemo(() => {
-    return queryResult.data?.pages[0]?.count || 0;
-  }, [queryResult.data]);
-
-  return {
-    ...queryResult,
-    booths, // 변환된 부스 배열
-    totalCount, // 전체 개수
-  };
-};
-
-/**
- * 필터 객체를 쿼리 파라미터로 변환
- */
-const buildQueryParams = (filters, offset) => {
-  const params = {
-    limit: LIMIT,
-    offset,
-  };
-
-  // 종료 제외 로직
-  // - 체크박스 OFF (excludeEnded=false, 기본): is_ongoing=false 전송 → 종료 포함
-  // - 체크박스 ON (excludeEnded=true): is_ongoing=true 전송 → 종료 제외
-  if (filters.excludeEnded) {
-    params.is_ongoing = true; // 운영 중인 것만
-  } else {
-    params.is_ongoing = false; // 모두 포함
-  }
-
-  // 카테고리 (배열)
-  if (filters.category?.length > 0) {
-    params.category = filters.category;
-  }
-
-  // 위치 (location → building)
-  if (filters.location?.length > 0) {
-    params.building = filters.location;
-  }
-
-  // 주관 (host)
-  if (filters.host?.length > 0) {
-    params.host = filters.host;
-  }
-
-  // 요일 (day → date, YYYY-MM-DD 형식)
-  if (filters.day?.length > 0) {
-    params.date = filters.day;
-  }
-
-  // 정렬 (sort → sorting)
-  if (filters.sort) {
-    params.sorting = filters.sort;
-  }
-
-  return params;
+  return { ...rest, booths, totalCount };
 };
 
 /**
@@ -142,7 +65,7 @@ export const getDaysText = (dates) => {
  * @param {Object} booth - 원본 부스 데이터
  * @returns {Object} - 변환된 부스 데이터 (categoryText, daysText, locationText, badgeState 추가)
  */
-const transformBoothData = (booth) => {
+export const transformBoothData = (booth) => {
   const { category = [], schedule = [], location, is_ongoing, is_scraped, scraps_count } = booth;
 
   // 카테고리 한글 변환
