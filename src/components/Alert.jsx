@@ -1,31 +1,34 @@
 /**
- * Alert 컴포넌트 ( variant: delete-삭제, logout-로그아웃, error-오류)
+ * Alert 컴포넌트 ( variant: delete-삭제(기본), confirm-확인, error-오류)
  */
 
-const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) => {
+const Alert = ({
+  variant = 'delete',
+  title = '',
+  text = '',
+  confirmLabel = '확인',
+  onCancel,
+  onConfirm,
+}) => {
   const isDelete = variant === 'delete';
   const isError = variant === 'error';
 
   return (
     <div className="shadow-up-sm z-50 flex w-80 flex-col items-center justify-center gap-4 rounded-2xl bg-white p-6">
       <div
-        className={`flex flex-col items-center justify-center gap-2 ${isDelete ? 'p-0' : 'p-4'}`}
+        className={`flex flex-col items-center justify-center gap-2 ${isDelete || isError ? 'p-0' : 'p-4'}`}
       >
-        {/* 아이콘은 삭제인 경우만 */}
+        {/* 아이콘은 삭제/오류인 경우만 */}
         {(isDelete || isError) && <img src="/icons/icon-alert.svg" />}
 
         {/* 타이틀 */}
         <h2 className="mt-0.5 text-center text-lg leading-6 font-semibold tracking-normal text-zinc-800">
-          {isDelete && `${title} 삭제`}
-          {isError && title}
-          {variant === 'logout' && '로그아웃하시겠어요?'}
+          {isDelete ? `${title} 삭제` : title}
         </h2>
 
         {/* 문구 */}
         <p className="text-center text-sm leading-5 font-normal tracking-normal text-zinc-500">
-          {variant === 'delete' && text}
-          {variant === 'error' && text}
-          {variant === 'logout' && '언제든지 다시 로그인하실 수 있어요.'}
+          {text}
         </p>
       </div>
 
@@ -47,7 +50,7 @@ const Alert = ({ variant = 'delete', title = '', text, onCancel, onConfirm }) =>
             isDelete || isError ? 'bg-red-400 text-white' : 'bg-emerald-600 text-white'
           }`}
         >
-          {isDelete ? '삭제' : '확인'}
+          {isDelete ? '삭제' : confirmLabel}
         </button>
       </div>
     </div>
