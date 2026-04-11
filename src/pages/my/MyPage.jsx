@@ -227,7 +227,7 @@ const MyPage = () => {
           >
             축제준비위원회에게 문의하기
           </Button>
-          <Button variant="underline-gray" onClick={handleWithdrawalClick}>
+          <Button variant="underline-lightgray" onClick={handleWithdrawalClick}>
             회원 탈퇴하기
           </Button>
         </div>
