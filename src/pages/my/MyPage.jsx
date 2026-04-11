@@ -141,7 +141,7 @@ const MyPage = () => {
                   key={scrap.id}
                   name={scrap.name}
                   thumbnail={scrap.thumbnail}
-                  onClick={() => goScrapDetail(scrap.id)}
+                  onClick={() => goScrapDetail(scrap.target_id)}
                 />
               ))}
             </div>
