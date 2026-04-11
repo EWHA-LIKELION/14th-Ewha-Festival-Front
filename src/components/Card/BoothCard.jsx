@@ -30,7 +30,7 @@ const BoothCard = ({ booth, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="g-0 flex w-full flex-col items-start border-b border-zinc-200 bg-white py-5"
+      className="g-0 flex w-full cursor-pointer flex-col items-start border-b border-zinc-200 bg-white py-5"
     >
       {/* 부스명 및 위치 */}
       <div className="flex w-full items-start justify-between p-0">

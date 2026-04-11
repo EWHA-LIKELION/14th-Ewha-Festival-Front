@@ -7,7 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
-import { BoothAPI } from '@/apis';
+import { useBoothDetail } from '@/hooks/useBoothDetail';
 import { BOOTH_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
@@ -31,37 +31,29 @@ const MyBoothPage = () => {
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const [booth, setBooth] = useState(null);
+  const { data: booth, error, isLoading } = useBoothDetail(id);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    const fetchBoothDetail = async () => {
-      try {
-        showLoading();
-        const data = await BoothAPI.getBoothById(id);
-        setBooth(data);
-      } catch (error) {
-        console.error('부스 정보를 불러오는데 실패했습니다:', error);
-        openAlert({
-          variant: 'error',
-          title: '오류',
-          text: '부스 정보를 불러올 수 없습니다.',
-          onConfirm: () => {
-            closeAlert();
-            navigate(-1);
-          },
-        });
-      } finally {
-        hideLoading();
-      }
-    };
+    if (isLoading) showLoading();
+    else hideLoading();
+  }, [isLoading]);
 
-    if (id) {
-      fetchBoothDetail();
-    }
-  }, [id]);
+  useEffect(() => {
+    if (!error) return;
+    console.error('부스 정보를 불러오는데 실패했습니다:', error);
+    openAlert({
+      variant: 'error',
+      title: '오류',
+      text: '부스 정보를 불러올 수 없습니다.',
+      onConfirm: () => {
+        closeAlert();
+        navigate(-1);
+      },
+    });
+  }, [error]);
 
   if (!booth) {
     return null;
@@ -104,7 +96,7 @@ const MyBoothPage = () => {
               <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                 {booth.name || '부스명'}
               </h2>
-              <ScrapButton count={booth.scraps_count} />
+              <ScrapButton id={id} type="booth" initialScrapped={booth.is_scrapped} count={booth.scraps_count} />
             </div>
 
             {(categoryText || booth.is_ongoing !== undefined) && (

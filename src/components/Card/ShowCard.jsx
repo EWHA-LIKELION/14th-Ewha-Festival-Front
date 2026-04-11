@@ -27,7 +27,7 @@ const ShowCard = ({ show, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="flex w-full items-start gap-4 border-b border-zinc-200 bg-white py-5"
+      className="flex w-full cursor-pointer items-start gap-4 border-b border-zinc-200 bg-white py-5"
     >
       {/* 공연 이미지 */}
       <img

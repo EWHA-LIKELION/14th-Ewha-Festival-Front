@@ -7,7 +7,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 
-import { ShowAPI } from '@/apis';
+import { useShowDetail } from '@/hooks/useShowDetail';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import { SHOW_CATEGORY } from '@/constants/category';
 import { SHOW_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
@@ -31,36 +32,26 @@ const ShowDetailSheet = () => {
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const isFull = useBottomsheetStore((s) => s.isFull());
 
-  const [show, setShow] = useState(null);
+  const { data: show, error, isLoading } = useShowDetail(id);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    const fetchShowDetail = async () => {
-      try {
-        const data = await ShowAPI.getShowById(id);
-        setShow(data);
-      } catch (error) {
-        console.error('공연 정보를 불러오는데 실패했습니다:', error);
-        openAlert({
-          variant: 'error',
-          title: '오류',
-          text: '공연 정보를 불러올 수 없습니다.',
-          onConfirm: () => {
-            closeAlert();
-            navigate(-1);
-          },
-        });
-      }
-    };
+    if (!error) return;
+    console.error('공연 정보를 불러오는데 실패했습니다:', error);
+    openAlert({
+      variant: 'error',
+      title: '오류',
+      text: '공연 정보를 불러올 수 없습니다.',
+      onConfirm: () => {
+        closeAlert();
+        navigate(-1);
+      },
+    });
+  }, [error]);
 
-    if (id) {
-      fetchShowDetail();
-    }
-  }, [id]);
-
-  if (!show) {
+  if (!isLoading && !show) {
     return null;
   }
 
@@ -74,16 +65,16 @@ const ShowDetailSheet = () => {
     return 'closed'; // 공연 종료
   };
 
-  const categoryText = show.category ? getLabel(show.category, SHOW_CATEGORY) : '';
+  const categoryText = show?.category ? getLabel(show.category, SHOW_CATEGORY) : '';
   const scheduleText =
-    show.schedule?.map((s) => {
+    show?.schedule?.map((s) => {
       const formattedDate = formatScheduleDate(s.date);
       return `${formattedDate} ${s.time}`;
     }) || [];
-  const locationName = show.location
+  const locationName = show?.location
     ? `${getLabel(show.location.building, SHOW_LOCATION)} ${padNumber(show.location.number)}`
     : '';
-  const snsLinks = mapSnsUrls(show.sns);
+  const snsLinks = mapSnsUrls(show?.sns);
 
   return (
     <>
@@ -91,7 +82,12 @@ const ShowDetailSheet = () => {
         <Header left="back" background="transparent" />
       </div>
       <BottomsheetDrag>
-        {isFull && (
+        {isLoading && (
+          <div className="flex h-full items-center justify-center">
+            <LoadingSpinner />
+          </div>
+        )}
+        {!isLoading && isFull && (
           <>
             <Header left="back" isSheet />
             <img
@@ -107,7 +103,7 @@ const ShowDetailSheet = () => {
           </>
         )}
 
-        <div className="flex w-full flex-col items-center gap-9 pt-5">
+        {!isLoading && <div className="flex w-full flex-col items-center gap-9 pt-5">
           {/* 부스 설명 */}
           <div className="flex w-full flex-col gap-6 self-stretch px-5">
             <div className="flex w-full flex-col items-start gap-2 self-stretch">
@@ -115,7 +111,7 @@ const ShowDetailSheet = () => {
                 <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                   {show.name || '공연명'}
                 </h2>
-                <ScrapButton count={show.scraps_count} />
+                <ScrapButton id={id} type="show" initialScrapped={show.is_scrapped} count={show.scraps_count} />
               </div>
 
               {(categoryText || show.is_ongoing !== undefined) && (
@@ -274,7 +270,7 @@ const ShowDetailSheet = () => {
               )}
             </div>
           </div>
-        </div>
+        </div>}
 
         {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
       </BottomsheetDrag>
