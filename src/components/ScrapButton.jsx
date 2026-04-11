@@ -46,44 +46,64 @@ const ScrapButton = ({
     }
   };
 
+  const scrapQueryKey = type === 'show' ? ['myScrapShows'] : ['myScrapBooths'];
+  const listQueryKey = type === 'show' ? ['shows'] : ['booths'];
+
   // TanStack Query useMutation으로 스크랩 토글
   const mutation = useMutation({
     mutationFn: getToggleFunction(),
 
     // 낙관적 업데이트: API 호출 전 즉시 UI 변경
     onMutate: async () => {
-      const previousScrapped = isScrapped; // 현재 스크랩 상태 백업
-      const previousCount = scrapCount; // 현재 스크랩 수 백업
+      const previousScrapped = isScrapped;
+      const previousCount = scrapCount;
 
       // UI 즉시 업데이트
-      const nextScrapped = !isScrapped;
-      setIsScrapped(nextScrapped);
-      setScrapCount((prev) => (nextScrapped ? prev + 1 : Math.max(0, prev - 1)));
+      setIsScrapped(!isScrapped);
+      setScrapCount((prev) => (!isScrapped ? prev + 1 : Math.max(0, prev - 1)));
 
-      // 롤백을 위해 이전 상태 반환
+      // 스크랩 취소 시: 스크랩 목록 캐시에서 즉시 제거
+      if (isScrapped) {
+        await queryClient.cancelQueries({ queryKey: scrapQueryKey });
+        const previousScrapData = queryClient.getQueryData(scrapQueryKey);
+
+        queryClient.setQueryData(scrapQueryKey, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            pages: old.pages.map((page) => ({
+              ...page,
+              result: page.result.filter((item) => item.id !== id),
+            })),
+          };
+        });
+
+        return { previousScrapped, previousCount, previousScrapData };
+      }
+
       return { previousScrapped, previousCount };
     },
 
-    // 성공 시
-    onSuccess: (data, variables, context) => {
-      // TanStack Query 캐시 무효화 → 데이터 다시 불러오기
-      if (type === 'show') {
-        queryClient.invalidateQueries({ queryKey: ['shows'] });
-      } else {
-        queryClient.invalidateQueries({ queryKey: ['booths'] });
-      }
+    // 성공 시: 서버와 동기화
+    onSuccess: (_data, _variables, context) => {
+      queryClient.invalidateQueries({ queryKey: listQueryKey });
+      queryClient.invalidateQueries({ queryKey: scrapQueryKey });
 
       if (onToggle) onToggle(!context.previousScrapped);
     },
 
     // 실패 시 롤백
-    onError: (error, variables, context) => {
+    onError: (error, _variables, context) => {
       console.error('❌ [ScrapButton] Toggle failed:', error);
 
-      // 이전 상태로 복구
       if (context) {
         setIsScrapped(context.previousScrapped);
         setScrapCount(context.previousCount);
+
+        // 스크랩 목록 캐시도 복원
+        if (context.previousScrapData) {
+          queryClient.setQueryData(scrapQueryKey, context.previousScrapData);
+        }
       }
     },
   });
