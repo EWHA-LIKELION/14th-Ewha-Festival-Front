@@ -4,9 +4,12 @@
 
 import React from 'react';
 
-const ImageCard = ({ image, name }) => {
+const ImageCard = ({ image, name, onClick }) => {
   return (
-    <div className="flex w-21 shrink-0 flex-col items-start gap-1.5">
+    <div
+      onClick={onClick}
+      className="flex w-21 shrink-0 cursor-pointer flex-col items-start gap-1.5"
+    >
       <img
         src={image || '/images/default-image-xsmall.png'}
         alt={name}
