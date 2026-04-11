@@ -52,7 +52,9 @@ const MyPage = () => {
 
   const handleLogoutClick = () => {
     openAlert({
-      variant: 'logout',
+      variant: 'confirm',
+      title: '로그아웃하시겠어요?',
+      text: '언제든지 다시 로그인하실 수 있어요.',
       onConfirm: async () => {
         try {
           await AuthAPI.logout();
@@ -62,6 +64,26 @@ const MyPage = () => {
         } finally {
           closeAlert();
         }
+      },
+      onCancel: closeAlert,
+    });
+  };
+
+  const handleWithdrawalClick = () => {
+    openAlert({
+      variant: 'confirm',
+      title: '탈퇴하시겠어요?',
+      text: (
+        <>
+          탈퇴는 이화여대 멋쟁이사자처럼
+          <br />
+          카카오톡 채널에서 도와드리고 있어요.
+        </>
+      ),
+      confirmLabel: '채널 바로가기',
+      onConfirm: () => {
+        window.open('https://pf.kakao.com/_htxexfd', '_blank');
+        closeAlert();
       },
       onCancel: closeAlert,
     });
@@ -194,7 +216,7 @@ const MyPage = () => {
           </button>
         </div>
         {/* 축준위 문의 버튼 */}
-        <div className="mt-28 mb-14.5 flex justify-center">
+        <div className="mt-28 mb-6 flex flex-col items-center gap-6">
           <Button
             variant="bg-white"
             circle
@@ -204,6 +226,9 @@ const MyPage = () => {
             onClick={goFestivalKakaotalk}
           >
             축제준비위원회에게 문의하기
+          </Button>
+          <Button variant="underline-gray" onClick={handleWithdrawalClick}>
+            회원 탈퇴하기
           </Button>
         </div>
       </div>
