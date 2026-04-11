@@ -24,6 +24,7 @@ import NoticePage from '@/pages/NoticePage';
 
 // 마이
 import MyPage from '@/pages/my/MyPage';
+import ScrapPage from '@/pages/my/ScrapPage';
 
 // 지도
 import MapPage from '@/pages/map/MapPage';
@@ -61,7 +62,7 @@ function App() {
 
           {/* 마이 */}
           <Route path="my" element={<MyPage />} />
-          <Route path="my/scrap" element={<div>Scrap</div>} />
+          <Route path="my/scrap" element={<ScrapPage />} />
 
           {/* 지도 */}
           <Route path="map" element={<MapPage />}>
