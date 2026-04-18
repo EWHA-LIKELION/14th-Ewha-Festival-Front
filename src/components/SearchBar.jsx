@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '@/components/Button';
 import useSearchStore from '@/store/useSearchStore';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
@@ -11,6 +11,7 @@ import { useSearch } from '@/hooks';
 
 const SearchBar = ({ isMap = false }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
   const { searchQuery, setSearchQuery, clearSearchQuery, isFocused, setIsFocused } =
     useSearchStore();
@@ -18,16 +19,18 @@ const SearchBar = ({ isMap = false }) => {
 
   const handleBack = () => {
     clearSearchQuery();
+    setIsFocused(false);
     setSheetSize('medium');
-    navigate('/map/booths');
-    // 지도 초기화
+    if (location.key !== 'default') {
+      navigate(-1);
+    } else {
+      navigate('/map/booths');
+    }
   };
 
   const handleClear = () => {
     clearSearchQuery();
     setSheetSize('medium');
-    navigate('/map/booths');
-    // 지도 유지
   };
 
   const handleSearch = () => {
@@ -42,7 +45,9 @@ const SearchBar = ({ isMap = false }) => {
 
   const handleInputClick = () => {
     setIsFocused(true);
-    navigate('/search');
+    if (location.pathname !== '/search') {
+      navigate('/search');
+    }
   };
 
   return (
@@ -53,6 +58,7 @@ const SearchBar = ({ isMap = false }) => {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
+        autoFocus={location.pathname === '/search'}
         onClick={handleInputClick}
         className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'shadow-down-lg bg-white' : 'bg-zinc-100'} py-3 text-base font-normal text-zinc-800 placeholder:text-zinc-300 focus:outline-none ${
           isFocused || searchQuery ? 'px-12.5 ' : 'px-5'
@@ -71,6 +77,7 @@ const SearchBar = ({ isMap = false }) => {
         leftIcon="/icons/icon-chevronleft.svg"
         variant="text-black"
         size="md"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={handleBack}
         className={`absolute top-1/2 left-1 -translate-y-1/2 transition-opacity duration-100 ${
           isFocused || searchQuery ? 'opacity-100' : 'pointer-events-none opacity-0'

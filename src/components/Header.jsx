@@ -14,7 +14,7 @@
  * @param {Boolean} props.isSheet - 뒤로가기 버튼 클릭 핸들러 결정용
  */
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from '@/components/SearchBar';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 
@@ -29,6 +29,7 @@ const Header = ({
   isSheet = false,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   // 배경 스타일
@@ -42,7 +43,7 @@ const Header = ({
   const handleBack = () => {
     if (isSheet) {
       setSheetSize('medium');
-    } else if (window.history.length > 1) {
+    } else if (location.key !== 'default') {
       navigate(-1);
     } else {
       navigate('/');
