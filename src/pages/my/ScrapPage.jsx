@@ -2,7 +2,9 @@
  * 스크랩 페이지
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useAuthStore from '@/store/useAuthStore';
 
 import Header from '@/components/Header';
 import Tab from '@/components/Tab';
@@ -13,6 +15,16 @@ const totalCount = 0;
 
 const ScrapPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const navigate = useNavigate();
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/my');
+      openLoginSheet();
+    }
+  }, [isLoggedIn]);
 
   return (
     <>
