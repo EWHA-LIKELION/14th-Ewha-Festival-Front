@@ -2,8 +2,10 @@
  * 관리자 코드 인증 페이지
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AdminAPI } from '@/apis';
+import useAuthStore from '@/store/useAuthStore';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
 import Header from '@/components/Header';
@@ -15,40 +17,48 @@ const AdminConfirmPage = () => {
   const { showToast } = useToastStore();
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/my');
+      openLoginSheet();
+    }
+  }, [isLoggedIn]);
 
   const [boothNumber, setBoothNumber] = useState('');
   const [adminCode, setAdminCode] = useState('');
+  const [boothNumberError, setBoothNumberError] = useState('');
+  const [adminCodeError, setAdminCodeError] = useState('');
 
   const isDisabled = !boothNumber || !adminCode;
 
-  const showErrorAlert = () => {
-    openAlert({
-      variant: 'error',
-      title: '관리자 인증 오류',
-      text: (
-        <>
-          부스/공연 번호 혹은 관리자 코드를
-          <br />
-          다시 확인해주세요.
-        </>
-      ),
-      onConfirm: closeAlert,
-    });
-  };
-
-  //추후 수정 예정
   const handleConfirm = async () => {
+    setBoothNumberError('');
+    setAdminCodeError('');
     try {
-      //성공시 5-1-2페이지로 이동 및 토스트 생성
-      if (boothNumber === '123456' && adminCode === 'CODE1886') {
-        showToast('인증되었어요.');
-        navigate('/5-1-2');
-      } else {
-        showErrorAlert();
-      }
-      //db에 없을 경우 입력 값 유지
+      await AdminAPI.verifyAdminCode(boothNumber, adminCode);
+      showToast('인증되었어요.');
+      navigate('/my');
     } catch (error) {
-      showErrorAlert();
+      if (error?.programname || error?.password) {
+        setBoothNumberError(error.programname?.[0] ?? '');
+        setAdminCodeError(error.password?.[0] ?? '');
+      } else {
+        openAlert({
+          variant: 'error',
+          title: '관리자 인증 오류',
+          text: error?.detail ?? (
+            <>
+              부스/공연 번호 혹은 관리자 코드를
+              <br />
+              다시 확인해주세요.
+            </>
+          ),
+          onConfirm: closeAlert,
+        });
+      }
     }
   };
 
@@ -65,7 +75,12 @@ const AdminConfirmPage = () => {
             variant="round"
             value={boothNumber}
             placeholder="부스/공연 번호를 입력해주세요"
-            onChange={(value) => setBoothNumber(value)}
+            onChange={(value) => {
+              setBoothNumber(value);
+              setBoothNumberError('');
+            }}
+            error={!!boothNumberError}
+            helperText={boothNumberError}
           />
         </div>
 
@@ -77,7 +92,12 @@ const AdminConfirmPage = () => {
             variant="round"
             value={adminCode}
             placeholder="관리자 코드를 입력해주세요"
-            onChange={(value) => setAdminCode(value)}
+            onChange={(value) => {
+              setAdminCode(value);
+              setAdminCodeError('');
+            }}
+            error={!!adminCodeError}
+            helperText={adminCodeError}
           />
         </div>
 
