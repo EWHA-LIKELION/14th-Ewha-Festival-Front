@@ -3,4 +3,5 @@ export const HOST = [
   { value: 'COMMITTEE', label: '축준위' },
   { value: 'SPONSOR', label: '협찬' },
   { value: 'FLEA_MARKET', label: '플리마켓' },
+  { value: 'ETC', label: '기타' },
 ];
