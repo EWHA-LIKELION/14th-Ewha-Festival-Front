@@ -58,7 +58,6 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/kakao-redirect" element={<KakaoRedirect />} />
           <Route path="credit" element={<CreditPage />} />
-          <Route path="search" element={<SearchPage />} />
 
           {/* 마이 */}
           <Route path="my" element={<MyPage />} />
