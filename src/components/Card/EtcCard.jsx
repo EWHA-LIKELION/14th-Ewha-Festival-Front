@@ -2,9 +2,7 @@
  * TrashCard 컴포넌트 (selected)
  */
 
-import react from 'react';
-
-const TrashCard = ({ title, description, selected = false, onClick }) => {
+const EtcCard = ({ title, description, selected = false, onClick }) => {
   return (
     <div
       onClick={onClick}
@@ -24,4 +22,4 @@ const TrashCard = ({ title, description, selected = false, onClick }) => {
   );
 };
 
-export default TrashCard;
+export default EtcCard;

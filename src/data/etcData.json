@@ -1,136 +1,43 @@
 [
-  {
-    "category": "TRASH",
-    "location": "GRASS_GROUND",
-    "number": 2,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "SPORT_TRACK",
-    "number": 3,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "HYUUT_GIL",
-    "number": 4,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "WELCH_RYANG_AUDITORIUM",
-    "number": 5,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "EWHA_POSCO_BUILDING",
-    "number": 6,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "STUDENT_UNION",
-    "number": 7,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "HUMAN_ECOLOGY_BUILDING",
-    "number": 8,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "HAK_GWAN",
-    "number": 9,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "TRASH",
-    "location": "EDUCATION_BUILDING",
-    "number": 10,
-    "description": "00 부스 옆"
-  },
+  { "category": "TRASH", "location": "HYUUT_GIL", "number": 1 },
 
-  {
-    "category": "DISH",
-    "location": "GRASS_GROUND",
-    "number": 2,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "SPORT_TRACK",
-    "number": 3,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "HYUUT_GIL",
-    "number": 4,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "WELCH_RYANG_AUDITORIUM",
-    "number": 5,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "EWHA_POSCO_BUILDING",
-    "number": 6,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "STUDENT_UNION",
-    "number": 7,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "HUMAN_ECOLOGY_BUILDING",
-    "number": 8,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "HAK_GWAN",
-    "number": 9,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "DISH",
-    "location": "EDUCATION_BUILDING",
-    "number": 10,
-    "description": "00 부스 옆"
-  },
+  { "category": "GAS", "location": "HUMAN_ECOLOGY_BUILDING", "number": 1 },
+  { "category": "STUFF", "location": "HUMAN_ECOLOGY_BUILDING", "number": 1 },
+  { "category": "TRASH", "location": "HUMAN_ECOLOGY_BUILDING", "number": 1 },
 
-  {
-    "category": "GAS",
-    "location": "WELCH_RYANG_AUDITORIUM",
-    "number": 1,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "GAS",
-    "location": "EWHA_POSCO_BUILDING",
-    "number": 2,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "GAS",
-    "location": "STUDENT_UNION",
-    "number": 3,
-    "description": "00 부스 옆"
-  },
-  {
-    "category": "GAS",
-    "location": "HUMAN_ECOLOGY_BUILDING",
-    "number": 4,
-    "description": "00 부스 옆"
-  }
+  { "category": "TRASH", "location": "GRASS_GROUND", "number": 1 },
+  { "category": "TRASH", "location": "GRASS_GROUND", "number": 2 },
+
+  { "category": "STUFF", "location": "EWHA_POSCO_BUILDING", "number": 1 },
+  { "category": "TRASH", "location": "EWHA_POSCO_BUILDING", "number": 1 },
+  { "category": "TRASH", "location": "EWHA_POSCO_BUILDING", "number": 2 },
+
+  { "category": "STUFF", "location": "EDUCATION_BUILDING", "number": 1 },
+  { "category": "TRASH", "location": "EDUCATION_BUILDING", "number": 1 },
+
+  { "category": "FOOD", "location": "WELCH_RYANG_AUDITORIUM", "number": 1 },
+  { "category": "GAS", "location": "WELCH_RYANG_AUDITORIUM", "number": 1 },
+  { "category": "STUFF", "location": "WELCH_RYANG_AUDITORIUM", "number": 1 },
+  { "category": "TRASH", "location": "WELCH_RYANG_AUDITORIUM", "number": 1 },
+  { "category": "TRASH", "location": "WELCH_RYANG_AUDITORIUM", "number": 2 },
+
+  { "category": "STUFF", "location": "EWHA_SHINSEGAE_BUILDING", "number": 1 },
+  { "category": "TRASH", "location": "EWHA_SHINSEGAE_BUILDING", "number": 1 },
+
+  { "category": "STUFF", "location": "HAK_GWAN", "number": 1 },
+  { "category": "TRASH", "location": "HAK_GWAN", "number": 1 },
+
+  { "category": "DISH", "location": "STUDENT_UNION", "number": 1 },
+  { "category": "DISH", "location": "STUDENT_UNION", "number": 2 },
+  { "category": "GAS", "location": "STUDENT_UNION", "number": 1 },
+  { "category": "GAS", "location": "STUDENT_UNION", "number": 2 },
+  { "category": "STUFF", "location": "STUDENT_UNION", "number": 1 },
+  { "category": "TRASH", "location": "STUDENT_UNION", "number": 1 },
+
+  { "category": "DISH", "location": "SPORT_TRACK", "number": 1 },
+  { "category": "DISH", "location": "SPORT_TRACK", "number": 2 },
+  { "category": "FOOD", "location": "SPORT_TRACK", "number": 1 },
+  { "category": "TRASH", "location": "SPORT_TRACK", "number": 1 },
+  { "category": "TRASH", "location": "SPORT_TRACK", "number": 2 },
+  { "category": "TRASH", "location": "SPORT_TRACK", "number": 3 }
 ]

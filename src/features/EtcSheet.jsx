@@ -8,11 +8,11 @@ import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
 import Header from '@/components/Header';
 import FilterBar from '@/components/FilterBar';
-import TrashCard from '@/components/Card/TrashCard';
+import EtcCard from '@/components/Card/EtcCard';
 import etcData from '@/data/etcData.json';
 import { getLabel } from '@/utils/labelHelper';
 import { BOOTH_LOCATION } from '@/constants/building';
-import { ETC_CATEGORY } from '@/constants/category';
+import { ETC_CATEGORY, ETC_DESCRIPTION } from '@/constants/category';
 
 const EtcSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
@@ -26,8 +26,9 @@ const EtcSheet = () => {
     setSheetSize('medium');
   }, [setSheetSize]);
 
-  const handleSelectTrash = (item) => {
-    setSelected(`${item.category}-${item.number}`);
+  const handleSelectEtc = (item) => {
+    const id = `${item.category}-${item.number}`;
+    setSelected((prev) => (prev === id ? false : id));
   };
 
   // 필터링된 데이터
@@ -71,12 +72,12 @@ const EtcSheet = () => {
               <div key={location} className="flex flex-col gap-2">
                 <h1 className="text-lg font-semibold">{getLabel(location, BOOTH_LOCATION)}</h1>
                 {items.map((item) => (
-                  <TrashCard
+                  <EtcCard
                     key={`${item.category}-${item.number}`}
                     title={`${getLabel(item.category, ETC_CATEGORY)} ${item.number}`}
-                    description={item.description}
+                    description={ETC_DESCRIPTION[item.category]}
                     selected={selected === `${item.category}-${item.number}`}
-                    onClick={() => handleSelectTrash(item)}
+                    onClick={() => handleSelectEtc(item)}
                   />
                 ))}
               </div>
