@@ -4,6 +4,7 @@
   { "category": "GAS", "location": "HUMAN_ECOLOGY_BUILDING", "number": 1 },
   { "category": "STUFF", "location": "HUMAN_ECOLOGY_BUILDING", "number": 1 },
   { "category": "TRASH", "location": "HUMAN_ECOLOGY_BUILDING", "number": 1 },
+  { "category": "TRASH", "location": "HUMAN_ECOLOGY_BUILDING", "number": 2 },
 
   { "category": "TRASH", "location": "GRASS_GROUND", "number": 1 },
   { "category": "TRASH", "location": "GRASS_GROUND", "number": 2 },
