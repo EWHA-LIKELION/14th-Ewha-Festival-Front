@@ -22,12 +22,12 @@ const AdminConfirmPage = () => {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate('/my');
-  //     openLoginSheet();
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/my');
+      openLoginSheet();
+    }
+  }, [isLoggedIn]);
 
   const [boothNumber, setBoothNumber] = useState('');
   const [adminCode, setAdminCode] = useState('');
