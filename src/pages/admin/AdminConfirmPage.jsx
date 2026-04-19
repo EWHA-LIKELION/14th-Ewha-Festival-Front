@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { AdminAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
 import useAlertStore from '@/store/useAlertStore';
@@ -14,18 +15,19 @@ import Button from '@/components/Button';
 
 const AdminConfirmPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { showToast } = useToastStore();
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/my');
-      openLoginSheet();
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     navigate('/my');
+  //     openLoginSheet();
+  //   }
+  // }, [isLoggedIn]);
 
   const [boothNumber, setBoothNumber] = useState('');
   const [adminCode, setAdminCode] = useState('');
@@ -39,6 +41,7 @@ const AdminConfirmPage = () => {
     setAdminCodeError('');
     try {
       await AdminAPI.verifyAdminCode(boothNumber, adminCode);
+      await queryClient.invalidateQueries({ queryKey: ['myProfile'] });
       showToast('인증되었어요.');
       navigate('/my');
     } catch (error) {
