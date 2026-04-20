@@ -17,6 +17,7 @@ import FilterBar from '@/components/FilterBar';
 import Checkbox from '@/components/Checkbox';
 import DropDown from '@/components/DropDown';
 import ShowCard from '@/components/Card/ShowCard';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const ShowListSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
@@ -72,10 +73,10 @@ const ShowListSheet = () => {
       </div>
       <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
         {isFull && <Header center="search" />}
-        <div className="flex flex-col gap-4 p-5">
+        <div className="flex h-full flex-col gap-4 p-5">
           <Tab tabs={['부스', '공연']} activeIndex={activeTabIndex} onChange={handleTabChange} />
           <FilterBar type="show" />
-          <div className="flex flex-col">
+          <div className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center justify-between text-sm font-normal text-zinc-500">
               총 {totalCount}개
               <div className="flex items-center gap-2">
@@ -91,7 +92,11 @@ const ShowListSheet = () => {
             </div>
 
             {/* 로딩 */}
-            {isLoading && <div className="py-24 text-center text-zinc-300">로딩 중...</div>}
+            {isLoading && (
+              <div className="flex h-full items-center justify-center">
+                <LoadingSpinner />
+              </div>
+            )}
 
             {/* 에러 */}
             {isError && (
