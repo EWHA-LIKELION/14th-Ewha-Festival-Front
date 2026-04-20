@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useFilterStore from '@/store/useFilterStore';
+import useLoadingStore from '@/store/useLoadingStore';
 import { useMyScrapShows } from '@/hooks/useMyScrap';
 
 import FilterBar from '@/components/FilterBar';
@@ -22,6 +23,12 @@ const ScrapShow = () => {
   const { shows, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMyScrapShows(scrapShowFilters);
 
+  const { showLoading, hideLoading } = useLoadingStore();
+  useEffect(() => {
+    if (isLoading) showLoading();
+    else hideLoading();
+  }, [isLoading]);
+
   const handleShowExcludeEndedChange = (value) => {
     setFilter('scrap_show', 'excludeEnded', value);
   };
@@ -30,7 +37,6 @@ const ScrapShow = () => {
     scrapShowFilters.category.length > 0 ||
     scrapShowFilters.host.length > 0 ||
     scrapShowFilters.day.length > 0 ||
-    scrapShowFilters.sort !== null ||
     scrapShowFilters.excludeEnded;
 
   // 윈도우 스크롤 기반 무한 스크롤
@@ -62,9 +68,6 @@ const ScrapShow = () => {
             <DropDown type="scrap_show" />
           </div>
         </div>
-
-        {/* 로딩 */}
-        {isLoading && <div className="py-24 text-center text-zinc-300">로딩 중...</div>}
 
         {/* 에러 */}
         {isError && (
