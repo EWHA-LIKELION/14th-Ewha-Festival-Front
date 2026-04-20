@@ -8,7 +8,8 @@ import { useNavigate, useMatch } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
-import { useShows, useInfiniteScroll } from '@/hooks';
+import { useShows, useInfiniteScroll, useSearchResults } from '@/hooks';
+import useSearchStore from '@/store/useSearchStore';
 
 import Header from '@/components/Header';
 import Tab from '@/components/Tab';
@@ -27,9 +28,21 @@ const ShowListSheet = () => {
   const matchShows = useMatch('/map/shows');
   const activeTabIndex = matchShows ? 1 : 0;
 
-  // TanStack Query로 공연 데이터 가져오기
-  const { shows, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useShows(showFilters);
+  const searchQuery = useSearchStore((s) => s.searchQuery);
+  const isSearchMode = !!searchQuery;
+
+  const showsQuery = useShows(showFilters);
+  const searchResultsQuery = useSearchResults(searchQuery);
+
+  const shows = isSearchMode ? searchResultsQuery.shows : showsQuery.shows;
+  const totalCount = isSearchMode ? searchResultsQuery.showCount : showsQuery.totalCount;
+  const isLoading = isSearchMode ? searchResultsQuery.isLoading : showsQuery.isLoading;
+  const isError = isSearchMode ? searchResultsQuery.isError : showsQuery.isError;
+  const fetchNextPage = isSearchMode ? searchResultsQuery.fetchNextPage : showsQuery.fetchNextPage;
+  const hasNextPage = isSearchMode ? searchResultsQuery.hasNextPage : showsQuery.hasNextPage;
+  const isFetchingNextPage = isSearchMode
+    ? searchResultsQuery.isFetchingNextPage
+    : showsQuery.isFetchingNextPage;
 
   const handleTabChange = (index) => {
     navigate(index === 0 ? '/map/booths' : '/map/shows');

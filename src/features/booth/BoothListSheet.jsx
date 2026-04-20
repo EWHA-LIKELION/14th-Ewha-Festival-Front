@@ -8,7 +8,8 @@ import { useNavigate, useMatch } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
-import { useBooths, useInfiniteScroll } from '@/hooks';
+import { useBooths, useInfiniteScroll, useSearchResults } from '@/hooks';
+import useSearchStore from '@/store/useSearchStore';
 
 import Header from '@/components/Header';
 import Tab from '@/components/Tab';
@@ -27,9 +28,21 @@ const BoothListSheet = () => {
   const matchBooths = useMatch('/map/booths');
   const activeTabIndex = matchBooths ? 0 : 1;
 
-  // TanStack Query로 부스 데이터 가져오기
-  const { booths, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useBooths(boothFilters);
+  const searchQuery = useSearchStore((s) => s.searchQuery);
+  const isSearchMode = !!searchQuery;
+
+  const boothsQuery = useBooths(boothFilters);
+  const searchResultsQuery = useSearchResults(searchQuery);
+
+  const booths = isSearchMode ? searchResultsQuery.booths : boothsQuery.booths;
+  const totalCount = isSearchMode ? searchResultsQuery.boothCount : boothsQuery.totalCount;
+  const isLoading = isSearchMode ? searchResultsQuery.isLoading : boothsQuery.isLoading;
+  const isError = isSearchMode ? searchResultsQuery.isError : boothsQuery.isError;
+  const fetchNextPage = isSearchMode ? searchResultsQuery.fetchNextPage : boothsQuery.fetchNextPage;
+  const hasNextPage = isSearchMode ? searchResultsQuery.hasNextPage : boothsQuery.hasNextPage;
+  const isFetchingNextPage = isSearchMode
+    ? searchResultsQuery.isFetchingNextPage
+    : boothsQuery.isFetchingNextPage;
 
   const handleTabChange = (index) => {
     navigate(index === 0 ? '/map/booths' : '/map/shows');

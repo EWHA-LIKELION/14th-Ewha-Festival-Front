@@ -21,10 +21,7 @@ export const useSearch = () => {
     setSearchQuery(trimmed);
     addRecentSearch(trimmed);
 
-    // 검색 결과 페이지로 이동
-    console.log('검색 실행:', trimmed);
-    // TODO: 검색 결과 페이지 구현 후 주석 해제
-    // navigate(`/search-result?q=${encodeURIComponent(trimmed)}`);
+    navigate('/map/booths');
   };
 
   return { executeSearch };
