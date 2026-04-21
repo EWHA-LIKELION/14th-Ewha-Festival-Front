@@ -4,8 +4,8 @@
 
 import api from '@/apis/api';
 
-export const verifyAdminCode = async (code) => {
-  const { data } = await api.post('/accounts/admin/verify', { code });
+export const verifyAdminCode = async (programname, password) => {
+  const { data } = await api.post('/accounts/permission/', { programname, password });
   return data;
 };
 
