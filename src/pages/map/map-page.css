@@ -3,41 +3,127 @@ svg {
   pointer-events: none;
 }
 
-/* 클릭 가능한 요소 활성화 */
-svg [id^='building-'],
-svg [id^='Map icon button'] {
+/* 클릭 가능한 요소 활성화 — buildings */
+.building-layer svg [id='STUDENT_UNION'],
+.building-layer svg [id='SPORT_TRACK'],
+.building-layer svg [id='HYUUT_GIL'],
+.building-layer svg [id='HUMAN_ECOLOGY_BUILDING'],
+.building-layer svg [id='HAK_GWAN'],
+.building-layer svg [id='GRASS_GROUND'],
+.building-layer svg [id='EWHA_SHINSEGAE_BUILDING'],
+.building-layer svg [id^='EWHA_POSCO_BUILDING'],
+.building-layer svg [id^='EDUCATION_BUILDING'],
+.building-layer svg [id='WELCH_RYANG_AUDITORIUM'],
+.building-layer svg [id='SENTENNIAL_MUSEUM'] {
   cursor: pointer;
   pointer-events: all;
   transition: filter 0.15s ease;
 }
 
-svg [id^='Map icon button'] * {
+.building-layer svg [id='STUDENT_UNION'] *,
+.building-layer svg [id='SPORT_TRACK'] *,
+.building-layer svg [id='HYUUT_GIL'] *,
+.building-layer svg [id='HUMAN_ECOLOGY_BUILDING'] *,
+.building-layer svg [id='HAK_GWAN'] *,
+.building-layer svg [id='GRASS_GROUND'] *,
+.building-layer svg [id='EWHA_SHINSEGAE_BUILDING'] *,
+.building-layer svg [id^='EWHA_POSCO_BUILDING'] *,
+.building-layer svg [id^='EDUCATION_BUILDING'] *,
+.building-layer svg [id='WELCH_RYANG_AUDITORIUM'] *,
+.building-layer svg [id='SENTENNIAL_MUSEUM'] * {
   pointer-events: all;
 }
 
-/* hover */
-svg [id^='building-']:hover {
-  filter: brightness(0.9);
+/* 클릭 가능한 요소 활성화 — pois */
+.pois-layer svg [id*='BOOTH'],
+.pois-layer svg [id*='TRASH'],
+.pois-layer svg [id*='DISH'],
+.pois-layer svg [id*='GAS'],
+.pois-layer svg [id*='STUFF'],
+.pois-layer svg [id*='FOOD'] {
+  cursor: pointer;
+  pointer-events: all;
+  transition: filter 0.15s ease;
 }
 
-svg [id^='Map icon button']:hover {
+.pois-layer svg [id*='BOOTH'] *,
+.pois-layer svg [id*='TRASH'] *,
+.pois-layer svg [id*='DISH'] *,
+.pois-layer svg [id*='GAS'] *,
+.pois-layer svg [id*='STUFF'] *,
+.pois-layer svg [id*='FOOD'] * {
+  pointer-events: visiblePainted;
+}
+
+/* hover — buildings */
+.building-layer svg [id='STUDENT_UNION']:hover,
+.building-layer svg [id='SPORT_TRACK']:hover,
+.building-layer svg [id='HYUUT_GIL']:hover,
+.building-layer svg [id='HUMAN_ECOLOGY_BUILDING']:hover,
+.building-layer svg [id='HAK_GWAN']:hover,
+.building-layer svg [id='GRASS_GROUND']:hover,
+.building-layer svg [id='EWHA_SHINSEGAE_BUILDING']:hover,
+.building-layer svg [id^='EWHA_POSCO_BUILDING']:hover,
+.building-layer svg [id^='EDUCATION_BUILDING']:hover,
+.building-layer svg [id='WELCH_RYANG_AUDITORIUM']:hover,
+.building-layer svg [id='SENTENNIAL_MUSEUM']:hover {
   filter: brightness(0.85);
 }
 
-/* active - 배경 주황색 */
-[id^='Map icon button'].is-active > path[fill='#fefce8' i],
-[id^='Map icon button'].is-active path[fill='#fefce8' i] {
+/* hover — pois */
+.pois-layer svg [id*='BOOTH']:hover,
+.pois-layer svg [id*='TRASH']:hover,
+.pois-layer svg [id*='DISH']:hover,
+.pois-layer svg [id*='GAS']:hover,
+.pois-layer svg [id*='STUFF']:hover,
+.pois-layer svg [id*='FOOD']:hover {
+  filter: brightness(0.85);
+}
+
+/* building active */
+.building-layer [id='STUDENT_UNION'].is-active,
+.building-layer [id='SPORT_TRACK'].is-active,
+.building-layer [id='HYUUT_GIL'].is-active,
+.building-layer [id='HUMAN_ECOLOGY_BUILDING'].is-active,
+.building-layer [id='HAK_GWAN'].is-active,
+.building-layer [id='GRASS_GROUND'].is-active,
+.building-layer [id='EWHA_SHINSEGAE_BUILDING'].is-active,
+.building-layer [id^='EWHA_POSCO_BUILDING'].is-active,
+.building-layer [id^='EDUCATION_BUILDING'].is-active,
+.building-layer [id='WELCH_RYANG_AUDITORIUM'].is-active,
+.building-layer [id='SENTENNIAL_MUSEUM'].is-active {
+  fill: #aad6b5 !important;
+  stroke: #81b783 !important;
+}
+
+/* BOOTH active - 배경 주황색, 텍스트 흰색 */
+[data-category='BOOTH'].is-active path[fill='#FEFCE8'] {
   fill: #fd9a00 !important;
 }
-
-/* active - 텍스트 흰색 */
-[id^='Map icon button'].is-active > path[fill='#fd9a00' i],
-[id^='Map icon button'].is-active path[fill='#fd9a00' i] {
+[data-category='BOOTH'].is-active path[fill='#FD9A00'] {
   fill: #ffffff !important;
 }
-
-/* active - 테두리 (Map icon button 한정) */
-[id^='Map icon button'].is-active > path[stroke='#fef3c6' i],
-[id^='Map icon button'].is-active path[stroke='#fef3c6' i] {
+[data-category='BOOTH'].is-active path[stroke='#FEE685'] {
   stroke: #fd9a00 !important;
+}
+
+/* TRASH active */
+[data-category='TRASH'].is-active path[fill='#FF5B5E'] {
+  fill: #e9423c !important;
+}
+
+/* DISH, GAS active */
+[data-category='DISH'].is-active path[fill='#56A85B'],
+[data-category='GAS'].is-active path[fill='#56A85B'] {
+  fill: #316e34 !important;
+}
+
+/* STUFF active */
+[data-category='STUFF'].is-active path[fill='#00BB8F'] {
+  fill: #007864 !important;
+}
+
+/* FOOD active */
+[data-category='FOOD'].is-active path[fill='#FEFCE8'] {
+  filter: drop-shadow(0 0 6px #fb923c); /* 추후 수정 필요 */
 }
