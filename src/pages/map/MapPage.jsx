@@ -7,11 +7,17 @@ import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet } from 'react-router-dom';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
+import useFilterStore from '@/store/useFilterStore';
+import { MAP_ZOOM_LEVELS } from '@/constants/mapCoordinates';
 
-const savedTransform = { scale: 1, positionX: 0, positionY: 0 };
+const savedTransform = { scale: MAP_ZOOM_LEVELS.ZL2, positionX: 0, positionY: 0 };
 
 const MapPage = () => {
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
+  const boothLocation = useFilterStore((s) => s.filters.booth.location);
+  const etcLocation = useFilterStore((s) => s.filters.etc.location);
+  const setFilter = useFilterStore((s) => s.setFilter);
+  const filtersRef = useRef({ boothLocation, etcLocation });
 
   const navigate = useNavigate();
   const mapRef = useRef(null);
@@ -55,57 +61,115 @@ const MapPage = () => {
       .then((data) => setPoisSvg(data));
   }, []);
 
-  // 건물 클릭 이벤트
+  const BUILDING_IDS = [
+    'STUDENT_UNION',
+    'SPORT_TRACK',
+    'HYUUT_GIL',
+    'HUMAN_ECOLOGY_BUILDING',
+    'HAK_GWAN',
+    'GRASS_GROUND',
+    'EWHA_SHINSEGAE_BUILDING',
+    'EWHA_POSCO_BUILDING',
+    'EDUCATION_BUILDING',
+    'WELCH_RYANG_AUDITORIUM',
+    'SENTENNIAL_MUSEUM',
+  ];
+
+  // filtersRef를 최신 상태로 유지 (클릭 핸들러 클로저에서 사용)
+  useEffect(() => {
+    filtersRef.current = { boothLocation, etcLocation };
+  });
+
+  // 필터 location → 지도 building is-active 동기화
+  useEffect(() => {
+    if (!buildingLayerRef.current || !buildingSvg) return;
+
+    buildingLayerRef.current.querySelectorAll('.is-active').forEach((el) => {
+      el.classList.remove('is-active');
+    });
+
+    const selected = new Set([...boothLocation, ...etcLocation]);
+    selected.forEach((id) => {
+      buildingLayerRef.current.querySelectorAll(`[id^="${id}"]`).forEach((el) => {
+        el.classList.add('is-active');
+      });
+    });
+  }, [boothLocation, etcLocation, buildingSvg]);
+
+  // 건물 클릭 → 필터 location 토글
   useEffect(() => {
     if (!buildingLayerRef.current) return;
+
+    const buildingSelector = BUILDING_IDS.map((id) => `[id^="${id}"]`).join(',');
 
     const handleClick = (e) => {
       e.stopPropagation();
       if (!(e.target instanceof SVGElement)) return;
 
-      const target = e.target.closest('[id^="building-"]');
+      const target = e.target.closest(buildingSelector);
       if (!target) return;
 
-      if (target.classList.contains('is-active')) {
-        target.classList.remove('is-active');
-        return;
-      }
+      const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
+      const { boothLocation: bl, etcLocation: el } = filtersRef.current;
+      const isActive = bl.includes(normalizedId) || el.includes(normalizedId);
 
-      // building active 초기화 (pois가 아닌 building에서 초기화)
-      buildingLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
-        el.classList.remove('is-active');
-      });
+      const toggle = (current) =>
+        isActive ? current.filter((v) => v !== normalizedId) : [...current, normalizedId];
 
-      target.classList.add('is-active');
-      console.log(`🏢 건물 클릭: ${target.id}`);
+      setFilter('booth', 'location', toggle(bl));
+      setFilter('etc', 'location', toggle(el));
+
+      console.log(`🏢 건물 클릭: ${normalizedId}`);
+
+      // 포커스 이동 (좌표 준비 후 활성화)
+      // const center = BUILDING_CENTERS[normalizedId];
+      // if (center && transformRef.current && mapRef.current) {
+      //   const W = mapRef.current.clientWidth;
+      //   const H = mapRef.current.clientHeight;
+      //   const scale = toScale(MAP_CLICK_ZOOM_SCALE);
+      //   transformRef.current.setTransform(
+      //     W / 2 - center.x * scale,
+      //     H / 2 - center.y * scale,
+      //     scale,
+      //     400,
+      //   );
+      // }
     };
 
     buildingLayerRef.current.addEventListener('click', handleClick);
     return () => buildingLayerRef.current?.removeEventListener('click', handleClick);
-  }, [buildingSvg]);
+  }, [buildingSvg, setFilter]);
 
   // Pois 클릭 이벤트
   useEffect(() => {
     if (!poisLayerRef.current) return;
 
+    const CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'CAS', 'STUFF', 'FOOD'];
+    const selector = CATEGORIES.map((cat) => `[id*="${cat}"]`).join(',');
+
     const handleClick = (e) => {
       e.stopPropagation();
       if (!(e.target instanceof SVGElement)) return;
 
-      const target = e.target.closest('[id^="Map icon button"]');
+      const target = e.target.closest(selector);
       if (!target) return;
+
+      const category = CATEGORIES.find((cat) => target.id.includes(cat));
 
       if (target.classList.contains('is-active')) {
         target.classList.remove('is-active');
+        delete target.dataset.category;
         return;
       }
 
       poisLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
         el.classList.remove('is-active');
+        delete el.dataset.category;
       });
 
       target.classList.add('is-active');
-      console.log(`🎪 부스 클릭: ${target.id}`);
+      target.dataset.category = category;
+      console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
     };
 
     poisLayerRef.current.addEventListener('click', handleClick);
@@ -163,7 +227,7 @@ const MapPage = () => {
             />
             <div
               ref={buildingLayerRef}
-              className="absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
+              className="building-layer absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
               dangerouslySetInnerHTML={{ __html: buildingSvg }}
               style={{ pointerEvents: 'auto' }}
             />
@@ -174,9 +238,9 @@ const MapPage = () => {
             />
             <div
               ref={poisLayerRef}
-              className="absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
+              className="pois-layer absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
               dangerouslySetInnerHTML={{ __html: poisSvg }}
-              style={{ pointerEvents: 'auto' }}
+              style={{ pointerEvents: 'none' }}
             />
           </div>
         </TransformComponent>
