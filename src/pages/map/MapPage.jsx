@@ -17,10 +17,10 @@ const MapPage = () => {
   const mapRef = useRef(null);
   const transformRef = useRef(null);
   const buildingLayerRef = useRef(null);
-  const boothLayerRef = useRef(null);
+  const poisLayerRef = useRef(null);
 
   const [buildingSvg, setBuildingSvg] = useState('');
-  const [boothSvg, setBoothSvg] = useState('');
+  const [poisSvg, setPoisSvg] = useState('');
 
   const matchTrash = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
@@ -50,9 +50,9 @@ const MapPage = () => {
     fetch('/map/map-building.svg')
       .then((res) => res.text())
       .then((data) => setBuildingSvg(data));
-    fetch('/map/map-booth.svg')
+    fetch('/map/map-pois.svg')
       .then((res) => res.text())
-      .then((data) => setBoothSvg(data));
+      .then((data) => setPoisSvg(data));
   }, []);
 
   // 건물 클릭 이벤트
@@ -71,7 +71,7 @@ const MapPage = () => {
         return;
       }
 
-      // building active 초기화 (booth가 아닌 building에서 초기화)
+      // building active 초기화 (pois가 아닌 building에서 초기화)
       buildingLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
         el.classList.remove('is-active');
       });
@@ -84,9 +84,9 @@ const MapPage = () => {
     return () => buildingLayerRef.current?.removeEventListener('click', handleClick);
   }, [buildingSvg]);
 
-  // 부스 클릭 이벤트
+  // Pois 클릭 이벤트
   useEffect(() => {
-    if (!boothLayerRef.current) return;
+    if (!poisLayerRef.current) return;
 
     const handleClick = (e) => {
       e.stopPropagation();
@@ -100,7 +100,7 @@ const MapPage = () => {
         return;
       }
 
-      boothLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
+      poisLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
         el.classList.remove('is-active');
       });
 
@@ -108,9 +108,9 @@ const MapPage = () => {
       console.log(`🎪 부스 클릭: ${target.id}`);
     };
 
-    boothLayerRef.current.addEventListener('click', handleClick);
-    return () => boothLayerRef.current?.removeEventListener('click', handleClick);
-  }, [boothSvg]);
+    poisLayerRef.current.addEventListener('click', handleClick);
+    return () => poisLayerRef.current?.removeEventListener('click', handleClick);
+  }, [poisSvg]);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
@@ -173,9 +173,9 @@ const MapPage = () => {
               className="pointer-events-none absolute inset-0 h-full w-full object-contain"
             />
             <div
-              ref={boothLayerRef}
+              ref={poisLayerRef}
               className="absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
-              dangerouslySetInnerHTML={{ __html: boothSvg }}
+              dangerouslySetInnerHTML={{ __html: poisSvg }}
               style={{ pointerEvents: 'auto' }}
             />
           </div>
