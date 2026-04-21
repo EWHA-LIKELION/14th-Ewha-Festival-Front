@@ -8,7 +8,8 @@ import { useNavigate, useMatch } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
-import { useShows, useInfiniteScroll } from '@/hooks';
+import { useShows, useInfiniteScroll, useSearchResults } from '@/hooks';
+import useSearchStore from '@/store/useSearchStore';
 
 import Header from '@/components/Header';
 import Tab from '@/components/Tab';
@@ -16,6 +17,7 @@ import FilterBar from '@/components/FilterBar';
 import Checkbox from '@/components/Checkbox';
 import DropDown from '@/components/DropDown';
 import ShowCard from '@/components/Card/ShowCard';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const ShowListSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
@@ -27,9 +29,21 @@ const ShowListSheet = () => {
   const matchShows = useMatch('/map/shows');
   const activeTabIndex = matchShows ? 1 : 0;
 
-  // TanStack Query로 공연 데이터 가져오기
-  const { shows, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useShows(showFilters);
+  const searchQuery = useSearchStore((s) => s.searchQuery);
+  const isSearchMode = !!searchQuery;
+
+  const showsQuery = useShows(showFilters);
+  const searchResultsQuery = useSearchResults(searchQuery);
+
+  const shows = isSearchMode ? searchResultsQuery.shows : showsQuery.shows;
+  const totalCount = isSearchMode ? searchResultsQuery.showCount : showsQuery.totalCount;
+  const isLoading = isSearchMode ? searchResultsQuery.isLoading : showsQuery.isLoading;
+  const isError = isSearchMode ? searchResultsQuery.isError : showsQuery.isError;
+  const fetchNextPage = isSearchMode ? searchResultsQuery.fetchNextPage : showsQuery.fetchNextPage;
+  const hasNextPage = isSearchMode ? searchResultsQuery.hasNextPage : showsQuery.hasNextPage;
+  const isFetchingNextPage = isSearchMode
+    ? searchResultsQuery.isFetchingNextPage
+    : showsQuery.isFetchingNextPage;
 
   const handleTabChange = (index) => {
     navigate(index === 0 ? '/map/booths' : '/map/shows');
@@ -59,10 +73,10 @@ const ShowListSheet = () => {
       </div>
       <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
         {isFull && <Header center="search" />}
-        <div className="flex flex-col gap-4 p-5">
+        <div className="flex h-full flex-col gap-4 p-5">
           <Tab tabs={['부스', '공연']} activeIndex={activeTabIndex} onChange={handleTabChange} />
           <FilterBar type="show" />
-          <div className="flex flex-col">
+          <div className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center justify-between text-sm font-normal text-zinc-500">
               총 {totalCount}개
               <div className="flex items-center gap-2">
@@ -78,7 +92,11 @@ const ShowListSheet = () => {
             </div>
 
             {/* 로딩 */}
-            {isLoading && <div className="py-24 text-center text-zinc-300">로딩 중...</div>}
+            {isLoading && (
+              <div className="flex h-full items-center justify-center">
+                <LoadingSpinner />
+              </div>
+            )}
 
             {/* 에러 */}
             {isError && (

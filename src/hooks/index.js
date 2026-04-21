@@ -7,3 +7,5 @@ export { useBooths } from './useBooths.js';
 export { useShows } from './useShows.js';
 export { useInfiniteScroll } from './useInfiniteScroll.js';
 export { useInfiniteList, buildQueryParams } from './useInfiniteList.js';
+export { usePopularKeywords } from './usePopularKeywords.js';
+export { useSearchResults } from './useSearchResults.js';

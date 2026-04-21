@@ -88,6 +88,7 @@ const ScrapButton = ({
     onSuccess: (_data, _variables, context) => {
       queryClient.invalidateQueries({ queryKey: listQueryKey });
       queryClient.invalidateQueries({ queryKey: scrapQueryKey });
+      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
 
       if (onToggle) onToggle(!context.previousScrapped);
     },

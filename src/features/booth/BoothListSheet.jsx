@@ -8,7 +8,8 @@ import { useNavigate, useMatch } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
-import { useBooths, useInfiniteScroll } from '@/hooks';
+import { useBooths, useInfiniteScroll, useSearchResults } from '@/hooks';
+import useSearchStore from '@/store/useSearchStore';
 
 import Header from '@/components/Header';
 import Tab from '@/components/Tab';
@@ -16,6 +17,7 @@ import FilterBar from '@/components/FilterBar';
 import Checkbox from '@/components/Checkbox';
 import DropDown from '@/components/DropDown';
 import BoothCard from '@/components/Card/BoothCard';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const BoothListSheet = () => {
   const isFull = useBottomsheetStore((s) => s.isFull());
@@ -27,9 +29,21 @@ const BoothListSheet = () => {
   const matchBooths = useMatch('/map/booths');
   const activeTabIndex = matchBooths ? 0 : 1;
 
-  // TanStack Query로 부스 데이터 가져오기
-  const { booths, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useBooths(boothFilters);
+  const searchQuery = useSearchStore((s) => s.searchQuery);
+  const isSearchMode = !!searchQuery;
+
+  const boothsQuery = useBooths(boothFilters);
+  const searchResultsQuery = useSearchResults(searchQuery);
+
+  const booths = isSearchMode ? searchResultsQuery.booths : boothsQuery.booths;
+  const totalCount = isSearchMode ? searchResultsQuery.boothCount : boothsQuery.totalCount;
+  const isLoading = isSearchMode ? searchResultsQuery.isLoading : boothsQuery.isLoading;
+  const isError = isSearchMode ? searchResultsQuery.isError : boothsQuery.isError;
+  const fetchNextPage = isSearchMode ? searchResultsQuery.fetchNextPage : boothsQuery.fetchNextPage;
+  const hasNextPage = isSearchMode ? searchResultsQuery.hasNextPage : boothsQuery.hasNextPage;
+  const isFetchingNextPage = isSearchMode
+    ? searchResultsQuery.isFetchingNextPage
+    : boothsQuery.isFetchingNextPage;
 
   const handleTabChange = (index) => {
     navigate(index === 0 ? '/map/booths' : '/map/shows');
@@ -59,10 +73,10 @@ const BoothListSheet = () => {
       </div>
       <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
         {isFull && <Header center="search" />}
-        <div className="flex flex-col gap-4 p-5">
+        <div className="flex h-full flex-col gap-4 p-5">
           <Tab tabs={['부스', '공연']} activeIndex={activeTabIndex} onChange={handleTabChange} />
           <FilterBar type="booth" />
-          <div className="flex flex-col">
+          <div className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center justify-between text-sm font-normal text-zinc-500">
               총 {totalCount}개
               <div className="flex items-center gap-2">
@@ -78,7 +92,11 @@ const BoothListSheet = () => {
             </div>
 
             {/* 로딩 */}
-            {isLoading && <div className="py-24 text-center text-zinc-300">로딩 중...</div>}
+            {isLoading && (
+              <div className="flex h-full items-center justify-center">
+                <LoadingSpinner />
+              </div>
+            )}
 
             {/* 에러 */}
             {isError && (
