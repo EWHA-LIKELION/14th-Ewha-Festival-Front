@@ -82,7 +82,6 @@ svg {
 
 /* building active */
 .building-layer [id='STUDENT_UNION'].is-active *,
-.building-layer [id='SPORT_TRACK'].is-active *,
 .building-layer [id='HYUUT_GIL'].is-active *,
 .building-layer [id='HUMAN_ECOLOGY_BUILDING'].is-active *,
 .building-layer [id='HAK_GWAN'].is-active *,
@@ -96,34 +95,40 @@ svg {
   stroke: #81b783 !important;
 }
 
+/* SPORT_TRACK은 <path> 직접 요소 */
+.building-layer [id='SPORT_TRACK'].is-active {
+  fill: #aad6b5 !important;
+  stroke: #81b783 !important;
+}
+
 /* BOOTH active - 배경 주황색, 텍스트 흰색 */
-[data-category='BOOTH'].is-active path[fill='#FEFCE8'] * {
+.pois-layer [data-category='BOOTH'].is-active path[fill='#FEFCE8'] {
   fill: #fd9a00 !important;
 }
-[data-category='BOOTH'].is-active path[fill='#FD9A00'] * {
+.pois-layer [data-category='BOOTH'].is-active path[fill='#FD9A00'] {
   fill: #ffffff !important;
 }
-[data-category='BOOTH'].is-active path[stroke='#FEE685'] * {
+.pois-layer [data-category='BOOTH'].is-active path[stroke='#FEE685'] {
   stroke: #fd9a00 !important;
 }
 
 /* TRASH active */
-[data-category='TRASH'].is-active path[fill='#FF5B5E'] * {
+.pois-layer [data-category='TRASH'].is-active path[fill='#FF5B5E'] {
   fill: #e9423c !important;
 }
 
 /* DISH, GAS active */
-[data-category='DISH'].is-active path[fill='#56A85B'] *,
-[data-category='GAS'].is-active path[fill='#56A85B'] * {
+.pois-layer [data-category='DISH'].is-active path[fill='#56A85B'],
+.pois-layer [data-category='GAS'].is-active path[fill='#56A85B'] {
   fill: #316e34 !important;
 }
 
 /* STUFF active */
-[data-category='STUFF'].is-active path[fill='#00BB8F'] * {
+.pois-layer [data-category='STUFF'].is-active path[fill='#00BB8F'] {
   fill: #007864 !important;
 }
 
 /* FOOD active */
-[data-category='FOOD'].is-active path[fill='#FEFCE8'] * {
+.pois-layer [data-category='FOOD'].is-active path[fill='#FEFCE8'] {
   filter: drop-shadow(0 0 6px #fb923c); /* 추후 수정 필요 */
 }
