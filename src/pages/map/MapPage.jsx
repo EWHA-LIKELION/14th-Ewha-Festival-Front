@@ -156,6 +156,11 @@ const MapPage = () => {
       const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
       if (!normalizedId) return;
 
+      poisLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
+        el.classList.remove('is-active');
+        delete el.dataset.category;
+      });
+
       setFilter('booth', 'location', [normalizedId]);
       setFilter('etc', 'location', [normalizedId]);
 
@@ -163,8 +168,9 @@ const MapPage = () => {
       moveFocusToBuilding(normalizedId);
     };
 
-    buildingLayerRef.current.addEventListener('click', handleClick);
-    return () => buildingLayerRef.current?.removeEventListener('click', handleClick);
+    const el = buildingLayerRef.current;
+    el.addEventListener('click', handleClick);
+    return () => el.removeEventListener('click', handleClick);
   }, [buildingSvg, setFilter, moveFocusToBuilding]);
 
   // Pois 클릭 이벤트
@@ -191,14 +197,20 @@ const MapPage = () => {
       target.classList.add('is-active');
       target.dataset.category = category;
 
-      console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
+      console.log(
+        `🗺️ POI 클릭: ${target.id} (${category}) → classList: ${target.classList} / data-category: ${target.dataset.category}`,
+      );
       const buildingId = BUILDING_IDS.find((id) => target.id.includes(id));
       if (buildingId) moveFocusToBuilding(buildingId);
+
+      setFilter('booth', 'location', []);
+      setFilter('etc', 'location', []);
     };
 
-    poisLayerRef.current.addEventListener('click', handleClick);
-    return () => poisLayerRef.current?.removeEventListener('click', handleClick);
-  }, [poisSvg, moveFocusToBuilding]);
+    const el = poisLayerRef.current;
+    el.addEventListener('click', handleClick);
+    return () => el.removeEventListener('click', handleClick);
+  }, [poisSvg, moveFocusToBuilding, setFilter]);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">

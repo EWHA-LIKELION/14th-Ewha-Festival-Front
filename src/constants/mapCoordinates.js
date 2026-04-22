@@ -22,7 +22,7 @@ export const BUILDING_CENTERS = {
 export const MAP_ZOOM_LEVELS = {
   ZL1: 1.0,
   ZL2: 1.0,
-  ZL3: 4.0,
+  ZL3: 8.0,
   ZL4: 1.0,
 };
 
