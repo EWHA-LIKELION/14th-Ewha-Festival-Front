@@ -2,7 +2,7 @@
  * 지도
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet } from 'react-router-dom';
@@ -17,20 +17,43 @@ import {
 } from '@/constants/mapCoordinates';
 
 const savedTransform = { scale: MAP_ZOOM_LEVELS.ZL2, positionX: 0, positionY: 0 };
+const EMPTY_ARRAY = [];
 
 const MapPage = () => {
   const SHEET_SNAP_HEIGHTS = { small: 87, medium: 385, large: 589, full: window.innerHeight };
 
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
-  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
-  const sheetSizeRef = useRef(sheetSize);
+  const sheetSizeRef = useRef(useBottomsheetStore.getState().sheetSize);
   useEffect(() => {
-    sheetSizeRef.current = sheetSize;
-  }, [sheetSize]);
-  const boothLocation = useFilterStore((s) => s.filters.booth?.location ?? []);
-  const etcLocation = useFilterStore((s) => s.filters.etc?.location ?? []);
+    return useBottomsheetStore.subscribe((state) => {
+      sheetSizeRef.current = state.sheetSize;
+    });
+  }, []);
+  const boothLocation = useFilterStore((s) => s.filters.booth?.location ?? EMPTY_ARRAY);
+  const etcLocation = useFilterStore((s) => s.filters.etc?.location ?? EMPTY_ARRAY);
   const setFilter = useFilterStore((s) => s.setFilter);
   const filtersRef = useRef({ boothLocation, etcLocation });
+
+  const moveFocusToBuilding = useCallback((buildingId) => {
+    const center = BUILDING_CENTERS[buildingId];
+    if (!center || !transformRef.current || !mapRef.current) return;
+    const W = mapRef.current.clientWidth;
+    const H = mapRef.current.clientHeight;
+    const renderScale = Math.min(W / SVG_WIDTH, H / SVG_HEIGHT);
+    const offsetX = (W - SVG_WIDTH * renderScale) / 2;
+    const offsetY = (H - SVG_HEIGHT * renderScale) / 2;
+    const cx = offsetX + center.x * renderScale;
+    const cy = offsetY + center.y * renderScale;
+    const zoomScale = MAP_CLICK_ZOOM_SCALE;
+    const sheetHeight = SHEET_SNAP_HEIGHTS[sheetSizeRef.current] ?? SHEET_SNAP_HEIGHTS.medium;
+    const visibleCenterY = 108 + (H - sheetHeight - 108) / 2;
+    transformRef.current.setTransform(
+      W / 2 - cx * zoomScale,
+      visibleCenterY - cy * zoomScale,
+      zoomScale,
+      400,
+    );
+  }, []);
 
   const navigate = useNavigate();
   const mapRef = useRef(null);
@@ -137,34 +160,12 @@ const MapPage = () => {
       setFilter('etc', 'location', [normalizedId]);
 
       console.log(`🏢 건물 클릭: ${normalizedId}`);
-
-      //포커스 이동
-      const center = BUILDING_CENTERS[normalizedId];
-      if (center && transformRef.current && mapRef.current) {
-        const W = mapRef.current.clientWidth;
-        const H = mapRef.current.clientHeight;
-        // object-contain 렌더 배율 및 letterbox 오프셋 계산
-        const renderScale = Math.min(W / SVG_WIDTH, H / SVG_HEIGHT);
-        const offsetX = (W - SVG_WIDTH * renderScale) / 2;
-        const offsetY = (H - SVG_HEIGHT * renderScale) / 2;
-        // SVG 원본 좌표 → 컨텐츠 좌표
-        const cx = offsetX + center.x * renderScale;
-        const cy = offsetY + center.y * renderScale;
-        const zoomScale = MAP_CLICK_ZOOM_SCALE;
-        const sheetHeight = SHEET_SNAP_HEIGHTS[sheetSizeRef.current] ?? SHEET_SNAP_HEIGHTS.medium;
-        const visibleCenterY = 108 + (H - sheetHeight - 108) / 2;
-        transformRef.current.setTransform(
-          W / 2 - cx * zoomScale,
-          visibleCenterY - cy * zoomScale,
-          zoomScale,
-          400,
-        );
-      }
+      moveFocusToBuilding(normalizedId);
     };
 
     buildingLayerRef.current.addEventListener('click', handleClick);
     return () => buildingLayerRef.current?.removeEventListener('click', handleClick);
-  }, [buildingSvg, setFilter]);
+  }, [buildingSvg, setFilter, moveFocusToBuilding]);
 
   // Pois 클릭 이벤트
   useEffect(() => {
@@ -189,12 +190,15 @@ const MapPage = () => {
 
       target.classList.add('is-active');
       target.dataset.category = category;
+
       console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
+      const buildingId = BUILDING_IDS.find((id) => target.id.includes(id));
+      if (buildingId) moveFocusToBuilding(buildingId);
     };
 
     poisLayerRef.current.addEventListener('click', handleClick);
     return () => poisLayerRef.current?.removeEventListener('click', handleClick);
-  }, [poisSvg]);
+  }, [poisSvg, moveFocusToBuilding]);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
