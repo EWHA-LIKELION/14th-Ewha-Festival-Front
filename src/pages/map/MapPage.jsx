@@ -8,14 +8,27 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet } from 'react-router-dom';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
-import { MAP_ZOOM_LEVELS } from '@/constants/mapCoordinates';
+import {
+  MAP_ZOOM_LEVELS,
+  BUILDING_CENTERS,
+  MAP_CLICK_ZOOM_SCALE,
+  SVG_WIDTH,
+  SVG_HEIGHT,
+} from '@/constants/mapCoordinates';
 
 const savedTransform = { scale: MAP_ZOOM_LEVELS.ZL2, positionX: 0, positionY: 0 };
 
 const MapPage = () => {
+  const SHEET_SNAP_HEIGHTS = { small: 87, medium: 385, large: 589, full: window.innerHeight };
+
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
-  const boothLocation = useFilterStore((s) => s.filters.booth.location);
-  const etcLocation = useFilterStore((s) => s.filters.etc.location);
+  const sheetSize = useBottomsheetStore((s) => s.sheetSize);
+  const sheetSizeRef = useRef(sheetSize);
+  useEffect(() => {
+    sheetSizeRef.current = sheetSize;
+  }, [sheetSize]);
+  const boothLocation = useFilterStore((s) => s.filters.booth?.location ?? []);
+  const etcLocation = useFilterStore((s) => s.filters.etc?.location ?? []);
   const setFilter = useFilterStore((s) => s.setFilter);
   const filtersRef = useRef({ boothLocation, etcLocation });
 
@@ -80,6 +93,14 @@ const MapPage = () => {
     filtersRef.current = { boothLocation, etcLocation };
   });
 
+  // location 필터 삭제 시 booth ↔ etc 동기화
+  useEffect(() => {
+    if (boothLocation.length === 0 && etcLocation.length > 0) setFilter('etc', 'location', []);
+  }, [boothLocation]);
+  useEffect(() => {
+    if (etcLocation.length === 0 && boothLocation.length > 0) setFilter('booth', 'location', []);
+  }, [etcLocation]);
+
   // 필터 location → 지도 building is-active 동기화
   useEffect(() => {
     if (!buildingLayerRef.current || !buildingSvg) return;
@@ -110,30 +131,35 @@ const MapPage = () => {
       if (!target) return;
 
       const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
-      const { boothLocation: bl, etcLocation: el } = filtersRef.current;
-      const isActive = bl.includes(normalizedId) || el.includes(normalizedId);
+      if (!normalizedId) return;
 
-      const toggle = (current) =>
-        isActive ? current.filter((v) => v !== normalizedId) : [...current, normalizedId];
-
-      setFilter('booth', 'location', toggle(bl));
-      setFilter('etc', 'location', toggle(el));
+      setFilter('booth', 'location', [normalizedId]);
+      setFilter('etc', 'location', [normalizedId]);
 
       console.log(`🏢 건물 클릭: ${normalizedId}`);
 
-      // 포커스 이동 (좌표 준비 후 활성화)
-      // const center = BUILDING_CENTERS[normalizedId];
-      // if (center && transformRef.current && mapRef.current) {
-      //   const W = mapRef.current.clientWidth;
-      //   const H = mapRef.current.clientHeight;
-      //   const scale = toScale(MAP_CLICK_ZOOM_SCALE);
-      //   transformRef.current.setTransform(
-      //     W / 2 - center.x * scale,
-      //     H / 2 - center.y * scale,
-      //     scale,
-      //     400,
-      //   );
-      // }
+      //포커스 이동
+      const center = BUILDING_CENTERS[normalizedId];
+      if (center && transformRef.current && mapRef.current) {
+        const W = mapRef.current.clientWidth;
+        const H = mapRef.current.clientHeight;
+        // object-contain 렌더 배율 및 letterbox 오프셋 계산
+        const renderScale = Math.min(W / SVG_WIDTH, H / SVG_HEIGHT);
+        const offsetX = (W - SVG_WIDTH * renderScale) / 2;
+        const offsetY = (H - SVG_HEIGHT * renderScale) / 2;
+        // SVG 원본 좌표 → 컨텐츠 좌표
+        const cx = offsetX + center.x * renderScale;
+        const cy = offsetY + center.y * renderScale;
+        const zoomScale = MAP_CLICK_ZOOM_SCALE;
+        const sheetHeight = SHEET_SNAP_HEIGHTS[sheetSizeRef.current] ?? SHEET_SNAP_HEIGHTS.medium;
+        const visibleCenterY = 108 + (H - sheetHeight - 108) / 2;
+        transformRef.current.setTransform(
+          W / 2 - cx * zoomScale,
+          visibleCenterY - cy * zoomScale,
+          zoomScale,
+          400,
+        );
+      }
     };
 
     buildingLayerRef.current.addEventListener('click', handleClick);
@@ -155,12 +181,6 @@ const MapPage = () => {
       if (!target) return;
 
       const category = CATEGORIES.find((cat) => target.id.includes(cat));
-
-      if (target.classList.contains('is-active')) {
-        target.classList.remove('is-active');
-        delete target.dataset.category;
-        return;
-      }
 
       poisLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
         el.classList.remove('is-active');
