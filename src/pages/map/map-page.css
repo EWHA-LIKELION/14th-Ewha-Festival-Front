@@ -101,34 +101,34 @@ svg {
   stroke: #81b783 !important;
 }
 
-/* BOOTH active - 배경 주황색, 텍스트 흰색 */
-.pois-layer [data-category='BOOTH'].is-active path[fill='#FEFCE8'] {
+/* BOOTH active — #FEFCE8 배경, #FEE685 테두리, #FD9A00 숫자 */
+.pois-layer .poi-booth.is-active path[fill='#FEFCE8'] {
   fill: #fd9a00 !important;
 }
-.pois-layer [data-category='BOOTH'].is-active path[fill='#FD9A00'] {
-  fill: #ffffff !important;
-}
-.pois-layer [data-category='BOOTH'].is-active path[stroke='#FEE685'] {
+.pois-layer .poi-booth.is-active path[stroke='#FEE685'] {
   stroke: #fd9a00 !important;
 }
+.pois-layer .poi-booth.is-active path[fill='#FD9A00'] {
+  fill: #ffffff !important;
+}
 
-/* TRASH active */
-.pois-layer [data-category='TRASH'].is-active path[fill='#FF5B5E'] {
+/* TRASH active — #FF5B5E 배경 */
+.pois-layer .poi-trash.is-active path[fill='#FF5B5E'] {
   fill: #e9423c !important;
 }
 
-/* DISH, GAS active */
-.pois-layer [data-category='DISH'].is-active path[fill='#56A85B'],
-.pois-layer [data-category='GAS'].is-active path[fill='#56A85B'] {
+/* DISH, GAS active — #56A85B 배경 */
+.pois-layer .poi-dish.is-active path[fill='#56A85B'],
+.pois-layer .poi-gas.is-active path[fill='#56A85B'] {
   fill: #316e34 !important;
 }
 
-/* STUFF active */
-.pois-layer [data-category='STUFF'].is-active path[fill='#00BB8F'] {
+/* STUFF active — #00BB8F 배경 */
+.pois-layer .poi-stuff.is-active path[fill='#00BB8F'] {
   fill: #007864 !important;
 }
 
-/* FOOD active */
-.pois-layer [data-category='FOOD'].is-active path[fill='#FEFCE8'] {
-  filter: drop-shadow(0 0 6px #fb923c); /* 추후 수정 필요 */
+/* FOOD active — rect 구조, element에 직접 filter */
+.pois-layer .poi-food.is-active {
+  fill: #000 !important;
 }
