@@ -63,6 +63,7 @@ const MapPage = () => {
 
   const [buildingSvg, setBuildingSvg] = useState('');
   const [poisSvg, setPoisSvg] = useState('');
+  const [activePOIId, setActivePOIId] = useState(null);
 
   const matchTrash = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
@@ -140,6 +141,38 @@ const MapPage = () => {
     });
   }, [boothLocation, etcLocation, buildingSvg]);
 
+  // activePOIId → 지도 POI is-active 동기화
+  // pois-layer의 SVG가 재렌더링으로 교체될 수 있어, MutationObserver로 재적용까지 보장
+  useEffect(() => {
+    if (!poisLayerRef.current || !poisSvg) return;
+    const CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'GAS', 'STUFF', 'FOOD'];
+
+    const applyActive = () => {
+      const layer = poisLayerRef.current;
+      if (!layer) return;
+      layer.querySelectorAll('.is-active').forEach((el) => {
+        el.classList.remove('is-active');
+        CATEGORIES.forEach((cat) => el.classList.remove(`poi-${cat.toLowerCase()}`));
+      });
+      if (!activePOIId) return;
+      const el = layer.querySelector(`[id="${activePOIId}"]`);
+      if (!el) return;
+      const category = CATEGORIES.find((cat) => activePOIId.includes(cat));
+      el.classList.add('is-active');
+      if (category) el.classList.add(`poi-${category.toLowerCase()}`);
+    };
+
+    applyActive();
+
+    const observer = new MutationObserver((mutations) => {
+      if (mutations.some((m) => m.type === 'childList' && m.target === poisLayerRef.current)) {
+        applyActive();
+      }
+    });
+    observer.observe(poisLayerRef.current, { childList: true });
+    return () => observer.disconnect();
+  }, [activePOIId, poisSvg]);
+
   // 건물 클릭 → 필터 location 토글
   useEffect(() => {
     if (!buildingLayerRef.current) return;
@@ -156,11 +189,7 @@ const MapPage = () => {
       const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
       if (!normalizedId) return;
 
-      poisLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
-        el.classList.remove('is-active');
-        delete el.dataset.category;
-      });
-
+      setActivePOIId(null);
       setFilter('booth', 'location', [normalizedId]);
       setFilter('etc', 'location', [normalizedId]);
 
@@ -177,7 +206,7 @@ const MapPage = () => {
   useEffect(() => {
     if (!poisLayerRef.current) return;
 
-    const CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'CAS', 'STUFF', 'FOOD'];
+    const CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'GAS', 'STUFF', 'FOOD'];
     const selector = CATEGORIES.map((cat) => `[id*="${cat}"]`).join(',');
 
     const handleClick = (e) => {
@@ -189,28 +218,25 @@ const MapPage = () => {
 
       const category = CATEGORIES.find((cat) => target.id.includes(cat));
 
-      poisLayerRef.current?.querySelectorAll('.is-active').forEach((el) => {
-        el.classList.remove('is-active');
-        delete el.dataset.category;
-      });
+      setActivePOIId(target.id);
+      setFilter('booth', 'location', []);
+      setFilter('etc', 'location', []);
 
-      target.classList.add('is-active');
-      target.dataset.category = category;
-
-      console.log(
-        `🗺️ POI 클릭: ${target.id} (${category}) → classList: ${target.classList} / data-category: ${target.dataset.category}`,
-      );
+      console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
       const buildingId = BUILDING_IDS.find((id) => target.id.includes(id));
       if (buildingId) moveFocusToBuilding(buildingId);
 
-      setFilter('booth', 'location', []);
-      setFilter('etc', 'location', []);
+      if (category !== 'BOOTH') {
+        const location = BUILDING_IDS.find((id) => target.id.includes(id));
+        const number = parseInt(target.id.split(`${category}-`).pop(), 10);
+        navigate('/map/etc', { state: { selectedPOI: { category, location, number } } });
+      }
     };
 
     const el = poisLayerRef.current;
     el.addEventListener('click', handleClick);
     return () => el.removeEventListener('click', handleClick);
-  }, [poisSvg, moveFocusToBuilding, setFilter]);
+  }, [poisSvg, moveFocusToBuilding, navigate, setFilter]);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
