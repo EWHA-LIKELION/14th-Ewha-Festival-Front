@@ -5,9 +5,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { useNavigate, useMatch, Outlet } from 'react-router-dom';
+import { useNavigate, useMatch, Outlet, useLocation } from 'react-router-dom';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
+import useSearchStore from '@/store/useSearchStore';
+import { BOOTH_LOCATION, SHOW_LOCATION } from '@/constants/building';
+import { getLabel } from '@/utils/labelHelper';
 import {
   MAP_ZOOM_LEVELS,
   BUILDING_CENTERS,
@@ -31,8 +34,12 @@ const MapPage = () => {
   }, []);
   const boothLocation = useFilterStore((s) => s.filters.booth?.location ?? EMPTY_ARRAY);
   const etcLocation = useFilterStore((s) => s.filters.etc?.location ?? EMPTY_ARRAY);
+  const showLocation = useFilterStore((s) => s.filters.show?.location ?? EMPTY_ARRAY);
   const setFilter = useFilterStore((s) => s.setFilter);
-  const filtersRef = useRef({ boothLocation, etcLocation });
+  const searchQuery = useSearchStore((s) => s.searchQuery);
+  const setSearchQuery = useSearchStore((s) => s.setSearchQuery);
+  const addRecentSearch = useSearchStore((s) => s.addRecentSearch);
+  const filtersRef = useRef({ boothLocation, etcLocation, showLocation });
 
   const moveFocusToBuilding = useCallback((buildingId) => {
     const center = BUILDING_CENTERS[buildingId];
@@ -65,8 +72,16 @@ const MapPage = () => {
   const [poisSvg, setPoisSvg] = useState('');
   const [activePOIId, setActivePOIId] = useState(null);
 
-  const matchTrash = useMatch('/map/etc');
+  const matchEtc = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
+  const matchBooths = useMatch('/map/booths/*');
+  const matchShows = useMatch('/map/shows/*');
+  const isBoothPage = !!matchBooths;
+  const isEtcPage = !!matchEtc;
+  const isShowsPage = !!matchShows;
+
+  const { pathname } = useLocation();
+  const prevPathnameRef = useRef(pathname);
 
   const goList = () => {
     setSheetSize('full');
@@ -114,18 +129,59 @@ const MapPage = () => {
 
   // filtersRef를 최신 상태로 유지 (클릭 핸들러 클로저에서 사용)
   useEffect(() => {
-    filtersRef.current = { boothLocation, etcLocation };
+    filtersRef.current = { boothLocation, etcLocation, showLocation };
   });
 
-  // location 필터 삭제 시 booth ↔ etc 동기화
+  // location 필터 삭제 시 booth ↔ etc ↔ show 동기화
   useEffect(() => {
-    if (boothLocation.length === 0 && etcLocation.length > 0) setFilter('etc', 'location', []);
+    if (boothLocation.length > 0) return;
+    if (etcLocation.length > 0) setFilter('etc', 'location', []);
+    if (showLocation.length > 0) setFilter('show', 'location', []);
   }, [boothLocation]);
   useEffect(() => {
-    if (etcLocation.length === 0 && boothLocation.length > 0) setFilter('booth', 'location', []);
+    if (etcLocation.length > 0) return;
+    if (boothLocation.length > 0) setFilter('booth', 'location', []);
+    if (showLocation.length > 0) setFilter('show', 'location', []);
   }, [etcLocation]);
+  useEffect(() => {
+    if (showLocation.length > 0) return;
+    if (boothLocation.length > 0) setFilter('booth', 'location', []);
+    if (etcLocation.length > 0) setFilter('etc', 'location', []);
+  }, [showLocation]);
 
-  // 필터 location → 지도 building is-active 동기화
+  // 부스목록 ↔ 기타시설 ↔ 공연 페이지 이동 시 선택 건물 필터를 목적지로 복사
+  useEffect(() => {
+    const prev = prevPathnameRef.current;
+    prevPathnameRef.current = pathname;
+    if (prev === pathname) return;
+
+    const getType = (p) => {
+      if (p === '/map/booths' || p.startsWith('/map/booths/')) return 'booth';
+      if (p === '/map/etc') return 'etc';
+      if (p === '/map/shows' || p.startsWith('/map/shows/')) return 'show';
+      return null;
+    };
+
+    const prevType = getType(prev);
+    const currType = getType(pathname);
+    if (!prevType || !currType || prevType === currType) return;
+
+    const srcKey = `${prevType}Location`;
+    const src = filtersRef.current[srcKey] ?? [];
+
+    if (currType === 'show') {
+      const showValues = new Set(SHOW_LOCATION.map((o) => o.value));
+      setFilter(
+        'show',
+        'location',
+        src.filter((id) => showValues.has(id)),
+      );
+    } else {
+      setFilter(currType, 'location', src);
+    }
+  }, [pathname, setFilter]);
+
+  // 필터 location → 지도 building is-active 동기화 (현재 페이지 기준)
   useEffect(() => {
     if (!buildingLayerRef.current || !buildingSvg) return;
 
@@ -133,16 +189,22 @@ const MapPage = () => {
       el.classList.remove('is-active');
     });
 
-    const selected = new Set([...boothLocation, ...etcLocation]);
-    selected.forEach((id) => {
+    let activeLocations;
+    if (isBoothPage) activeLocations = boothLocation;
+    else if (isEtcPage) activeLocations = etcLocation;
+    else if (isShowsPage) activeLocations = showLocation;
+    else activeLocations = [...new Set([...boothLocation, ...etcLocation, ...showLocation])];
+
+    activeLocations.forEach((id) => {
       buildingLayerRef.current.querySelectorAll(`[id^="${id}"]`).forEach((el) => {
         el.classList.add('is-active');
       });
     });
-  }, [boothLocation, etcLocation, buildingSvg]);
+  }, [boothLocation, etcLocation, showLocation, buildingSvg, isBoothPage, isEtcPage, isShowsPage]);
 
   // activePOIId → 지도 POI is-active 동기화
   // pois-layer의 SVG가 재렌더링으로 교체될 수 있어, MutationObserver로 재적용까지 보장
+  // BOOTH는 부스 목록 페이지에서만, 나머지는 기타시설 페이지에서만 active 표시
   useEffect(() => {
     if (!poisLayerRef.current || !poisSvg) return;
     const CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'GAS', 'STUFF', 'FOOD'];
@@ -155,6 +217,9 @@ const MapPage = () => {
         CATEGORIES.forEach((cat) => el.classList.remove(`poi-${cat.toLowerCase()}`));
       });
       if (!activePOIId) return;
+      const isBoothPOI = activePOIId.includes('BOOTH');
+      if (isBoothPOI && !isBoothPage) return;
+      if (!isBoothPOI && !isEtcPage) return;
       const el = layer.querySelector(`[id="${activePOIId}"]`);
       if (!el) return;
       const category = CATEGORIES.find((cat) => activePOIId.includes(cat));
@@ -171,7 +236,25 @@ const MapPage = () => {
     });
     observer.observe(poisLayerRef.current, { childList: true });
     return () => observer.disconnect();
-  }, [activePOIId, poisSvg]);
+  }, [activePOIId, poisSvg, isBoothPage, isEtcPage]);
+
+  // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
+  useEffect(() => {
+    if (searchQuery) return;
+    if (activePOIId?.includes('BOOTH')) setActivePOIId(null);
+  }, [searchQuery, activePOIId]);
+
+  // 페이지 이동으로 현재 POI 카테고리와 페이지가 맞지 않으면 activePOIId 해제
+  // pathname 변경 시에만 실행 (방금 set한 activePOIId를 같은 렌더에서 날리지 않도록)
+  const prevPathForPOIRef = useRef(pathname);
+  useEffect(() => {
+    const prev = prevPathForPOIRef.current;
+    prevPathForPOIRef.current = pathname;
+    if (prev === pathname || !activePOIId) return;
+    const isBoothPOI = activePOIId.includes('BOOTH');
+    if (isBoothPOI && !pathname.startsWith('/map/booths')) setActivePOIId(null);
+    else if (!isBoothPOI && pathname !== '/map/etc') setActivePOIId(null);
+  }, [pathname, activePOIId]);
 
   // 건물 클릭 → 필터 location 토글
   useEffect(() => {
@@ -190,8 +273,18 @@ const MapPage = () => {
       if (!normalizedId) return;
 
       setActivePOIId(null);
-      setFilter('booth', 'location', [normalizedId]);
-      setFilter('etc', 'location', [normalizedId]);
+      const isShowLocation = SHOW_LOCATION.some((o) => o.value === normalizedId);
+      if (isBoothPage) {
+        setFilter('booth', 'location', [normalizedId]);
+      } else if (isEtcPage) {
+        setFilter('etc', 'location', [normalizedId]);
+      } else if (isShowsPage) {
+        setFilter('show', 'location', isShowLocation ? [normalizedId] : []);
+      } else {
+        setFilter('booth', 'location', [normalizedId]);
+        setFilter('etc', 'location', [normalizedId]);
+        setFilter('show', 'location', isShowLocation ? [normalizedId] : []);
+      }
 
       console.log(`🏢 건물 클릭: ${normalizedId}`);
       moveFocusToBuilding(normalizedId);
@@ -200,7 +293,7 @@ const MapPage = () => {
     const el = buildingLayerRef.current;
     el.addEventListener('click', handleClick);
     return () => el.removeEventListener('click', handleClick);
-  }, [buildingSvg, setFilter, moveFocusToBuilding]);
+  }, [buildingSvg, setFilter, moveFocusToBuilding, isBoothPage, isEtcPage, isShowsPage]);
 
   // Pois 클릭 이벤트
   useEffect(() => {
@@ -221,14 +314,21 @@ const MapPage = () => {
       setActivePOIId(target.id);
       setFilter('booth', 'location', []);
       setFilter('etc', 'location', []);
+      setFilter('show', 'location', []);
 
       console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
       const buildingId = BUILDING_IDS.find((id) => target.id.includes(id));
       if (buildingId) moveFocusToBuilding(buildingId);
 
-      if (category !== 'BOOTH') {
-        const location = BUILDING_IDS.find((id) => target.id.includes(id));
-        const number = parseInt(target.id.split(`${category}-`).pop(), 10);
+      const location = BUILDING_IDS.find((id) => target.id.includes(id));
+      const number = parseInt(target.id.split(`${category}-`).pop(), 10);
+
+      if (category === 'BOOTH') {
+        const query = `${getLabel(location, BOOTH_LOCATION)}${number}`;
+        setSearchQuery(query);
+        addRecentSearch(query);
+        navigate('/map/booths');
+      } else {
         navigate('/map/etc', { state: { selectedPOI: { category, location, number } } });
       }
     };
@@ -236,19 +336,19 @@ const MapPage = () => {
     const el = poisLayerRef.current;
     el.addEventListener('click', handleClick);
     return () => el.removeEventListener('click', handleClick);
-  }, [poisSvg, moveFocusToBuilding, navigate, setFilter]);
+  }, [poisSvg, moveFocusToBuilding, navigate, setFilter, setSearchQuery, addRecentSearch]);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
       <div className="fixed top-18 z-5 flex gap-2 bg-transparent px-5">
         <button
           onClick={goEtc}
-          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchTrash ? 'bg-red-400 text-white' : 'bg-white text-zinc-800'}`}
+          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchEtc ? 'bg-red-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
             src="/icons/icon-map-etc.svg"
             alt="etc"
-            className={`h-4 w-4 shrink-0 ${matchTrash ? 'brightness-0 invert' : ''}`}
+            className={`h-4 w-4 shrink-0 ${matchEtc ? 'brightness-0 invert' : ''}`}
           />
           기타시설
         </button>
