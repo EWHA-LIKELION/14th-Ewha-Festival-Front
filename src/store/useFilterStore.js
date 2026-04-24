@@ -17,9 +17,9 @@ const defaultFilters = {
     excludeEnded: false,
   },
   show: {
-    host: [],
     category: [],
     day: [],
+    location: [],
     sort: null,
     excludeEnded: false,
   },
@@ -36,9 +36,9 @@ const defaultFilters = {
     excludeEnded: false,
   },
   scrap_show: {
-    host: [],
     category: [],
     day: [],
+    location: [],
     sort: null,
     excludeEnded: false,
   },
