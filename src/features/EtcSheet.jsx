@@ -2,7 +2,8 @@
  * 기타시설 바텀시트
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
@@ -15,9 +16,24 @@ import { BOOTH_LOCATION } from '@/constants/building';
 import { ETC_CATEGORY, ETC_DESCRIPTION } from '@/constants/category';
 
 const EtcSheet = () => {
+  const location = useLocation();
   const isFull = useBottomsheetStore((s) => s.isFull());
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
   const [selected, setSelected] = useState(false);
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    const poi = location.state?.selectedPOI;
+    if (poi) {
+      const id = `${poi.category}-${poi.location}-${poi.number}`;
+      setSelected(id);
+      setTimeout(() => {
+        document
+          .getElementById(`etc-card-${id}`)
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 150);
+    }
+  }, [location.state]);
 
   // 전역 필터 상태
   const filters = useFilterStore((state) => state.filters.etc);
@@ -26,8 +42,14 @@ const EtcSheet = () => {
     setSheetSize('medium');
   }, [setSheetSize]);
 
+  useEffect(() => {
+    if (filters.location?.length > 0) {
+      scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [filters.location]);
+
   const handleSelectEtc = (item) => {
-    const id = `${item.category}-${item.number}`;
+    const id = `${item.category}-${item.location}-${item.number}`;
     setSelected((prev) => (prev === id ? false : id));
   };
 
@@ -62,7 +84,7 @@ const EtcSheet = () => {
       <div className={isFull ? 'relative z-10' : 'relative z-20'}>
         <Header left="back" background="transparent" />
       </div>
-      <BottomsheetDrag>
+      <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
         {isFull && <Header left="back" center="title" centerTitle="기타시설" isSheet />}
         <div className="flex flex-col gap-4 px-5 pt-5">
           <FilterBar type="etc" />
@@ -72,13 +94,17 @@ const EtcSheet = () => {
               <div key={location} className="flex flex-col gap-2">
                 <h1 className="text-lg font-semibold">{getLabel(location, BOOTH_LOCATION)}</h1>
                 {items.map((item) => (
-                  <EtcCard
+                  <div
                     key={`${item.category}-${item.number}`}
-                    title={`${getLabel(item.category, ETC_CATEGORY)} ${item.number}`}
-                    description={ETC_DESCRIPTION[item.category]}
-                    selected={selected === `${item.category}-${item.number}`}
-                    onClick={() => handleSelectEtc(item)}
-                  />
+                    id={`etc-card-${item.category}-${item.location}-${item.number}`}
+                  >
+                    <EtcCard
+                      title={`${getLabel(item.category, ETC_CATEGORY)} ${item.number}`}
+                      description={ETC_DESCRIPTION[item.category]}
+                      selected={selected === `${item.category}-${item.location}-${item.number}`}
+                      onClick={() => handleSelectEtc(item)}
+                    />
+                  </div>
                 ))}
               </div>
             ))}
