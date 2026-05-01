@@ -47,10 +47,8 @@ const MapPage = () => {
     const W = mapRef.current.clientWidth;
     const H = mapRef.current.clientHeight;
     const renderScale = H / SVG_HEIGHT;
-    const offsetX = (W - SVG_WIDTH * renderScale) / 2;
-    const offsetY = 0;
-    const cx = offsetX + center.x * renderScale;
-    const cy = offsetY + center.y * renderScale;
+    const cx = center.x * renderScale;
+    const cy = center.y * renderScale;
     const zoomScale = MAP_CLICK_ZOOM_SCALE;
     const sheetHeight = SHEET_SNAP_HEIGHTS[sheetSizeRef.current] ?? SHEET_SNAP_HEIGHTS.medium;
     const visibleCenterY = 108 + (H - sheetHeight - 108) / 2;
@@ -354,7 +352,7 @@ const MapPage = () => {
         </button>
         <button
           onClick={goBarrierFree}
-          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchBarrierFree ? 'bg-cyan-400 text-white' : 'bg-white text-zinc-800'}`}
+          className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchBarrierFree ? 'bg-teal-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
             src="/icons/icon-map-barrierfree.svg"
@@ -370,29 +368,19 @@ const MapPage = () => {
         pinch={{ disabled: false }}
         panning={{ disabled: false }}
         limitToBounds={true}
-        maxScale={50}
+        minScale={MAP_ZOOM_LEVELS.ZL1}
+        maxScale={MAP_ZOOM_LEVELS.ZL4}
+        centerOnInit={true}
         initialScale={savedTransform.scale}
-        initialPositionX={savedTransform.positionX}
-        initialPositionY={savedTransform.positionY}
         onTransformed={(_, state) => {
           savedTransform.scale = state.scale;
           savedTransform.positionX = state.positionX;
           savedTransform.positionY = state.positionY;
         }}
       >
-        <TransformComponent
-          wrapperClass="!w-full !h-dvh overflow-hidden"
-          contentClass="!w-full !h-dvh flex justify-center"
-        >
-          <div
-            className="relative h-full shrink-0"
-            style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}
-          >
-            <img
-              src="/map/map-background.svg"
-              alt="map-background"
-              className="h-full w-full"
-            />
+        <TransformComponent wrapperClass="!w-full !h-dvh overflow-hidden">
+          <div className="relative h-dvh" style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}>
+            <img src="/map/map-background.svg" alt="map-background" className="h-full w-full" />
             <div
               ref={buildingLayerRef}
               className="building-layer absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
