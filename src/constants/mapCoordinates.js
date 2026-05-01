@@ -20,10 +20,10 @@ export const BUILDING_CENTERS = {
 
 // 줌 레벨 (1 = 100%)
 export const MAP_ZOOM_LEVELS = {
-  ZL1: 1.0,
-  ZL2: 1.0,
-  ZL3: 8.0,
-  ZL4: 1.0,
+  ZL1: 2.44,
+  ZL2: 4.86,
+  ZL3: 9.72,
+  ZL4: 14.58,
 };
 
 // 건물/부스 클릭 시 사용할 줌 레벨
