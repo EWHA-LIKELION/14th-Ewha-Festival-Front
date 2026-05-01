@@ -2,36 +2,29 @@
  * 지도
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet, useLocation } from 'react-router-dom';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
 import useSearchStore from '@/store/useSearchStore';
+import { useMapFocus } from '@/hooks';
 import { BOOTH_LOCATION, SHOW_LOCATION } from '@/constants/building';
 import { getLabel } from '@/utils/labelHelper';
 import {
   MAP_ZOOM_LEVELS,
-  BUILDING_CENTERS,
   MAP_CLICK_ZOOM_SCALE,
   SVG_WIDTH,
   SVG_HEIGHT,
+  INITIAL_CENTER,
 } from '@/constants/mapCoordinates';
 
 const savedTransform = { scale: MAP_ZOOM_LEVELS.ZL2, positionX: 0, positionY: 0 };
 const EMPTY_ARRAY = [];
 
 const MapPage = () => {
-  const SHEET_SNAP_HEIGHTS = { small: 87, medium: 385, large: 589, full: window.innerHeight };
-
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
-  const sheetSizeRef = useRef(useBottomsheetStore.getState().sheetSize);
-  useEffect(() => {
-    return useBottomsheetStore.subscribe((state) => {
-      sheetSizeRef.current = state.sheetSize;
-    });
-  }, []);
   const boothLocation = useFilterStore((s) => s.filters.booth?.location ?? EMPTY_ARRAY);
   const etcLocation = useFilterStore((s) => s.filters.etc?.location ?? EMPTY_ARRAY);
   const showLocation = useFilterStore((s) => s.filters.show?.location ?? EMPTY_ARRAY);
@@ -41,28 +34,10 @@ const MapPage = () => {
   const addRecentSearch = useSearchStore((s) => s.addRecentSearch);
   const filtersRef = useRef({ boothLocation, etcLocation, showLocation });
 
-  const moveFocusToBuilding = useCallback((buildingId) => {
-    const center = BUILDING_CENTERS[buildingId];
-    if (!center || !transformRef.current || !mapRef.current) return;
-    const W = mapRef.current.clientWidth;
-    const H = mapRef.current.clientHeight;
-    const renderScale = H / SVG_HEIGHT;
-    const cx = center.x * renderScale;
-    const cy = center.y * renderScale;
-    const zoomScale = MAP_CLICK_ZOOM_SCALE;
-    const sheetHeight = SHEET_SNAP_HEIGHTS[sheetSizeRef.current] ?? SHEET_SNAP_HEIGHTS.medium;
-    const visibleCenterY = 108 + (H - sheetHeight - 108) / 2;
-    transformRef.current.setTransform(
-      W / 2 - cx * zoomScale,
-      visibleCenterY - cy * zoomScale,
-      zoomScale,
-      400,
-    );
-  }, []);
+  const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
+    useMapFocus();
 
   const navigate = useNavigate();
-  const mapRef = useRef(null);
-  const transformRef = useRef(null);
   const buildingLayerRef = useRef(null);
   const poisLayerRef = useRef(null);
 
@@ -315,8 +290,9 @@ const MapPage = () => {
       setFilter('show', 'location', []);
 
       console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
-      const buildingId = BUILDING_IDS.find((id) => target.id.includes(id));
-      if (buildingId) moveFocusToBuilding(buildingId);
+      const bbox = target.getBBox();
+      const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
+      moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
 
       const location = BUILDING_IDS.find((id) => target.id.includes(id));
       const number = parseInt(target.id.split(`${category}-`).pop(), 10);
@@ -334,7 +310,9 @@ const MapPage = () => {
     const el = poisLayerRef.current;
     el.addEventListener('click', handleClick);
     return () => el.removeEventListener('click', handleClick);
-  }, [poisSvg, moveFocusToBuilding, navigate, setFilter, setSearchQuery, addRecentSearch]);
+  }, [poisSvg, moveFocusToPoint, navigate, setFilter, setSearchQuery, addRecentSearch]);
+
+  const initialPos = getInitialPosition(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
@@ -370,12 +348,20 @@ const MapPage = () => {
         limitToBounds={true}
         minScale={MAP_ZOOM_LEVELS.ZL1}
         maxScale={MAP_ZOOM_LEVELS.ZL4}
-        centerOnInit={true}
-        initialScale={savedTransform.scale}
+        initialScale={MAP_ZOOM_LEVELS.ZL2}
+        initialPositionX={initialPos.x}
+        initialPositionY={initialPos.y}
+        onInit={() => {
+          moveFocusToPoint(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2, 0);
+        }}
         onTransformed={(_, state) => {
           savedTransform.scale = state.scale;
           savedTransform.positionX = state.positionX;
           savedTransform.positionY = state.positionY;
+          if (poisLayerRef.current) {
+            poisLayerRef.current.style.visibility =
+              state.scale >= MAP_ZOOM_LEVELS.ZL2 ? 'visible' : 'hidden';
+          }
         }}
       >
         <TransformComponent wrapperClass="!w-full !h-dvh overflow-hidden">
@@ -396,7 +382,10 @@ const MapPage = () => {
               ref={poisLayerRef}
               className="pois-layer absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
               dangerouslySetInnerHTML={{ __html: poisSvg }}
-              style={{ pointerEvents: 'none' }}
+              style={{
+                pointerEvents: 'none',
+                visibility: savedTransform.scale >= MAP_ZOOM_LEVELS.ZL2 ? 'visible' : 'hidden',
+              }}
             />
           </div>
         </TransformComponent>
