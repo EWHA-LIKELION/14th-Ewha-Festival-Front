@@ -46,9 +46,9 @@ const MapPage = () => {
     if (!center || !transformRef.current || !mapRef.current) return;
     const W = mapRef.current.clientWidth;
     const H = mapRef.current.clientHeight;
-    const renderScale = Math.min(W / SVG_WIDTH, H / SVG_HEIGHT);
+    const renderScale = H / SVG_HEIGHT;
     const offsetX = (W - SVG_WIDTH * renderScale) / 2;
-    const offsetY = (H - SVG_HEIGHT * renderScale) / 2;
+    const offsetY = 0;
     const cx = offsetX + center.x * renderScale;
     const cy = offsetY + center.y * renderScale;
     const zoomScale = MAP_CLICK_ZOOM_SCALE;
@@ -380,27 +380,33 @@ const MapPage = () => {
           savedTransform.positionY = state.positionY;
         }}
       >
-        <TransformComponent wrapperClass="w-full h-dvh" contentClass="w-full h-dvh">
-          <div className="relative h-dvh w-full">
+        <TransformComponent
+          wrapperClass="!w-full !h-dvh overflow-hidden"
+          contentClass="!w-full !h-dvh flex justify-center"
+        >
+          <div
+            className="relative h-full shrink-0"
+            style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}
+          >
             <img
               src="/map/map-background.svg"
               alt="map-background"
-              className="h-full w-full object-contain"
+              className="h-full w-full"
             />
             <div
               ref={buildingLayerRef}
-              className="building-layer absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
+              className="building-layer absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
               dangerouslySetInnerHTML={{ __html: buildingSvg }}
               style={{ pointerEvents: 'auto' }}
             />
             <img
               src="/map/map-label.svg"
               alt="map-label"
-              className="pointer-events-none absolute inset-0 h-full w-full object-contain"
+              className="pointer-events-none absolute inset-0 h-full w-full"
             />
             <div
               ref={poisLayerRef}
-              className="pois-layer absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full [&>svg]:object-contain"
+              className="pois-layer absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
               dangerouslySetInnerHTML={{ __html: poisSvg }}
               style={{ pointerEvents: 'none' }}
             />
