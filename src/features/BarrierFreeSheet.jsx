@@ -25,9 +25,7 @@ const BarrierFreeSheet = () => {
         <Header left="back" background="transparent" onBack={handleBack} />
       </div>
       <BottomsheetDrag>
-        {isFull && (
-          <Header left="back" center="title" centerTitle="배리어프리" isSheet onBack={handleBack} />
-        )}
+        {isFull && <Header left="back" center="title" centerTitle="배리어프리" isSheet />}
         <div className="flex flex-col gap-10 p-5 text-zinc-800">
           <div className="flex flex-col gap-1">
             <h1 className="text-base font-semibold">이용 대상</h1>

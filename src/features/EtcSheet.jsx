@@ -88,9 +88,7 @@ const EtcSheet = () => {
         <Header left="back" background="transparent" onBack={handleBack} />
       </div>
       <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
-        {isFull && (
-          <Header left="back" center="title" centerTitle="기타시설" isSheet onBack={handleBack} />
-        )}
+        {isFull && <Header left="back" center="title" centerTitle="기타시설" isSheet />}
         <div className="flex flex-col gap-4 px-5 pt-5">
           <FilterBar type="etc" />
           <p className="text-sm font-normal text-zinc-500">총 {filteredData.length}개</p>
