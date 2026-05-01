@@ -128,7 +128,15 @@ svg {
   fill: #007864 !important;
 }
 
-/* FOOD active — rect 구조, element에 직접 filter */
-.pois-layer .poi-food.is-active {
-  fill: #000 !important;
+/* FOOD active — #FEF3C6 배경, #FEE685 테두리, #FD9A00 글자 */
+.pois-layer .poi-food.is-active rect[fill='#FEF3C6'],
+.pois-layer .poi-food.is-active path[fill='#FEF3C6'] {
+  fill: #fd9a00 !important;
+}
+.pois-layer .poi-food.is-active rect[stroke='#FEE685'],
+.pois-layer .poi-food.is-active path[stroke='#FEE685'] {
+  stroke: #fd9a00 !important;
+}
+.pois-layer .poi-food.is-active path[fill='#FD9A00'] {
+  fill: #ffffff !important;
 }
