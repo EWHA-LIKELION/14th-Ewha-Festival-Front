@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
@@ -17,10 +17,13 @@ import { ETC_CATEGORY, ETC_DESCRIPTION } from '@/constants/category';
 
 const EtcSheet = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isFull = useBottomsheetStore((s) => s.isFull());
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
   const [selected, setSelected] = useState(false);
   const scrollContainerRef = useRef(null);
+
+  const handleBack = () => navigate('/map/booths');
 
   useEffect(() => {
     const poi = location.state?.selectedPOI;
@@ -82,10 +85,12 @@ const EtcSheet = () => {
   return (
     <>
       <div className={isFull ? 'relative z-10' : 'relative z-20'}>
-        <Header left="back" background="transparent" />
+        <Header left="back" background="transparent" onBack={handleBack} />
       </div>
       <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
-        {isFull && <Header left="back" center="title" centerTitle="기타시설" isSheet />}
+        {isFull && (
+          <Header left="back" center="title" centerTitle="기타시설" isSheet onBack={handleBack} />
+        )}
         <div className="flex flex-col gap-4 px-5 pt-5">
           <FilterBar type="etc" />
           <p className="text-sm font-normal text-zinc-500">총 {filteredData.length}개</p>

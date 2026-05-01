@@ -3,11 +3,13 @@
  */
 
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import Header from '@/components/Header';
 
 const BarrierFreeSheet = () => {
+  const navigate = useNavigate();
   const isFull = useBottomsheetStore((s) => s.isFull());
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
@@ -15,13 +17,17 @@ const BarrierFreeSheet = () => {
     setSheetSize('medium');
   }, [setSheetSize]);
 
+  const handleBack = () => navigate('/map/booths');
+
   return (
     <>
       <div className={isFull ? 'relative z-10' : 'relative z-20'}>
-        <Header left="back" background="transparent" />
+        <Header left="back" background="transparent" onBack={handleBack} />
       </div>
       <BottomsheetDrag>
-        {isFull && <Header left="back" center="title" centerTitle="배리어프리" isSheet />}
+        {isFull && (
+          <Header left="back" center="title" centerTitle="배리어프리" isSheet onBack={handleBack} />
+        )}
         <div className="flex flex-col gap-10 p-5 text-zinc-800">
           <div className="flex flex-col gap-1">
             <h1 className="text-base font-semibold">이용 대상</h1>
