@@ -18,12 +18,17 @@ export const BUILDING_CENTERS = {
   SENTENNIAL_MUSEUM: { x: 3159, y: 8637 }, //박물관
 };
 
+// 아티스트 모드(5/22 또는 배리어프리)에서 building 포커스 좌표 override
+export const ARTIST_BUILDING_CENTERS = {
+  GRASS_GROUND: { x: 1500, y: 2962 },
+};
+
 // 줌 레벨 (1 = 100%)
 export const MAP_ZOOM_LEVELS = {
   ZL1: 1.5,
   ZL2: 4.0,
   ZL3: 6.0,
-  ZL4: 14.0,
+  ZL4: 15.0,
 };
 
 // 건물/부스 클릭 시 사용할 줌 레벨
