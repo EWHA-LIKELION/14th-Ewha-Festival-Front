@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
@@ -11,7 +11,7 @@ import Header from '@/components/Header';
 import FilterBar from '@/components/FilterBar';
 import EtcCard from '@/components/Card/EtcCard';
 import etcData from '@/data/etcData.json';
-import { getLabel } from '@/utils/labelHelper';
+import { getLabel, padNumber } from '@/utils/labelHelper';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { ETC_CATEGORY, ETC_DESCRIPTION } from '@/constants/category';
 
@@ -20,6 +20,7 @@ const EtcSheet = () => {
   const navigate = useNavigate();
   const isFull = useBottomsheetStore((s) => s.isFull());
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
+  const { focusPOI } = useOutletContext();
   const [selected, setSelected] = useState(false);
   const scrollContainerRef = useRef(null);
 
@@ -53,7 +54,12 @@ const EtcSheet = () => {
 
   const handleSelectEtc = (item) => {
     const id = `${item.category}-${item.location}-${item.number}`;
-    setSelected((prev) => (prev === id ? false : id));
+    setSelected((prev) => {
+      const next = prev === id ? false : id;
+      const poiId = next ? `${item.location}-${item.category}-${padNumber(item.number)}` : null;
+      focusPOI(poiId);
+      return next;
+    });
   };
 
   // 필터링된 데이터

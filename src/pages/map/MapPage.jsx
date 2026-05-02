@@ -2,7 +2,7 @@
  * 지도
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet, useLocation } from 'react-router-dom';
@@ -272,20 +272,28 @@ const MapPage = () => {
     return () => observer.disconnect();
   }, [activePOIId, poisSvg, isBoothPage, isEtcPage, matchBarrierFree]);
 
+  // POI를 active 상태로 만들고 해당 좌표로 focus 이동
+  // 부스 상세 페이지 진입, 시트 카드 클릭 등에서 호출
+  const focusPOI = useCallback(
+    (poiId) => {
+      setActivePOIId(poiId);
+      if (!poiId || !poisLayerRef.current) return;
+      const el = poisLayerRef.current.querySelector(`[id="${poiId}"]`);
+      if (el && typeof el.getBBox === 'function') {
+        const bbox = el.getBBox();
+        const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
+        moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
+      }
+    },
+    [moveFocusToPoint],
+  );
+
   // 부스 상세 페이지(/map/booths/:id) 진입 시 해당 부스 POI active + 포커스 이동
   useEffect(() => {
-    if (!boothDetail?.location || !poisLayerRef.current || !poisSvg) return;
+    if (!boothDetail?.location || !poisSvg) return;
     const { building, number } = boothDetail.location;
-    const poiId = `${building}-BOOTH-${padNumber(number)}`;
-    setActivePOIId(poiId);
-
-    const el = poisLayerRef.current.querySelector(`[id="${poiId}"]`);
-    if (el && typeof el.getBBox === 'function') {
-      const bbox = el.getBBox();
-      const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
-      moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
-    }
-  }, [boothDetail, poisSvg, moveFocusToPoint]);
+    focusPOI(`${building}-BOOTH-${padNumber(number)}`);
+  }, [boothDetail, poisSvg, focusPOI]);
 
   // 아티스트 모드에서 GRASS_GROUND 등은 좌표를 override 해서 포커스
   const focusBuilding = (buildingId) => {
@@ -552,7 +560,7 @@ const MapPage = () => {
         </TransformComponent>
       </TransformWrapper>
 
-      <Outlet />
+      <Outlet context={{ focusPOI }} />
 
       <div className="reactive-width fixed bottom-28 left-1/2 -translate-x-1/2">
         <div className="flex justify-center">
