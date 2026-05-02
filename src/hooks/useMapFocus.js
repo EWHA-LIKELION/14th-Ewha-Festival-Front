@@ -11,6 +11,10 @@ const getSheetSnapHeights = () => ({
   full: window.innerHeight,
 });
 
+// 시트가 large/full로 차있어도 가시 영역이 너무 작아지지 않도록 medium으로 클램프
+const normalizeSheetSizeForFocus = (size) =>
+  size === 'large' || size === 'full' ? 'medium' : size;
+
 const computeTargetTransform = (W, H, svgX, svgY, scale, sheetHeight) => {
   const renderScale = H / SVG_HEIGHT;
   const cx = svgX * renderScale;
@@ -39,7 +43,9 @@ const useMapFocus = () => {
       const W = mapRef.current.clientWidth;
       const H = mapRef.current.clientHeight;
       const heights = getSheetSnapHeights();
-      const effectiveSheetSize = overrideSheetSize ?? sheetSizeRef.current;
+      const effectiveSheetSize = normalizeSheetSizeForFocus(
+        overrideSheetSize ?? sheetSizeRef.current,
+      );
       const sheetHeight = heights[effectiveSheetSize] ?? heights.medium;
       const { x, y } = computeTargetTransform(W, H, svgX, svgY, zoomScale, sheetHeight);
       transformRef.current.setTransform(x, y, zoomScale, duration);
@@ -58,7 +64,9 @@ const useMapFocus = () => {
 
   const getInitialPosition = useCallback((svgX, svgY, scale, overrideSheetSize) => {
     const heights = getSheetSnapHeights();
-    const effectiveSheetSize = overrideSheetSize ?? sheetSizeRef.current ?? 'medium';
+    const effectiveSheetSize = normalizeSheetSizeForFocus(
+      overrideSheetSize ?? sheetSizeRef.current ?? 'medium',
+    );
     const sheetHeight = heights[effectiveSheetSize] ?? heights.medium;
     return computeTargetTransform(
       window.innerWidth,
