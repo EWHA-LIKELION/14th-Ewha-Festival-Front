@@ -4,13 +4,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
-
-const SNAP_HEIGHTS = {
-  small: 87,
-  medium: 385,
-  large: 589,
-  full: window.innerHeight,
-};
+import { SHEET_SNAP_HEIGHTS as SNAP_HEIGHTS } from '@/constants/bottomsheet';
 
 const FULL_THRESHOLD = (SNAP_HEIGHTS.large + window.innerHeight) / 2;
 

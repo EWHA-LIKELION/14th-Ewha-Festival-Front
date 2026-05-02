@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import { BUILDING_CENTERS, MAP_CLICK_ZOOM_SCALE, SVG_HEIGHT } from '@/constants/mapCoordinates';
+import { SHEET_SNAP_HEIGHTS } from '@/constants/bottomsheet';
 
 const TOP_OFFSET = 108;
-
-const getSheetSnapHeights = () => ({
-  small: 87,
-  medium: 385,
-  large: 589,
-  full: window.innerHeight,
-});
 
 // 시트가 large/full로 차있어도 가시 영역이 너무 작아지지 않도록 medium으로 클램프
 const normalizeSheetSizeForFocus = (size) =>
@@ -42,7 +36,7 @@ const useMapFocus = () => {
       if (!transformRef.current || !mapRef.current) return;
       const W = mapRef.current.clientWidth;
       const H = mapRef.current.clientHeight;
-      const heights = getSheetSnapHeights();
+      const heights = SHEET_SNAP_HEIGHTS;
       const effectiveSheetSize = normalizeSheetSizeForFocus(
         overrideSheetSize ?? sheetSizeRef.current,
       );
@@ -63,7 +57,7 @@ const useMapFocus = () => {
   );
 
   const getInitialPosition = useCallback((svgX, svgY, scale, overrideSheetSize) => {
-    const heights = getSheetSnapHeights();
+    const heights = SHEET_SNAP_HEIGHTS;
     const effectiveSheetSize = normalizeSheetSizeForFocus(
       overrideSheetSize ?? sheetSizeRef.current ?? 'medium',
     );
