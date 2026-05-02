@@ -30,7 +30,7 @@ const EMPTY_ARRAY = [];
 // 아티스트 라벨/POI 적용일 (2026-05-22)
 const IS_ARTIST_DAY = (() => {
   const today = new Date();
-  return today.getFullYear() === 2026 && today.getMonth() + 1 === 5 && today.getDate() === 3;
+  return today.getFullYear() === 2026 && today.getMonth() + 1 === 5 && today.getDate() === 22;
 })();
 
 const MapPage = () => {
