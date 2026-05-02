@@ -383,7 +383,6 @@ const MapPage = () => {
         setFilter('show', 'location', isShowLocation ? [normalizedId] : []);
       }
 
-      console.log(`🏢 건물 클릭: ${normalizedId}`);
       focusBuilding(normalizedId);
     };
 
@@ -418,6 +417,7 @@ const MapPage = () => {
       const barrierTarget = e.target.closest('[id="Barrierfree"]');
       if (barrierTarget) {
         navigate('/map/barrierfree');
+        focusBuilding('GRASS_GROUND');
         return;
       }
 
@@ -431,7 +431,6 @@ const MapPage = () => {
       setFilter('etc', 'location', []);
       setFilter('show', 'location', []);
 
-      console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
       const bbox = target.getBBox();
       const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
       // 비BOOTH POI는 /map/etc로 이동 → 시트가 medium으로 올라오므로 미리 반영
