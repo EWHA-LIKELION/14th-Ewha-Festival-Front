@@ -262,7 +262,7 @@ const ShowDetailSheet = () => {
                 activeIndex={activeTab}
                 onChange={(index) => setActiveTab(index)}
               />
-              <div className="flex w-full flex-col items-start self-stretch">
+              <div className="flex w-full flex-col items-stretch self-stretch">
                 {activeTab === 0 && (
                   <div className="flex w-full flex-col gap-2 pb-36">
                     {show.setlist && show.setlist.length > 0 ? (

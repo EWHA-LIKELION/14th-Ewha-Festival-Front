@@ -108,7 +108,12 @@ const BoothDetailSheet = () => {
                   <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                     {booth.name || '부스명'}
                   </h2>
-                  <ScrapButton id={id} type="booth" initialScrapped={booth.is_scrapped} count={booth.scraps_count} />
+                  <ScrapButton
+                    id={id}
+                    type="booth"
+                    initialScrapped={booth.is_scrapped}
+                    count={booth.scraps_count}
+                  />
                 </div>
 
                 {(categoryText || booth.is_ongoing !== undefined) && (
@@ -254,7 +259,7 @@ const BoothDetailSheet = () => {
                 activeIndex={activeTab}
                 onChange={(index) => setActiveTab(index)}
               />
-              <div className="flex w-full flex-col items-center self-stretch">
+              <div className="flex w-full flex-col items-stretch self-stretch">
                 {activeTab === 0 && (
                   <div className="pb-36">
                     {booth.product && booth.product.length > 0 ? (
