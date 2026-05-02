@@ -20,7 +20,7 @@ export const BUILDING_CENTERS = {
 
 // 아티스트 모드(5/22 또는 배리어프리)에서 building 포커스 좌표 override
 export const ARTIST_BUILDING_CENTERS = {
-  GRASS_GROUND: { x: 1500, y: 2962 },
+  GRASS_GROUND: { x: 4450, y: 8950 },
 };
 
 // 줌 레벨 (1 = 100%)

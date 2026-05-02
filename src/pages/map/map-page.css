@@ -40,7 +40,8 @@ svg {
 .pois-layer svg [id*='DISH'],
 .pois-layer svg [id*='GAS'],
 .pois-layer svg [id*='STUFF'],
-.pois-layer svg [id*='FOOD'] {
+.pois-layer svg [id*='FOOD'],
+.pois-layer svg [id='Barrierfree'] {
   cursor: pointer;
   pointer-events: all;
   transition: filter 0.15s ease;
@@ -53,6 +54,11 @@ svg {
 .pois-layer svg [id*='STUFF'] *,
 .pois-layer svg [id*='FOOD'] * {
   pointer-events: visiblePainted;
+}
+
+/* Barrierfree는 building 위에 겹쳐있어 hit-area를 넓혀야 클릭이 가로채임 */
+.pois-layer svg [id='Barrierfree'] * {
+  pointer-events: all;
 }
 
 /* hover — buildings */
@@ -154,5 +160,13 @@ svg {
   stroke: #fd9a00 !important;
 }
 .pois-layer .poi-food.is-active path[fill='#FD9A00'] {
+  fill: #ffffff !important;
+}
+
+/* Barrierfree active — #CBFBF1 배경, #46ECD5 테두리, #00D5BE 아이콘 */
+.pois-layer [id='Barrierfree'].is-active path[fill='#CBFBF1'] {
+  fill: #46ecd5 !important;
+}
+.pois-layer [id='Barrierfree'].is-active path[fill='#00D5BE'] {
   fill: #ffffff !important;
 }

@@ -21,10 +21,17 @@ import {
   SVG_WIDTH,
   SVG_HEIGHT,
   INITIAL_CENTER,
+  ARTIST_BUILDING_CENTERS,
 } from '@/constants/mapCoordinates';
 
 const savedTransform = { scale: MAP_ZOOM_LEVELS.ZL2, positionX: 0, positionY: 0 };
 const EMPTY_ARRAY = [];
+
+// 아티스트 라벨/POI 적용일 (2026-05-22)
+const IS_ARTIST_DAY = (() => {
+  const today = new Date();
+  return today.getFullYear() === 2026 && today.getMonth() + 1 === 5 && today.getDate() === 2;
+})();
 
 const MapPage = () => {
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
@@ -87,18 +94,27 @@ const MapPage = () => {
     navigate('/map/barrierfree');
   };
 
-  // SVG 불러오기
+  // 아티스트 데이(5/22) 또는 배리어프리 페이지 → artist 라벨/POI로 교체
+  const useArtistAssets = IS_ARTIST_DAY || !!matchBarrierFree;
+
+  // 빌딩 SVG는 항상 동일 — 한 번만 fetch
   useEffect(() => {
     fetch('/map/map-building.svg')
       .then((res) => res.text())
       .then((data) => setBuildingSvg(data));
-    fetch('/map/map-label.svg')
+  }, []);
+
+  // 라벨/POI SVG는 useArtistAssets에 따라 다른 파일 fetch
+  useEffect(() => {
+    const labelUrl = useArtistAssets ? '/map/map-artist-label.svg' : '/map/map-label.svg';
+    const poisUrl = useArtistAssets ? '/map/map-artist-pois.svg' : '/map/map-pois.svg';
+    fetch(labelUrl)
       .then((res) => res.text())
       .then((data) => setLabelSvg(data));
-    fetch('/map/map-pois.svg')
+    fetch(poisUrl)
       .then((res) => res.text())
       .then((data) => setPoisSvg(data));
-  }, []);
+  }, [useArtistAssets]);
 
   const BUILDING_IDS = [
     'STUDENT_UNION',
@@ -227,6 +243,13 @@ const MapPage = () => {
         el.classList.remove('is-active');
         CATEGORIES.forEach((cat) => el.classList.remove(`poi-${cat.toLowerCase()}`));
       });
+
+      // Barrierfree 아이콘: 배리어프리 페이지에서 active
+      if (matchBarrierFree) {
+        const barrierEl = layer.querySelector('[id="Barrierfree"]');
+        if (barrierEl) barrierEl.classList.add('is-active');
+      }
+
       if (!activePOIId) return;
       const isBoothPOI = activePOIId.includes('BOOTH');
       if (isBoothPOI && !isBoothPage) return;
@@ -247,7 +270,7 @@ const MapPage = () => {
     });
     observer.observe(poisLayerRef.current, { childList: true });
     return () => observer.disconnect();
-  }, [activePOIId, poisSvg, isBoothPage, isEtcPage]);
+  }, [activePOIId, poisSvg, isBoothPage, isEtcPage, matchBarrierFree]);
 
   // 부스 상세 페이지(/map/booths/:id) 진입 시 해당 부스 POI active + 포커스 이동
   useEffect(() => {
@@ -264,12 +287,23 @@ const MapPage = () => {
     }
   }, [boothDetail, poisSvg, moveFocusToPoint]);
 
+  // 아티스트 모드에서 GRASS_GROUND 등은 좌표를 override 해서 포커스
+  const focusBuilding = (buildingId) => {
+    const override = useArtistAssets ? ARTIST_BUILDING_CENTERS[buildingId] : null;
+    if (override) {
+      moveFocusToPoint(override.x, override.y, MAP_CLICK_ZOOM_SCALE);
+    } else {
+      moveFocusToBuilding(buildingId);
+    }
+  };
+
   // 공연 상세 페이지(/map/shows/:id) 진입 시 해당 공연 building 포커스 이동
   // (active 표시는 위 building is-active 동기화 useEffect가 showDetail 기반으로 처리)
   useEffect(() => {
     if (!showDetail?.location?.building) return;
-    moveFocusToBuilding(showDetail.location.building);
-  }, [showDetail, moveFocusToBuilding]);
+    focusBuilding(showDetail.location.building);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showDetail, useArtistAssets, moveFocusToBuilding, moveFocusToPoint]);
 
   // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
   // 단, 부스 상세 페이지에서는 검색어 없이도 active 유지
@@ -317,15 +351,19 @@ const MapPage = () => {
       const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
       if (!normalizedId) return;
 
+      // 배리어프리 페이지에서는 모든 건물 클릭을 차단 (active/포커스 변경 없음)
+      if (matchBarrierFree) {
+        showToast('선택할 수 없는 항목입니다.', 'warn');
+        return;
+      }
+
       const allowedLocations = isBoothPage
         ? BOOTH_LOCATION
         : isEtcPage
           ? BOOTH_LOCATION
           : isShowsPage
             ? SHOW_LOCATION
-            : matchBarrierFree
-              ? SHOW_LOCATION
-              : null;
+            : null;
       if (allowedLocations && !allowedLocations.some((o) => o.value === normalizedId)) {
         showToast('선택할 수 없는 항목입니다.', 'warn');
         return;
@@ -346,7 +384,7 @@ const MapPage = () => {
       }
 
       console.log(`🏢 건물 클릭: ${normalizedId}`);
-      moveFocusToBuilding(normalizedId);
+      focusBuilding(normalizedId);
     };
 
     const el = buildingLayerRef.current;
@@ -356,6 +394,8 @@ const MapPage = () => {
     buildingSvg,
     setFilter,
     moveFocusToBuilding,
+    moveFocusToPoint,
+    useArtistAssets,
     isBoothPage,
     isEtcPage,
     isShowsPage,
@@ -373,6 +413,13 @@ const MapPage = () => {
     const handleClick = (e) => {
       e.stopPropagation();
       if (!(e.target instanceof SVGElement)) return;
+
+      // Barrierfree 아이콘 → 배리어프리 페이지로 이동
+      const barrierTarget = e.target.closest('[id="Barrierfree"]');
+      if (barrierTarget) {
+        navigate('/map/barrierfree');
+        return;
+      }
 
       const target = e.target.closest(selector);
       if (!target) return;
