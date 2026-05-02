@@ -4,7 +4,7 @@
 
 export const SHEET_SNAP_HEIGHTS = {
   small: 87,
-  medium: 345,
+  medium: 325,
   large: 589,
   full: typeof window !== 'undefined' ? window.innerHeight : 0,
 };
