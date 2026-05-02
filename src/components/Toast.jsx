@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const Toast = ({ type = 'check', text = '' }) => {
   return (
-    <div className="backdrop-blur-token-lg flex w-89.5 items-center gap-2 rounded-lg bg-black/50 px-5 py-3">
+    <div className="backdrop-blur-token-lg flex w-full items-center gap-2 rounded-lg bg-black/50 px-5 py-3">
       {type === 'check' ? (
         <img src="/icons/icon-greencheck.svg" />
       ) : (
@@ -42,7 +42,7 @@ export const ToastManager = ({ type, text, isOpen, duration = 3000, onClose }) =
 
   return (
     <div
-      className={`fixed left-1/2 z-50 -translate-x-1/2 ${
+      className={`reactive-width fixed left-1/2 z-50 -translate-x-1/2 px-5 ${
         type === 'warn'
           ? 'bottom-[calc(env(safe-area-inset-bottom)+80px)]'
           : 'bottom-[calc(env(safe-area-inset-bottom)+20px)]'
