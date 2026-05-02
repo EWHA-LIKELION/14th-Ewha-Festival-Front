@@ -31,6 +31,7 @@ const BoothDetailSheet = () => {
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const isFull = useBottomsheetStore((s) => s.isFull());
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const { data: booth, error, isLoading } = useBoothDetail(id);
   const [showModal, setShowModal] = useState(false);
@@ -168,6 +169,7 @@ const BoothDetailSheet = () => {
                   <div className="flex flex-col items-start gap-1.5">
                     <div className="flex items-center gap-1.5">
                       <button
+                        onClick={() => setSheetSize('medium')}
                         className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
                           locationName
                             ? 'underline decoration-solid underline-offset-2'
