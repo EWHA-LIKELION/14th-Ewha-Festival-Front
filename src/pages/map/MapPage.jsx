@@ -9,6 +9,7 @@ import { useNavigate, useMatch, Outlet, useLocation } from 'react-router-dom';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
 import useSearchStore from '@/store/useSearchStore';
+import useToastStore from '@/store/useToastStore';
 import { useMapFocus } from '@/hooks';
 import { BOOTH_LOCATION, SHOW_LOCATION } from '@/constants/building';
 import { getLabel } from '@/utils/labelHelper';
@@ -25,6 +26,7 @@ const EMPTY_ARRAY = [];
 
 const MapPage = () => {
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
+  const showToast = useToastStore((s) => s.showToast);
   const boothLocation = useFilterStore((s) => s.filters.booth?.location ?? EMPTY_ARRAY);
   const etcLocation = useFilterStore((s) => s.filters.etc?.location ?? EMPTY_ARRAY);
   const showLocation = useFilterStore((s) => s.filters.show?.location ?? EMPTY_ARRAY);
@@ -245,6 +247,20 @@ const MapPage = () => {
       const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
       if (!normalizedId) return;
 
+      const allowedLocations = isBoothPage
+        ? BOOTH_LOCATION
+        : isEtcPage
+          ? BOOTH_LOCATION
+          : isShowsPage
+            ? SHOW_LOCATION
+            : matchBarrierFree
+              ? SHOW_LOCATION
+              : null;
+      if (allowedLocations && !allowedLocations.some((o) => o.value === normalizedId)) {
+        showToast('선택할 수 없는 항목입니다.', 'warn');
+        return;
+      }
+
       setActivePOIId(null);
       const isShowLocation = SHOW_LOCATION.some((o) => o.value === normalizedId);
       if (isBoothPage) {
@@ -252,7 +268,7 @@ const MapPage = () => {
       } else if (isEtcPage) {
         setFilter('etc', 'location', [normalizedId]);
       } else if (isShowsPage) {
-        setFilter('show', 'location', isShowLocation ? [normalizedId] : []);
+        setFilter('show', 'location', [normalizedId]);
       } else {
         setFilter('booth', 'location', [normalizedId]);
         setFilter('etc', 'location', [normalizedId]);
@@ -266,7 +282,16 @@ const MapPage = () => {
     const el = buildingLayerRef.current;
     el.addEventListener('click', handleClick);
     return () => el.removeEventListener('click', handleClick);
-  }, [buildingSvg, setFilter, moveFocusToBuilding, isBoothPage, isEtcPage, isShowsPage]);
+  }, [
+    buildingSvg,
+    setFilter,
+    moveFocusToBuilding,
+    isBoothPage,
+    isEtcPage,
+    isShowsPage,
+    matchBarrierFree,
+    showToast,
+  ]);
 
   // Pois 클릭 이벤트
   useEffect(() => {
