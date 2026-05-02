@@ -11,8 +11,9 @@ import useFilterStore from '@/store/useFilterStore';
 import useSearchStore from '@/store/useSearchStore';
 import useToastStore from '@/store/useToastStore';
 import { useMapFocus } from '@/hooks';
+import { useBoothDetail } from '@/hooks/useBoothDetail';
 import { BOOTH_LOCATION, SHOW_LOCATION } from '@/constants/building';
-import { getLabel } from '@/utils/labelHelper';
+import { getLabel, padNumber } from '@/utils/labelHelper';
 import {
   MAP_ZOOM_LEVELS,
   MAP_CLICK_ZOOM_SCALE,
@@ -50,10 +51,13 @@ const MapPage = () => {
   const matchEtc = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
   const matchBooths = useMatch('/map/booths/*');
+  const matchBoothDetail = useMatch('/map/booths/:id');
   const matchShows = useMatch('/map/shows/*');
   const isBoothPage = !!matchBooths;
   const isEtcPage = !!matchEtc;
   const isShowsPage = !!matchShows;
+  const boothDetailId = matchBoothDetail?.params?.id;
+  const { data: boothDetail } = useBoothDetail(boothDetailId);
 
   const { pathname } = useLocation();
   const prevPathnameRef = useRef(pathname);
@@ -222,11 +226,28 @@ const MapPage = () => {
     return () => observer.disconnect();
   }, [activePOIId, poisSvg, isBoothPage, isEtcPage]);
 
+  // 부스 상세 페이지(/map/booths/:id) 진입 시 해당 부스 POI active + 포커스 이동
+  useEffect(() => {
+    if (!boothDetail?.location || !poisLayerRef.current || !poisSvg) return;
+    const { building, number } = boothDetail.location;
+    const poiId = `${building}-BOOTH-${padNumber(number)}`;
+    setActivePOIId(poiId);
+
+    const el = poisLayerRef.current.querySelector(`[id="${poiId}"]`);
+    if (el && typeof el.getBBox === 'function') {
+      const bbox = el.getBBox();
+      const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
+      moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
+    }
+  }, [boothDetail, poisSvg, moveFocusToPoint]);
+
   // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
+  // 단, 부스 상세 페이지에서는 검색어 없이도 active 유지
   useEffect(() => {
     if (searchQuery) return;
+    if (matchBoothDetail) return;
     if (activePOIId?.includes('BOOTH')) setActivePOIId(null);
-  }, [searchQuery, activePOIId]);
+  }, [searchQuery, activePOIId, matchBoothDetail]);
 
   // BOOTH active 상태가 해제되면(다른 POI 클릭/건물 클릭/페이지 이동 등) 검색어 비우기
   const prevWasBoothActiveRef = useRef(false);
