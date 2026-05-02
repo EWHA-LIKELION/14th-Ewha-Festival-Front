@@ -30,7 +30,7 @@ const EMPTY_ARRAY = [];
 // 아티스트 라벨/POI 적용일 (2026-05-22)
 const IS_ARTIST_DAY = (() => {
   const today = new Date();
-  return today.getFullYear() === 2026 && today.getMonth() + 1 === 5 && today.getDate() === 2;
+  return today.getFullYear() === 2026 && today.getMonth() + 1 === 5 && today.getDate() === 3;
 })();
 
 const MapPage = () => {
@@ -184,13 +184,16 @@ const MapPage = () => {
     }
   }, [pathname, setFilter]);
 
-  // 배리어프리 페이지 진입 시 building/booth/etc/show active 초기화
+  // 배리어프리 페이지 진입 시 building/booth/etc/show active 초기화 + GRASS_GROUND focus
+  // focus는 artist 좌표가 적용되도록 useArtistAssets 반영 후(렌더 사이클 이후) 호출
   useEffect(() => {
     if (!matchBarrierFree) return;
     setFilter('booth', 'location', []);
     setFilter('etc', 'location', []);
     setFilter('show', 'location', []);
     setActivePOIId(null);
+    focusBuilding('GRASS_GROUND');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchBarrierFree, setFilter]);
 
   // 필터 location → 지도 building is-active 동기화 (현재 페이지 기준)
@@ -422,10 +425,10 @@ const MapPage = () => {
       if (!(e.target instanceof SVGElement)) return;
 
       // Barrierfree 아이콘 → 배리어프리 페이지로 이동
+      // (focus는 matchBarrierFree useEffect에서 artist 좌표로 처리)
       const barrierTarget = e.target.closest('[id="Barrierfree"]');
       if (barrierTarget) {
         navigate('/map/barrierfree');
-        focusBuilding('GRASS_GROUND');
         return;
       }
 
