@@ -156,6 +156,15 @@ const MapPage = () => {
     }
   }, [pathname, setFilter]);
 
+  // 배리어프리 페이지 진입 시 building/booth/etc/show active 초기화
+  useEffect(() => {
+    if (!matchBarrierFree) return;
+    setFilter('booth', 'location', []);
+    setFilter('etc', 'location', []);
+    setFilter('show', 'location', []);
+    setActivePOIId(null);
+  }, [matchBarrierFree, setFilter]);
+
   // 필터 location → 지도 building is-active 동기화 (현재 페이지 기준)
   useEffect(() => {
     if (!buildingLayerRef.current || !buildingSvg) return;
