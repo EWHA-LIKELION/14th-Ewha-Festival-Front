@@ -12,6 +12,7 @@ import useSearchStore from '@/store/useSearchStore';
 import useToastStore from '@/store/useToastStore';
 import { useMapFocus } from '@/hooks';
 import { useBoothDetail } from '@/hooks/useBoothDetail';
+import { useShowDetail } from '@/hooks/useShowDetail';
 import { BOOTH_LOCATION, SHOW_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
 import {
@@ -54,11 +55,14 @@ const MapPage = () => {
   const matchBooths = useMatch('/map/booths/*');
   const matchBoothDetail = useMatch('/map/booths/:id');
   const matchShows = useMatch('/map/shows/*');
+  const matchShowDetail = useMatch('/map/shows/:id');
   const isBoothPage = !!matchBooths;
   const isEtcPage = !!matchEtc;
   const isShowsPage = !!matchShows;
   const boothDetailId = matchBoothDetail?.params?.id;
+  const showDetailId = matchShowDetail?.params?.id;
   const { data: boothDetail } = useBoothDetail(boothDetailId);
+  const { data: showDetail } = useShowDetail(showDetailId);
 
   const { pathname } = useLocation();
   const prevPathnameRef = useRef(pathname);
@@ -187,12 +191,27 @@ const MapPage = () => {
     else if (isShowsPage) activeLocations = showLocation;
     else activeLocations = [...new Set([...boothLocation, ...etcLocation, ...showLocation])];
 
+    // 공연 상세 페이지에서는 필터와 별개로 showDetail의 building도 active 표시
+    if (matchShowDetail && showDetail?.location?.building) {
+      activeLocations = [...new Set([...activeLocations, showDetail.location.building])];
+    }
+
     activeLocations.forEach((id) => {
       buildingLayerRef.current.querySelectorAll(`[id^="${id}"]`).forEach((el) => {
         el.classList.add('is-active');
       });
     });
-  }, [boothLocation, etcLocation, showLocation, buildingSvg, isBoothPage, isEtcPage, isShowsPage]);
+  }, [
+    boothLocation,
+    etcLocation,
+    showLocation,
+    buildingSvg,
+    isBoothPage,
+    isEtcPage,
+    isShowsPage,
+    matchShowDetail,
+    showDetail,
+  ]);
 
   // activePOIId → 지도 POI is-active 동기화
   // pois-layer의 SVG가 재렌더링으로 교체될 수 있어, MutationObserver로 재적용까지 보장
@@ -244,6 +263,13 @@ const MapPage = () => {
       moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
     }
   }, [boothDetail, poisSvg, moveFocusToPoint]);
+
+  // 공연 상세 페이지(/map/shows/:id) 진입 시 해당 공연 building 포커스 이동
+  // (active 표시는 위 building is-active 동기화 useEffect가 showDetail 기반으로 처리)
+  useEffect(() => {
+    if (!showDetail?.location?.building) return;
+    moveFocusToBuilding(showDetail.location.building);
+  }, [showDetail, moveFocusToBuilding]);
 
   // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
   // 단, 부스 상세 페이지에서는 검색어 없이도 active 유지
