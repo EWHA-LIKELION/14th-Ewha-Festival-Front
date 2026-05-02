@@ -45,6 +45,7 @@ const MapPage = () => {
   const poisLayerRef = useRef(null);
 
   const [buildingSvg, setBuildingSvg] = useState('');
+  const [labelSvg, setLabelSvg] = useState('');
   const [poisSvg, setPoisSvg] = useState('');
   const [activePOIId, setActivePOIId] = useState(null);
 
@@ -87,6 +88,9 @@ const MapPage = () => {
     fetch('/map/map-building.svg')
       .then((res) => res.text())
       .then((data) => setBuildingSvg(data));
+    fetch('/map/map-label.svg')
+      .then((res) => res.text())
+      .then((data) => setLabelSvg(data));
     fetch('/map/map-pois.svg')
       .then((res) => res.text())
       .then((data) => setPoisSvg(data));
@@ -459,10 +463,9 @@ const MapPage = () => {
               dangerouslySetInnerHTML={{ __html: buildingSvg }}
               style={{ pointerEvents: 'auto' }}
             />
-            <img
-              src="/map/map-label.svg"
-              alt="map-label"
-              className="pointer-events-none absolute inset-0 h-full w-full"
+            <div
+              className="pointer-events-none absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
+              dangerouslySetInnerHTML={{ __html: labelSvg }}
             />
             <div
               ref={poisLayerRef}
