@@ -104,7 +104,7 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
       </div>
 
       {isFull && (
-        <div className="reactive-width fixed bottom-28 left-1/2 -translate-x-1/2">
+        <div className="reactive-width fixed bottom-20 left-1/2 -translate-x-1/2">
           <div className="flex justify-center">
             <button
               onClick={() => setSheetSize('medium')}
