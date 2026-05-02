@@ -33,15 +33,19 @@ const useMapFocus = () => {
     });
   }, []);
 
-  const moveFocusToPoint = useCallback((svgX, svgY, zoomScale, duration = 400) => {
-    if (!transformRef.current || !mapRef.current) return;
-    const W = mapRef.current.clientWidth;
-    const H = mapRef.current.clientHeight;
-    const heights = getSheetSnapHeights();
-    const sheetHeight = heights[sheetSizeRef.current] ?? heights.medium;
-    const { x, y } = computeTargetTransform(W, H, svgX, svgY, zoomScale, sheetHeight);
-    transformRef.current.setTransform(x, y, zoomScale, duration);
-  }, []);
+  const moveFocusToPoint = useCallback(
+    (svgX, svgY, zoomScale, duration = 400, overrideSheetSize) => {
+      if (!transformRef.current || !mapRef.current) return;
+      const W = mapRef.current.clientWidth;
+      const H = mapRef.current.clientHeight;
+      const heights = getSheetSnapHeights();
+      const effectiveSheetSize = overrideSheetSize ?? sheetSizeRef.current;
+      const sheetHeight = heights[effectiveSheetSize] ?? heights.medium;
+      const { x, y } = computeTargetTransform(W, H, svgX, svgY, zoomScale, sheetHeight);
+      transformRef.current.setTransform(x, y, zoomScale, duration);
+    },
+    [],
+  );
 
   const moveFocusToBuilding = useCallback(
     (buildingId) => {
@@ -52,9 +56,10 @@ const useMapFocus = () => {
     [moveFocusToPoint],
   );
 
-  const getInitialPosition = useCallback((svgX, svgY, scale, sheetSize = 'medium') => {
+  const getInitialPosition = useCallback((svgX, svgY, scale, overrideSheetSize) => {
     const heights = getSheetSnapHeights();
-    const sheetHeight = heights[sheetSize] ?? heights.medium;
+    const effectiveSheetSize = overrideSheetSize ?? sheetSizeRef.current ?? 'medium';
+    const sheetHeight = heights[effectiveSheetSize] ?? heights.medium;
     return computeTargetTransform(
       window.innerWidth,
       window.innerHeight,

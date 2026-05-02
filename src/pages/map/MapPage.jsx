@@ -228,6 +228,16 @@ const MapPage = () => {
     if (activePOIId?.includes('BOOTH')) setActivePOIId(null);
   }, [searchQuery, activePOIId]);
 
+  // BOOTH active 상태가 해제되면(다른 POI 클릭/건물 클릭/페이지 이동 등) 검색어 비우기
+  const prevWasBoothActiveRef = useRef(false);
+  useEffect(() => {
+    const isBoothActive = activePOIId?.includes('BOOTH') ?? false;
+    if (prevWasBoothActiveRef.current && !isBoothActive && searchQuery) {
+      setSearchQuery('');
+    }
+    prevWasBoothActiveRef.current = isBoothActive;
+  }, [activePOIId, searchQuery, setSearchQuery]);
+
   // 페이지 이동으로 현재 POI 카테고리와 페이지가 맞지 않으면 activePOIId 해제
   // pathname 변경 시에만 실행 (방금 set한 activePOIId를 같은 렌더에서 날리지 않도록)
   const prevPathForPOIRef = useRef(pathname);
@@ -326,7 +336,15 @@ const MapPage = () => {
       console.log(`🗺️ POI 클릭: ${target.id} (${category})`);
       const bbox = target.getBBox();
       const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
-      moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
+      // 비BOOTH POI는 /map/etc로 이동 → 시트가 medium으로 올라오므로 미리 반영
+      const targetSheetSize = category !== 'BOOTH' ? 'medium' : undefined;
+      moveFocusToPoint(
+        bbox.x + bbox.width / 2,
+        bbox.y + bbox.height / 2,
+        zoomScale,
+        400,
+        targetSheetSize,
+      );
 
       const location = BUILDING_IDS.find((id) => target.id.includes(id));
       const number = parseInt(target.id.split(`${category}-`).pop(), 10);
@@ -346,7 +364,14 @@ const MapPage = () => {
     return () => el.removeEventListener('click', handleClick);
   }, [poisSvg, moveFocusToPoint, navigate, setFilter, setSearchQuery, addRecentSearch]);
 
-  const initialPos = getInitialPosition(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2);
+  // EtcSheet/BarrierFreeSheet은 마운트 시 시트를 medium으로 올림 → 포커스 계산도 medium 가정
+  const initialSheetSize = matchEtc || matchBarrierFree ? 'medium' : undefined;
+  const initialPos = getInitialPosition(
+    INITIAL_CENTER.x,
+    INITIAL_CENTER.y,
+    MAP_ZOOM_LEVELS.ZL2,
+    initialSheetSize,
+  );
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
@@ -386,7 +411,13 @@ const MapPage = () => {
         initialPositionX={initialPos.x}
         initialPositionY={initialPos.y}
         onInit={() => {
-          moveFocusToPoint(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2, 0);
+          moveFocusToPoint(
+            INITIAL_CENTER.x,
+            INITIAL_CENTER.y,
+            MAP_ZOOM_LEVELS.ZL2,
+            0,
+            initialSheetSize,
+          );
         }}
         onTransformed={(_, state) => {
           savedTransform.scale = state.scale;
