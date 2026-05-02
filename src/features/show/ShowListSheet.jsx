@@ -100,14 +100,14 @@ const ShowListSheet = () => {
 
             {/* 에러 */}
             {isError && (
-              <div className="py-24 text-center text-zinc-300">
+              <div className="pt-12 text-center text-zinc-300">
                 데이터를 불러오는데 실패했습니다.
               </div>
             )}
 
             {/* 공연 목록 */}
             {!isLoading && !isError && shows.length === 0 && (
-              <div className="py-24 text-center text-zinc-300">검색 결과가 없어요.</div>
+              <div className="pt-12 text-center text-zinc-300">검색 결과가 없어요.</div>
             )}
 
             {!isLoading &&
@@ -118,7 +118,7 @@ const ShowListSheet = () => {
 
             {/* 다음 페이지 로딩 */}
             {isFetchingNextPage && (
-              <div className="py-24 text-center text-sm text-zinc-300">더 불러오는 중...</div>
+              <div className="pt-12 text-center text-sm text-zinc-300">더 불러오는 중...</div>
             )}
           </div>
         </div>
