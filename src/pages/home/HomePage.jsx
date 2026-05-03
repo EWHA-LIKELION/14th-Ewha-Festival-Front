@@ -137,20 +137,6 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {/* 후원사 */}
-      <div className="flex flex-col gap-4 px-5 pt-10 pb-20">
-        <div className="flex flex-col items-center gap-1">
-          <h1 className="text-lg font-semibold text-zinc-800">후원사</h1>
-          <p className="text-sm font-normal text-zinc-500">
-            2026 대동제와 함께하는 공식 파트너예요!
-          </p>
-        </div>
-        <div className="flex justify-center gap-1.5">
-          <ImageCard name="이마트 24" />
-          <ImageCard name="likelion univ." />
-          <ImageCard name="the Venti" />
-        </div>
-      </div>
       <Footer />
     </>
   );

@@ -59,6 +59,10 @@ const MyShowPage = () => {
     return null;
   }
 
+  const goEditPage = () => {
+    navigate(`/admin/show/${id}/edit`);
+  };
+
   const goNoticePage = () => {
     navigate(`/admin/show/${id}/notice`);
   };
@@ -82,7 +86,7 @@ const MyShowPage = () => {
 
   return (
     <>
-      <Header left="back" right="edit" background="white" />
+      <Header left="back" right="edit" background="white" onEdit={goEditPage} />
       <img
         src={show.thumbnail || '/images/default-image-large.png'}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
@@ -102,7 +106,12 @@ const MyShowPage = () => {
               <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                 {show.name || '공연명'}
               </h2>
-              <ScrapButton id={id} type="show" initialScrapped={show.is_scrapped} count={show.scraps_count} />
+              <ScrapButton
+                id={id}
+                type="show"
+                initialScrapped={show.is_scrapped}
+                count={show.scraps_count}
+              />
             </div>
 
             {(categoryText || show.is_ongoing !== undefined) && (
@@ -165,13 +174,6 @@ const MyShowPage = () => {
                       locationName ? 'underline decoration-solid underline-offset-2' : ''
                     }`}
                   >
-                    {/* <button
-                    className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
-                      locationName
-                        ? 'underline decoration-solid underline-offset-2'
-                        : 'cursor-default'
-                    }`}
-                  > */}
                     {locationName || '-'}
                   </button>
 
@@ -250,7 +252,7 @@ const MyShowPage = () => {
             activeIndex={activeTab}
             onChange={(index) => setActiveTab(index)}
           />
-          <div className="flex w-full flex-col items-start self-stretch">
+          <div className="flex w-full flex-col items-stretch self-stretch">
             {activeTab === 0 && (
               <div className="flex w-full flex-col gap-2 pb-36">
                 {show.setlist && show.setlist.length > 0 ? (

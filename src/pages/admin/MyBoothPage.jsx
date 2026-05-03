@@ -59,6 +59,10 @@ const MyBoothPage = () => {
     return null;
   }
 
+  const goEditPage = () => {
+    navigate(`/admin/booth/${id}/edit`);
+  };
+
   const goNoticePage = () => {
     navigate(`/admin/booth/${id}/notice`);
   };
@@ -76,7 +80,7 @@ const MyBoothPage = () => {
 
   return (
     <>
-      <Header left="back" right="edit" background="white" />
+      <Header left="back" right="edit" background="white" onEdit={goEditPage} />
       <img
         src={booth.thumbnail || '/images/default-image-large.png'}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
@@ -96,7 +100,12 @@ const MyBoothPage = () => {
               <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                 {booth.name || '부스명'}
               </h2>
-              <ScrapButton id={id} type="booth" initialScrapped={booth.is_scrapped} count={booth.scraps_count} />
+              <ScrapButton
+                id={id}
+                type="booth"
+                initialScrapped={booth.is_scrapped}
+                count={booth.scraps_count}
+              />
             </div>
 
             {(categoryText || booth.is_ongoing !== undefined) && (
@@ -237,7 +246,7 @@ const MyBoothPage = () => {
             activeIndex={activeTab}
             onChange={(index) => setActiveTab(index)}
           />
-          <div className="flex w-full flex-col items-center self-stretch">
+          <div className="flex w-full flex-col items-stretch self-stretch">
             {activeTab === 0 && (
               <div className="pb-36">
                 {booth.product && booth.product.length > 0 ? (
