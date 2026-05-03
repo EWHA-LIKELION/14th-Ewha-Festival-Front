@@ -39,6 +39,8 @@ import BarrierFreeSheet from '@/features/BarrierFreeSheet';
 import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
 import MyBoothPage from '@/pages/admin/MyBoothPage';
 import MyShowPage from '@/pages/admin/MyShowPage';
+import BoothEditPage from '@/pages/admin/BoothEditPage';
+import ShowEditPage from '@/pages/admin/ShowEditPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
@@ -80,10 +82,10 @@ function App() {
         <Route path="admin">
           <Route path="confirm" element={<AdminConfirmPage />} />
           <Route path="booth/:id" element={<MyBoothPage />} />
-          <Route path="booth/:id/edit" element={<div>Booth Edit</div>} />
+          <Route path="booth/:id/edit" element={<BoothEditPage />} />
           <Route path="booth/:id/notice" element={<NoticePage />} />
           <Route path="show/:id" element={<MyShowPage />} />
-          <Route path="show/:id/edit" element={<div>Show Edit</div>} />
+          <Route path="show/:id/edit" element={<ShowEditPage />} />
           <Route path="show/:id/notice" element={<NoticePage />} />
         </Route>
       </Routes>

@@ -11,6 +11,7 @@ const VARIANT_CLASS = {
 };
 
 const Input = ({
+  name,
   value,
   onChange,
   onSubmit,
@@ -22,7 +23,7 @@ const Input = ({
 }) => {
   const isWhiteVariant = variant === 'square_white';
   const [isFocused, setIsFocused] = useState(false);
-  const subTextColor = error ? 'text-red-500' : 'text-zinc-500';
+  const subTextColor = error ? 'text-red-400' : 'text-zinc-500';
   const hasHelper = !!helperText;
   const hasCounter = !!maxLength;
   const showBottom = hasHelper || hasCounter;
@@ -33,7 +34,7 @@ const Input = ({
     hasHelper && hasCounter ? 'justify-between' : hasHelper ? 'justify-start' : 'justify-end';
 
   const borderColor = error
-    ? 'border border-red-500'
+    ? 'border border-red-400'
     : isFocused
       ? 'border border-emerald-600'
       : isWhiteVariant
@@ -52,7 +53,8 @@ const Input = ({
     <div className="flex w-full flex-col items-start">
       <input
         type="text"
-        value={value}
+        name={name}
+        value={value ?? ''}
         placeholder={placeholder}
         onChange={(e) => {
           let next = e.target.value;

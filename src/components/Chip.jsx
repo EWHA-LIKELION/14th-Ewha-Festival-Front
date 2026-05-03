@@ -38,7 +38,7 @@ function Chip({
 
   // 표시 텍스트 결정하가ㅣ
   const getDisplayText = () => {
-    if (variant === 'state') return isSelected ? '운영 중' : '종료';
+    if (variant === 'state') return text;
     if (variant === 'filter' && isSelected && selectedValue) return selectedValue;
     return text;
   };

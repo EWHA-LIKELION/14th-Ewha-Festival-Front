@@ -21,8 +21,8 @@ const MenuCard = ({ name, description, price, image, onImageClick }) => {
       className="flex w-full flex-col items-center justify-center bg-white"
     >
       <div className="flex w-full justify-between gap-4 py-5">
-        <div className="flex flex-col items-start justify-between gap-2">
-          <div className="flex flex-col items-start gap-1">
+        <div className="flex w-full flex-col items-start justify-between gap-2">
+          <div className="flex w-full flex-col items-start gap-1">
             <h2 className="line-clamp-1 overflow-hidden text-base leading-6 font-medium tracking-normal text-ellipsis text-zinc-800">
               {name || '메뉴명'}
             </h2>

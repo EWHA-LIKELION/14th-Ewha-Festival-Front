@@ -61,7 +61,9 @@ function Timepicker({
           type="time"
           value={startTime}
           onChange={(e) => handleStartChange(e.target.value)}
-          className="absolute inset-0 cursor-pointer opacity-0"
+          className={`absolute inset-0 z-10 opacity-0 ${
+            isSelected ? 'cursor-pointer' : 'cursor-not-allowed'
+          }`}
         />
       </div>
 
@@ -76,7 +78,9 @@ function Timepicker({
           type="time"
           value={endTime}
           onChange={(e) => handleEndChange(e.target.value)}
-          className="absolute inset-0 cursor-pointer opacity-0"
+          className={`absolute inset-0 z-10 opacity-0 ${
+            isSelected ? 'cursor-pointer' : 'cursor-not-allowed'
+          }`}
         />
       </div>
     </div>

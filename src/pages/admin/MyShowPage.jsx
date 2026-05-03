@@ -102,7 +102,12 @@ const MyShowPage = () => {
               <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                 {show.name || '공연명'}
               </h2>
-              <ScrapButton id={id} type="show" initialScrapped={show.is_scrapped} count={show.scraps_count} />
+              <ScrapButton
+                id={id}
+                type="show"
+                initialScrapped={show.is_scrapped}
+                count={show.scraps_count}
+              />
             </div>
 
             {(categoryText || show.is_ongoing !== undefined) && (
@@ -254,7 +259,7 @@ const MyShowPage = () => {
             {activeTab === 0 && (
               <div className="flex w-full flex-col gap-2 pb-36">
                 {show.setlist && show.setlist.length > 0 ? (
-                  show.setlist.map((item) => <SetlistCard key={item.id} title={item.name} />)
+                  show.setlist.map((item) => <SetlistCard key={item.id} setlist={item.name} />)
                 ) : (
                   <div className="flex w-full items-center justify-center self-stretch py-20 text-center text-base leading-6 font-normal tracking-normal text-zinc-300">
                     등록된 내용이 없어요.
