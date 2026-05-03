@@ -1,6 +1,6 @@
 // SVG 원본 크기
 export const SVG_WIDTH = 9843;
-export const SVG_HEIGHT = 12300;
+export const SVG_HEIGHT = 13000;
 
 // 클릭 시 해당 좌표로 지도 중앙 이동 및 줌 확대
 export const INITIAL_CENTER = { x: 3403, y: 7177 };
