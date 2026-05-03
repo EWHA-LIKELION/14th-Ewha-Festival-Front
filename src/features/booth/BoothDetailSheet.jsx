@@ -31,6 +31,7 @@ const BoothDetailSheet = () => {
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const isFull = useBottomsheetStore((s) => s.isFull());
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const { data: booth, error, isLoading } = useBoothDetail(id);
   const [showModal, setShowModal] = useState(false);
@@ -107,7 +108,12 @@ const BoothDetailSheet = () => {
                   <h2 className="text-2xl leading-8 font-semibold tracking-normal text-zinc-800">
                     {booth.name || '부스명'}
                   </h2>
-                  <ScrapButton id={id} type="booth" initialScrapped={booth.is_scrapped} count={booth.scraps_count} />
+                  <ScrapButton
+                    id={id}
+                    type="booth"
+                    initialScrapped={booth.is_scrapped}
+                    count={booth.scraps_count}
+                  />
                 </div>
 
                 {(categoryText || booth.is_ongoing !== undefined) && (
@@ -168,6 +174,7 @@ const BoothDetailSheet = () => {
                   <div className="flex flex-col items-start gap-1.5">
                     <div className="flex items-center gap-1.5">
                       <button
+                        onClick={() => setSheetSize('medium')}
                         className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
                           locationName
                             ? 'underline decoration-solid underline-offset-2'
@@ -252,7 +259,7 @@ const BoothDetailSheet = () => {
                 activeIndex={activeTab}
                 onChange={(index) => setActiveTab(index)}
               />
-              <div className="flex w-full flex-col items-center self-stretch">
+              <div className="flex w-full flex-col items-stretch self-stretch">
                 {activeTab === 0 && (
                   <div className="pb-36">
                     {booth.product && booth.product.length > 0 ? (

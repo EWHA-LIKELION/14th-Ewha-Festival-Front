@@ -59,6 +59,10 @@ const MyBoothPage = () => {
     return null;
   }
 
+  const goEditPage = () => {
+    navigate(`/admin/booth/${id}/edit`);
+  };
+
   const goNoticePage = () => {
     navigate(`/admin/booth/${id}/notice`);
   };
@@ -82,12 +86,7 @@ const MyBoothPage = () => {
   console.log(booth.thumbnail);
   return (
     <>
-      <Header
-        left="back"
-        right="edit"
-        background="white"
-        onEdit={() => navigate(`/admin/booth/${id}/edit`)}
-      />
+      <Header left="back" right="edit" background="white" onEdit={goEditPage} />
       <img
         src={fixUrl(booth.thumbnail || '/images/default-image-large.png')}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
@@ -253,7 +252,7 @@ const MyBoothPage = () => {
             activeIndex={activeTab}
             onChange={(index) => setActiveTab(index)}
           />
-          <div className="flex w-full flex-col items-center self-stretch">
+          <div className="flex w-full flex-col items-stretch self-stretch">
             {activeTab === 0 && (
               <div className="w-full pb-36">
                 {booth.product && booth.product.length > 0 ? (

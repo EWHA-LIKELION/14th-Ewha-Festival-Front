@@ -45,7 +45,7 @@ import ShowEditPage from '@/pages/admin/ShowEditPage';
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
   const showFilterSheet = useFilterSheetStore((s) => s.isOpen);
-  const { text, isOpen, closeToast } = useToastStore();
+  const { type, text, isOpen, closeToast } = useToastStore();
   const { alert, closeAlert } = useAlertStore();
 
   return (
@@ -101,7 +101,7 @@ function App() {
       {showFilterSheet && <FilterSheet />}
 
       {/* 토스트 */}
-      <ToastManager text={text} isOpen={isOpen} onClose={closeToast} />
+      <ToastManager type={type} text={text} isOpen={isOpen} onClose={closeToast} />
 
       {/* Alert */}
       {alert && (

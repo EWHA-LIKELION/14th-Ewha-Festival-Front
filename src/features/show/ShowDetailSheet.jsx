@@ -11,7 +11,7 @@ import { useShowDetail } from '@/hooks/useShowDetail';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { SHOW_CATEGORY } from '@/constants/category';
 import { SHOW_LOCATION } from '@/constants/building';
-import { getLabel, padNumber } from '@/utils/labelHelper';
+import { getLabel } from '@/utils/labelHelper';
 import { formatScheduleDate } from '@/utils/dateHelper';
 import { mapSnsUrls } from '@/utils/snsHelper';
 
@@ -31,6 +31,7 @@ const ShowDetailSheet = () => {
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const isFull = useBottomsheetStore((s) => s.isFull());
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const { data: show, error, isLoading } = useShowDetail(id);
   const [showModal, setShowModal] = useState(false);
@@ -71,9 +72,7 @@ const ShowDetailSheet = () => {
       const formattedDate = formatScheduleDate(s.date);
       return `${formattedDate} ${s.time}`;
     }) || [];
-  const locationName = show?.location
-    ? `${getLabel(show.location.building, SHOW_LOCATION)} ${padNumber(show.location.number)}`
-    : '';
+  const locationName = show?.location ? `${getLabel(show.location.building, SHOW_LOCATION)}` : '';
   const snsLinks = mapSnsUrls(show?.sns);
 
   return (
@@ -178,6 +177,7 @@ const ShowDetailSheet = () => {
                   <div className="flex flex-col items-start gap-1.5">
                     <div className="flex items-center gap-1.5">
                       <button
+                        onClick={() => setSheetSize('medium')}
                         className={`text-sm leading-5 font-medium tracking-normal text-zinc-800 ${
                           locationName
                             ? 'underline decoration-solid underline-offset-2'
@@ -262,7 +262,7 @@ const ShowDetailSheet = () => {
                 activeIndex={activeTab}
                 onChange={(index) => setActiveTab(index)}
               />
-              <div className="flex w-full flex-col items-start self-stretch">
+              <div className="flex w-full flex-col items-stretch self-stretch">
                 {activeTab === 0 && (
                   <div className="flex w-full flex-col gap-2 pb-36">
                     {show.setlist && show.setlist.length > 0 ? (

@@ -2,7 +2,7 @@
  * 필터링 바텀시트
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BottomsheetScrim from '@/components/BottomsheetScrim';
 import useFilterSheetStore from '@/store/useFilterSheetStore';
 import useFilterStore from '@/store/useFilterStore';
@@ -17,6 +17,11 @@ const FilterSheet = () => {
 
   // 로컬 임시 필터 상태 (적용 전까지)
   const [tempFilters, setTempFilters] = useState(filters || {});
+
+  // 시트가 열릴 때마다 최신 필터 상태로 동기화 (외부 변경 반영)
+  useEffect(() => {
+    if (isOpen) setTempFilters(filters || {});
+  }, [isOpen]);
 
   // scrap_ 접두사 제거하여 동일한 config 사용
   const configType = type?.replace('scrap_', '') || type;

@@ -26,6 +26,7 @@ const Header = ({
   background = 'white', // white, transparent
   onEdit,
   onSave,
+  onBack,
   isSheet = false,
   saveDisabled = false,
 }) => {
@@ -42,7 +43,9 @@ const Header = ({
   const iconColor = '#52525C';
 
   const handleBack = () => {
-    if (isSheet) {
+    if (onBack) {
+      onBack();
+    } else if (isSheet) {
       setSheetSize('medium');
     } else if (location.key !== 'default') {
       navigate(-1);

@@ -6,11 +6,13 @@ import { create } from 'zustand';
 
 const useToastStore = create((set) => ({
   text: '',
+  type: 'check',
   isOpen: false,
 
-  showToast: (text) =>
+  showToast: (text, type = 'check') =>
     set({
       text,
+      type,
       isOpen: true,
     }),
 

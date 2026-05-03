@@ -10,7 +10,11 @@ export const useSearchResults = (query) => {
   const queryResult = useInfiniteQuery({
     queryKey: ['searchResults', query],
     queryFn: async ({ pageParam = 0 }) => {
-      const data = await SearchAPI.searchContents({ q: query, offset: pageParam });
+      const data = await SearchAPI.searchContents({
+        q: query,
+        offset: pageParam,
+        is_ongoing: false,
+      });
       return {
         booths: {
           ...data.booths,

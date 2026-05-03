@@ -2,15 +2,9 @@
  * 드래그 되고 Scrim 없는 Bottomsheet
  */
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
-
-const SNAP_HEIGHTS = {
-  small: 87,
-  medium: 385,
-  large: 589,
-  full: window.innerHeight,
-};
+import { SHEET_SNAP_HEIGHTS as SNAP_HEIGHTS } from '@/constants/bottomsheet';
 
 const FULL_THRESHOLD = (SNAP_HEIGHTS.large + window.innerHeight) / 2;
 
@@ -81,6 +75,69 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
     };
   })();
 
+  useEffect(() => {
+    const el = scrollContainerRef?.current;
+    if (!el) return;
+
+    let lastTouchY = null;
+
+    const handleTouchStart = (e) => {
+      lastTouchY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      // 시트 내부 스크롤은 어떤 경우에도 외부(지도)로 전파되지 않도록 차단
+      e.stopPropagation();
+
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const currentY = e.touches[0].clientY;
+      const diff = lastTouchY === null ? 0 : lastTouchY - currentY;
+      lastTouchY = currentY;
+
+      const isAtTop = scrollTop <= 0;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight;
+      const isScrollingDown = diff > 0;
+      const isScrollingUp = diff < 0;
+
+      // 경계에 도달했을 때는 default까지 막아 브라우저 native overscroll(체인 스크롤) 방지
+      if ((isAtTop && isScrollingUp) || (isAtBottom && isScrollingDown)) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = () => {
+      lastTouchY = null;
+    };
+
+    const handleWheel = (e) => {
+      e.stopPropagation();
+
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const isAtTop = scrollTop <= 0;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight;
+      const isScrollingDown = e.deltaY > 0;
+      const isScrollingUp = e.deltaY < 0;
+
+      if ((isAtTop && isScrollingUp) || (isAtBottom && isScrollingDown)) {
+        e.preventDefault();
+      }
+    };
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    el.addEventListener('touchend', handleTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+    el.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+      el.removeEventListener('touchend', handleTouchEnd);
+      el.removeEventListener('touchcancel', handleTouchEnd);
+      el.removeEventListener('wheel', handleWheel);
+    };
+  }, [scrollContainerRef]);
+
   return (
     <div
       className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col bg-white ${
@@ -105,12 +162,13 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
       <div
         ref={scrollContainerRef}
         className={`relative w-full flex-1 overflow-y-auto ${isFull ? 'pt-18' : ''}`}
+        style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
       >
         {children}
       </div>
 
       {isFull && (
-        <div className="reactive-width fixed bottom-28 left-1/2 -translate-x-1/2">
+        <div className="reactive-width fixed bottom-20 left-1/2 -translate-x-1/2">
           <div className="flex justify-center">
             <button
               onClick={() => setSheetSize('medium')}
