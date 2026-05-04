@@ -57,7 +57,7 @@ export const AdminAccordion = ({ title, children }) => {
     } else {
       setHeight(0);
     }
-  }, [isOpen]);
+  }, [isOpen, children]);
 
   return (
     <>

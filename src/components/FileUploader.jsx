@@ -5,9 +5,7 @@
 import { useRef } from 'react';
 import { useImageUploader } from '@/hooks';
 
-/* 상세 이미지 */
-export const DetailImageUploader = ({ initialImage, onRemove }) => {
-  const { image, onSelectFile, clearImage } = useImageUploader(initialImage);
+export const DetailImageUploader = ({ image, onChange, onRemove }) => {
   const inputRef = useRef(null);
 
   return (
@@ -18,18 +16,14 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
         hidden
         accept="image/*"
         onChange={(e) => {
-          onSelectFile(e.target.files[0]);
+          onChange?.(e.target.files[0]);
           e.target.value = '';
         }}
       />
-
-      {/* 고정 영역 */}
       <div
         className="aspect-square w-15 overflow-hidden rounded-lg border border-zinc-100 bg-white"
         onClick={() => {
-          if (!image) {
-            inputRef.current?.click();
-          }
+          if (!image) inputRef.current?.click();
         }}
       >
         {image ? (
@@ -40,14 +34,12 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
           </div>
         )}
       </div>
-
-      {/* 삭제 버튼 */}
       {image && (
         <button
           className="absolute top-1 right-1 p-0.5"
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove?.(clearImage);
+          onClick={() => {
+            onRemove?.();
+            onChange?.(null);
           }}
         >
           <img src="/icons/icon-xmarkblack.svg" alt="삭제" width="16" height="16" />
@@ -57,9 +49,7 @@ export const DetailImageUploader = ({ initialImage, onRemove }) => {
   );
 };
 
-/* 썸네일 이미지 */
-export const ThumbnailImageUploader = ({ initialImage, onRemove }) => {
-  const { image, onSelectFile, clearImage } = useImageUploader(initialImage);
+export const ThumbnailImageUploader = ({ image, onChange, onRemove }) => {
   const inputRef = useRef(null);
 
   return (
@@ -70,17 +60,14 @@ export const ThumbnailImageUploader = ({ initialImage, onRemove }) => {
         hidden
         accept="image/*"
         onChange={(e) => {
-          onSelectFile(e.target.files[0]);
+          onChange?.(e.target.files[0]);
           e.target.value = '';
         }}
       />
-
       <img
         src={image || '/images/default-image-large.png'}
         className="absolute inset-0 h-full w-full object-cover"
       />
-
-      {/* 버튼 영역 (아래 텍스트 버튼) */}
       <div className="absolute bottom-0 flex h-12 w-full cursor-pointer items-center justify-center bg-black/50">
         {!image ? (
           <button
@@ -91,7 +78,10 @@ export const ThumbnailImageUploader = ({ initialImage, onRemove }) => {
           </button>
         ) : (
           <button
-            onClick={() => onRemove?.(clearImage)}
+            onClick={() => {
+              onRemove?.();
+              onChange?.(null);
+            }}
             className="text-center text-base leading-6 font-semibold tracking-normal text-white"
           >
             사진 삭제

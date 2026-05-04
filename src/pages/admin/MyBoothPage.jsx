@@ -78,15 +78,21 @@ const MyBoothPage = () => {
     : '';
   const snsLinks = mapSnsUrls(booth.sns);
 
+  const fixUrl = (url) => {
+    if (!url) return url;
+    return url.replace('http://', 'https://');
+  };
+
+  console.log(booth.thumbnail);
   return (
     <>
       <Header left="back" right="edit" background="white" onEdit={goEditPage} />
       <img
-        src={booth.thumbnail || '/images/default-image-large.png'}
+        src={fixUrl(booth.thumbnail || '/images/default-image-large.png')}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
         onClick={() => {
           if (booth.thumbnail) {
-            setSelectedImage(booth.thumbnail);
+            setSelectedImage(fixUrl(booth.thumbnail));
             setShowModal(true);
           }
         }}
@@ -177,7 +183,7 @@ const MyBoothPage = () => {
                       <button
                         className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
                         onClick={() => {
-                          setSelectedImage(booth.roadview);
+                          setSelectedImage(fixUrl(booth.roadview));
                           setShowModal(true);
                         }}
                       >
@@ -248,17 +254,17 @@ const MyBoothPage = () => {
           />
           <div className="flex w-full flex-col items-stretch self-stretch">
             {activeTab === 0 && (
-              <div className="pb-36">
+              <div className="w-full pb-36">
                 {booth.product && booth.product.length > 0 ? (
                   booth.product.map((item) => (
                     <MenuCard
                       key={item.id}
                       name={item.name}
                       description={item.description}
-                      image={item.image}
+                      image={fixUrl(item.image)}
                       price={item.price}
                       onImageClick={(img) => {
-                        setSelectedImage(img);
+                        setSelectedImage(fixUrl(img));
                         setShowModal(true);
                       }}
                     />

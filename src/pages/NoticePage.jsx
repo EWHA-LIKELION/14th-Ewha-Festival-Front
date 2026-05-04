@@ -25,7 +25,11 @@ const NoticePage = () => {
   const isBooth = id?.startsWith('BOOTH_');
   const isShow = id?.startsWith('SHOW_');
 
-  const { data: notices = [], error, isLoading } = useQuery({
+  const {
+    data: notices = [],
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ['notices', id],
     queryFn: () => (isBooth ? BoothAPI.getBoothNotices(id) : ShowAPI.getShowNotices(id)),
     enabled: !!id && (isBooth || isShow),

@@ -22,6 +22,7 @@ const SIZE = {
 const TextArea = forwardRef(
   (
     {
+      name,
       size = 'medium',
       label,
       required = false,
@@ -38,7 +39,7 @@ const TextArea = forwardRef(
   ) => {
     const isLeft = labelPosition === 'left';
 
-    const subTextColor = error ? 'text-red-500' : 'text-zinc-500';
+    const subTextColor = error ? 'text-red-400' : 'text-zinc-500';
 
     const hasHelper = !!helperText;
     const hasCounter = !!maxLength;
@@ -66,8 +67,9 @@ const TextArea = forwardRef(
 
         <div className="flex w-full flex-1 flex-col">
           <textarea
+            name={name}
             ref={ref}
-            value={value}
+            value={value ?? ''}
             onChange={(e) => {
               let next = e.target.value;
               if (maxLength && next.length > maxLength) {
@@ -76,7 +78,7 @@ const TextArea = forwardRef(
               onChange?.(next);
             }}
             placeholder={placeholder}
-            className={`box-border w-full resize-none rounded-lg border bg-white px-4 py-3 text-base leading-6 font-normal tracking-normal text-zinc-800 placeholder-zinc-300 outline-none focus:outline-none ${error ? 'border-red-500' : 'border-zinc-100'} ${SIZE[size].minHeight} ${className} `}
+            className={`box-border w-full resize-none rounded-lg border bg-white px-4 py-3 text-base leading-6 font-normal tracking-normal text-zinc-800 placeholder-zinc-300 outline-none focus:outline-none ${error ? 'border-red-400' : 'border-zinc-100'} ${SIZE[size].minHeight} ${className} `}
           />
 
           {showBottom && (

@@ -28,6 +28,7 @@ const Header = ({
   onSave,
   onBack,
   isSheet = false,
+  saveDisabled = false,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -164,9 +165,13 @@ const Header = ({
         )}
         {right === 'save' && (
           <button
-            onClick={onSave}
-            onPointerDown={(e) => e.stopPropagation()}
-            className="mr-3 h-8 rounded-full bg-emerald-600 px-4 text-sm font-medium text-white"
+            onClick={!saveDisabled ? onSave : undefined}
+            disabled={saveDisabled}
+            className={`mr-3 h-8 rounded-full px-4 text-sm font-medium transition ${
+              saveDisabled
+                ? 'cursor-not-allowed bg-zinc-100 text-zinc-300'
+                : 'bg-emerald-600 text-white'
+            }`}
           >
             저장
           </button>
