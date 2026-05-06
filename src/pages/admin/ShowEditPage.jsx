@@ -61,6 +61,8 @@ const ShowEditPage = () => {
   const [notices, setNotices] = useState([]);
   const [setlists, setSetlists] = useState([]);
 
+  const [isDirty, setIsDirty] = useState(false);
+
   const {
     image: detailImage,
     file: detailFile,
@@ -165,6 +167,48 @@ const ShowEditPage = () => {
     fetchShowData();
   }, [id]);
 
+  useEffect(() => {
+    if (!originData) return;
+
+    const isChanged =
+      form.name !== originData.name ||
+      form.description !== originData.description ||
+      form.locationDetail !== originData.location_description ||
+      category !== originData.category ||
+      JSON.stringify(schedule) !==
+        JSON.stringify(
+          DAYS.reduce((acc, day) => {
+            const s = originData.schedule?.find((d) => d.date === day);
+            if (s) {
+              const [start, end] = s.time.split('~');
+              acc[day] = { checked: true, start, end };
+            } else {
+              acc[day] = { checked: false, start: '09:00', end: '18:00' };
+            }
+            return acc;
+          }, {}),
+        ) ||
+      JSON.stringify(notices) !== JSON.stringify(originNotices) ||
+      JSON.stringify(setlists) !== JSON.stringify(initialSetlists) ||
+      thumbnailFile ||
+      detailFile ||
+      isThumbnailDeleted ||
+      isRoadviewDeleted;
+
+    setIsDirty(!!isChanged);
+  }, [
+    form,
+    category,
+    schedule,
+    notices,
+    setlists,
+    thumbnailFile,
+    detailFile,
+    isThumbnailDeleted,
+    isRoadviewDeleted,
+    originData,
+  ]);
+
   // 핸들러 함수들
   const handleChange = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
@@ -249,6 +293,32 @@ const ShowEditPage = () => {
         if (target.id) setDeletedSetlistIds((prev) => [...prev, target.id]);
         setSetlists((prev) => prev.filter((_, i) => i !== idx));
         closeAlert();
+      },
+      onCancel: () => closeAlert(),
+    });
+  };
+
+  const handleBack = () => {
+    if (!isDirty) {
+      navigate(-1);
+      return;
+    }
+
+    openAlert({
+      variant: 'delete',
+      title: '변경사항 폐기',
+      confirmLabel: '확인',
+      text: (
+        <>
+          변경사항을 폐기할까요?
+          <br />
+          폐기된 변경사항은 복구되지 않아요.
+        </>
+      ),
+      onConfirm: () => {
+        setIsDirty(false);
+        closeAlert();
+        navigate(-1);
       },
       onCancel: () => closeAlert(),
     });
@@ -416,7 +486,13 @@ const ShowEditPage = () => {
 
   return (
     <>
-      <Header left="back" right="save" onSave={handleSave} saveDisabled={!isFormValid} />
+      <Header
+        left="back"
+        right="save"
+        onSave={handleSave}
+        saveDisabled={!isFormValid}
+        onBack={handleBack}
+      />
 
       <div className="pt-18">
         <ThumbnailImageUploader

@@ -50,7 +50,7 @@ const Alert = ({
             isDelete || isError ? 'bg-red-400 text-white' : 'bg-emerald-600 text-white'
           }`}
         >
-          {isDelete ? '삭제' : confirmLabel}
+          {confirmLabel || (isDelete ? '삭제' : '확인')}
         </button>
       </div>
     </div>
