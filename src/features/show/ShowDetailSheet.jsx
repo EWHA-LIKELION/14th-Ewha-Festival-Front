@@ -60,10 +60,19 @@ const ShowDetailSheet = () => {
     navigate(`/admin/show/${id}/notice`);
   };
 
-  const getShowState = (isOngoing) => {
-    if (isOngoing === null) return 'upcoming'; // 공연 전
-    if (isOngoing === true) return 'performing'; // 공연 중
-    return 'closed'; // 공연 종료
+  const getShowState = (status) => {
+    if (!status) return 'upcoming';
+
+    switch (status.toUpperCase()) {
+      case 'BEFORE':
+        return 'upcoming';
+      case 'DURING':
+        return 'performing';
+      case 'AFTER':
+        return 'closed';
+      default:
+        return 'upcoming';
+    }
   };
 
   const categoryText = show?.category ? getLabel(show.category, SHOW_CATEGORY) : '';

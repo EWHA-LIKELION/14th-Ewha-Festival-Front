@@ -67,10 +67,19 @@ const MyShowPage = () => {
     navigate(`/admin/show/${id}/notice`);
   };
 
-  const getShowState = (isOngoing) => {
-    if (isOngoing === null) return 'upcoming'; // 공연 전
-    if (isOngoing === true) return 'performing'; // 공연 중
-    return 'closed'; // 공연 종료
+  const getShowState = (status) => {
+    if (!status) return 'upcoming';
+
+    switch (status) {
+      case 'BEFORE':
+        return 'upcoming';
+      case 'DURING':
+        return 'performing';
+      case 'AFTER':
+        return 'closed';
+      default:
+        return 'upcoming';
+    }
   };
 
   const categoryText = show.category ? getLabel(show.category, SHOW_CATEGORY) : '';
@@ -79,9 +88,7 @@ const MyShowPage = () => {
       const formattedDate = formatScheduleDate(s.date);
       return `${formattedDate} ${s.time}`;
     }) || [];
-  const locationName = show.location
-    ? `${getLabel(show.location.building, SHOW_LOCATION)} ${padNumber(show.location.number)}`
-    : '';
+  const locationName = show.location ? `${getLabel(show.location.building, SHOW_LOCATION)}` : '';
   const snsLinks = mapSnsUrls(show.sns);
 
   return (
