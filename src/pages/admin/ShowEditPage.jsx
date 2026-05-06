@@ -154,7 +154,7 @@ const ShowEditPage = () => {
         setLoading(false);
       } catch (err) {
         console.error('데이터 로딩 실패:', err);
-        showToast('데이터를 불러오는데 실패했습니다.');
+        showToast('데이터를 불러오는데 실패했습니다.', 'warn');
       }
     };
     fetchShowData();
@@ -401,9 +401,9 @@ const ShowEditPage = () => {
       console.error('저장 실패:', err);
 
       if (err.response?.status === 409) {
-        showToast('데이터가 변경되었습니다. 새로고침 후 다시 시도해주세요.');
+        showToast('데이터가 변경되었습니다. 새로고침 후 다시 시도해주세요.', 'warn');
       } else {
-        showToast('수정 중 오류가 발생했습니다.');
+        showToast('수정 중 오류가 발생했습니다.', 'warn');
       }
     }
   };

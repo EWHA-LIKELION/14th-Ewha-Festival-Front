@@ -11,7 +11,7 @@ const Toast = ({ type = 'check', text = '' }) => {
       {type === 'check' ? (
         <img src="/icons/icon-greencheck.svg" />
       ) : (
-        <img src="/icons/icon-redwarn.svg" />
+        <img src="/icons/icon-alert-red.svg" />
       )}
       <p className="text-sm leading-5 font-semibold tracking-normal text-white">{text}</p>
     </div>
