@@ -15,7 +15,11 @@ import { useInfiniteList } from '@/hooks/useInfiniteList';
  * @returns {Object} useInfiniteQuery 결과 + 변환된 shows, totalCount
  */
 export const useShows = (filters = {}) => {
-  const { items: shows, totalCount, ...rest } = useInfiniteList({
+  const {
+    items: shows,
+    totalCount,
+    ...rest
+  } = useInfiniteList({
     queryKey: 'shows',
     apiFn: ShowAPI.getShows,
     dataKey: 'result',
@@ -94,10 +98,19 @@ export const transformShowData = (show) => {
 
   // 상태 배지
   // 공연: null(공연전) / true(공연 중) / false(종료)
-  const getBadgeState = (isOngoing) => {
-    if (isOngoing === null) return 'upcoming'; // 공연전
-    if (isOngoing === true) return 'operating'; // 공연중
-    return 'closed'; // 종료
+  const getBadgeState = (status) => {
+    if (!status) return 'upcoming';
+
+    switch (status.toUpperCase()) {
+      case 'BEFORE':
+        return 'upcoming';
+      case 'DURING':
+        return 'performing';
+      case 'AFTER':
+        return 'closed';
+      default:
+        return 'upcoming';
+    }
   };
 
   const badgeState = getBadgeState(is_ongoing);
