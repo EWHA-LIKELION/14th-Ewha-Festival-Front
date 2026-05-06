@@ -72,7 +72,7 @@ const AdminConfirmPage = () => {
       <div className="flex flex-col items-start justify-between px-5 pt-23">
         <div className="flex flex-col items-start gap-3 self-stretch">
           <h3 className="text-base leading-6 font-semibold tracking-normal text-zinc-800">
-            부스/공연 번호
+            부스/공연 ID
           </h3>
           <Input
             variant="round"
