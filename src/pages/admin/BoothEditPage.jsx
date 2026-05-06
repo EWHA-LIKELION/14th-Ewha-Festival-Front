@@ -911,6 +911,7 @@ const BoothEditPage = () => {
                         value={item.price}
                         onChange={(value) => handleItemChange(idx, 'price', value)}
                         placeholder="가격을 입력해주세요"
+                        maxLength="10"
                         error={!!errors.items[idx]?.price}
                       />
                     </div>
