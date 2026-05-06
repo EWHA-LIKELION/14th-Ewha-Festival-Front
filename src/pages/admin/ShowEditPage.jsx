@@ -50,12 +50,13 @@ const ShowEditPage = () => {
     snsKakao: '',
   });
   const [category, setCategory] = useState(null);
-  const [schedule, setSchedule] = useState(
-    DAYS.reduce(
-      (acc, day) => ({ ...acc, [day]: { checked: false, start: '09:00', end: '18:00' } }),
-      {},
-    ),
-  );
+  const [selectedDay, setSelectedDay] = useState(null);
+
+  const [schedule, setSchedule] = useState({
+    '05.20': { start: '09:00', end: '18:00' },
+    '05.21': { start: '09:00', end: '18:00' },
+    '05.22': { start: '09:00', end: '18:00' },
+  });
 
   const [notices, setNotices] = useState([]);
   const [setlists, setSetlists] = useState([]);
@@ -121,12 +122,16 @@ const ShowEditPage = () => {
         setCategory(data.category || null);
 
         // 스케줄 세팅
-        const newSchedule = { ...schedule };
         data.schedule?.forEach((s) => {
           const [start, end] = s.time.split('~');
-          newSchedule[s.date] = { checked: true, start, end };
+
+          setSelectedDay(s.date);
+
+          setSchedule((prev) => ({
+            ...prev,
+            [s.date]: { start, end },
+          }));
         });
-        setSchedule(newSchedule);
 
         // 공지 및 아이템 세팅
         const noticesArray = Array.isArray(noticeData) ? noticeData : [];
@@ -167,8 +172,8 @@ const ShowEditPage = () => {
     setCategory(value);
   };
 
-  const handleDayCheck = (day, checked) => {
-    setSchedule((prev) => ({ ...prev, [day]: { ...prev[day], checked } }));
+  const handleDaySelect = (day) => {
+    setSelectedDay(day);
   };
 
   const handleNoticeChange = (idx, field, value) => {
@@ -261,8 +266,7 @@ const ShowEditPage = () => {
 
     if (!form.name.trim()) newErrors.name = '부스명을 입력해주세요.';
     if (!category) newErrors.category = '카테고리를 선택해주세요.';
-    if (!Object.values(schedule).some((d) => d.checked))
-      newErrors.schedule = '운영 시간을 1개 이상 선택해주세요.';
+    if (!selectedDay) newErrors.schedule = '운영 시간을 선택해주세요.';
 
     newErrors.notices = notices.map((n) => ({
       title: !n.title.trim() ? '제목을 입력해주세요.' : '',
@@ -328,12 +332,14 @@ const ShowEditPage = () => {
     }
 
     // 4. schedule
-    const schedulePayload = Object.entries(schedule)
-      .filter(([_, v]) => v.checked)
-      .map(([date, v]) => ({
-        date,
-        time: `${v.start}~${v.end}`,
-      }));
+    const schedulePayload = selectedDay
+      ? [
+          {
+            date: selectedDay,
+            time: `${schedule[selectedDay].start}~${schedule[selectedDay].end}`,
+          },
+        ]
+      : [];
 
     formData.append('schedule', JSON.stringify(schedulePayload));
 
@@ -424,7 +430,7 @@ const ShowEditPage = () => {
           <div className="flex w-full flex-col items-start gap-3">
             <div className="flex items-center gap-1">
               <h2 className="text-base leading-6 font-semibold tracking-normal text-zinc-800">
-                부스명
+                공연명
               </h2>
               <p className="text-xs leading-4 font-normal tracking-normal text-emerald-600">
                 *필수
@@ -434,7 +440,7 @@ const ShowEditPage = () => {
               variant="square"
               value={form.name}
               onChange={(value) => handleChange('name', value)}
-              placeholder="부스명을 입력해주세요"
+              placeholder="공연명을 입력해주세요"
               maxLength="20"
               error={!!errors.name}
             />
@@ -519,16 +525,15 @@ const ShowEditPage = () => {
                   <div className="flex flex-col items-start gap-2">
                     {DAYS.map((day) => (
                       <div key={day} className="flex items-center gap-7">
-                        <Checkbox
+                        <Radio
                           label={day === '05.20' ? '수요일' : day === '05.21' ? '목요일' : '금요일'}
-                          isSelected={schedule?.[day]?.checked}
-                          onChange={(checked) => handleDayCheck(day, checked)}
-                          isError={!!errors.schedule}
+                          selected={selectedDay === day}
+                          onChange={() => handleDaySelect(day)}
                         />
                         <Timepicker
                           startTime={schedule?.[day]?.start}
                           endTime={schedule?.[day]?.end}
-                          isSelected={schedule?.[day]?.checked}
+                          isSelected={selectedDay === day}
                           onStartChange={(start) =>
                             setSchedule((prev) => ({ ...prev, [day]: { ...prev[day], start } }))
                           }
