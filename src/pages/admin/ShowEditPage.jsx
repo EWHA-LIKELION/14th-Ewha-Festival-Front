@@ -141,7 +141,6 @@ const ShowEditPage = () => {
         setNotices(
           noticesArray.map((n) => ({
             ...n,
-            image: n.image?.replace('http://', 'https://') || null,
           })),
         );
 
@@ -414,17 +413,11 @@ const ShowEditPage = () => {
     formData.append('schedule', JSON.stringify(schedulePayload));
 
     // 5. notice
-    const noticePayload = notices.map((n, idx) => {
-      if (n.image instanceof File) {
-        formData.append(`notice_images_${idx}`, n.image);
-      }
-
-      return {
-        ...(n.id ? { id: n.id } : {}),
-        title: n.title,
-        content: n.content,
-      };
-    });
+    const noticePayload = notices.map((n) => ({
+      ...(n.id ? { id: n.id } : {}),
+      title: n.title,
+      content: n.content,
+    }));
 
     formData.append('notice', JSON.stringify(noticePayload));
 
@@ -467,7 +460,6 @@ const ShowEditPage = () => {
       setNotices(
         noticeData.map((n) => ({
           ...n,
-          image: n.image?.replace('http://', 'https://') || null,
         })),
       );
 
@@ -696,7 +688,6 @@ const ShowEditPage = () => {
                         _tempId: Date.now(),
                         title: '',
                         content: '',
-                        image: null,
                       },
                       ...prev,
                     ])
@@ -750,19 +741,7 @@ const ShowEditPage = () => {
                         {errors.notices[idx].content}
                       </p>
                     )}
-                    <div className="flex items-end justify-between self-stretch">
-                      <div className="flex items-start gap-2">
-                        <h2 className="w-7 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
-                          사진
-                        </h2>
-                        <DetailImageUploader
-                          image={notice.image}
-                          onChange={(file) => handleNoticeChange(idx, 'image', file)}
-                          onRemove={() =>
-                            handleClickRemove(() => handleNoticeChange(idx, 'image', null))
-                          }
-                        />
-                      </div>
+                    <div className="flex justify-end self-stretch">
                       <Button
                         variant="bg-pink"
                         size="sm"
