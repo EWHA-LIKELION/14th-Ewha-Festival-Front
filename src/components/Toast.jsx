@@ -13,7 +13,7 @@ const Toast = ({ type = 'check', text = '' }) => {
       ) : (
         <img src="/icons/icon-redwarn.svg" />
       )}
-      <p className="text-sm leading-5 font-semibold tracking-normal text-white">{text}</p>
+      <p className="text-sm leading-5 font-medium tracking-normal text-white">{text}</p>
     </div>
   );
 };
