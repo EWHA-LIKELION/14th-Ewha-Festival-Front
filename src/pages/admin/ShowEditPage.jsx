@@ -575,7 +575,7 @@ const ShowEditPage = () => {
                 {/* SNS */}
                 <div className="flex w-full flex-col items-start gap-3 self-stretch">
                   <h2 className="text-base leading-6 font-semibold tracking-normal text-zinc-800">
-                    SNS
+                    SNS 링크
                   </h2>
                   <div className="flex items-center gap-3 self-stretch">
                     <img src="/icons/logo-instagramcolor.svg" className="rounded-md" />
@@ -592,7 +592,7 @@ const ShowEditPage = () => {
                       variant="square_white"
                       value={form.snsKakao}
                       onChange={(value) => handleChange('snsKakao', value)}
-                      placeholder="카카오톡 링크"
+                      placeholder="http://pf.kakao.com/"
                     />
                   </div>
                 </div>
