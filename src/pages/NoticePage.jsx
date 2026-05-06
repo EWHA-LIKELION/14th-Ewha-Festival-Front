@@ -22,8 +22,8 @@ const NoticePage = () => {
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
   // ID로 부스/공연 구분
-  const isBooth = id?.startsWith('BOOTH_');
-  const isShow = id?.startsWith('SHOW_');
+  const isBooth = id?.startsWith('BOOTH-');
+  const isShow = id?.startsWith('SHOW-');
 
   const {
     data: notices = [],
