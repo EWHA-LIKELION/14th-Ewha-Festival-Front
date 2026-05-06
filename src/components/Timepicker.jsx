@@ -7,11 +7,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 function Timepicker({
-  startTime = '09:00',
-  endTime = '18:00',
-  isSelected = true,
+  startTime,
+  endTime,
+  isSelected,
   onStartChange,
   onEndChange,
+  minTime,
+  maxTime,
+  onError,
 }) {
   const [hasError, setHasError] = useState(false);
   const errorTimer = useRef(null);
@@ -19,8 +22,11 @@ function Timepicker({
   // 일단 1초 후에 자동 해제되게 했음
   // (자세한 구현은 기디에서 알려준 스타일로 수정할 예정입니다!!)
 
-  const triggerError = () => {
+  const triggerError = (message) => {
     setHasError(true);
+
+    onError?.(message);
+
     if (errorTimer.current) clearTimeout(errorTimer.current);
     errorTimer.current = setTimeout(() => setHasError(false), 1000);
   };
@@ -32,16 +38,16 @@ function Timepicker({
   }, []);
 
   const handleStartChange = (newStart) => {
-    if (newStart >= endTime) {
-      triggerError();
+    if (newStart < minTime || newStart >= endTime) {
+      triggerError('공식 운영시간 이외의 시간은 설정할 수 없습니다.');
       return;
     }
     onStartChange?.(newStart);
   };
 
   const handleEndChange = (newEnd) => {
-    if (newEnd <= startTime) {
-      triggerError();
+    if (newEnd > maxTime || newEnd <= startTime) {
+      triggerError('공식 운영시간 이외의 시간은 설정할 수 없습니다.');
       return;
     }
     onEndChange?.(newEnd);
@@ -60,6 +66,8 @@ function Timepicker({
         <input
           type="time"
           value={startTime}
+          min={minTime}
+          max={endTime}
           onChange={(e) => handleStartChange(e.target.value)}
           className={`absolute inset-0 z-10 opacity-0 ${
             isSelected ? 'cursor-pointer' : 'cursor-not-allowed'
@@ -77,6 +85,8 @@ function Timepicker({
         <input
           type="time"
           value={endTime}
+          min={startTime}
+          max={maxTime}
           onChange={(e) => handleEndChange(e.target.value)}
           className={`absolute inset-0 z-10 opacity-0 ${
             isSelected ? 'cursor-pointer' : 'cursor-not-allowed'

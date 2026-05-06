@@ -17,6 +17,7 @@ import Divider from '@/components/Divider';
 import TextArea from '@/components/Input/TextArea';
 import Timepicker from '@/components/Timepicker';
 import Button from '@/components/Button';
+import { FESTIVAL_TIME } from '@/constants/time';
 
 import { BoothAPI } from '@/apis';
 
@@ -51,7 +52,14 @@ const BoothEditPage = () => {
   const [isOpen, setIsOpen] = useState(null);
   const [schedule, setSchedule] = useState(
     DAYS.reduce(
-      (acc, day) => ({ ...acc, [day]: { checked: false, start: '09:00', end: '18:00' } }),
+      (acc, day) => ({
+        ...acc,
+        [day]: {
+          checked: false,
+          start: FESTIVAL_TIME.booth[day].start,
+          end: FESTIVAL_TIME.booth[day].end,
+        },
+      }),
       {},
     ),
   );
@@ -643,27 +651,42 @@ const BoothEditPage = () => {
                     </p>
                   </div>
                   <div className="flex flex-col items-start gap-2">
-                    {DAYS.map((day) => (
-                      <div key={day} className="flex items-center gap-7">
-                        <Checkbox
-                          label={day === '05.20' ? '수요일' : day === '05.21' ? '목요일' : '금요일'}
-                          isSelected={schedule?.[day]?.checked}
-                          onChange={(checked) => handleDayCheck(day, checked)}
-                          isError={!!errors.schedule}
-                        />
-                        <Timepicker
-                          startTime={schedule?.[day]?.start}
-                          endTime={schedule?.[day]?.end}
-                          isSelected={schedule?.[day]?.checked}
-                          onStartChange={(start) =>
-                            setSchedule((prev) => ({ ...prev, [day]: { ...prev[day], start } }))
-                          }
-                          onEndChange={(end) =>
-                            setSchedule((prev) => ({ ...prev, [day]: { ...prev[day], end } }))
-                          }
-                        />
-                      </div>
-                    ))}
+                    {DAYS.map((day) => {
+                      const timeRange = FESTIVAL_TIME.booth[day];
+
+                      return (
+                        <div key={day} className="flex items-center gap-7">
+                          <Checkbox
+                            label={
+                              day === '05.20' ? '수요일' : day === '05.21' ? '목요일' : '금요일'
+                            }
+                            isSelected={schedule?.[day]?.checked}
+                            onChange={(checked) => handleDayCheck(day, checked)}
+                            isError={!!errors.schedule}
+                          />
+                          <Timepicker
+                            startTime={schedule?.[day]?.start}
+                            endTime={schedule?.[day]?.end}
+                            isSelected={schedule?.[day]?.checked}
+                            onStartChange={(start) =>
+                              setSchedule((prev) => ({
+                                ...prev,
+                                [day]: { ...prev[day], start },
+                              }))
+                            }
+                            onEndChange={(end) =>
+                              setSchedule((prev) => ({
+                                ...prev,
+                                [day]: { ...prev[day], end },
+                              }))
+                            }
+                            minTime={timeRange.start}
+                            maxTime={timeRange.end}
+                            onError={(msg) => showToast(msg, 'warn')}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                   {errors.schedule && (
                     <p className={`${ERROR_TEXT_CLASS} -mt-1.5`} style={ERROR_TEXT_STYLE}>
