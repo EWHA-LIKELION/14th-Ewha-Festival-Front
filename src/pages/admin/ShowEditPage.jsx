@@ -449,8 +449,9 @@ const ShowEditPage = () => {
     }
 
     // 8. sns
-    formData.append('sns', form.snsKakao);
-    formData.append('sns', form.snsInstagram);
+    const currentSns = [form.snsKakao, form.snsInstagram].filter((v) => v && v.trim() !== '');
+
+    formData.append('sns', JSON.stringify(currentSns));
 
     for (let [k, v] of formData.entries()) {
       console.log(k, v);

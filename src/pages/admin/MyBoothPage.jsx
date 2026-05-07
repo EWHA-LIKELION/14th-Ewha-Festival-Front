@@ -31,10 +31,14 @@ const MyBoothPage = () => {
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const { data: booth, error, isLoading } = useBoothDetail(id);
+  const { data: booth, error, isLoading, refetch } = useBoothDetail(id);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    refetch();
+  }, [id]);
 
   useEffect(() => {
     if (isLoading) showLoading();

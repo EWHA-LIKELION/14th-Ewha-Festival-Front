@@ -131,11 +131,29 @@ const BoothEditPage = () => {
         setIsOpen(data.is_ongoing);
 
         // 스케줄 세팅
-        const newSchedule = { ...schedule };
+        // 스케줄 세팅
+        const newSchedule = DAYS.reduce(
+          (acc, day) => ({
+            ...acc,
+            [day]: {
+              checked: false,
+              start: FESTIVAL_TIME.booth[day].start,
+              end: FESTIVAL_TIME.booth[day].end,
+            },
+          }),
+          {},
+        );
+
         data.schedule?.forEach((s) => {
           const [start, end] = s.time.split('~');
-          newSchedule[s.date] = { checked: true, start, end };
+
+          newSchedule[s.date] = {
+            checked: true,
+            start,
+            end,
+          };
         });
+
         setSchedule(newSchedule);
 
         // 공지 및 아이템 세팅
@@ -185,7 +203,11 @@ const BoothEditPage = () => {
               const [start, end] = s.time.split('~');
               acc[day] = { checked: true, start, end };
             } else {
-              acc[day] = { checked: false, start: '09:00', end: '18:00' };
+              acc[day] = {
+                checked: false,
+                start: FESTIVAL_TIME.booth[day].start,
+                end: FESTIVAL_TIME.booth[day].end,
+              };
             }
             return acc;
           }, {}),
