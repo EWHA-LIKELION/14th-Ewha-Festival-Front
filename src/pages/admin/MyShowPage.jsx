@@ -67,6 +67,10 @@ const MyShowPage = () => {
     navigate(`/admin/show/${id}/edit`);
   };
 
+  const goMyPage = () => {
+    navigate(`/my`);
+  };
+
   const goNoticePage = () => {
     navigate(`/admin/show/${id}/notice`);
   };
@@ -97,7 +101,7 @@ const MyShowPage = () => {
 
   return (
     <>
-      <Header left="back" right="edit" background="white" onEdit={goEditPage} />
+      <Header left="back" right="edit" background="white" onEdit={goEditPage} onBack={goMyPage} />
       <img
         src={show.thumbnail || '/images/default-image-large.png'}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
