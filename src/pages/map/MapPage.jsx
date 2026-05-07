@@ -10,10 +10,11 @@ import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
 import useSearchStore from '@/store/useSearchStore';
 import useToastStore from '@/store/useToastStore';
-import { useMapFocus } from '@/hooks';
+import { useMapFocus, useMapAssets, useMapActiveSync, useMapFilterSync } from '@/hooks';
 import { useBoothDetail } from '@/hooks/useBoothDetail';
 import { useShowDetail } from '@/hooks/useShowDetail';
-import { BOOTH_LOCATION, SHOW_LOCATION } from '@/constants/building';
+import { BOOTH_LOCATION, SHOW_LOCATION, BUILDING_IDS } from '@/constants/building';
+import { POI_CATEGORIES } from '@/constants/category';
 import { getLabel, padNumber } from '@/utils/labelHelper';
 import {
   MAP_ZOOM_LEVELS,
@@ -43,7 +44,6 @@ const MapPage = () => {
   const searchQuery = useSearchStore((s) => s.searchQuery);
   const setSearchQuery = useSearchStore((s) => s.setSearchQuery);
   const addRecentSearch = useSearchStore((s) => s.addRecentSearch);
-  const filtersRef = useRef({ boothLocation, etcLocation, showLocation });
 
   const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
     useMapFocus();
@@ -52,9 +52,6 @@ const MapPage = () => {
   const buildingLayerRef = useRef(null);
   const poisLayerRef = useRef(null);
 
-  const [buildingSvg, setBuildingSvg] = useState('');
-  const [labelSvg, setLabelSvg] = useState('');
-  const [poisSvg, setPoisSvg] = useState('');
   const [activePOIId, setActivePOIId] = useState(null);
 
   const matchEtc = useMatch('/map/etc');
@@ -72,7 +69,6 @@ const MapPage = () => {
   const { data: showDetail } = useShowDetail(showDetailId);
 
   const { pathname } = useLocation();
-  const prevPathnameRef = useRef(pathname);
 
   const goList = () => {
     setSheetSize('full');
@@ -97,38 +93,8 @@ const MapPage = () => {
   // 아티스트 데이(5/22) 또는 배리어프리 페이지 → artist 라벨/POI로 교체
   const useArtistAssets = IS_ARTIST_DAY || !!matchBarrierFree;
 
-  // 빌딩 SVG는 항상 동일 — 한 번만 fetch
-  useEffect(() => {
-    fetch('/map/map-building.svg')
-      .then((res) => res.text())
-      .then((data) => setBuildingSvg(data));
-  }, []);
-
-  // 라벨/POI SVG는 useArtistAssets에 따라 다른 파일 fetch
-  useEffect(() => {
-    const labelUrl = useArtistAssets ? '/map/map-artist-label.svg' : '/map/map-label.svg';
-    const poisUrl = useArtistAssets ? '/map/map-artist-pois.svg' : '/map/map-pois.svg';
-    fetch(labelUrl)
-      .then((res) => res.text())
-      .then((data) => setLabelSvg(data));
-    fetch(poisUrl)
-      .then((res) => res.text())
-      .then((data) => setPoisSvg(data));
-  }, [useArtistAssets]);
-
-  const BUILDING_IDS = [
-    'STUDENT_UNION',
-    'SPORT_TRACK',
-    'HYUUT_GIL',
-    'HUMAN_ECOLOGY_BUILDING',
-    'HAK_GWAN',
-    'GRASS_GROUND',
-    'EWHA_SHINSEGAE_BUILDING',
-    'EWHA_POSCO_BUILDING',
-    'EDUCATION_BUILDING',
-    'WELCH_RYANG_AUDITORIUM',
-    'SENTENNIAL_MUSEUM',
-  ];
+  // 지도 SVG 에셋
+  const { buildingSvg, labelSvg, poisSvg } = useMapAssets(useArtistAssets);
 
   // 아티스트 모드에서 GRASS_GROUND 등은 좌표를 override 해서 포커스
   const focusBuilding = useCallback(
@@ -143,59 +109,8 @@ const MapPage = () => {
     [useArtistAssets, moveFocusToBuilding, moveFocusToPoint],
   );
 
-  // filtersRef를 최신 상태로 유지 (클릭 핸들러 클로저에서 사용)
-  useEffect(() => {
-    filtersRef.current = { boothLocation, etcLocation, showLocation };
-  });
-
-  // location 필터 삭제 시 booth ↔ etc ↔ show 동기화
-  useEffect(() => {
-    if (boothLocation.length > 0) return;
-    if (etcLocation.length > 0) setFilter('etc', 'location', []);
-    if (showLocation.length > 0) setFilter('show', 'location', []);
-  }, [boothLocation]);
-  useEffect(() => {
-    if (etcLocation.length > 0) return;
-    if (boothLocation.length > 0) setFilter('booth', 'location', []);
-    if (showLocation.length > 0) setFilter('show', 'location', []);
-  }, [etcLocation]);
-  useEffect(() => {
-    if (showLocation.length > 0) return;
-    if (boothLocation.length > 0) setFilter('booth', 'location', []);
-    if (etcLocation.length > 0) setFilter('etc', 'location', []);
-  }, [showLocation]);
-
-  // 부스목록 ↔ 기타시설 ↔ 공연 페이지 이동 시 선택 건물 필터를 목적지로 복사
-  useEffect(() => {
-    const prev = prevPathnameRef.current;
-    prevPathnameRef.current = pathname;
-    if (prev === pathname) return;
-
-    const getType = (p) => {
-      if (p === '/map/booths' || p.startsWith('/map/booths/')) return 'booth';
-      if (p === '/map/etc') return 'etc';
-      if (p === '/map/shows' || p.startsWith('/map/shows/')) return 'show';
-      return null;
-    };
-
-    const prevType = getType(prev);
-    const currType = getType(pathname);
-    if (!prevType || !currType || prevType === currType) return;
-
-    const srcKey = `${prevType}Location`;
-    const src = filtersRef.current[srcKey] ?? [];
-
-    if (currType === 'show') {
-      const showValues = new Set(SHOW_LOCATION.map((o) => o.value));
-      setFilter(
-        'show',
-        'location',
-        src.filter((id) => showValues.has(id)),
-      );
-    } else {
-      setFilter(currType, 'location', src);
-    }
-  }, [pathname, setFilter]);
+  // booth ↔ etc ↔ show location 필터 동기화 + 페이지 이동 시 필터 복사
+  useMapFilterSync({ boothLocation, etcLocation, showLocation, setFilter, pathname });
 
   // 배리어프리 페이지 진입 시 building/booth/etc/show active 초기화 + GRASS_GROUND focus
   // focus는 artist 좌표가 적용되도록 useArtistAssets 반영 후(렌더 사이클 이후) 호출
@@ -208,84 +123,23 @@ const MapPage = () => {
     focusBuilding('GRASS_GROUND');
   }, [matchBarrierFree, setFilter, focusBuilding]);
 
-  // 필터 location → 지도 building is-active 동기화 (현재 페이지 기준)
-  useEffect(() => {
-    if (!buildingLayerRef.current || !buildingSvg) return;
-
-    buildingLayerRef.current.querySelectorAll('.is-active').forEach((el) => {
-      el.classList.remove('is-active');
-    });
-
-    let activeLocations;
-    if (isBoothPage) activeLocations = boothLocation;
-    else if (isEtcPage) activeLocations = etcLocation;
-    else if (isShowsPage) activeLocations = showLocation;
-    else activeLocations = [...new Set([...boothLocation, ...etcLocation, ...showLocation])];
-
-    // 공연 상세 페이지에서는 필터와 별개로 showDetail의 building도 active 표시
-    if (matchShowDetail && showDetail?.location?.building) {
-      activeLocations = [...new Set([...activeLocations, showDetail.location.building])];
-    }
-
-    activeLocations.forEach((id) => {
-      buildingLayerRef.current.querySelectorAll(`[id^="${id}"]`).forEach((el) => {
-        el.classList.add('is-active');
-      });
-    });
-  }, [
+  // 지도 building/POI is-active 클래스를 앱 상태와 DOM 동기화
+  useMapActiveSync({
+    buildingLayerRef,
+    buildingSvg,
+    poisLayerRef,
+    poisSvg,
     boothLocation,
     etcLocation,
     showLocation,
-    buildingSvg,
     isBoothPage,
     isEtcPage,
     isShowsPage,
     matchShowDetail,
     showDetail,
-  ]);
-
-  // activePOIId → 지도 POI is-active 동기화
-  // pois-layer의 SVG가 재렌더링으로 교체될 수 있어, MutationObserver로 재적용까지 보장
-  // BOOTH는 부스 목록 페이지에서만, 나머지는 기타시설 페이지에서만 active 표시
-  useEffect(() => {
-    if (!poisLayerRef.current || !poisSvg) return;
-    const CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'GAS', 'STUFF', 'FOOD'];
-
-    const applyActive = () => {
-      const layer = poisLayerRef.current;
-      if (!layer) return;
-      layer.querySelectorAll('.is-active').forEach((el) => {
-        el.classList.remove('is-active');
-        CATEGORIES.forEach((cat) => el.classList.remove(`poi-${cat.toLowerCase()}`));
-      });
-
-      // Barrierfree 아이콘: 배리어프리 페이지에서 active
-      if (matchBarrierFree) {
-        const barrierEl = layer.querySelector('[id="Barrierfree"]');
-        if (barrierEl) barrierEl.classList.add('is-active');
-      }
-
-      if (!activePOIId) return;
-      const isBoothPOI = activePOIId.includes('BOOTH');
-      if (isBoothPOI && !isBoothPage) return;
-      if (!isBoothPOI && !isEtcPage) return;
-      const el = layer.querySelector(`[id="${activePOIId}"]`);
-      if (!el) return;
-      const category = CATEGORIES.find((cat) => activePOIId.includes(cat));
-      el.classList.add('is-active');
-      if (category) el.classList.add(`poi-${category.toLowerCase()}`);
-    };
-
-    applyActive();
-
-    const observer = new MutationObserver((mutations) => {
-      if (mutations.some((m) => m.type === 'childList' && m.target === poisLayerRef.current)) {
-        applyActive();
-      }
-    });
-    observer.observe(poisLayerRef.current, { childList: true });
-    return () => observer.disconnect();
-  }, [activePOIId, poisSvg, isBoothPage, isEtcPage, matchBarrierFree]);
+    matchBarrierFree,
+    activePOIId,
+  });
 
   // POI를 active 상태로 만들고 해당 좌표로 focus 이동
   // 부스 상세 페이지 진입, 시트 카드 클릭 등에서 호출
@@ -425,8 +279,7 @@ const MapPage = () => {
   useEffect(() => {
     if (!poisLayerRef.current) return;
 
-    const CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'GAS', 'STUFF', 'FOOD'];
-    const selector = CATEGORIES.map((cat) => `[id*="${cat}"]`).join(',');
+    const selector = POI_CATEGORIES.map((cat) => `[id*="${cat}"]`).join(',');
 
     const handleClick = (e) => {
       e.stopPropagation();
@@ -443,7 +296,7 @@ const MapPage = () => {
       const target = e.target.closest(selector);
       if (!target) return;
 
-      const category = CATEGORIES.find((cat) => target.id.includes(cat));
+      const category = POI_CATEGORIES.find((cat) => target.id.includes(cat));
 
       setActivePOIId(target.id);
       setFilter('booth', 'location', []);
