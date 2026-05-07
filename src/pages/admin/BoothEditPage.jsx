@@ -941,7 +941,14 @@ const BoothEditPage = () => {
                       <Input
                         variant="square_white"
                         value={item.price}
-                        onChange={(value) => handleItemChange(idx, 'price', value)}
+                        onChange={(value) => {
+                          if (!/^\d*$/.test(value)) {
+                            showToast('가격은 숫자로만 입력해주세요.', 'warn');
+                            return;
+                          }
+
+                          handleItemChange(idx, 'price', value);
+                        }}
                         placeholder="가격을 입력해주세요"
                         maxLength="10"
                         error={!!errors.items[idx]?.price}
