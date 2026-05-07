@@ -4,9 +4,11 @@
 
 import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { toFullDate } from '@/utils/dateHelper';
 
 /**
  * 필터 객체를 API 쿼리 파라미터로 변환 (부스/공연/스크랩 공통)
+ * - day 필터는 내부적으로 "MM.DD" 형식이지만 API는 "YYYY-MM-DD" 형식을 요구하므로 변환
  */
 export const buildQueryParams = (filters, offset, limit) => {
   const params = { limit, offset };
@@ -16,7 +18,7 @@ export const buildQueryParams = (filters, offset, limit) => {
   if (filters.category?.length > 0) params.category = filters.category;
   if (filters.location?.length > 0) params.building = filters.location;
   if (filters.host?.length > 0) params.host = filters.host;
-  if (filters.day?.length > 0) params.date = filters.day;
+  if (filters.day?.length > 0) params.date = filters.day.map((d) => toFullDate(d));
   if (filters.sort) params.sorting = filters.sort;
 
   return params;
