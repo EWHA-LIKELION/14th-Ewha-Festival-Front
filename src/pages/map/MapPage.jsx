@@ -316,6 +316,14 @@ const MapPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showDetail, useArtistAssets, moveFocusToBuilding, moveFocusToPoint]);
 
+  // 부스/공연 목록 페이지에서 필터로 건물 1개만 선택된 경우 해당 건물로 포커스 이동
+  useEffect(() => {
+    const targetLocation = isBoothPage ? boothLocation : isShowsPage ? showLocation : null;
+    if (!targetLocation || targetLocation.length !== 1) return;
+    focusBuilding(targetLocation[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boothLocation, showLocation, isBoothPage, isShowsPage]);
+
   // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
   // 단, 부스 상세 페이지에서는 검색어 없이도 active 유지
   useEffect(() => {
