@@ -85,7 +85,7 @@ const BoothDetailSheet = () => {
         )}
         {!isLoading && isFull && (
           <>
-            <Header left="back" isSheet />
+            <Header left="back" />
             <img
               src={booth.thumbnail || '/images/default-image-large.png'}
               className="flex aspect-49/30 w-full items-center justify-center object-cover"
