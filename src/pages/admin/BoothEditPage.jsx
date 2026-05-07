@@ -348,13 +348,13 @@ const BoothEditPage = () => {
 
     openAlert({
       variant: 'delete',
-      title: '변경사항',
+      title: '변경사항 폐기',
       confirmLabel: '확인',
       text: (
         <>
-          변경사항을 삭제할까요?
+          변경사항을 폐기할까요?
           <br />
-          삭제된 변경사항은 복구되지 않아요.
+          폐기된 변경사항은 복구되지 않아요.
         </>
       ),
       onConfirm: () => {
@@ -371,6 +371,7 @@ const BoothEditPage = () => {
     const newErrors = {
       name: '',
       category: '',
+      isOpen: '',
       schedule: '',
       notices: [],
       items: [],
@@ -378,6 +379,7 @@ const BoothEditPage = () => {
 
     if (!form.name.trim()) newErrors.name = '부스명을 입력해주세요.';
     if (selectedCategories.length === 0) newErrors.category = '카테고리를 1개 이상 선택해주세요.';
+    if (isOpen === null || isOpen === undefined) newErrors.isOpen = '운영 여부를 선택해주세요.';
     if (!Object.values(schedule).some((d) => d.checked))
       newErrors.schedule = '운영 시간을 1개 이상 선택해주세요.';
 
@@ -395,6 +397,7 @@ const BoothEditPage = () => {
     const isValid =
       !newErrors.name &&
       !newErrors.category &&
+      !newErrors.isOpen &&
       !newErrors.schedule &&
       newErrors.notices.every((n) => !n.title && !n.content) &&
       newErrors.items.every((i) => !i.name && !i.description && !i.price);
@@ -402,7 +405,7 @@ const BoothEditPage = () => {
     setErrors(newErrors);
     setIsFormValid(isValid);
     return isValid;
-  }, [form, selectedCategories, schedule, notices, items]);
+  }, [form, selectedCategories, isOpen, schedule, notices, items]);
 
   useEffect(() => {
     validateForm();
@@ -618,12 +621,12 @@ const BoothEditPage = () => {
 
           {/* 운영 여부 */}
           <div className="flex w-full flex-col items-start gap-3">
-            <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-1">
               <h2 className="text-base leading-6 font-semibold tracking-normal text-zinc-800">
                 운영 여부
               </h2>
-              <p className="text-xs leading-4 font-normal tracking-normal text-zinc-500">
-                설정한 운영 시간에 따라 자동 변경되며, 필요 시 수동으로 변경 가능합니다.
+              <p className="text-xs leading-4 font-normal tracking-normal text-emerald-600">
+                *필수
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -656,7 +659,6 @@ const BoothEditPage = () => {
                     size="large"
                     label="소개글"
                     placeholder="소개글을 입력해주세요"
-                    maxLength="100"
                   />
                 </div>
 
