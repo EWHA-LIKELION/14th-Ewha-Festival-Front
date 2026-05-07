@@ -14,3 +14,11 @@ export const formatScheduleDate = (date, year = 2026) => {
   const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][dateObj.getDay()];
   return `${parseInt(day)}일 (${dayOfWeek})`;
 };
+
+/**
+ * "05.13" → "2026-05-13" 변환 (필터링 API 쿼리 파라미터용)
+ * @param {string} date - MM.DD 형식의 날짜 문자열
+ * @param {number} year - 연도 (기본값: 2026)
+ * @returns {string} - YYYY-MM-DD 형식
+ */
+export const toFullDate = (date, year = 2026) => `${year}-${date.replace('.', '-')}`;
