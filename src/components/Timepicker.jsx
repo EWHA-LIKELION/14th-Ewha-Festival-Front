@@ -60,6 +60,7 @@ function Timepicker({
         <input
           type="time"
           value={startTime}
+          disabled={!isSelected}
           onChange={(e) => handleStartChange(e.target.value)}
           className={`absolute inset-0 z-10 opacity-0 ${
             isSelected ? 'cursor-pointer' : 'cursor-not-allowed'
@@ -77,6 +78,7 @@ function Timepicker({
         <input
           type="time"
           value={endTime}
+          disabled={!isSelected}
           onChange={(e) => handleEndChange(e.target.value)}
           className={`absolute inset-0 z-10 opacity-0 ${
             isSelected ? 'cursor-pointer' : 'cursor-not-allowed'
