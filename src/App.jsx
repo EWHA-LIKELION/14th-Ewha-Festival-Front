@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
 // 레이아웃
 import NavigationBarLayout from '@/layouts/NavigationBarLayout';
@@ -46,6 +46,7 @@ import ShowEditPage from '@/pages/admin/ShowEditPage';
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const showFilterSheet = useFilterSheetStore((s) => s.isOpen);
   const { type, text, isOpen, closeToast } = useToastStore();
   const { alert, closeAlert } = useAlertStore();
@@ -66,7 +67,10 @@ function App() {
 
           {/* 마이 */}
           <Route path="my" element={<MyPage />} />
-          <Route path="my/scrap" element={<ScrapPage />} />
+          <Route
+            path="my/scrap"
+            element={isLoggedIn ? <ScrapPage /> : <Navigate to="/my" replace />}
+          />
 
           {/* 지도 */}
           <Route path="map" element={<MapPage />}>
@@ -82,7 +86,10 @@ function App() {
           <Route path="map/shows/:id/notice" element={<NoticePage />} />
         </Route>
 
-        <Route path="admin">
+        <Route
+          path="admin"
+          element={isLoggedIn ? <Outlet /> : <Navigate to="/my" replace />}
+        >
           <Route path="confirm" element={<AdminConfirmPage />} />
           <Route path="booth/:id" element={<MyBoothPage />} />
           <Route path="booth/:id/edit" element={<BoothEditPage />} />
