@@ -8,6 +8,7 @@ import { AuthAPI } from '@/apis';
 import useAuthStore from '@/store/useAuthStore';
 import useAlertStore from '@/store/useAlertStore';
 import { useMyProfile } from '@/hooks/useMyProfile';
+import { useScrollToTop } from '@/hooks';
 import Header from '@/components/Header';
 import Button from '@/components/Button';
 import ImageCard from '@/components/Card/ImageCard';
@@ -96,9 +97,7 @@ const MyPage = () => {
     });
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollToTop();
 
   useEffect(() => {
     if (!isLoggedIn) {

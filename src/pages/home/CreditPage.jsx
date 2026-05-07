@@ -2,14 +2,12 @@
  * 만든이들 페이지
  */
 
-import { useEffect } from 'react';
 import Header from '@/components/Header';
 import creditData from '@/data/creditData.json';
+import { useScrollToTop } from '@/hooks';
 
 const CreditPage = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollToTop();
 
   // 1. organization 기준으로 그룹핑
   const groupedByOrg = creditData.reduce((acc, member) => {

@@ -9,6 +9,7 @@ import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
 import Header from '@/components/Header';
 import useImageUploader from '@/hooks/useImageUploader';
+import { useScrollToTop } from '@/hooks';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
 import Input from '@/components/Input/Input';
 import Checkbox from '@/components/Checkbox';
@@ -37,6 +38,8 @@ const ShowEditPage = () => {
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const showToast = useToastStore((s) => s.showToast);
   const queryClient = useQueryClient();
+
+  useScrollToTop();
 
   const [loading, setLoading] = useState(false);
   const [originData, setOriginData] = useState(null);

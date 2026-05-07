@@ -7,6 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
+import { useScrollToTop } from '@/hooks';
 
 import { BoothAPI, ShowAPI } from '@/apis';
 
@@ -35,9 +36,7 @@ const NoticePage = () => {
     enabled: !!id && (isBooth || isShow),
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollToTop();
 
   useEffect(() => {
     if (isLoading) showLoading();

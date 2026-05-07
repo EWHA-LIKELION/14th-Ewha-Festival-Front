@@ -8,6 +8,7 @@ import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
 import { useBoothDetail } from '@/hooks/useBoothDetail';
+import { useScrollToTop } from '@/hooks';
 import { BOOTH_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
@@ -35,6 +36,8 @@ const MyBoothPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useScrollToTop();
 
   useEffect(() => {
     refetch();
