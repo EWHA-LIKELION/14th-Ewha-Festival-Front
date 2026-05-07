@@ -58,6 +58,7 @@ const EtcSheet = () => {
       const next = prev === id ? false : id;
       const poiId = next ? `${item.location}-${item.category}-${padNumber(item.number)}` : null;
       focusPOI(poiId);
+      if (next) setSheetSize('medium');
       return next;
     });
   };

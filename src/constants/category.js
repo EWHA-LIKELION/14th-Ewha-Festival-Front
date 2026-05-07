@@ -30,3 +30,6 @@ export const ETC_DESCRIPTION = {
   STUFF: '부스 운영에 필요한 비품(테이블, 의자 등)을 배부하는 곳입니다.',
   FOOD: '축제기간 동안 누구나 자유롭게 이용가능한 취식공간입니다.',
 };
+
+// 지도 SVG POI 카테고리 prefix (BOOTH + 기타시설 카테고리)
+export const POI_CATEGORIES = ['BOOTH', 'TRASH', 'DISH', 'GAS', 'STUFF', 'FOOD'];
