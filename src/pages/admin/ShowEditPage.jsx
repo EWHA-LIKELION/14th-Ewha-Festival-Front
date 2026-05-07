@@ -7,6 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
+import useLoadingStore from '@/store/useLoadingStore';
+
 import Header from '@/components/Header';
 import useImageUploader from '@/hooks/useImageUploader';
 import { useScrollToTop } from '@/hooks';
@@ -40,8 +42,10 @@ const ShowEditPage = () => {
   const queryClient = useQueryClient();
 
   useScrollToTop();
+  const showLoading = useLoadingStore((s) => s.showLoading);
+  const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [originData, setOriginData] = useState(null);
   const [originNotices, setOriginNotices] = useState([]);
   const [initialSetlists, setInitialSetlists] = useState([]);
@@ -103,6 +107,9 @@ const ShowEditPage = () => {
   // 1. 데이터 초기화 (Fetch)
   useEffect(() => {
     const fetchShowData = async () => {
+      setLoading(true);
+      showLoading();
+
       try {
         const data = await ShowAPI.getShowById(id);
         const noticeData = await ShowAPI.getShowNotices(id);
@@ -174,6 +181,9 @@ const ShowEditPage = () => {
       } catch (err) {
         console.error('데이터 로딩 실패:', err);
         showToast('데이터를 불러오는데 실패했습니다.', 'warn');
+      } finally {
+        hideLoading();
+        setLoading(false);
       }
     };
     fetchShowData();
@@ -484,6 +494,8 @@ const ShowEditPage = () => {
       }
     }
   };
+
+  if (loading || !originData) return null;
 
   return (
     <>

@@ -7,6 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
+import useLoadingStore from '@/store/useLoadingStore';
+
 import Header from '@/components/Header';
 import useImageUploader from '@/hooks/useImageUploader';
 import { useScrollToTop } from '@/hooks';
@@ -39,8 +41,10 @@ const BoothEditPage = () => {
   const queryClient = useQueryClient();
 
   useScrollToTop();
+  const showLoading = useLoadingStore((s) => s.showLoading);
+  const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [originData, setOriginData] = useState(null);
   const [originNotices, setOriginNotices] = useState([]);
   const [resourceVersion, setResourceVersion] = useState(null);
@@ -101,6 +105,9 @@ const BoothEditPage = () => {
   // 1. 데이터 초기화 (Fetch)
   useEffect(() => {
     const fetchBoothData = async () => {
+      setLoading(true);
+      showLoading();
+
       try {
         const data = await BoothAPI.getBoothById(id);
         const noticeData = await BoothAPI.getBoothNotices(id);
@@ -135,7 +142,6 @@ const BoothEditPage = () => {
         setSelectedCategories(data.category || []);
         setIsOpen(data.is_ongoing);
 
-        // 스케줄 세팅
         // 스케줄 세팅
         const newSchedule = DAYS.reduce(
           (acc, day) => ({
@@ -181,11 +187,12 @@ const BoothEditPage = () => {
             image: p.image || null,
           })),
         );
-
-        setLoading(false);
       } catch (err) {
         console.error('데이터 로딩 실패:', err);
         showToast('데이터를 불러오는데 실패했습니다.', 'warn');
+      } finally {
+        hideLoading();
+        setLoading(false);
       }
     };
     fetchBoothData();
@@ -409,6 +416,8 @@ const BoothEditPage = () => {
 
     const formData = new FormData();
 
+    showLoading();
+
     // 1. 기본 필드 (변경된 것만)
     if (form.name !== originData.name) {
       formData.append('name', form.name || null);
@@ -469,7 +478,10 @@ const BoothEditPage = () => {
     if (items.length > 0) {
       const productPayload = items.map((i, idx) => {
         if (i.image instanceof File) {
-          formData.append(`product_images_${idx}`, i.image);
+          formData.append(`product_image_${idx}`, i.image);
+        } else if (i.image === null) {
+          // 삭제 요청
+          formData.append(`product_image_${idx}`, null);
         }
 
         return {
@@ -524,6 +536,8 @@ const BoothEditPage = () => {
       }
     }
   };
+
+  if (loading || !originData) return null;
 
   return (
     <>
