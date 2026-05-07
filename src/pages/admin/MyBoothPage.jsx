@@ -67,6 +67,10 @@ const MyBoothPage = () => {
     navigate(`/admin/booth/${id}/edit`);
   };
 
+  const goMyPage = () => {
+    navigate(`/my`);
+  };
+
   const goNoticePage = () => {
     navigate(`/admin/booth/${id}/notice`);
   };
@@ -90,7 +94,7 @@ const MyBoothPage = () => {
   console.log(booth.thumbnail);
   return (
     <>
-      <Header left="back" right="edit" background="white" onEdit={goEditPage} />
+      <Header left="back" right="edit" background="white" onEdit={goEditPage} onBack={goMyPage} />
       <img
         src={fixUrl(booth.thumbnail || '/images/default-image-large.png')}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
