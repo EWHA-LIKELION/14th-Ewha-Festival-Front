@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
+import useImageModalStore from '@/store/useImageModalStore';
 
 import { useBoothDetail } from '@/hooks/useBoothDetail';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -19,7 +20,6 @@ import BottomsheetDrag from '@/components/BottomsheetDrag';
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
 import Badge from '@/components/Badge';
-import ImageModal from '@/components/ImageModal';
 import Divider from '@/components/Divider';
 import NoticeCard from '@/components/Card/NoticeCard';
 import Tab from '@/components/Tab';
@@ -34,9 +34,8 @@ const BoothDetailSheet = () => {
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const { data: booth, error, isLoading } = useBoothDetail(id);
-  const [showModal, setShowModal] = useState(false);
+  const openImageModal = useImageModalStore((s) => s.openImageModal);
   const [activeTab, setActiveTab] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     if (!error) return;
@@ -90,10 +89,7 @@ const BoothDetailSheet = () => {
               src={booth.thumbnail || '/images/default-image-large.png'}
               className="flex aspect-49/30 w-full items-center justify-center object-cover"
               onClick={() => {
-                if (booth.thumbnail) {
-                  setSelectedImage(booth.thumbnail);
-                  setShowModal(true);
-                }
+                if (booth.thumbnail) openImageModal(booth.thumbnail);
               }}
             />
           </>
@@ -189,10 +185,7 @@ const BoothDetailSheet = () => {
                           <img src="/icons/icon-eclipse-gray.svg" />
                           <button
                             className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
-                            onClick={() => {
-                              setSelectedImage(booth.roadview);
-                              setShowModal(true);
-                            }}
+                            onClick={() => openImageModal(booth.roadview)}
                           >
                             로드뷰
                           </button>
@@ -270,10 +263,7 @@ const BoothDetailSheet = () => {
                           description={item.description}
                           image={item.image}
                           price={item.price}
-                          onImageClick={(img) => {
-                            setSelectedImage(img);
-                            setShowModal(true);
-                          }}
+                          onImageClick={openImageModal}
                         />
                       ))
                     ) : (
@@ -287,7 +277,6 @@ const BoothDetailSheet = () => {
             </div>
           </div>
         )}
-        {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
       </BottomsheetDrag>
     </>
   );

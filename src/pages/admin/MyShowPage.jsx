@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
+import useImageModalStore from '@/store/useImageModalStore';
 
 import { useShowDetail } from '@/hooks/useShowDetail';
 import { useScrollToTop } from '@/hooks';
@@ -18,7 +19,6 @@ import { mapSnsUrls } from '@/utils/snsHelper';
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
 import Badge from '@/components/Badge';
-import ImageModal from '@/components/ImageModal';
 import Divider from '@/components/Divider';
 import NoticeCard from '@/components/Card/NoticeCard';
 import Tab from '@/components/Tab';
@@ -33,9 +33,8 @@ const MyShowPage = () => {
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
   const { data: show, error, isLoading, refetch } = useShowDetail(id);
-  const [showModal, setShowModal] = useState(false);
+  const openImageModal = useImageModalStore((s) => s.openImageModal);
   const [activeTab, setActiveTab] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(null);
 
   useScrollToTop();
 
@@ -109,10 +108,7 @@ const MyShowPage = () => {
         src={show.thumbnail || '/images/default-image-large.png'}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
         onClick={() => {
-          if (show.thumbnail) {
-            setSelectedImage(show.thumbnail);
-            setShowModal(true);
-          }
+          if (show.thumbnail) openImageModal(show.thumbnail);
         }}
       />
 
@@ -200,10 +196,7 @@ const MyShowPage = () => {
                       <img src="/icons/icon-eclipse-gray.svg" />
                       <button
                         className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
-                        onClick={() => {
-                          setSelectedImage(show.roadview);
-                          setShowModal(true);
-                        }}
+                        onClick={() => openImageModal(show.roadview)}
                       >
                         로드뷰
                       </button>
@@ -286,7 +279,6 @@ const MyShowPage = () => {
         </div>
       </div>
 
-      {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
     </>
   );
 };
