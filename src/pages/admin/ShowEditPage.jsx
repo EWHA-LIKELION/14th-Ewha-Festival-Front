@@ -4,6 +4,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
 import Header from '@/components/Header';
@@ -35,6 +36,7 @@ const ShowEditPage = () => {
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const showToast = useToastStore((s) => s.showToast);
+  const queryClient = useQueryClient();
 
   const [loading, setLoading] = useState(false);
   const [originData, setOriginData] = useState(null);
@@ -460,17 +462,12 @@ const ShowEditPage = () => {
     try {
       await ShowAPI.updateShow(id, formData, resourceVersion);
 
-      const [showData, noticeData] = await Promise.all([
-        ShowAPI.getShowById(id),
-        ShowAPI.getShowNotices(id),
+      // 다른 페이지들이 사용하는 react-query 캐시 무효화 → 진입 시 최신 데이터로 refetch
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['show', id] }),
+        queryClient.invalidateQueries({ queryKey: ['notices', id] }),
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] }),
       ]);
-
-      setOriginData(showData);
-      setNotices(
-        noticeData.map((n) => ({
-          ...n,
-        })),
-      );
 
       showToast('성공적으로 수정되었어요.');
       navigate(`/admin/show/${id}`, { replace: true });
