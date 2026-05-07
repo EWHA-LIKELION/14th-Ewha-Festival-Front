@@ -348,13 +348,13 @@ const BoothEditPage = () => {
 
     openAlert({
       variant: 'delete',
-      title: '변경사항 폐기',
+      title: '변경사항',
       confirmLabel: '확인',
       text: (
         <>
-          변경사항을 폐기할까요?
+          변경사항을 삭제할까요?
           <br />
-          폐기된 변경사항은 복구되지 않아요.
+          삭제된 변경사항은 복구되지 않아요.
         </>
       ),
       onConfirm: () => {
