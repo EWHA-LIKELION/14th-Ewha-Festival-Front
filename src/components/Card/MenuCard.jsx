@@ -35,7 +35,7 @@ const MenuCard = ({ name, description, price, image, onImageClick }) => {
           </h3>
         </div>
         <img
-          src={image || '/images/default-image-medium.png'}
+          src={image || '/images/default-image.png'}
           className="flex aspect-square w-22 items-center justify-center rounded-md border border-zinc-100"
         />
       </div>
