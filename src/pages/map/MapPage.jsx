@@ -130,6 +130,19 @@ const MapPage = () => {
     'SENTENNIAL_MUSEUM',
   ];
 
+  // 아티스트 모드에서 GRASS_GROUND 등은 좌표를 override 해서 포커스
+  const focusBuilding = useCallback(
+    (buildingId) => {
+      const override = useArtistAssets ? ARTIST_BUILDING_CENTERS[buildingId] : null;
+      if (override) {
+        moveFocusToPoint(override.x, override.y, MAP_CLICK_ZOOM_SCALE);
+      } else {
+        moveFocusToBuilding(buildingId);
+      }
+    },
+    [useArtistAssets, moveFocusToBuilding, moveFocusToPoint],
+  );
+
   // filtersRef를 최신 상태로 유지 (클릭 핸들러 클로저에서 사용)
   useEffect(() => {
     filtersRef.current = { boothLocation, etcLocation, showLocation };
@@ -193,8 +206,7 @@ const MapPage = () => {
     setFilter('show', 'location', []);
     setActivePOIId(null);
     focusBuilding('GRASS_GROUND');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matchBarrierFree, setFilter]);
+  }, [matchBarrierFree, setFilter, focusBuilding]);
 
   // 필터 location → 지도 building is-active 동기화 (현재 페이지 기준)
   useEffect(() => {
@@ -298,31 +310,19 @@ const MapPage = () => {
     focusPOI(`${building}-BOOTH-${padNumber(number)}`);
   }, [boothDetail, poisSvg, focusPOI]);
 
-  // 아티스트 모드에서 GRASS_GROUND 등은 좌표를 override 해서 포커스
-  const focusBuilding = (buildingId) => {
-    const override = useArtistAssets ? ARTIST_BUILDING_CENTERS[buildingId] : null;
-    if (override) {
-      moveFocusToPoint(override.x, override.y, MAP_CLICK_ZOOM_SCALE);
-    } else {
-      moveFocusToBuilding(buildingId);
-    }
-  };
-
   // 공연 상세 페이지(/map/shows/:id) 진입 시 해당 공연 building 포커스 이동
   // (active 표시는 위 building is-active 동기화 useEffect가 showDetail 기반으로 처리)
   useEffect(() => {
     if (!showDetail?.location?.building) return;
     focusBuilding(showDetail.location.building);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showDetail, useArtistAssets, moveFocusToBuilding, moveFocusToPoint]);
+  }, [showDetail, focusBuilding]);
 
   // 부스/공연 목록 페이지에서 필터로 건물 1개만 선택된 경우 해당 건물로 포커스 이동
   useEffect(() => {
     const targetLocation = isBoothPage ? boothLocation : isShowsPage ? showLocation : null;
     if (!targetLocation || targetLocation.length !== 1) return;
     focusBuilding(targetLocation[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boothLocation, showLocation, isBoothPage, isShowsPage]);
+  }, [boothLocation, showLocation, isBoothPage, isShowsPage, focusBuilding]);
 
   // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
   // 단, 부스 상세 페이지에서는 검색어 없이도 active 유지
@@ -413,9 +413,7 @@ const MapPage = () => {
     buildingSvg,
     setFilter,
     setSheetSize,
-    moveFocusToBuilding,
-    moveFocusToPoint,
-    useArtistAssets,
+    focusBuilding,
     isBoothPage,
     isEtcPage,
     isShowsPage,
