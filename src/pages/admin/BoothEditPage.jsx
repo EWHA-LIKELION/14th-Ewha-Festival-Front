@@ -371,7 +371,6 @@ const BoothEditPage = () => {
     const newErrors = {
       name: '',
       category: '',
-      isOpen: '',
       schedule: '',
       notices: [],
       items: [],
@@ -379,7 +378,6 @@ const BoothEditPage = () => {
 
     if (!form.name.trim()) newErrors.name = '부스명을 입력해주세요.';
     if (selectedCategories.length === 0) newErrors.category = '카테고리를 1개 이상 선택해주세요.';
-    if (isOpen === null || isOpen === undefined) newErrors.isOpen = '운영 여부를 선택해주세요.';
     if (!Object.values(schedule).some((d) => d.checked))
       newErrors.schedule = '운영 시간을 1개 이상 선택해주세요.';
 
@@ -397,7 +395,6 @@ const BoothEditPage = () => {
     const isValid =
       !newErrors.name &&
       !newErrors.category &&
-      !newErrors.isOpen &&
       !newErrors.schedule &&
       newErrors.notices.every((n) => !n.title && !n.content) &&
       newErrors.items.every((i) => !i.name && !i.description && !i.price);
@@ -405,7 +402,7 @@ const BoothEditPage = () => {
     setErrors(newErrors);
     setIsFormValid(isValid);
     return isValid;
-  }, [form, selectedCategories, isOpen, schedule, notices, items]);
+  }, [form, selectedCategories, schedule, notices, items]);
 
   useEffect(() => {
     validateForm();
@@ -621,12 +618,12 @@ const BoothEditPage = () => {
 
           {/* 운영 여부 */}
           <div className="flex w-full flex-col items-start gap-3">
-            <div className="flex items-center gap-1">
+            <div className="flex flex-col gap-1">
               <h2 className="text-base leading-6 font-semibold tracking-normal text-zinc-800">
                 운영 여부
               </h2>
-              <p className="text-xs leading-4 font-normal tracking-normal text-emerald-600">
-                *필수
+              <p className="text-xs leading-4 font-normal tracking-normal text-zinc-500">
+                설정한 운영 시간에 따라 자동 변경되며, 필요 시 수동으로 변경 가능합니다.
               </p>
             </div>
             <div className="flex items-center gap-4">
