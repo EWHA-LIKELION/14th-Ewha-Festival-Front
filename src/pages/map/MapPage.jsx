@@ -346,7 +346,7 @@ const MapPage = () => {
     else if (!isBoothPOI && pathname !== '/map/etc') setActivePOIId(null);
   }, [pathname, activePOIId]);
 
-  // 건물 클릭 → 필터 location 토글
+  // 🏢 Building 클릭 → 필터 location 토글
   useEffect(() => {
     if (!buildingLayerRef.current) return;
 
@@ -394,6 +394,7 @@ const MapPage = () => {
         setFilter('show', 'location', isShowLocation ? [normalizedId] : []);
       }
 
+      setSheetSize('medium');
       focusBuilding(normalizedId);
     };
 
@@ -403,6 +404,7 @@ const MapPage = () => {
   }, [
     buildingSvg,
     setFilter,
+    setSheetSize,
     moveFocusToBuilding,
     moveFocusToPoint,
     useArtistAssets,
@@ -413,7 +415,7 @@ const MapPage = () => {
     showToast,
   ]);
 
-  // Pois 클릭 이벤트
+  // 🏠 Pois 클릭
   useEffect(() => {
     if (!poisLayerRef.current) return;
 
@@ -442,17 +444,11 @@ const MapPage = () => {
       setFilter('etc', 'location', []);
       setFilter('show', 'location', []);
 
+      setSheetSize('medium');
+
       const bbox = target.getBBox();
       const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
-      // 비BOOTH POI는 /map/etc로 이동 → 시트가 medium으로 올라오므로 미리 반영
-      const targetSheetSize = category !== 'BOOTH' ? 'medium' : undefined;
-      moveFocusToPoint(
-        bbox.x + bbox.width / 2,
-        bbox.y + bbox.height / 2,
-        zoomScale,
-        400,
-        targetSheetSize,
-      );
+      moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
 
       const location = BUILDING_IDS.find((id) => target.id.includes(id));
       const number = parseInt(target.id.split(`${category}-`).pop(), 10);
@@ -470,16 +466,18 @@ const MapPage = () => {
     const el = poisLayerRef.current;
     el.addEventListener('click', handleClick);
     return () => el.removeEventListener('click', handleClick);
-  }, [poisSvg, moveFocusToPoint, navigate, setFilter, setSearchQuery, addRecentSearch]);
+  }, [
+    poisSvg,
+    moveFocusToPoint,
+    navigate,
+    setFilter,
+    setSheetSize,
+    setSearchQuery,
+    addRecentSearch,
+  ]);
 
-  // EtcSheet/BarrierFreeSheet은 마운트 시 시트를 medium으로 올림 → 포커스 계산도 medium 가정
-  const initialSheetSize = matchEtc || matchBarrierFree ? 'medium' : undefined;
-  const initialPos = getInitialPosition(
-    INITIAL_CENTER.x,
-    INITIAL_CENTER.y,
-    MAP_ZOOM_LEVELS.ZL2,
-    initialSheetSize,
-  );
+  // 포커스는 항상 시트 medium 기준 (useMapFocus 참조)
+  const initialPos = getInitialPosition(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2);
 
   return (
     <div ref={mapRef} className="relative h-dvh w-full">
@@ -519,13 +517,7 @@ const MapPage = () => {
         initialPositionX={initialPos.x}
         initialPositionY={initialPos.y}
         onInit={() => {
-          moveFocusToPoint(
-            INITIAL_CENTER.x,
-            INITIAL_CENTER.y,
-            MAP_ZOOM_LEVELS.ZL2,
-            0,
-            initialSheetSize,
-          );
+          moveFocusToPoint(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2, 0);
         }}
         onTransformed={(_, state) => {
           savedTransform.scale = state.scale;

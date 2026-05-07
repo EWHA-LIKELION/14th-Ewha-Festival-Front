@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
-import useBottomsheetStore from '@/store/useBottomsheetStore';
+import { useCallback, useRef } from 'react';
 import { BUILDING_CENTERS, MAP_CLICK_ZOOM_SCALE, SVG_HEIGHT } from '@/constants/mapCoordinates';
 import { SHEET_SNAP_HEIGHTS } from '@/constants/bottomsheet';
 
@@ -18,19 +17,14 @@ const getSafeAreaInsetBottom = () => {
   return h;
 };
 
-// 시트가 large/full로 차있어도 가시 영역이 너무 작아지지 않도록 medium으로 클램프
-const normalizeSheetSizeForFocus = (size) =>
-  size === 'large' || size === 'full' ? 'medium' : size;
+// 포커스는 항상 시트 medium 기준 — 클릭 핸들러들이 진입 시 medium으로 맞춤
+const getFocusSheetHeight = () => SHEET_SNAP_HEIGHTS.medium + getSafeAreaInsetBottom();
 
-const getEffectiveSheetHeight = (size) => {
-  const base = SHEET_SNAP_HEIGHTS[size] ?? SHEET_SNAP_HEIGHTS.medium;
-  return base + getSafeAreaInsetBottom();
-};
-
-const computeTargetTransform = (W, H, svgX, svgY, scale, sheetHeight) => {
+const computeTargetTransform = (W, H, svgX, svgY, scale) => {
   const renderScale = H / SVG_HEIGHT;
   const cx = svgX * renderScale;
   const cy = svgY * renderScale;
+  const sheetHeight = getFocusSheetHeight();
   const visibleCenterY = TOP_OFFSET + (H - sheetHeight - TOP_OFFSET) / 2;
   return {
     x: W / 2 - cx * scale,
@@ -41,28 +35,14 @@ const computeTargetTransform = (W, H, svgX, svgY, scale, sheetHeight) => {
 const useMapFocus = () => {
   const mapRef = useRef(null);
   const transformRef = useRef(null);
-  const sheetSizeRef = useRef(useBottomsheetStore.getState().sheetSize);
 
-  useEffect(() => {
-    return useBottomsheetStore.subscribe((state) => {
-      sheetSizeRef.current = state.sheetSize;
-    });
+  const moveFocusToPoint = useCallback((svgX, svgY, zoomScale, duration = 400) => {
+    if (!transformRef.current || !mapRef.current) return;
+    const W = mapRef.current.clientWidth;
+    const H = mapRef.current.clientHeight;
+    const { x, y } = computeTargetTransform(W, H, svgX, svgY, zoomScale);
+    transformRef.current.setTransform(x, y, zoomScale, duration);
   }, []);
-
-  const moveFocusToPoint = useCallback(
-    (svgX, svgY, zoomScale, duration = 400, overrideSheetSize) => {
-      if (!transformRef.current || !mapRef.current) return;
-      const W = mapRef.current.clientWidth;
-      const H = mapRef.current.clientHeight;
-      const effectiveSheetSize = normalizeSheetSizeForFocus(
-        overrideSheetSize ?? sheetSizeRef.current,
-      );
-      const sheetHeight = getEffectiveSheetHeight(effectiveSheetSize);
-      const { x, y } = computeTargetTransform(W, H, svgX, svgY, zoomScale, sheetHeight);
-      transformRef.current.setTransform(x, y, zoomScale, duration);
-    },
-    [],
-  );
 
   const moveFocusToBuilding = useCallback(
     (buildingId) => {
@@ -73,19 +53,8 @@ const useMapFocus = () => {
     [moveFocusToPoint],
   );
 
-  const getInitialPosition = useCallback((svgX, svgY, scale, overrideSheetSize) => {
-    const effectiveSheetSize = normalizeSheetSizeForFocus(
-      overrideSheetSize ?? sheetSizeRef.current ?? 'medium',
-    );
-    const sheetHeight = getEffectiveSheetHeight(effectiveSheetSize);
-    return computeTargetTransform(
-      window.innerWidth,
-      window.innerHeight,
-      svgX,
-      svgY,
-      scale,
-      sheetHeight,
-    );
+  const getInitialPosition = useCallback((svgX, svgY, scale) => {
+    return computeTargetTransform(window.innerWidth, window.innerHeight, svgX, svgY, scale);
   }, []);
 
   return {
