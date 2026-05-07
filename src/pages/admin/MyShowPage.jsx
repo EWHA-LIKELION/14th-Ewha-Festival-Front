@@ -31,10 +31,14 @@ const MyShowPage = () => {
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const { data: show, error, isLoading } = useShowDetail(id);
+  const { data: show, error, isLoading, refetch } = useShowDetail(id);
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    refetch();
+  }, [id]);
 
   useEffect(() => {
     if (isLoading) showLoading();

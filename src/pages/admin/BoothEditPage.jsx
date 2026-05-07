@@ -131,11 +131,29 @@ const BoothEditPage = () => {
         setIsOpen(data.is_ongoing);
 
         // 스케줄 세팅
-        const newSchedule = { ...schedule };
+        // 스케줄 세팅
+        const newSchedule = DAYS.reduce(
+          (acc, day) => ({
+            ...acc,
+            [day]: {
+              checked: false,
+              start: FESTIVAL_TIME.booth[day].start,
+              end: FESTIVAL_TIME.booth[day].end,
+            },
+          }),
+          {},
+        );
+
         data.schedule?.forEach((s) => {
           const [start, end] = s.time.split('~');
-          newSchedule[s.date] = { checked: true, start, end };
+
+          newSchedule[s.date] = {
+            checked: true,
+            start,
+            end,
+          };
         });
+
         setSchedule(newSchedule);
 
         // 공지 및 아이템 세팅
@@ -144,7 +162,6 @@ const BoothEditPage = () => {
         setNotices(
           noticesArray.map((n) => ({
             ...n,
-            image: n.image?.replace('http://', 'https://') || null,
           })),
         );
 
@@ -186,7 +203,11 @@ const BoothEditPage = () => {
               const [start, end] = s.time.split('~');
               acc[day] = { checked: true, start, end };
             } else {
-              acc[day] = { checked: false, start: '09:00', end: '18:00' };
+              acc[day] = {
+                checked: false,
+                start: FESTIVAL_TIME.booth[day].start,
+                end: FESTIVAL_TIME.booth[day].end,
+              };
             }
             return acc;
           }, {}),
@@ -402,9 +423,7 @@ const BoothEditPage = () => {
 
     // 2. category (배열)
     if (JSON.stringify(selectedCategories) !== JSON.stringify(originData.category)) {
-      selectedCategories.forEach((cat) => {
-        formData.append('category', cat);
-      });
+      formData.append('category', JSON.stringify(selectedCategories));
     }
 
     // 3. 이미지
@@ -433,17 +452,11 @@ const BoothEditPage = () => {
     formData.append('schedule', JSON.stringify(schedulePayload));
 
     // 5. notice
-    const noticePayload = notices.map((n, idx) => {
-      if (n.image instanceof File) {
-        formData.append(`notice_images_${idx}`, n.image);
-      }
-
-      return {
-        ...(n.id ? { id: n.id } : {}),
-        title: n.title,
-        content: n.content,
-      };
-    });
+    const noticePayload = notices.map((n) => ({
+      ...(n.id ? { id: n.id } : {}),
+      title: n.title,
+      content: n.content,
+    }));
 
     formData.append('notice', JSON.stringify(noticePayload));
 
@@ -497,7 +510,6 @@ const BoothEditPage = () => {
       setNotices(
         noticeData.map((n) => ({
           ...n,
-          image: n.image?.replace('http://', 'https://') || null,
         })),
       );
 
@@ -764,7 +776,6 @@ const BoothEditPage = () => {
                         _tempId: Date.now(),
                         title: '',
                         content: '',
-                        image: null,
                       },
                       ...prev,
                     ])
@@ -818,19 +829,7 @@ const BoothEditPage = () => {
                         {errors.notices[idx].content}
                       </p>
                     )}
-                    <div className="flex items-end justify-between self-stretch">
-                      <div className="flex items-start gap-2">
-                        <h2 className="w-7 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
-                          사진
-                        </h2>
-                        <DetailImageUploader
-                          image={notice.image}
-                          onChange={(file) => handleNoticeChange(idx, 'image', file)}
-                          onRemove={() =>
-                            handleClickRemove(() => handleNoticeChange(idx, 'image', null))
-                          }
-                        />
-                      </div>
+                    <div className="flex justify-end self-stretch">
                       <Button
                         variant="bg-pink"
                         size="sm"

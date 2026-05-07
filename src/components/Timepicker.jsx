@@ -66,6 +66,7 @@ function Timepicker({
         <input
           type="time"
           value={startTime}
+          disabled={!isSelected}
           min={minTime}
           max={endTime}
           onChange={(e) => handleStartChange(e.target.value)}
@@ -85,6 +86,7 @@ function Timepicker({
         <input
           type="time"
           value={endTime}
+          disabled={!isSelected}
           min={startTime}
           max={maxTime}
           onChange={(e) => handleEndChange(e.target.value)}
