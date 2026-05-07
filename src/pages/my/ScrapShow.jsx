@@ -27,6 +27,7 @@ const ScrapShow = () => {
   useEffect(() => {
     if (isLoading) showLoading();
     else hideLoading();
+    return () => hideLoading();
   }, [isLoading]);
 
   const handleShowExcludeEndedChange = (value) => {
