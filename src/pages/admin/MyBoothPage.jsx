@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
+import useImageModalStore from '@/store/useImageModalStore';
 
 import { useBoothDetail } from '@/hooks/useBoothDetail';
 import { useScrollToTop } from '@/hooks';
@@ -18,7 +19,6 @@ import { mapSnsUrls } from '@/utils/snsHelper';
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
 import Badge from '@/components/Badge';
-import ImageModal from '@/components/ImageModal';
 import Divider from '@/components/Divider';
 import NoticeCard from '@/components/Card/NoticeCard';
 import Tab from '@/components/Tab';
@@ -33,9 +33,8 @@ const MyBoothPage = () => {
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
   const { data: booth, error, isLoading, refetch } = useBoothDetail(id);
-  const [showModal, setShowModal] = useState(false);
+  const openImageModal = useImageModalStore((s) => s.openImageModal);
   const [activeTab, setActiveTab] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(null);
 
   useScrollToTop();
 
@@ -102,10 +101,7 @@ const MyBoothPage = () => {
         src={fixUrl(booth.thumbnail || '/images/default-image-large.png')}
         className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
         onClick={() => {
-          if (booth.thumbnail) {
-            setSelectedImage(fixUrl(booth.thumbnail));
-            setShowModal(true);
-          }
+          if (booth.thumbnail) openImageModal(fixUrl(booth.thumbnail));
         }}
       />
 
@@ -193,10 +189,7 @@ const MyBoothPage = () => {
                       <img src="/icons/icon-eclipse-gray.svg" />
                       <button
                         className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
-                        onClick={() => {
-                          setSelectedImage(fixUrl(booth.roadview));
-                          setShowModal(true);
-                        }}
+                        onClick={() => openImageModal(fixUrl(booth.roadview))}
                       >
                         로드뷰
                       </button>
@@ -274,10 +267,7 @@ const MyBoothPage = () => {
                       description={item.description}
                       image={fixUrl(item.image)}
                       price={item.price}
-                      onImageClick={(img) => {
-                        setSelectedImage(fixUrl(img));
-                        setShowModal(true);
-                      }}
+                      onImageClick={(img) => openImageModal(fixUrl(img))}
                     />
                   ))
                 ) : (
@@ -290,7 +280,6 @@ const MyBoothPage = () => {
           </div>
         </div>
       </div>
-      {showModal && <ImageModal image={selectedImage} onClose={() => setShowModal(false)} />}
     </>
   );
 };

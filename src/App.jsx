@@ -11,6 +11,8 @@ import { ToastManager } from '@/components/Toast';
 import useAlertStore from '@/store/useAlertStore';
 import Alert from '@/components/Alert';
 import Scrim from '@/components/Scrim';
+import useImageModalStore from '@/store/useImageModalStore';
+import ImageModal from '@/components/ImageModal';
 import useFilterSheetStore from '@/store/useFilterSheetStore';
 import FilterSheet from '@/features/FilterSheet';
 import Loading from '@/components/Loading';
@@ -47,6 +49,7 @@ function App() {
   const showFilterSheet = useFilterSheetStore((s) => s.isOpen);
   const { type, text, isOpen, closeToast } = useToastStore();
   const { alert, closeAlert } = useAlertStore();
+  const { image: modalImage, closeImageModal } = useImageModalStore();
 
   return (
     <main className="app">
@@ -102,6 +105,9 @@ function App() {
 
       {/* 토스트 */}
       <ToastManager type={type} text={text} isOpen={isOpen} onClose={closeToast} />
+
+      {/* 이미지 모달 */}
+      {modalImage && <ImageModal image={modalImage} onClose={closeImageModal} />}
 
       {/* Alert */}
       {alert && (

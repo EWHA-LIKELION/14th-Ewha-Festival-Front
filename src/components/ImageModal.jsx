@@ -16,10 +16,7 @@ const ImageModal = ({ image, onClose }) => {
 
           {/* 이미지 */}
           <div className="reactive-width w-full">
-            <img
-              src={image || '/images/showcard-default.png'}
-              className="h-auto w-full object-cover"
-            />
+            <img src={image} className="h-auto w-full object-cover" />
           </div>
         </div>
       </div>
