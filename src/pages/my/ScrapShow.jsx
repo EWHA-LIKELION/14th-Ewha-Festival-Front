@@ -35,7 +35,6 @@ const ScrapShow = () => {
 
   const hasActiveFilters =
     scrapShowFilters.category.length > 0 ||
-    scrapShowFilters.host.length > 0 ||
     scrapShowFilters.day.length > 0 ||
     scrapShowFilters.excludeEnded;
 
