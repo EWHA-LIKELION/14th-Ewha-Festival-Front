@@ -2,11 +2,10 @@
  * 관리자 코드 인증 페이지
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { AdminAPI } from '@/apis';
-import useAuthStore from '@/store/useAuthStore';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
 import Header from '@/components/Header';
@@ -19,15 +18,6 @@ const AdminConfirmPage = () => {
   const { showToast } = useToastStore();
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
-  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/my');
-      openLoginSheet();
-    }
-  }, [isLoggedIn]);
 
   const [boothNumber, setBoothNumber] = useState('');
   const [adminCode, setAdminCode] = useState('');

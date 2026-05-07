@@ -27,6 +27,7 @@ const ScrapBooth = () => {
   useEffect(() => {
     if (isLoading) showLoading();
     else hideLoading();
+    return () => hideLoading();
   }, [isLoading]);
 
   const handleBoothExcludeEndedChange = (value) => {

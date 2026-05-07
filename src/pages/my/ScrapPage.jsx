@@ -28,7 +28,7 @@ const ScrapPage = () => {
 
   return (
     <>
-      <Header left="back" center="title" centerTitle="스크랩북" right="search" />
+      <Header left="back" center="title" centerTitle="스크랩북" />
       <div className="mt-18 flex flex-col gap-4 px-5 pt-5">
         <Tab tabs={['부스', '공연']} activeIndex={activeIndex} onChange={setActiveIndex} />
         {activeIndex === 0 ? <ScrapBooth /> : <ScrapShow />}

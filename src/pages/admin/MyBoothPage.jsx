@@ -45,6 +45,7 @@ const MyBoothPage = () => {
   useEffect(() => {
     if (isLoading) showLoading();
     else hideLoading();
+    return () => hideLoading();
   }, [isLoading]);
 
   useEffect(() => {
