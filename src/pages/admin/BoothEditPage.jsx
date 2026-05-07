@@ -393,9 +393,7 @@ const BoothEditPage = () => {
 
     // 2. category (배열)
     if (JSON.stringify(selectedCategories) !== JSON.stringify(originData.category)) {
-      selectedCategories.forEach((cat) => {
-        formData.append('category', cat);
-      });
+      formData.append('category', JSON.stringify(selectedCategories));
     }
 
     // 3. 이미지
