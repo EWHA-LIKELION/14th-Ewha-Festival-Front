@@ -4,12 +4,14 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
 import Header from '@/components/Header';
 import useImageUploader from '@/hooks/useImageUploader';
+import { useScrollToTop } from '@/hooks';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
 import Input from '@/components/Input/Input';
 import Checkbox from '@/components/Checkbox';
@@ -36,6 +38,9 @@ const BoothEditPage = () => {
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const showToast = useToastStore((s) => s.showToast);
+  const queryClient = useQueryClient();
+
+  useScrollToTop();
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
@@ -512,20 +517,12 @@ const BoothEditPage = () => {
     try {
       await BoothAPI.updateBooth(id, formData, resourceVersion);
 
-      const [boothData, noticeData] = await Promise.all([
-        BoothAPI.getBoothById(id),
-        BoothAPI.getBoothNotices(id),
+      // 다른 페이지들이 사용하는 react-query 캐시 무효화 → 진입 시 최신 데이터로 refetch
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['booth', id] }),
+        queryClient.invalidateQueries({ queryKey: ['notices', id] }),
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] }),
       ]);
-
-      setOriginData(boothData);
-      setResourceVersion(boothData.updated_at);
-      setNotices(
-        noticeData.map((n) => ({
-          ...n,
-        })),
-      );
-
-      console.log(noticePayload);
 
       showToast('성공적으로 수정되었어요.');
       navigate(`/admin/booth/${id}`, { replace: true });

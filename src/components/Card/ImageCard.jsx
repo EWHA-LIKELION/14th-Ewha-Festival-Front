@@ -11,7 +11,7 @@ const ImageCard = ({ image, name, onClick }) => {
       className="flex w-21 shrink-0 cursor-pointer flex-col items-start gap-1.5"
     >
       <img
-        src={image || '/images/default-image-xsmall.png'}
+        src={image || '/images/default-image.png'}
         alt={name}
         className="flex h-21 flex-col items-start rounded-lg border border-zinc-100"
       />

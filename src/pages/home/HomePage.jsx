@@ -2,14 +2,12 @@
  * 홈 페이지
  */
 
-import { useEffect } from 'react';
 import Footer from '@/components/Footer';
 import ImageCard from '@/components/Card/ImageCard';
+import { useScrollToTop } from '@/hooks';
 
 const HomePage = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollToTop();
 
   const goFestivalInstagram = () => {
     window.open('https://www.instagram.com/ewha_festa/', '_blank');

@@ -8,6 +8,7 @@ import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
 import { useShowDetail } from '@/hooks/useShowDetail';
+import { useScrollToTop } from '@/hooks';
 import { SHOW_CATEGORY } from '@/constants/category';
 import { SHOW_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
@@ -35,6 +36,8 @@ const MyShowPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useScrollToTop();
 
   useEffect(() => {
     refetch();
