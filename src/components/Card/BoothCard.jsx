@@ -34,9 +34,9 @@ const BoothCard = ({ booth, onClick }) => {
     >
       {/* 부스명 및 위치 */}
       <div className="flex w-full items-start justify-between p-0">
-        <div className="flex flex-col items-start gap-1 p-0">
-          <div className="flex items-center gap-1.5">
-            <h2 className="text-lg leading-6 font-semibold tracking-normal text-zinc-800">
+        <div className="flex min-w-0 flex-1 flex-col items-start p-0">
+          <div className="flex w-full min-w-0 items-center">
+            <h2 className="min-w-0 truncate text-lg leading-6 font-semibold tracking-normal text-zinc-800">
               {name || '부스명'}
             </h2>
 

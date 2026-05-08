@@ -37,11 +37,11 @@ const ShowCard = ({ show, onClick }) => {
       />
 
       {/* 공연명 및 정보 */}
-      <div className="flex w-full flex-col items-start gap-1">
-        <div className="flex w-full items-start justify-between">
-          <div className="flex flex-col items-start gap-1">
-            <div className="flex items-center gap-1">
-              <h2 className="text-lg leading-6 font-semibold tracking-normal text-zinc-800">
+      <div className="flex w-full min-w-0 flex-col items-start gap-1">
+        <div className="flex w-full min-w-0 items-start justify-between">
+          <div className="flex min-w-0 flex-1 flex-col items-start">
+            <div className="flex w-full min-w-0 items-center">
+              <h2 className="min-w-0 truncate text-lg leading-6 font-semibold tracking-normal text-zinc-800">
                 {name || '공연명'}
               </h2>
 
