@@ -104,7 +104,7 @@ const ShowDetailSheet = () => {
             <Header left="back" />
             <img
               src={show.thumbnail || '/images/default-image-large.png'}
-              className="flex aspect-49/30 w-full items-center justify-center object-cover"
+              className={`${show.thumbnail ? 'cursor-pointer' : 'cursor-default'} flex aspect-49/30 w-full items-center justify-center object-cover`}
               onClick={() => {
                 if (show.thumbnail) openImageModal(show.thumbnail);
               }}

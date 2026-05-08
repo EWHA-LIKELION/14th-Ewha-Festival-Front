@@ -40,7 +40,7 @@ const MenuCard = ({ name, description, price, image, isSelling = true, onImageCl
         </div>
         <img
           src={image || '/images/default-image.png'}
-          className="flex aspect-square w-22 items-center justify-center rounded-md border border-zinc-100"
+          className={`${image ? 'cursor-pointer' : 'cursor-default'} flex aspect-square w-22 items-center justify-center rounded-md border border-zinc-100`}
         />
       </div>
       <Divider />
