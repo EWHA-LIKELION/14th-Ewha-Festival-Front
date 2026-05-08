@@ -270,6 +270,7 @@ const MyBoothPage = () => {
                         description={item.description}
                         image={fixUrl(item.image)}
                         price={item.price}
+                        isSelling={item.is_selling}
                         onImageClick={(img) => openImageModal(fixUrl(img))}
                       />
                     ))

@@ -268,6 +268,7 @@ const BoothDetailSheet = () => {
                           description={item.description}
                           image={item.image}
                           price={item.price}
+                          isSelling={item.is_selling}
                           onImageClick={openImageModal}
                         />
                       ))

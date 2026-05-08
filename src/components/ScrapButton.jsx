@@ -126,7 +126,7 @@ const ScrapButton = ({
     <button
       onClick={handleClick}
       disabled={mutation.isPending}
-      className="flex cursor-pointer flex-col items-center"
+      className="flex shrink-0 cursor-pointer flex-col items-center"
     >
       {/* 상태에 따라 아이콘 변경 */}
       <img
