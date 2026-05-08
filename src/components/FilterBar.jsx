@@ -52,7 +52,7 @@ function FilterBar({ type = 'booth' }) {
   };
 
   return (
-    <div className="flex items-center gap-2.5 overflow-x-auto">
+    <div className="scrollbar-hide flex items-center gap-2.5 overflow-x-auto">
       {/* 설정 버튼 */}
       <Chip variant="toggle" isSelected={hasActiveFilter} onClick={handleSettingClick} />
 
