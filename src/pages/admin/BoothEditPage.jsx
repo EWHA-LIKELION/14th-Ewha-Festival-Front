@@ -4,7 +4,6 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
 import useLoadingStore from '@/store/useLoadingStore';
@@ -12,6 +11,7 @@ import useLoadingStore from '@/store/useLoadingStore';
 import Header from '@/components/Header';
 import useImageUploader from '@/hooks/useImageUploader';
 import { useScrollToTop } from '@/hooks';
+import { useBoothDetail, useBoothNotices, useUpdateBooth } from '@/hooks/useBoothDetail';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
 import Input from '@/components/Input/Input';
 import Checkbox from '@/components/Checkbox';
@@ -22,8 +22,6 @@ import TextArea from '@/components/Input/TextArea';
 import Timepicker from '@/components/Timepicker';
 import Button from '@/components/Button';
 import { FESTIVAL_TIME } from '@/constants/time';
-
-import { BoothAPI } from '@/apis';
 
 const ERROR_TEXT_CLASS = 'text-xs font-normal leading-4 font-normal tracking-0';
 const ERROR_TEXT_STYLE = {
@@ -38,13 +36,20 @@ const BoothEditPage = () => {
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const showToast = useToastStore((s) => s.showToast);
-  const queryClient = useQueryClient();
 
   useScrollToTop();
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const [loading, setLoading] = useState(true);
+  const {
+    data: boothData,
+    isLoading: isBoothLoading,
+    error: boothError,
+  } = useBoothDetail(id);
+  const { data: noticesData, isLoading: isNoticesLoading } = useBoothNotices(id);
+
+  const isLoading = isBoothLoading || isNoticesLoading;
+
   const [originData, setOriginData] = useState(null);
   const [originNotices, setOriginNotices] = useState([]);
   const [resourceVersion, setResourceVersion] = useState(null);
@@ -102,104 +107,80 @@ const BoothEditPage = () => {
   const [errors, setErrors] = useState({ notices: [], items: [] });
   const [isFormValid, setIsFormValid] = useState(false);
 
-  // 1. 데이터 초기화 (Fetch)
+  // 1. 데이터 초기화 (쿼리 결과를 폼 state로 한 번만 populate)
   useEffect(() => {
-    const fetchBoothData = async () => {
-      setLoading(true);
-      showLoading();
+    if (!boothData || !noticesData || originData) return;
 
-      try {
-        const data = await BoothAPI.getBoothById(id);
-        const noticeData = await BoothAPI.getBoothNotices(id);
-
-        const sanitizeUrl = (url) => {
-          if (!url) return url;
-
-          return url
-            .replace(/^http:\/\//, 'https://')
-            .replace(/[^:/?#]+(?=[/?#]|$)/g, (segment) => encodeURIComponent(segment));
-        };
-
-        const safeData = {
-          ...data,
-          thumbnail: sanitizeUrl(data.thumbnail),
-          roadview: sanitizeUrl(data.roadview),
-        };
-
-        setOriginData(safeData);
-        setResourceVersion(data.updated_at);
-
-        const snsArray = data.sns || [];
-
-        // 기본 정보 세팅
-        setForm({
-          name: data.name || '',
-          description: data.description || '',
-          locationDetail: data.location_description || '',
-          snsKakao: snsArray[0] || '',
-          snsInstagram: snsArray[1] || '',
-        });
-        setSelectedCategories(data.category || []);
-        setIsOpen(data.is_ongoing);
-
-        // 스케줄 세팅
-        const newSchedule = DAYS.reduce(
-          (acc, day) => ({
-            ...acc,
-            [day]: {
-              checked: false,
-              start: FESTIVAL_TIME.booth[day].start,
-              end: FESTIVAL_TIME.booth[day].end,
-            },
-          }),
-          {},
-        );
-
-        data.schedule?.forEach((s) => {
-          const [start, end] = s.time.split('~');
-
-          newSchedule[s.date] = {
-            checked: true,
-            start,
-            end,
-          };
-        });
-
-        setSchedule(newSchedule);
-
-        // 공지 및 아이템 세팅
-        const noticesArray = Array.isArray(noticeData) ? noticeData : [];
-
-        setNotices(
-          noticesArray.map((n) => ({
-            ...n,
-          })),
-        );
-
-        setOriginNotices(noticesArray);
-
-        const productArray = Array.isArray(data.product)
-          ? [...data.product].sort((a, b) => b.id - a.id)
-          : [];
-
-        setItems(
-          productArray.map((p) => ({
-            ...p,
-            _tempId: crypto.randomUUID(),
-            status: p.is_selling ? '판매중' : '종료',
-            image: p.image || null,
-          })),
-        );
-      } catch (err) {
-        console.error('데이터 로딩 실패:', err);
-        showToast('데이터를 불러오는데 실패했습니다.', 'warn');
-      } finally {
-        hideLoading();
-        setLoading(false);
-      }
+    const sanitizeUrl = (url) => {
+      if (!url) return url;
+      return url
+        .replace(/^http:\/\//, 'https://')
+        .replace(/[^:/?#]+(?=[/?#]|$)/g, (segment) => encodeURIComponent(segment));
     };
-    fetchBoothData();
-  }, [id]);
+
+    const safeData = {
+      ...boothData,
+      thumbnail: sanitizeUrl(boothData.thumbnail),
+      roadview: sanitizeUrl(boothData.roadview),
+    };
+
+    setOriginData(safeData);
+    setResourceVersion(boothData.updated_at);
+
+    const snsArray = boothData.sns || [];
+
+    setForm({
+      name: boothData.name || '',
+      description: boothData.description || '',
+      locationDetail: boothData.location_description || '',
+      snsKakao: snsArray[0] || '',
+      snsInstagram: snsArray[1] || '',
+    });
+    setSelectedCategories(boothData.category || []);
+    setIsOpen(boothData.is_ongoing);
+
+    const newSchedule = DAYS.reduce(
+      (acc, day) => ({
+        ...acc,
+        [day]: {
+          checked: false,
+          start: FESTIVAL_TIME.booth[day].start,
+          end: FESTIVAL_TIME.booth[day].end,
+        },
+      }),
+      {},
+    );
+
+    boothData.schedule?.forEach((s) => {
+      const [start, end] = s.time.split('~');
+      newSchedule[s.date] = { checked: true, start, end };
+    });
+
+    setSchedule(newSchedule);
+
+    const noticesArray = Array.isArray(noticesData) ? noticesData : [];
+    setNotices(noticesArray.map((n) => ({ ...n })));
+    setOriginNotices(noticesArray);
+
+    const productArray = Array.isArray(boothData.product)
+      ? [...boothData.product].sort((a, b) => b.id - a.id)
+      : [];
+
+    setItems(
+      productArray.map((p) => ({
+        ...p,
+        _tempId: crypto.randomUUID(),
+        status: p.is_selling ? '판매중' : '종료',
+        image: p.image || null,
+      })),
+    );
+  }, [boothData, noticesData, originData]);
+
+  useEffect(() => {
+    if (!boothError) return;
+    console.error('데이터 로딩 실패:', boothError);
+    showToast('데이터를 불러오는데 실패했습니다.', 'warn');
+  }, [boothError]);
 
   useEffect(() => {
     if (!originData) return;
@@ -419,12 +400,12 @@ const BoothEditPage = () => {
     validateForm();
   }, [validateForm]);
 
-  const handleSave = async () => {
+  const updateBoothMutation = useUpdateBooth(id, resourceVersion);
+
+  const handleSave = () => {
     if (!validateForm()) return;
 
     const formData = new FormData();
-
-    showLoading();
 
     // 1. 기본 필드 (변경된 것만)
     if (form.name !== originData.name) {
@@ -518,36 +499,10 @@ const BoothEditPage = () => {
 
     formData.append('sns', JSON.stringify(currentSns));
 
-    for (let [k, v] of formData.entries()) {
-      console.log(k, v);
-    }
-
-    try {
-      await BoothAPI.updateBooth(id, formData, resourceVersion);
-
-      // 다른 페이지들이 사용하는 react-query 캐시 무효화 → 진입 시 최신 데이터로 refetch
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['booth', id] }),
-        queryClient.invalidateQueries({ queryKey: ['notices', id] }),
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] }),
-      ]);
-
-      console.log(items.map((i) => i.id));
-
-      showToast('성공적으로 수정되었어요.');
-      navigate(`/admin/booth/${id}`, { replace: true });
-    } catch (err) {
-      console.error('저장 실패:', err);
-
-      if (err.response?.status === 409) {
-        showToast('데이터가 변경되었습니다. 새로고침 후 다시 시도해주세요.', 'warn');
-      } else {
-        showToast('수정 중 오류가 발생했습니다.', 'warn');
-      }
-    }
+    updateBoothMutation.mutate(formData);
   };
 
-  if (loading || !originData) return null;
+  if (isLoading || !originData) return null;
 
   return (
     <>
