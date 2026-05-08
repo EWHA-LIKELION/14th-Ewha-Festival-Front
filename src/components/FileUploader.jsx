@@ -2,11 +2,32 @@
  * FileUploader 컴포넌트 ( variant: thumbnail, detail)
  */
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useImageUploader } from '@/hooks';
+
+const useImagePreview = (image) => {
+  const [previewUrl, setPreviewUrl] = useState('');
+
+  useEffect(() => {
+    if (!image) {
+      setPreviewUrl('');
+      return;
+    }
+    if (typeof image === 'string') {
+      setPreviewUrl(image);
+      return;
+    }
+    const url = URL.createObjectURL(image);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [image]);
+
+  return previewUrl;
+};
 
 export const DetailImageUploader = ({ image, onChange, onRemove }) => {
   const inputRef = useRef(null);
+  const previewUrl = useImagePreview(image);
 
   return (
     <div className="relative w-15">
@@ -27,7 +48,7 @@ export const DetailImageUploader = ({ image, onChange, onRemove }) => {
         }}
       >
         {image ? (
-          <img src={image} className="h-full w-full object-cover" />
+          <img src={previewUrl} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <img src="/icons/icon-addimage.svg" />
@@ -51,6 +72,7 @@ export const DetailImageUploader = ({ image, onChange, onRemove }) => {
 
 export const ThumbnailImageUploader = ({ image, onChange, onRemove }) => {
   const inputRef = useRef(null);
+  const previewUrl = useImagePreview(image);
 
   return (
     <div className="relative h-62.5 w-full">
@@ -65,7 +87,7 @@ export const ThumbnailImageUploader = ({ image, onChange, onRemove }) => {
         }}
       />
       <img
-        src={image || '/images/default-image-large.png'}
+        src={previewUrl || '/images/default-image-large.png'}
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute bottom-0 flex h-12 w-full cursor-pointer items-center justify-center bg-black/50">
