@@ -32,6 +32,16 @@ const ERROR_TEXT_STYLE = {
   color: 'var(--System-normal, #FF5B5E)',
 };
 const DAYS = ['05.20', '05.21', '05.22'];
+const PRICE_MAX_DIGITS = 10;
+
+const formatPrice = (value) => {
+  const digits = String(value ?? '')
+    .replace(/\D/g, '')
+    .slice(0, PRICE_MAX_DIGITS);
+  return digits ? Number(digits).toLocaleString('en-US') : '';
+};
+
+const parsePrice = (value) => Number(String(value ?? '').replace(/,/g, ''));
 
 const BoothEditPage = () => {
   const { id } = useParams();
@@ -171,6 +181,7 @@ const BoothEditPage = () => {
         ...p,
         _tempId: crypto.randomUUID(),
         status: p.is_selling ? '판매중' : '종료',
+        price: formatPrice(p.price),
         image: p.image || null,
       })),
     );
@@ -496,7 +507,7 @@ const BoothEditPage = () => {
           id: i.id || undefined,
           name: i.name,
           description: i.description,
-          price: Number(i.price),
+          price: parsePrice(i.price),
           is_selling: i.status === '판매중',
         };
       });
@@ -927,15 +938,16 @@ const BoothEditPage = () => {
                         variant="square_white"
                         value={item.price}
                         onChange={(value) => {
-                          if (!/^\d*$/.test(value)) {
+                          if (!/^[\d,]*$/.test(value)) {
                             showToast('가격은 숫자로만 입력해주세요.', 'warn');
                             return;
                           }
 
-                          handleItemChange(idx, 'price', value);
+                          handleItemChange(idx, 'price', formatPrice(value));
                         }}
                         placeholder="가격을 입력해주세요"
-                        maxLength="10"
+                        maxLength={PRICE_MAX_DIGITS}
+                        maxLengthCountMode="digits"
                         error={!!errors.items[idx]?.price}
                       />
                     </div>

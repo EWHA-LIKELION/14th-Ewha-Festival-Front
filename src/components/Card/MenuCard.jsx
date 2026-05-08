@@ -30,11 +30,11 @@ const MenuCard = ({ name, description, price, image, isSelling = true, onImageCl
               </h2>
               {!isSelling && <Badge size="sm" />}
             </div>
-            <p className="line-clamp-2 overflow-hidden text-xs leading-4 font-normal tracking-normal text-ellipsis text-zinc-500">
+            <p className="line-clamp-3 overflow-hidden text-xs leading-4 font-normal tracking-normal text-ellipsis text-zinc-500">
               {description}
             </p>
           </div>
-          <h3 className="line-clamp-1 overflow-hidden text-sm leading-5 font-semibold tracking-normal text-ellipsis text-zinc-800">
+          <h3 className="text-sm leading-5 font-semibold tracking-normal text-zinc-800">
             {(price ?? 0).toLocaleString()}원
           </h3>
         </div>
