@@ -106,7 +106,6 @@ const BoothEditPage = () => {
   useEffect(() => {
     const fetchBoothData = async () => {
       setLoading(true);
-      showLoading();
 
       try {
         const data = await BoothAPI.getBoothById(id);
@@ -194,12 +193,17 @@ const BoothEditPage = () => {
         console.error('데이터 로딩 실패:', err);
         showToast('데이터를 불러오는데 실패했습니다.', 'warn');
       } finally {
-        hideLoading();
         setLoading(false);
       }
     };
     fetchBoothData();
   }, [id]);
+
+  useEffect(() => {
+    if (loading) showLoading();
+    else hideLoading();
+    return () => hideLoading();
+  }, [loading]);
 
   useEffect(() => {
     if (!originData) return;
@@ -544,6 +548,8 @@ const BoothEditPage = () => {
       } else {
         showToast('수정 중 오류가 발생했습니다.', 'warn');
       }
+    } finally {
+      hideLoading();
     }
   };
 
@@ -669,6 +675,7 @@ const BoothEditPage = () => {
                     size="large"
                     label="소개글"
                     placeholder="소개글을 입력해주세요"
+                    maxLength="100"
                   />
                 </div>
 
