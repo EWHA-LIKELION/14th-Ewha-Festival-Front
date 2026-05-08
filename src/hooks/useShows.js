@@ -7,7 +7,7 @@ import { SHOW_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { FESTIVAL_DAYS } from '@/constants/day';
 import { getLabel, padNumber } from '@/utils/labelHelper';
-import { useInfiniteList } from '@/hooks/useInfiniteList';
+import { useInfiniteList } from '../useInfiniteList.js';
 
 /**
  * 공연 목록 조회 (무한 스크롤)

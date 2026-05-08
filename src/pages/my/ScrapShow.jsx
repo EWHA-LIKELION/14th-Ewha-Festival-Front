@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useFilterStore from '@/store/useFilterStore';
 import useLoadingStore from '@/store/useLoadingStore';
-import { useMyScrapShows } from '@/hooks/useMyScrap';
+import { useMyScrapShows } from '@/hooks';
 
 import FilterBar from '@/components/FilterBar';
 import Checkbox from '@/components/Checkbox';

@@ -7,7 +7,7 @@ import { BOOTH_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { FESTIVAL_DAYS } from '@/constants/day';
 import { getLabel, padNumber } from '@/utils/labelHelper';
-import { useInfiniteList } from '@/hooks/useInfiniteList';
+import { useInfiniteList } from '../useInfiniteList.js';
 
 /**
  * 부스 목록 조회 (무한 스크롤)
@@ -15,7 +15,11 @@ import { useInfiniteList } from '@/hooks/useInfiniteList';
  * @returns {Object} useInfiniteQuery 결과 + 변환된 booths, totalCount
  */
 export const useBooths = (filters = {}) => {
-  const { items: booths, totalCount, ...rest } = useInfiniteList({
+  const {
+    items: booths,
+    totalCount,
+    ...rest
+  } = useInfiniteList({
     queryKey: 'booths',
     apiFn: BoothAPI.getBooths,
     dataKey: 'result',

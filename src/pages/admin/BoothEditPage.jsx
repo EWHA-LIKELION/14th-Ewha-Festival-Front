@@ -9,9 +9,13 @@ import useToastStore from '@/store/useToastStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
 import Header from '@/components/Header';
-import useImageUploader from '@/hooks/useImageUploader';
-import { useScrollToTop } from '@/hooks';
-import { useBoothDetail, useBoothNotices, useUpdateBooth } from '@/hooks/useBoothDetail';
+import {
+  useImageUploader,
+  useScrollToTop,
+  useBoothDetail,
+  useBoothNotices,
+  useUpdateBooth,
+} from '@/hooks';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
 import Input from '@/components/Input/Input';
 import Checkbox from '@/components/Checkbox';

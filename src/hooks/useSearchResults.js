@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { SearchAPI } from '@/apis';
-import { transformBoothData } from '@/hooks/useBooths';
-import { transformShowData } from '@/hooks/useShows';
+import { transformBoothData } from '../booth/useBooths.js';
+import { transformShowData } from '../show/useShows.js';
 
 const LIMIT = 10;
 
