@@ -597,7 +597,6 @@ const ShowEditPage = () => {
                     size="large"
                     label="소개글"
                     placeholder="소개글을 입력해주세요"
-                    maxLength="100"
                   />
                 </div>
 
