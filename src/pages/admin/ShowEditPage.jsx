@@ -108,7 +108,6 @@ const ShowEditPage = () => {
   useEffect(() => {
     const fetchShowData = async () => {
       setLoading(true);
-      showLoading();
 
       try {
         const data = await ShowAPI.getShowById(id);
@@ -184,12 +183,17 @@ const ShowEditPage = () => {
         console.error('데이터 로딩 실패:', err);
         showToast('데이터를 불러오는데 실패했습니다.', 'warn');
       } finally {
-        hideLoading();
         setLoading(false);
       }
     };
     fetchShowData();
   }, [id]);
+
+  useEffect(() => {
+    if (loading) showLoading();
+    else hideLoading();
+    return () => hideLoading();
+  }, [loading]);
 
   useEffect(() => {
     if (!originData) return;
@@ -494,6 +498,8 @@ const ShowEditPage = () => {
       } else {
         showToast('수정 중 오류가 발생했습니다.', 'warn');
       }
+    } finally {
+      hideLoading();
     }
   };
 
@@ -599,6 +605,7 @@ const ShowEditPage = () => {
                     size="large"
                     label="소개글"
                     placeholder="소개글을 입력해주세요"
+                    maxLength="100"
                   />
                 </div>
 
@@ -807,6 +814,7 @@ const ShowEditPage = () => {
                           value={item.name}
                           onChange={(value) => handleSetlistChange(idx, value)}
                           placeholder="아티스트와 노래를 입력해주세요"
+                          maxLength="40"
                           error={!!errors.setlists?.[idx]?.name}
                         />
                         {errors.setlists?.[idx]?.setlist && (
