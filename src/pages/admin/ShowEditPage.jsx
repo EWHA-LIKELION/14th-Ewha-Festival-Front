@@ -4,7 +4,6 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import useAlertStore from '@/store/useAlertStore';
 import useToastStore from '@/store/useToastStore';
 import useLoadingStore from '@/store/useLoadingStore';
@@ -12,6 +11,7 @@ import useLoadingStore from '@/store/useLoadingStore';
 import Header from '@/components/Header';
 import useImageUploader from '@/hooks/useImageUploader';
 import { useScrollToTop } from '@/hooks';
+import { useShowDetail, useShowNotices, useUpdateShow } from '@/hooks/useShowDetail';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
 import Input from '@/components/Input/Input';
 import Checkbox from '@/components/Checkbox';
@@ -23,8 +23,6 @@ import TextArea from '@/components/Input/TextArea';
 import Timepicker from '@/components/Timepicker';
 import Button from '@/components/Button';
 import { FESTIVAL_TIME } from '@/constants/time';
-
-import { ShowAPI } from '@/apis';
 
 const ERROR_TEXT_CLASS = 'text-xs font-normal leading-4 font-normal tracking-0';
 const ERROR_TEXT_STYLE = {
@@ -39,13 +37,20 @@ const ShowEditPage = () => {
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
   const showToast = useToastStore((s) => s.showToast);
-  const queryClient = useQueryClient();
 
   useScrollToTop();
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const [loading, setLoading] = useState(true);
+  const {
+    data: showData,
+    isLoading: isShowLoading,
+    error: showError,
+  } = useShowDetail(id);
+  const { data: noticesData, isLoading: isNoticesLoading } = useShowNotices(id);
+
+  const isLoading = isShowLoading || isNoticesLoading;
+
   const [originData, setOriginData] = useState(null);
   const [originNotices, setOriginNotices] = useState([]);
   const [initialSetlists, setInitialSetlists] = useState([]);
@@ -104,92 +109,80 @@ const ShowEditPage = () => {
   const [errors, setErrors] = useState({ notices: [], items: [] });
   const [isFormValid, setIsFormValid] = useState(false);
 
-  // 1. 데이터 초기화 (Fetch)
+  // 1. 데이터 초기화 (쿼리 결과를 폼 state로 한 번만 populate)
   useEffect(() => {
-    const fetchShowData = async () => {
-      setLoading(true);
-      showLoading();
+    if (!showData || !noticesData || originData) return;
 
-      try {
-        const data = await ShowAPI.getShowById(id);
-        const noticeData = await ShowAPI.getShowNotices(id);
-
-        const sanitizeUrl = (url) => {
-          if (!url) return url;
-
-          return url
-            .replace(/^http:\/\//, 'https://')
-            .replace(/[^:/?#]+(?=[/?#]|$)/g, (segment) => encodeURIComponent(segment));
-        };
-
-        const safeData = {
-          ...data,
-          thumbnail: sanitizeUrl(data.thumbnail),
-          roadview: sanitizeUrl(data.roadview),
-        };
-
-        setOriginData(safeData);
-        setResourceVersion(data.updated_at);
-
-        const snsArray = data.sns || [];
-
-        // 기본 정보 세팅
-        setForm({
-          name: data.name || '',
-          description: data.description || '',
-          locationDetail: data.location_description || '',
-          snsKakao: snsArray[0] || '',
-          snsInstagram: snsArray[1] || '',
-        });
-        setCategory(data.category || null);
-
-        // 스케줄 세팅
-        data.schedule?.forEach((s) => {
-          const [start, end] = s.time.split('~');
-
-          setSelectedDay(s.date);
-
-          setSchedule((prev) => ({
-            ...prev,
-            [s.date]: { start, end },
-          }));
-        });
-
-        // 공지 및 아이템 세팅
-        const noticesArray = Array.isArray(noticeData) ? noticeData : [];
-
-        setNotices(
-          noticesArray.map((n) => ({
-            ...n,
-          })),
-        );
-
-        setOriginNotices(noticesArray);
-
-        const setlistArray = Array.isArray(data.setlist)
-          ? [...data.setlist].sort((a, b) => b.id - a.id)
-          : [];
-
-        setInitialSetlists(setlistArray);
-
-        setSetlists(
-          setlistArray.map((s) => ({
-            id: s.id,
-            name: s.name,
-          })),
-        );
-
-        setLoading(false);
-      } catch (err) {
-        console.error('데이터 로딩 실패:', err);
-        showToast('데이터를 불러오는데 실패했습니다.', 'warn');
-      } finally {
-        hideLoading();
-        setLoading(false);
-      }
+    const sanitizeUrl = (url) => {
+      if (!url) return url;
+      return url
+        .replace(/^http:\/\//, 'https://')
+        .replace(/[^:/?#]+(?=[/?#]|$)/g, (segment) => encodeURIComponent(segment));
     };
-    fetchShowData();
-  }, [id]);
+
+    const safeData = {
+      ...showData,
+      thumbnail: sanitizeUrl(showData.thumbnail),
+      roadview: sanitizeUrl(showData.roadview),
+    };
+
+    setOriginData(safeData);
+    setResourceVersion(showData.updated_at);
+
+    const snsArray = showData.sns || [];
+
+    // 기본 정보 세팅
+    setForm({
+      name: showData.name || '',
+      description: showData.description || '',
+      locationDetail: showData.location_description || '',
+      snsKakao: snsArray[0] || '',
+      snsInstagram: snsArray[1] || '',
+    });
+    setCategory(showData.category || null);
+
+    // 스케줄 세팅
+    showData.schedule?.forEach((s) => {
+      const [start, end] = s.time.split('~');
+
+      setSelectedDay(s.date);
+
+      setSchedule((prev) => ({
+        ...prev,
+        [s.date]: { start, end },
+      }));
+    });
+
+    // 공지 및 아이템 세팅
+    const noticesArray = Array.isArray(noticesData) ? noticesData : [];
+
+    setNotices(
+      noticesArray.map((n) => ({
+        ...n,
+      })),
+    );
+
+    setOriginNotices(noticesArray);
+
+    const setlistArray = Array.isArray(showData.setlist)
+      ? [...showData.setlist].sort((a, b) => b.id - a.id)
+      : [];
+
+    setInitialSetlists(setlistArray);
+
+    setSetlists(
+      setlistArray.map((s) => ({
+        id: s.id,
+        name: s.name,
+      })),
+    );
+  }, [showData, noticesData, originData]);
+
+  useEffect(() => {
+    if (!showError) return;
+    console.error('데이터 로딩 실패:', showError);
+    showToast('데이터를 불러오는데 실패했습니다.', 'warn');
+  }, [showError]);
 
   useEffect(() => {
     if (!originData) return;
@@ -387,7 +380,9 @@ const ShowEditPage = () => {
     validateForm();
   }, [validateForm]);
 
-  const handleSave = async () => {
+  const updateShowMutation = useUpdateShow(id, resourceVersion);
+
+  const handleSave = () => {
     if (!validateForm()) return;
 
     const formData = new FormData();
@@ -470,34 +465,10 @@ const ShowEditPage = () => {
 
     formData.append('sns', JSON.stringify(currentSns));
 
-    for (let [k, v] of formData.entries()) {
-      console.log(k, v);
-    }
-
-    try {
-      await ShowAPI.updateShow(id, formData, resourceVersion);
-
-      // 다른 페이지들이 사용하는 react-query 캐시 무효화 → 진입 시 최신 데이터로 refetch
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['show', id] }),
-        queryClient.invalidateQueries({ queryKey: ['notices', id] }),
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] }),
-      ]);
-
-      showToast('성공적으로 수정되었어요.');
-      navigate(`/admin/show/${id}`, { replace: true });
-    } catch (err) {
-      console.error('저장 실패:', err);
-
-      if (err.response?.status === 409) {
-        showToast('데이터가 변경되었습니다. 새로고침 후 다시 시도해주세요.', 'warn');
-      } else {
-        showToast('수정 중 오류가 발생했습니다.', 'warn');
-      }
-    }
+    updateShowMutation.mutate(formData);
   };
 
-  if (loading || !originData) return null;
+  if (isLoading || !originData) return null;
 
   return (
     <>
