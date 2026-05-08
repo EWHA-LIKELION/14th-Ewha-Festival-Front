@@ -178,11 +178,14 @@ const BoothEditPage = () => {
 
         setOriginNotices(noticesArray);
 
-        const productArray = Array.isArray(data.product) ? data.product : [];
+        const productArray = Array.isArray(data.product)
+          ? [...data.product].sort((a, b) => b.id - a.id)
+          : [];
 
         setItems(
           productArray.map((p) => ({
             ...p,
+            _tempId: crypto.randomUUID(),
             status: p.is_selling ? '판매중' : '종료',
             image: p.image || null,
           })),
@@ -265,7 +268,15 @@ const BoothEditPage = () => {
 
   const handleItemAdd = () => {
     setItems((prev) => [
-      { id: null, name: '', description: '', price: '', status: '판매중', image: null },
+      {
+        id: null,
+        _tempId: crypto.randomUUID(),
+        name: '',
+        description: '',
+        price: '',
+        status: '판매중',
+        image: null,
+      },
       ...prev,
     ]);
   };
@@ -520,6 +531,8 @@ const BoothEditPage = () => {
         queryClient.invalidateQueries({ queryKey: ['notices', id] }),
         queryClient.invalidateQueries({ queryKey: ['myProfile'] }),
       ]);
+
+      console.log(items.map((i) => i.id));
 
       showToast('성공적으로 수정되었어요.');
       navigate(`/admin/booth/${id}`, { replace: true });
@@ -864,7 +877,7 @@ const BoothEditPage = () => {
 
                 {items.map((item, idx) => (
                   <div
-                    key={item.id ?? `new-${idx}`}
+                    key={item.id ?? item._tempId}
                     className="flex w-full flex-col items-start gap-3"
                   >
                     {idx !== 0 && (

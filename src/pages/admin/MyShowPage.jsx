@@ -268,7 +268,9 @@ const MyShowPage = () => {
             {activeTab === 0 && (
               <div className="flex w-full flex-col gap-2 pb-36">
                 {show.setlist && show.setlist.length > 0 ? (
-                  show.setlist.map((item) => <SetlistCard key={item.id} setlist={item.name} />)
+                  [...show.setlist]
+                    .sort((a, b) => b.id - a.id)
+                    .map((item) => <SetlistCard key={item.id} setlist={item.name} />)
                 ) : (
                   <div className="flex w-full items-center justify-center self-stretch py-20 text-center text-base leading-6 font-normal tracking-normal text-zinc-300">
                     등록된 내용이 없어요.

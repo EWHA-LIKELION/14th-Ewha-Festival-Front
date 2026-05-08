@@ -166,7 +166,9 @@ const ShowEditPage = () => {
 
         setOriginNotices(noticesArray);
 
-        const setlistArray = Array.isArray(data.setlist) ? data.setlist : [];
+        const setlistArray = Array.isArray(data.setlist)
+          ? [...data.setlist].sort((a, b) => b.id - a.id)
+          : [];
 
         setInitialSetlists(setlistArray);
 
