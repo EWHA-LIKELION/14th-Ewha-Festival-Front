@@ -146,7 +146,7 @@ const BoothDetailSheet = () => {
               <div className="flex-start flex flex-col gap-4 self-stretch">
                 {/* 시간 */}
                 <div className="flex items-start gap-4">
-                  <h3 className="w-7 shrink-0 text-center text-sm leading-5 font-semibold tracking-normal text-zinc-500">
+                  <h3 className="w-7 shrink-0 text-center text-sm leading-5 font-semibold tracking-normal whitespace-nowrap text-zinc-500">
                     시간
                   </h3>
                   <div className="flex flex-col items-start gap-0.5">
@@ -169,7 +169,7 @@ const BoothDetailSheet = () => {
 
                 {/* 위치 */}
                 <div className="flex items-start gap-4">
-                  <h3 className="w-7 shrink-0 text-center text-sm leading-5 font-semibold tracking-normal text-zinc-500">
+                  <h3 className="w-7 shrink-0 text-center text-sm leading-5 font-semibold tracking-normal whitespace-nowrap text-zinc-500">
                     위치
                   </h3>
                   <div className="flex flex-col items-start gap-1.5">
@@ -208,7 +208,7 @@ const BoothDetailSheet = () => {
 
                 {/* SNS */}
                 <div className="flex items-start gap-4">
-                  <h3 className="w-7 shrink-0 text-center text-sm leading-5 font-semibold tracking-normal text-zinc-500">
+                  <h3 className="w-7 shrink-0 text-center text-sm leading-5 font-semibold tracking-normal whitespace-nowrap text-zinc-500">
                     SNS
                   </h3>
                   <div className="flex items-center gap-2.5">
