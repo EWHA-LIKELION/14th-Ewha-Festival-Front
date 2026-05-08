@@ -1,40 +1,40 @@
 /**
- * 공연 목록 조회 hook (무한 스크롤)
+ * 부스 목록 조회 hook (무한 스크롤)
  */
 
-import { ShowAPI } from '@/apis';
-import { SHOW_CATEGORY } from '@/constants/category';
+import { BoothAPI } from '@/apis';
+import { BOOTH_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { FESTIVAL_DAYS } from '@/constants/day';
 import { getLabel, padNumber } from '@/utils/labelHelper';
-import { useInfiniteList } from '@/hooks/useInfiniteList';
+import { useInfiniteList } from '../useInfiniteList.js';
 
 /**
- * 공연 목록 조회 (무한 스크롤)
+ * 부스 목록 조회 (무한 스크롤)
  * @param {Object} filters - 필터 객체 { host: [], category: [], day: [], location: [], sort: null, excludeEnded: false }
- * @returns {Object} useInfiniteQuery 결과 + 변환된 shows, totalCount
+ * @returns {Object} useInfiniteQuery 결과 + 변환된 booths, totalCount
  */
-export const useShows = (filters = {}) => {
+export const useBooths = (filters = {}) => {
   const {
-    items: shows,
+    items: booths,
     totalCount,
     ...rest
   } = useInfiniteList({
-    queryKey: 'shows',
-    apiFn: ShowAPI.getShows,
+    queryKey: 'booths',
+    apiFn: BoothAPI.getBooths,
     dataKey: 'result',
-    transform: transformShowData,
-    limit: 8,
+    transform: transformBoothData,
+    limit: 6,
     filters,
   });
-  return { ...rest, shows, totalCount };
+  return { ...rest, booths, totalCount };
 };
 
 /**
  * 카테고리 값을 한글 라벨로 변환
  */
 export const getCategoryLabel = (value) => {
-  return getLabel(value, SHOW_CATEGORY);
+  return getLabel(value, BOOTH_CATEGORY);
 };
 
 /**
@@ -65,63 +65,40 @@ export const getDaysText = (dates) => {
 };
 
 /**
- * 시간 배열을 문자열로 변환 (여러 개면 " · "로 구분)
- * @param {Array} times - 시간 배열 (예: ["09:00~16:00", "18:00~20:00"])
- * @returns {string} - 시간 문자열 (예: "09:00~16:00 · 18:00~20:00")
+ * 부스 데이터 변환 (API 응답 → UI 표시용)
+ * @param {Object} booth - 원본 부스 데이터
+ * @returns {Object} - 변환된 부스 데이터 (categoryText, daysText, locationText, badgeState 추가)
  */
-export const getTimesText = (times) => {
-  if (!times || times.length === 0) return '';
-  return times.join(' · ');
-};
-
-/**
- * 공연 데이터 변환 (API 응답 → UI 표시용)
- * @param {Object} show - 원본 공연 데이터
- * @returns {Object} - 변환된 공연 데이터 (categoryText, daysText, timesText, locationText, badgeState 추가)
- */
-export const transformShowData = (show) => {
-  const { category, schedule = [], location, is_ongoing, is_scraped, scraps_count } = show;
+export const transformBoothData = (booth) => {
+  const { category = [], schedule = [], location, is_ongoing, is_scraped, scraps_count } = booth;
 
   // 카테고리 한글 변환
-  const categoryText = getCategoryLabel(category);
+  const categoryText = category.map((c) => getCategoryLabel(c)).join(', ');
 
-  // 날짜 변환 (날짜 → 요일)
+  // 요일 변환 (날짜 → 요일)
   const dates = schedule.map((s) => s.date);
   const daysText = getDaysText(dates);
 
-  // 시간 변환
-  const times = schedule.map((s) => s.time);
-  const timesText = getTimesText(times);
-
-  // 위치 텍스트 (예: 학생문화관01)
+  // 위치 텍스트 (예: 잔디광장03)
   const locationText = `${getLocationLabel(location.building)}${location.number ? padNumber(location.number) : ''}`;
 
   // 상태 배지
+  // 부스: true(운영 중) / false(운영 종료)
   // 공연: null(공연전) / true(공연 중) / false(종료)
-  const getBadgeState = (status) => {
-    if (!status) return 'upcoming';
-
-    switch (status.toUpperCase()) {
-      case 'BEFORE':
-        return 'upcoming';
-      case 'DURING':
-        return 'performing';
-      case 'AFTER':
-        return 'closed';
-      default:
-        return 'upcoming';
-    }
+  const getBadgeState = (isOngoing) => {
+    if (isOngoing === null) return 'upcoming'; // 공연전
+    if (isOngoing === true) return 'operating'; // 운영중/공연중
+    return 'closed'; // 종료
   };
 
   const badgeState = getBadgeState(is_ongoing);
 
   return {
-    ...show,
+    ...booth,
     is_scrapped: is_scraped, // API 필드명(is_scraped) → 컴포넌트 필드명(is_scrapped) 변환
     scraps_count, // 명시적으로 포함
     categoryText, // 변환된 카테고리 텍스트
     daysText, // 변환된 요일 텍스트
-    timesText, // 변환된 시간 텍스트
     locationText, // 변환된 위치 텍스트
     badgeState, // 계산된 배지 상태
   };

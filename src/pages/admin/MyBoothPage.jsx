@@ -8,8 +8,7 @@ import useAlertStore from '@/store/useAlertStore';
 import useLoadingStore from '@/store/useLoadingStore';
 import useImageModalStore from '@/store/useImageModalStore';
 
-import { useBoothDetail } from '@/hooks/useBoothDetail';
-import { useScrollToTop } from '@/hooks';
+import { useBoothDetail, useScrollToTop } from '@/hooks';
 import { BOOTH_CATEGORY } from '@/constants/category';
 import { BOOTH_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';

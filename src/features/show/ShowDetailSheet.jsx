@@ -8,7 +8,7 @@ import useAlertStore from '@/store/useAlertStore';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useImageModalStore from '@/store/useImageModalStore';
 
-import { useShowDetail } from '@/hooks/useShowDetail';
+import { useShowDetail } from '@/hooks';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { SHOW_CATEGORY } from '@/constants/category';
 import { SHOW_LOCATION } from '@/constants/building';

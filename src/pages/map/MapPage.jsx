@@ -10,9 +10,14 @@ import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
 import useSearchStore from '@/store/useSearchStore';
 import useToastStore from '@/store/useToastStore';
-import { useMapFocus, useMapAssets, useMapActiveSync, useMapFilterSync } from '@/hooks';
-import { useBoothDetail } from '@/hooks/useBoothDetail';
-import { useShowDetail } from '@/hooks/useShowDetail';
+import {
+  useMapFocus,
+  useMapAssets,
+  useMapActiveSync,
+  useMapFilterSync,
+  useBoothDetail,
+  useShowDetail,
+} from '@/hooks';
 import { BOOTH_LOCATION, SHOW_LOCATION, BUILDING_IDS } from '@/constants/building';
 import { POI_CATEGORIES } from '@/constants/category';
 import { getLabel, padNumber } from '@/utils/labelHelper';

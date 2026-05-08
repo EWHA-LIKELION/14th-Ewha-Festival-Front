@@ -3,9 +3,9 @@
  */
 
 import { ScrapAPI } from '@/apis';
-import { transformBoothData } from '@/hooks/useBooths';
-import { transformShowData } from '@/hooks/useShows';
-import { useInfiniteList } from '@/hooks/useInfiniteList';
+import { transformBoothData } from '../booth/useBooths.js';
+import { transformShowData } from '../show/useShows.js';
+import { useInfiniteList } from '../useInfiniteList.js';
 
 // 스크랩 API 응답 구조:
 // { booths: { counts, next, search_result: [...] }, shows: { counts, next, search_result: [...] } }
