@@ -24,7 +24,7 @@ function Badge({ state = 'closed', size = 'md' }) {
 
   return (
     <span
-      className={`inline-flex items-center justify-center font-semibold tracking-normal ${color} ${sizes[size]}`}
+      className={`mx-1 inline-flex shrink-0 items-center justify-center font-semibold tracking-normal whitespace-nowrap ${color} ${sizes[size]}`}
     >
       {text}
     </span>
