@@ -109,7 +109,14 @@ function FilterBar({ type = 'booth' }) {
             <Chip
               variant="filter"
               text="요일"
-              selectedValue={getFilterLabels(day, config.day)}
+              selectedValue={getFilterLabels(
+                [...day].sort(
+                  (a, b) =>
+                    config.day.findIndex((d) => d.value === a) -
+                    config.day.findIndex((d) => d.value === b),
+                ),
+                config.day,
+              )}
               isSelected={true}
               onClick={() => handleFilterClick('day')}
               onDelete={() => handleDeleteFilter('day')}

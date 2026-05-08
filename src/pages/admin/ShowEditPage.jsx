@@ -9,7 +9,13 @@ import useToastStore from '@/store/useToastStore';
 import useLoadingStore from '@/store/useLoadingStore';
 
 import Header from '@/components/Header';
-import { useImageUploader, useScrollToTop, useShowDetail, useShowNotices, useUpdateShow } from '@/hooks';
+import {
+  useImageUploader,
+  useScrollToTop,
+  useShowDetail,
+  useShowNotices,
+  useUpdateShow,
+} from '@/hooks';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
 import Input from '@/components/Input/Input';
 import Checkbox from '@/components/Checkbox';
@@ -40,11 +46,7 @@ const ShowEditPage = () => {
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const {
-    data: showData,
-    isLoading: isShowLoading,
-    error: showError,
-  } = useShowDetail(id);
+  const { data: showData, isLoading: isShowLoading, error: showError } = useShowDetail(id);
   const { data: noticesData, isLoading: isNoticesLoading } = useShowNotices(id);
 
   const isLoading = isShowLoading || isNoticesLoading;
@@ -181,6 +183,12 @@ const ShowEditPage = () => {
     console.error('데이터 로딩 실패:', showError);
     showToast('데이터를 불러오는데 실패했습니다.', 'warn');
   }, [showError]);
+
+  useEffect(() => {
+    if (isLoading) showLoading();
+    else hideLoading();
+    return () => hideLoading();
+  }, [isLoading, showLoading, hideLoading]);
 
   useEffect(() => {
     if (!originData) return;
@@ -568,6 +576,7 @@ const ShowEditPage = () => {
                     size="large"
                     label="소개글"
                     placeholder="소개글을 입력해주세요"
+                    maxLength="100"
                   />
                 </div>
 
@@ -776,6 +785,7 @@ const ShowEditPage = () => {
                           value={item.name}
                           onChange={(value) => handleSetlistChange(idx, value)}
                           placeholder="아티스트와 노래를 입력해주세요"
+                          maxLength="40"
                           error={!!errors.setlists?.[idx]?.name}
                         />
                         {errors.setlists?.[idx]?.setlist && (

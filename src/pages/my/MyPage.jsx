@@ -160,7 +160,7 @@ const MyPage = () => {
                 <ImageCard
                   key={scrap.id}
                   name={scrap.name}
-                  thumbnail={scrap.thumbnail}
+                  image={scrap.thumbnail}
                   onClick={() => goScrapDetail(scrap.target_id)}
                 />
               ))}

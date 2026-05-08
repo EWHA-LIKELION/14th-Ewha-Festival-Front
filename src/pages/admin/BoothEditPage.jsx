@@ -45,11 +45,7 @@ const BoothEditPage = () => {
   const showLoading = useLoadingStore((s) => s.showLoading);
   const hideLoading = useLoadingStore((s) => s.hideLoading);
 
-  const {
-    data: boothData,
-    isLoading: isBoothLoading,
-    error: boothError,
-  } = useBoothDetail(id);
+  const { data: boothData, isLoading: isBoothLoading, error: boothError } = useBoothDetail(id);
   const { data: noticesData, isLoading: isNoticesLoading } = useBoothNotices(id);
 
   const isLoading = isBoothLoading || isNoticesLoading;
@@ -185,6 +181,12 @@ const BoothEditPage = () => {
     console.error('데이터 로딩 실패:', boothError);
     showToast('데이터를 불러오는데 실패했습니다.', 'warn');
   }, [boothError]);
+
+  useEffect(() => {
+    if (isLoading) showLoading();
+    else hideLoading();
+    return () => hideLoading();
+  }, [isLoading, showLoading, hideLoading]);
 
   useEffect(() => {
     if (!originData) return;
@@ -628,6 +630,7 @@ const BoothEditPage = () => {
                     size="large"
                     label="소개글"
                     placeholder="소개글을 입력해주세요"
+                    maxLength="100"
                   />
                 </div>
 

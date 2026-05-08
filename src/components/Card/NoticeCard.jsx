@@ -16,9 +16,9 @@ const NoticeCard = ({ title, variant = 'notice', onClick, style }) => {
       onClick={onClick}
       style={style}
     >
-      <div className="flex items-center gap-2.5">
+      <div className="flex min-w-0 items-center gap-2.5">
         <img src={ICON[variant]} />
-        <h2 className="line-clamp-1 overflow-hidden text-sm leading-5 font-medium tracking-normal text-ellipsis text-zinc-800">
+        <h2 className="truncate text-sm leading-5 font-medium tracking-normal text-zinc-800">
           {title}
         </h2>
       </div>
