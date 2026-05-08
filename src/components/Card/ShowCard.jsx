@@ -45,7 +45,7 @@ const ShowCard = ({ show, onClick }) => {
                 {name || '공연명'}
               </h2>
 
-              <Badge state={badgeState} />
+              <Badge state={badgeState} size="sm" />
             </div>
             <h3 className="text-xs leading-4 font-medium tracking-normal text-emerald-800">
               {categoryText || '카테고리'} | {daysText || '요일'} {timesText && ` ${timesText}`} |{' '}
