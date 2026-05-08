@@ -61,7 +61,7 @@ const ShowDetailSheet = () => {
   }
 
   const goNoticePage = () => {
-    navigate(`/admin/show/${id}/notice`);
+    navigate(`/map/shows/${id}/notice`);
   };
 
   const getShowState = (status) => {

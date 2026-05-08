@@ -438,12 +438,25 @@ const ShowEditPage = () => {
 
     formData.append('schedule', JSON.stringify(schedulePayload));
 
-    // 5. notice
-    const noticePayload = notices.map((n) => ({
-      ...(n.id ? { id: n.id } : {}),
-      title: n.title,
-      content: n.content,
-    }));
+    // 5. notice (신규/수정된 공지만 전송)
+    const originalNoticeMap = new Map(
+      originNotices.filter((n) => n.id).map((n) => [n.id, { title: n.title, content: n.content }]),
+    );
+
+    const noticePayload = notices
+      .filter((n) => {
+        if (!n.id) return true;
+
+        const original = originalNoticeMap.get(n.id);
+        if (!original) return true;
+
+        return n.title !== original.title || n.content !== original.content;
+      })
+      .map((n) => ({
+        ...(n.id ? { id: n.id } : {}),
+        title: n.title,
+        content: n.content,
+      }));
 
     formData.append('notice', JSON.stringify(noticePayload));
 

@@ -61,7 +61,7 @@ const BoothDetailSheet = () => {
   }
 
   const goNoticePage = () => {
-    navigate(`/admin/booth/${id}/notice`);
+    navigate(`/map/booths/${id}/notice`);
   };
 
   const categoryText =
