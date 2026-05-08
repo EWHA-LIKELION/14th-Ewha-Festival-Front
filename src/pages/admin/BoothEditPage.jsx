@@ -32,6 +32,16 @@ const ERROR_TEXT_STYLE = {
   color: 'var(--System-normal, #FF5B5E)',
 };
 const DAYS = ['05.20', '05.21', '05.22'];
+const PRICE_MAX_DIGITS = 10;
+
+const formatPrice = (value) => {
+  const digits = String(value ?? '')
+    .replace(/\D/g, '')
+    .slice(0, PRICE_MAX_DIGITS);
+  return digits ? Number(digits).toLocaleString('en-US') : '';
+};
+
+const parsePrice = (value) => Number(String(value ?? '').replace(/,/g, ''));
 
 const BoothEditPage = () => {
   const { id } = useParams();
@@ -171,6 +181,7 @@ const BoothEditPage = () => {
         ...p,
         _tempId: crypto.randomUUID(),
         status: p.is_selling ? '판매중' : '종료',
+        price: formatPrice(p.price),
         image: p.image || null,
       })),
     );
@@ -460,12 +471,25 @@ const BoothEditPage = () => {
 
     formData.append('schedule', JSON.stringify(schedulePayload));
 
-    // 5. notice
-    const noticePayload = notices.map((n) => ({
-      ...(n.id ? { id: n.id } : {}),
-      title: n.title,
-      content: n.content,
-    }));
+    // 5. notice (신규/수정된 공지만 전송)
+    const originalNoticeMap = new Map(
+      originNotices.filter((n) => n.id).map((n) => [n.id, { title: n.title, content: n.content }]),
+    );
+
+    const noticePayload = notices
+      .filter((n) => {
+        if (!n.id) return true;
+
+        const original = originalNoticeMap.get(n.id);
+        if (!original) return true;
+
+        return n.title !== original.title || n.content !== original.content;
+      })
+      .map((n) => ({
+        ...(n.id ? { id: n.id } : {}),
+        title: n.title,
+        content: n.content,
+      }));
 
     formData.append('notice', JSON.stringify(noticePayload));
 
@@ -483,7 +507,7 @@ const BoothEditPage = () => {
           id: i.id || undefined,
           name: i.name,
           description: i.description,
-          price: Number(i.price),
+          price: parsePrice(i.price),
           is_selling: i.status === '판매중',
         };
       });
@@ -914,15 +938,16 @@ const BoothEditPage = () => {
                         variant="square_white"
                         value={item.price}
                         onChange={(value) => {
-                          if (!/^\d*$/.test(value)) {
+                          if (!/^[\d,]*$/.test(value)) {
                             showToast('가격은 숫자로만 입력해주세요.', 'warn');
                             return;
                           }
 
-                          handleItemChange(idx, 'price', value);
+                          handleItemChange(idx, 'price', formatPrice(value));
                         }}
                         placeholder="가격을 입력해주세요"
-                        maxLength="10"
+                        maxLength={PRICE_MAX_DIGITS}
+                        maxLengthCountMode="digits"
                         error={!!errors.items[idx]?.price}
                       />
                     </div>

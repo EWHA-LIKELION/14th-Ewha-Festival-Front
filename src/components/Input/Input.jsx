@@ -16,6 +16,7 @@ const Input = ({
   onChange,
   onSubmit,
   maxLength,
+  maxLengthCountMode = 'raw',
   error = false,
   variant = 'square',
   placeholder = '',
@@ -28,7 +29,11 @@ const Input = ({
   const hasCounter = !!maxLength;
   const showBottom = hasHelper || hasCounter;
 
-  const currentLength = value?.length ?? 0;
+  const normalizedValue = String(value ?? '');
+  const currentLength =
+    maxLengthCountMode === 'digits'
+      ? normalizedValue.replace(/\D/g, '').length
+      : normalizedValue.length;
 
   const justify =
     hasHelper && hasCounter ? 'justify-between' : hasHelper ? 'justify-start' : 'justify-end';
@@ -58,7 +63,7 @@ const Input = ({
         placeholder={placeholder}
         onChange={(e) => {
           let next = e.target.value;
-          if (maxLength && next.length > maxLength) {
+          if (maxLength && maxLengthCountMode === 'raw' && next.length > maxLength) {
             next = next.slice(0, maxLength);
           }
           onChange?.(next);
