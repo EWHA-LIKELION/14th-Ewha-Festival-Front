@@ -814,6 +814,7 @@ const ShowEditPage = () => {
                           value={item.name}
                           onChange={(value) => handleSetlistChange(idx, value)}
                           placeholder="아티스트와 노래를 입력해주세요"
+                          maxLength="40"
                           error={!!errors.setlists?.[idx]?.name}
                         />
                         {errors.setlists?.[idx]?.setlist && (
