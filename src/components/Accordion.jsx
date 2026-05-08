@@ -25,8 +25,8 @@ export const Accordion = ({ title, time, isUpdate = false, content }) => {
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center justify-between text-base font-semibold"
       >
-        {title}
-        <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+        <div className="text-left">{title}</div>
+        <div className={`shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
           <img src="/icons/icon-chevrondown.svg" alt="chevron" width="20" height="20" />
         </div>
       </button>
