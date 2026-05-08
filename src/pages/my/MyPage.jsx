@@ -182,7 +182,7 @@ const MyPage = () => {
                 key={booth.id}
                 className="flex flex-col items-start gap-1 rounded-lg bg-zinc-100 p-5"
               >
-                <h2 className="font-semibold">{booth.name}</h2>
+                <h2 className="w-full text-left font-semibold">{booth.name}</h2>
                 <div className="flex items-center gap-1.5">
                   <p className="text-sm font-normal text-zinc-500">스크랩 수</p>
                   <p className="text-base">{booth.scrap_count}회</p>
@@ -196,7 +196,7 @@ const MyPage = () => {
                 key={show.id}
                 className="flex flex-col items-start gap-1 rounded-lg bg-zinc-100 p-5"
               >
-                <h2 className="font-semibold">{show.name}</h2>
+                <h2 className="w-full text-left font-semibold">{show.name}</h2>
                 <div className="flex items-center gap-1.5">
                   <p className="text-sm font-normal text-zinc-500">스크랩 수</p>
                   <p className="text-base">{show.scrap_count}회</p>
