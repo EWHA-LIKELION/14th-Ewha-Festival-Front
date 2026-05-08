@@ -1,5 +1,5 @@
 /**
- * MenuCard 컴포넌트
+ * ImageModal 컴포넌트
  */
 
 const ImageModal = ({ image, onClose }) => {
