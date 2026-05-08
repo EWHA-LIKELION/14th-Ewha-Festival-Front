@@ -2,7 +2,7 @@
  * SearchBar 컴포넌트 (isMap: 지도용 스타일)
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '@/components/Button';
 import useSearchStore from '@/store/useSearchStore';
@@ -16,6 +16,17 @@ const SearchBar = ({ isMap = false }) => {
   const { searchQuery, setSearchQuery, clearSearchQuery, isFocused, setIsFocused } =
     useSearchStore();
   const { executeSearch } = useSearch();
+
+  // 다른 페이지에서 /search로 navigate되면 SearchBar가 새 인스턴스로 mount되며
+  // 처음부터 showBackButton=true 상태라 트랜지션이 동작하지 않음 → 한 프레임 뒤에 토글
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setHasMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  const isSearchPage = location.pathname === '/search';
+  const showBackButton = hasMounted && (isSearchPage || isFocused || !!searchQuery);
 
   const handleBack = () => {
     clearSearchQuery();
@@ -61,7 +72,7 @@ const SearchBar = ({ isMap = false }) => {
         autoFocus={location.pathname === '/search'}
         onClick={handleInputClick}
         className={`h-12 w-full rounded-full transition-all duration-100 ${isMap ? 'shadow-down-lg bg-white' : 'bg-zinc-100'} py-3 text-base font-normal text-zinc-800 placeholder:text-zinc-300 focus:outline-none ${
-          isFocused || searchQuery ? 'px-12.5 ' : 'px-5'
+          showBackButton ? 'px-12.5 ' : 'px-5'
         }`}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
@@ -80,7 +91,7 @@ const SearchBar = ({ isMap = false }) => {
         onMouseDown={(e) => e.preventDefault()}
         onClick={handleBack}
         className={`absolute top-1/2 left-1 -translate-y-1/2 transition-opacity duration-100 ${
-          isFocused || searchQuery ? 'opacity-100' : 'pointer-events-none opacity-0'
+          showBackButton ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       />
       <Button
