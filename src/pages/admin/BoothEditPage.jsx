@@ -32,7 +32,7 @@ const ERROR_TEXT_STYLE = {
   color: 'var(--System-normal, #FF5B5E)',
 };
 const DAYS = ['05.20', '05.21', '05.22'];
-const PRICE_MAX_DIGITS = 10;
+const PRICE_MAX_DIGITS = 5;
 
 const formatPrice = (value) => {
   const digits = String(value ?? '')
@@ -172,9 +172,8 @@ const BoothEditPage = () => {
     setNotices(noticesArray.map((n) => ({ ...n })));
     setOriginNotices(noticesArray);
 
-    const productArray = Array.isArray(boothData.product)
-      ? [...boothData.product].sort((a, b) => b.id - a.id)
-      : [];
+    // 변경 후
+    const productArray = Array.isArray(boothData.product) ? [...boothData.product] : [];
 
     setItems(
       productArray.map((p) => ({
@@ -266,6 +265,7 @@ const BoothEditPage = () => {
 
   const handleItemAdd = () => {
     setItems((prev) => [
+      ...prev,
       {
         id: null,
         _tempId: crypto.randomUUID(),
@@ -275,7 +275,6 @@ const BoothEditPage = () => {
         status: '판매중',
         image: null,
       },
-      ...prev,
     ]);
   };
 
@@ -857,10 +856,6 @@ const BoothEditPage = () => {
             <div>
               <Divider />
               <div className="flex w-full flex-col gap-10 self-stretch bg-zinc-50 px-5 py-6">
-                <Button onClick={handleItemAdd} className="text-sm">
-                  <img src="/icons/icon-addimage-white.svg" />
-                </Button>
-
                 {items.map((item, idx) => (
                   <div
                     key={item.id ?? item._tempId}
@@ -982,6 +977,9 @@ const BoothEditPage = () => {
                     </div>
                   </div>
                 ))}
+                <Button onClick={handleItemAdd} className="text-sm">
+                  <img src="/icons/icon-addimage-white.svg" />
+                </Button>
               </div>
             </div>
           </AdminAccordion>
