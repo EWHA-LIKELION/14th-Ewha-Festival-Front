@@ -13,7 +13,7 @@ const ImageCard = ({ image, name, onClick }) => {
       <img
         src={image || '/images/default-image.png'}
         alt={name}
-        className="flex h-21 flex-col items-start rounded-lg border border-zinc-100"
+        className="flex h-21 w-21 flex-col items-start rounded-lg border border-zinc-100 object-cover object-center"
       />
 
       <h2 className="line-clamp-1 self-stretch overflow-hidden text-xs leading-4 font-medium tracking-normal text-ellipsis text-zinc-500">
