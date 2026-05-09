@@ -32,7 +32,7 @@ const ERROR_TEXT_STYLE = {
   color: 'var(--System-normal, #FF5B5E)',
 };
 const DAYS = ['05.20', '05.21', '05.22'];
-const PRICE_MAX_DIGITS = 10;
+const PRICE_MAX_DIGITS = 5;
 
 const formatPrice = (value) => {
   const digits = String(value ?? '')
