@@ -172,9 +172,8 @@ const BoothEditPage = () => {
     setNotices(noticesArray.map((n) => ({ ...n })));
     setOriginNotices(noticesArray);
 
-    const productArray = Array.isArray(boothData.product)
-      ? [...boothData.product].sort((a, b) => b.id - a.id)
-      : [];
+    // 변경 후
+    const productArray = Array.isArray(boothData.product) ? [...boothData.product] : [];
 
     setItems(
       productArray.map((p) => ({
