@@ -23,7 +23,7 @@ export const Accordion = ({ title, time, isUpdate = false, content }) => {
     >
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center justify-between text-base font-semibold"
+        className="flex items-start justify-between text-base font-semibold"
       >
         <div className="text-left">{title}</div>
         <div className={`shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
