@@ -250,7 +250,7 @@ const ShowEditPage = () => {
   };
 
   const handleSetlistAdd = () => {
-    setSetlists((prev) => [{ id: null, name: '' }, ...prev]);
+    setSetlists((prev) => [...prev, { id: null, name: '' }]);
   };
 
   const handleSetlistChange = (idx, value) => {
@@ -785,10 +785,6 @@ const ShowEditPage = () => {
             <div>
               <Divider />
               <div className="flex w-full flex-col gap-10 self-stretch bg-zinc-50 px-5 py-6">
-                <Button onClick={handleSetlistAdd} className="text-sm">
-                  <img src="/icons/icon-addimage-white.svg" />
-                </Button>
-
                 {setlists.map((item, idx) => (
                   <div key={item.id ?? `new-${idx}`} className="flex w-full flex-col gap-3">
                     <div className="flex w-full items-end gap-4">
@@ -819,6 +815,9 @@ const ShowEditPage = () => {
                     </div>
                   </div>
                 ))}
+                <Button onClick={handleSetlistAdd} className="text-sm">
+                  <img src="/icons/icon-addimage-white.svg" />
+                </Button>
               </div>
             </div>
           </AdminAccordion>

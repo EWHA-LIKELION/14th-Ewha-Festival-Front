@@ -266,6 +266,7 @@ const BoothEditPage = () => {
 
   const handleItemAdd = () => {
     setItems((prev) => [
+      ...prev,
       {
         id: null,
         _tempId: crypto.randomUUID(),
@@ -275,7 +276,6 @@ const BoothEditPage = () => {
         status: '판매중',
         image: null,
       },
-      ...prev,
     ]);
   };
 
@@ -857,10 +857,6 @@ const BoothEditPage = () => {
             <div>
               <Divider />
               <div className="flex w-full flex-col gap-10 self-stretch bg-zinc-50 px-5 py-6">
-                <Button onClick={handleItemAdd} className="text-sm">
-                  <img src="/icons/icon-addimage-white.svg" />
-                </Button>
-
                 {items.map((item, idx) => (
                   <div
                     key={item.id ?? item._tempId}
@@ -982,6 +978,9 @@ const BoothEditPage = () => {
                     </div>
                   </div>
                 ))}
+                <Button onClick={handleItemAdd} className="text-sm">
+                  <img src="/icons/icon-addimage-white.svg" />
+                </Button>
               </div>
             </div>
           </AdminAccordion>
