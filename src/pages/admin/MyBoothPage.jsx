@@ -99,7 +99,7 @@ const MyBoothPage = () => {
       <Header left="back" right="edit" background="white" onEdit={goEditPage} onBack={goMyPage} />
       <img
         src={fixUrl(booth.thumbnail || '/images/default-image-large.png')}
-        className="mt-18 flex aspect-49/30 w-full items-center justify-center object-cover"
+        className={`${booth.thumbnail ? 'cursor-pointer' : 'cursor-default'} mt-18 flex aspect-49/30 w-full items-center justify-center object-cover`}
         onClick={() => {
           if (booth.thumbnail) openImageModal(fixUrl(booth.thumbnail));
         }}

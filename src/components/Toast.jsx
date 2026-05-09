@@ -1,9 +1,8 @@
-import React from 'react';
-import { useEffect } from 'react';
-
 /**
  * Toast 컴포넌트
  */
+
+import { useState, useEffect } from 'react';
 
 const Toast = ({ type = 'check', text = '' }) => {
   return (
@@ -23,7 +22,7 @@ const Toast = ({ type = 'check', text = '' }) => {
  */
 
 export const ToastManager = ({ type, text, isOpen, duration = 3000, onClose }) => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
