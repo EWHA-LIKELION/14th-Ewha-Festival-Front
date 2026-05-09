@@ -35,7 +35,7 @@ export const Accordion = ({ title, time, isUpdate = false, content }) => {
         style={{ height: `${height}px` }}
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
-        <p className="text-sm">{content}</p>
+        <p className="text-sm whitespace-pre-line">{content}</p>
       </div>
       <div className="text-xs text-zinc-300">
         <p>
