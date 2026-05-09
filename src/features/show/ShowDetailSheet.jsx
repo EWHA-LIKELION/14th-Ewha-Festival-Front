@@ -147,7 +147,7 @@ const ShowDetailSheet = () => {
                 )}
 
                 {show.description && (
-                  <p className="self-stretch text-sm leading-5 font-normal tracking-normal text-zinc-500">
+                  <p className="self-stretch text-sm leading-5 font-normal tracking-normal whitespace-pre-line text-zinc-500">
                     {show.description}
                   </p>
                 )}
