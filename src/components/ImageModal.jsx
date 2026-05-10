@@ -15,8 +15,8 @@ const ImageModal = ({ image, onClose }) => {
         </button>
 
         {/* 이미지 */}
-        <div className="reactive-width h-98 w-full cursor-default overflow-hidden">
-          <img src={image} className="h-full w-full object-cover object-center" />
+        <div className="w-full cursor-default">
+          <img src={image} className="reactive-width h-98 object-cover object-center" />
         </div>
       </div>
     </div>
