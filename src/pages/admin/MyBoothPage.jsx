@@ -261,7 +261,7 @@ const MyBoothPage = () => {
               <div className="w-full pb-36">
                 {booth.product && booth.product.length > 0 ? (
                   [...booth.product]
-                    .sort((a, b) => b.id - a.id)
+                    .sort((a, b) => a.id - b.id)
                     .map((item) => (
                       <MenuCard
                         key={item.id}
