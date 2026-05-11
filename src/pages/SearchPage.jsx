@@ -33,7 +33,10 @@ const SearchPage = () => {
     }
   }, [isError]);
 
-  const popularKeywords = popularData?.results ?? [];
+  const popularKeywords =
+    popularData?.results && popularData.results.length > 0
+      ? popularData.results
+      : Array.from({ length: 10 }, (_, i) => ({ rank: i + 1, keyword: '-' }));
   const updatedAt = popularData?.updated_at
     ? new Date(popularData.updated_at).toLocaleString('ko-KR', { hour: 'numeric', hour12: true })
     : '';
@@ -82,7 +85,9 @@ const SearchPage = () => {
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h1 className="text-lg font-semibold text-gray-900">인기 검색어</h1>
-            <p className="text-xs font-normal text-gray-300">{updatedAt} 업데이트</p>
+            <p className="text-xs font-normal text-gray-300">
+              {updatedAt ? `${updatedAt} 업데이트` : '업데이트 전'}
+            </p>
           </div>
           <div className="grid grid-cols-2 gap-x-5 gap-y-3">
             {popularKeywords.map(({ rank, keyword }) => (
