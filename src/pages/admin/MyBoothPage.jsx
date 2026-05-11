@@ -260,19 +260,17 @@ const MyBoothPage = () => {
             {activeTab === 0 && (
               <div className="w-full pb-36">
                 {booth.product && booth.product.length > 0 ? (
-                  [...booth.product]
-                    .sort((a, b) => b.id - a.id)
-                    .map((item) => (
-                      <MenuCard
-                        key={item.id}
-                        name={item.name}
-                        description={item.description}
-                        image={fixUrl(item.image)}
-                        price={item.price}
-                        isSelling={item.is_selling}
-                        onImageClick={(img) => openImageModal(fixUrl(img))}
-                      />
-                    ))
+                  [...booth.product].map((item) => (
+                    <MenuCard
+                      key={item.id}
+                      name={item.name}
+                      description={item.description}
+                      image={fixUrl(item.image)}
+                      price={item.price}
+                      isSelling={item.is_selling}
+                      onImageClick={(img) => openImageModal(fixUrl(img))}
+                    />
+                  ))
                 ) : (
                   <div className="flex w-full items-center justify-center self-stretch py-20 text-center text-base leading-6 font-normal tracking-normal text-zinc-300">
                     등록된 내용이 없어요.
