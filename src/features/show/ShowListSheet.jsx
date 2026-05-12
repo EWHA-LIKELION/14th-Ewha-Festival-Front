@@ -8,7 +8,7 @@ import { useNavigate, useMatch } from 'react-router-dom';
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
-import { useShows, useInfiniteScroll, useSearchResults } from '@/hooks';
+import { useShows, useInfiniteScroll, useSearchResults, useScrollRestore } from '@/hooks';
 import useSearchStore from '@/store/useSearchStore';
 
 import Header from '@/components/Header';
@@ -54,6 +54,7 @@ const ShowListSheet = () => {
   };
 
   const goShowDetail = (showId) => {
+    saveScroll();
     navigate(`/map/shows/${showId}`);
   };
 
@@ -65,6 +66,14 @@ const ShowListSheet = () => {
     isFetchingNextPage,
     threshold: 0.8,
   });
+
+  // 스크롤 위치 저장/복원 (상세 → 목록 복귀 시 유지)
+  const scrollKey = isSearchMode ? `show-list:search:${searchQuery}` : 'show-list';
+  const saveScroll = useScrollRestore(
+    scrollKey,
+    scrollContainerRef,
+    !isLoading && !isError && shows.length > 0,
+  );
 
   return (
     <>

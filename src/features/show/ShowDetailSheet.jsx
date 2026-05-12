@@ -37,11 +37,6 @@ const ShowDetailSheet = () => {
   const openImageModal = useImageModalStore((s) => s.openImageModal);
   const [activeTab, setActiveTab] = useState(0);
 
-  // 첫 진입 시 시트를 medium으로
-  useEffect(() => {
-    setSheetSize('medium');
-  }, [setSheetSize]);
-
   useEffect(() => {
     if (!error) return;
     console.error('공연 정보를 불러오는데 실패했습니다:', error);
