@@ -5,6 +5,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
 import useLoadingStore from '@/store/useLoadingStore';
 import { useMyScrapBooths } from '@/hooks';
@@ -19,6 +20,7 @@ const ScrapBooth = () => {
 
   const scrapBoothFilters = useFilterStore((s) => s.filters.scrap_booth);
   const setFilter = useFilterStore((s) => s.setFilter);
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const { booths, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMyScrapBooths(scrapBoothFilters);
@@ -32,6 +34,11 @@ const ScrapBooth = () => {
 
   const handleBoothExcludeEndedChange = (value) => {
     setFilter('scrap_booth', 'excludeEnded', value);
+  };
+
+  const goBoothDetail = (scrapId) => {
+    setSheetSize('full');
+    navigate(`/map/booths/${scrapId}`);
   };
 
   const hasActiveFilters =
@@ -86,11 +93,7 @@ const ScrapBooth = () => {
         {!isLoading &&
           !isError &&
           booths.map((booth) => (
-            <BoothCard
-              key={booth.id}
-              booth={booth}
-              onClick={() => navigate(`/map/booths/${booth.id}`)}
-            />
+            <BoothCard key={booth.id} booth={booth} onClick={() => goBoothDetail(booth.id)} />
           ))}
 
         {/* 다음 페이지 로딩 */}

@@ -5,6 +5,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 import useFilterStore from '@/store/useFilterStore';
 import useLoadingStore from '@/store/useLoadingStore';
 import { useMyScrapShows } from '@/hooks';
@@ -19,6 +20,7 @@ const ScrapShow = () => {
 
   const scrapShowFilters = useFilterStore((s) => s.filters.scrap_show);
   const setFilter = useFilterStore((s) => s.setFilter);
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   const { shows, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMyScrapShows(scrapShowFilters);
@@ -32,6 +34,11 @@ const ScrapShow = () => {
 
   const handleShowExcludeEndedChange = (value) => {
     setFilter('scrap_show', 'excludeEnded', value);
+  };
+
+  const goShowDetail = (scrapId) => {
+    setSheetSize('full');
+    navigate(`/map/shows/${scrapId}`);
   };
 
   const hasActiveFilters =
@@ -84,7 +91,7 @@ const ScrapShow = () => {
         {!isLoading &&
           !isError &&
           shows.map((show) => (
-            <ShowCard key={show.id} show={show} onClick={() => navigate(`/map/shows/${show.id}`)} />
+            <ShowCard key={show.id} show={show} onClick={() => goShowDetail(show.id)} />
           ))}
 
         {/* 다음 페이지 로딩 */}

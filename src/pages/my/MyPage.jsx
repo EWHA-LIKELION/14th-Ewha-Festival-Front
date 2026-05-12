@@ -5,9 +5,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthAPI } from '@/apis';
+
 import useAuthStore from '@/store/useAuthStore';
 import useAlertStore from '@/store/useAlertStore';
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 import { useMyProfile, useScrollToTop } from '@/hooks';
+
 import Header from '@/components/Header';
 import Button from '@/components/Button';
 import ImageCard from '@/components/Card/ImageCard';
@@ -19,6 +22,7 @@ const MyPage = () => {
   const openLoginSheet = useAuthStore((s) => s.openLoginSheet);
   const openAlert = useAlertStore((s) => s.openAlert);
   const closeAlert = useAlertStore((s) => s.closeAlert);
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
   const { data: myData, error } = useMyProfile();
 
   const goScrap = () => {
@@ -50,6 +54,7 @@ const MyPage = () => {
   };
 
   const goScrapDetail = (scrapId) => {
+    setSheetSize('full');
     if (scrapId?.includes('BOOTH')) {
       navigate(`/map/booths/${scrapId}`);
     } else if (scrapId?.includes('SHOW')) {
