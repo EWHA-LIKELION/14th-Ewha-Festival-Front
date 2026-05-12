@@ -184,7 +184,7 @@ const MyPage = () => {
             {myData.managed_booths?.map((booth) => (
               <button
                 onClick={() => goBoothManage(booth.id)}
-                key={booth.id}
+                key={`booth-${booth.id}`}
                 className="flex flex-col items-start gap-1 rounded-lg bg-zinc-100 p-5"
               >
                 <h2 className="w-full truncate text-left font-semibold">{booth.name}</h2>
@@ -198,7 +198,7 @@ const MyPage = () => {
             {myData.managed_shows?.map((show) => (
               <button
                 onClick={() => goShowManage(show.id)}
-                key={show.id}
+                key={`show-${show.id}`}
                 className="flex flex-col items-start gap-1 rounded-lg bg-zinc-100 p-5"
               >
                 <h2 className="w-full truncate text-left font-semibold">{show.name}</h2>
