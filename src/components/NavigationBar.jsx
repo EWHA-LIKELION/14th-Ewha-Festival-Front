@@ -3,9 +3,11 @@
  */
 
 import { useNavigate, useMatch } from 'react-router-dom';
+import useBottomsheetStore from '@/store/useBottomsheetStore';
 
 const NavigationBar = ({ className = '' }) => {
   const navigate = useNavigate();
+  const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
   // Hooks를 최상위에서 호출하여 순서 보장
   const matchHomeRoot = useMatch({ path: '/', end: true });
@@ -83,7 +85,10 @@ const NavigationBar = ({ className = '' }) => {
           return (
             <button
               key={item.label}
-              onClick={() => navigate(item.path)}
+              onClick={() => {
+                if (item.path === '/map/booths') setSheetSize('medium');
+                navigate(item.path);
+              }}
               className="flex h-fit w-20 flex-col items-center justify-center gap-1 text-xs"
             >
               <div
