@@ -5,6 +5,7 @@ export { default as useImageUploader } from './useImageUploader.js';
 export { useInfiniteList, buildQueryParams } from './useInfiniteList.js';
 export { useInfiniteScroll } from './useInfiniteScroll.js';
 export { default as useScrollToTop } from './useScrollToTop.js';
+export { default as useScrollRestore } from './useScrollRestore.js';
 
 // booth
 export { useBooths } from './booth/useBooths.js';
