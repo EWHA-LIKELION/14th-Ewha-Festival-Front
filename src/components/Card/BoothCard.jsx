@@ -4,6 +4,7 @@
 
 import Badge from '@/components/Badge';
 import ScrapButton from '@/components/ScrapButton';
+import { resolveMediaUrl } from '@/utils/mediaUrl';
 
 const BoothCard = ({ booth, onClick }) => {
   if (!booth) return null;
@@ -59,7 +60,7 @@ const BoothCard = ({ booth, onClick }) => {
       <div className="mt-2.5 flex items-center gap-2 p-0">
         {/* 썸네일 */}
         <img
-          src={thumbnail || '/icons/default-image.svg'}
+          src={resolveMediaUrl(thumbnail) || '/icons/default-image.svg'}
           alt={name}
           className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
         />
@@ -69,7 +70,7 @@ const BoothCard = ({ booth, onClick }) => {
           images.map((img, idx) => (
             <img
               key={idx}
-              src={img}
+              src={resolveMediaUrl(img)}
               alt={`${name} 상품 ${idx + 1}`}
               className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
             />

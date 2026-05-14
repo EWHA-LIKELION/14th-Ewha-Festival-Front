@@ -24,6 +24,7 @@ import Divider from '@/components/Divider';
 import NoticeCard from '@/components/Card/NoticeCard';
 import Tab from '@/components/Tab';
 import MenuCard from '@/components/Card/MenuCard';
+import { resolveMediaUrl } from '@/utils/mediaUrl';
 
 const BoothDetailSheet = () => {
   const { id } = useParams();
@@ -86,10 +87,10 @@ const BoothDetailSheet = () => {
           <>
             <Header left="back" />
             <img
-              src={booth.thumbnail || '/images/default-image-large.png'}
+              src={resolveMediaUrl(booth.thumbnail) || '/images/default-image-large.png'}
               className={`${booth.thumbnail ? 'cursor-pointer' : 'cursor-default'} flex aspect-49/30 w-full items-center justify-center object-cover`}
               onClick={() => {
-                if (booth.thumbnail) openImageModal(booth.thumbnail);
+                if (booth.thumbnail) openImageModal(resolveMediaUrl(booth.thumbnail));
               }}
             />
           </>
@@ -185,7 +186,7 @@ const BoothDetailSheet = () => {
                           <img src="/icons/icon-eclipse-gray.svg" />
                           <button
                             className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
-                            onClick={() => openImageModal(booth.roadview)}
+                            onClick={() => openImageModal(resolveMediaUrl(booth.roadview))}
                           >
                             로드뷰
                           </button>
@@ -207,23 +208,16 @@ const BoothDetailSheet = () => {
                     SNS
                   </h3>
                   <div className="flex items-center gap-2.5">
-                    {snsLinks.instagram && (
-                      <img
-                        src="/icons/logo-instagramcolor.svg"
-                        className="h-7 w-7 cursor-pointer rounded-md"
-                        onClick={() => window.open(snsLinks.instagram, '_blank')}
-                      />
-                    )}
-
-                    {snsLinks.kakaotalk && (
-                      <img
-                        src="/icons/logo-kakaotalkcolor.svg"
-                        className="h-7 w-7 cursor-pointer rounded-md"
-                        onClick={() => window.open(snsLinks.kakaotalk, '_blank')}
-                      />
-                    )}
-
-                    {!snsLinks.instagram && !snsLinks.kakaotalk && (
+                    {snsLinks.length > 0 ? (
+                      snsLinks.map((sns) => (
+                        <img
+                          key={sns.url}
+                          src={sns.icon}
+                          className="h-7 w-7 cursor-pointer rounded-md"
+                          onClick={() => window.open(sns.url, '_blank')}
+                        />
+                      ))
+                    ) : (
                       <p className="text-sm leading-5 font-normal text-zinc-500">-</p>
                     )}
                   </div>
@@ -261,7 +255,7 @@ const BoothDetailSheet = () => {
                           key={item.id}
                           name={item.name}
                           description={item.description}
-                          image={item.image}
+                          image={resolveMediaUrl(item.image)}
                           price={item.price}
                           isSelling={item.is_selling}
                           onImageClick={openImageModal}

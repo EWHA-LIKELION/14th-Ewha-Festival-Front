@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import useToastStore from '@/store/useToastStore';
 import { ShowAPI } from '@/apis';
+import { getErrorMessage } from '@/utils/errorHelper';
 
 export const useShowDetail = (id) => {
   return useQuery({
@@ -45,12 +46,7 @@ export const useUpdateShow = (id, resourceVersion) => {
     },
     onError: (err) => {
       console.error('저장 실패:', err);
-
-      if (err.response?.status === 409) {
-        showToast('데이터가 변경되었습니다. 새로고침 후 다시 시도해주세요.', 'warn');
-      } else {
-        showToast('수정 중 오류가 발생했습니다.', 'warn');
-      }
+      showToast(getErrorMessage(err) || '수정 중 오류가 발생했습니다.', 'warn');
     },
   });
 };

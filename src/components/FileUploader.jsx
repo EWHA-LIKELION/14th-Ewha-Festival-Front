@@ -25,7 +25,7 @@ const useImagePreview = (image) => {
   return previewUrl;
 };
 
-export const DetailImageUploader = ({ image, onChange, onRemove }) => {
+export const DetailImageUploader = ({ image, onChange, onRemove, isLoading = false }) => {
   const inputRef = useRef(null);
   const previewUrl = useImagePreview(image);
 
@@ -55,6 +55,11 @@ export const DetailImageUploader = ({ image, onChange, onRemove }) => {
           </div>
         )}
       </div>
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-black/40">
+          <div className="size-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+        </div>
+      )}
       {image && (
         <button
           className="absolute top-1 right-1 p-0.5"
@@ -70,7 +75,7 @@ export const DetailImageUploader = ({ image, onChange, onRemove }) => {
   );
 };
 
-export const ThumbnailImageUploader = ({ image, onChange, onRemove }) => {
+export const ThumbnailImageUploader = ({ image, onChange, onRemove, isLoading = false }) => {
   const inputRef = useRef(null);
   const previewUrl = useImagePreview(image);
 
@@ -90,6 +95,11 @@ export const ThumbnailImageUploader = ({ image, onChange, onRemove }) => {
         src={previewUrl || '/images/default-image-large.png'}
         className="absolute inset-0 h-full w-full object-cover"
       />
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
+          <div className="size-8 animate-spin rounded-full border-[3px] border-white border-t-transparent" />
+        </div>
+      )}
       <div className="absolute bottom-0 flex h-12 w-full cursor-pointer items-center justify-center bg-black/50">
         {!image ? (
           <button

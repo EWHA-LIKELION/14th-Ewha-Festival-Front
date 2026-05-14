@@ -17,6 +17,7 @@ import {
   useUpdateBooth,
 } from '@/hooks';
 import { ThumbnailImageUploader, DetailImageUploader } from '@/components/FileUploader';
+import ProductItem from './ProductItem';
 import Input from '@/components/Input/Input';
 import Checkbox from '@/components/Checkbox';
 import Chip from '@/components/Chip';
@@ -26,6 +27,8 @@ import TextArea from '@/components/Input/TextArea';
 import Timepicker from '@/components/Timepicker';
 import Button from '@/components/Button';
 import { FESTIVAL_TIME } from '@/constants/time';
+import { resolveMediaUrl } from '@/utils/mediaUrl';
+import { isSnsUrl } from '@/utils/snsHelper';
 
 const ERROR_TEXT_CLASS = 'text-xs font-normal leading-4 font-normal tracking-0';
 const ERROR_TEXT_STYLE = {
@@ -97,6 +100,7 @@ const BoothEditPage = () => {
     image: detailImage,
     file: detailFile,
     isDeleted: isRoadviewDeleted,
+    isCompressing: isDetailCompressing,
     onSelectFile: onDetailChange,
     clearImage: clearDetailImage,
   } = useImageUploader(originData?.roadview);
@@ -105,6 +109,7 @@ const BoothEditPage = () => {
     image: thumbnailImage,
     file: thumbnailFile,
     isDeleted: isThumbnailDeleted,
+    isCompressing: isThumbnailCompressing,
     onSelectFile: onThumbnailChange,
     clearImage: clearThumbnailImage,
   } = useImageUploader(originData?.thumbnail);
@@ -117,21 +122,22 @@ const BoothEditPage = () => {
   const [errors, setErrors] = useState({ notices: [], items: [] });
   const [isFormValid, setIsFormValid] = useState(false);
 
+  // 상품 이미지 압축 진행 개수 (저장 버튼 활성화 제어용)
+  const [compressingCount, setCompressingCount] = useState(0);
+  const handleItemCompressingChange = useCallback((isCompressing) => {
+    setCompressingCount((count) => count + (isCompressing ? 1 : -1));
+  }, []);
+  const isAnyImageCompressing =
+    isThumbnailCompressing || isDetailCompressing || compressingCount > 0;
+
   // 1. 데이터 초기화 (쿼리 결과를 폼 state로 한 번만 populate)
   useEffect(() => {
     if (!boothData || !noticesData || originData) return;
 
-    const sanitizeUrl = (url) => {
-      if (!url) return url;
-      return url
-        .replace(/^http:\/\//, 'https://')
-        .replace(/[^:/?#]+(?=[/?#]|$)/g, (segment) => encodeURIComponent(segment));
-    };
-
     const safeData = {
       ...boothData,
-      thumbnail: sanitizeUrl(boothData.thumbnail),
-      roadview: sanitizeUrl(boothData.roadview),
+      thumbnail: resolveMediaUrl(boothData.thumbnail),
+      roadview: resolveMediaUrl(boothData.roadview),
     };
 
     setOriginData(safeData);
@@ -181,7 +187,7 @@ const BoothEditPage = () => {
         _tempId: crypto.randomUUID(),
         status: p.is_selling ? '판매중' : '종료',
         price: formatPrice(p.price),
-        image: p.image || null,
+        image: resolveMediaUrl(p.image) || null,
       })),
     );
   }, [boothData, noticesData, originData]);
@@ -278,10 +284,16 @@ const BoothEditPage = () => {
     ]);
   };
 
-  const handleItemChange = (idx, field, value) => {
-    const newItems = [...items];
-    newItems[idx][field] = value;
-    setItems(newItems);
+  const handleItemChange = useCallback((idx, field, value) => {
+    setItems((prev) => prev.map((it, i) => (i === idx ? { ...it, [field]: value } : it)));
+  }, []);
+
+  const handleItemPriceChange = (idx, value) => {
+    if (!/^[\d,]*$/.test(value)) {
+      showToast('가격은 숫자로만 입력해주세요.', 'warn');
+      return;
+    }
+    handleItemChange(idx, 'price', formatPrice(value));
   };
 
   // 이미지 삭제 alert
@@ -380,6 +392,8 @@ const BoothEditPage = () => {
       name: '',
       category: '',
       schedule: '',
+      snsInstagram: '',
+      snsKakao: '',
       notices: [],
       items: [],
     };
@@ -388,6 +402,11 @@ const BoothEditPage = () => {
     if (selectedCategories.length === 0) newErrors.category = '카테고리를 1개 이상 선택해주세요.';
     if (!Object.values(schedule).some((d) => d.checked))
       newErrors.schedule = '운영 시간을 1개 이상 선택해주세요.';
+
+    if (form.snsInstagram.trim() && !isSnsUrl(form.snsInstagram))
+      newErrors.snsInstagram = '인스타그램 또는 카카오 URL을 입력해주세요.';
+    if (form.snsKakao.trim() && !isSnsUrl(form.snsKakao))
+      newErrors.snsKakao = '인스타그램 또는 카카오 URL을 입력해주세요.';
 
     newErrors.notices = notices.map((n) => ({
       title: !n.title.trim() ? '제목을 입력해주세요.' : '',
@@ -404,6 +423,8 @@ const BoothEditPage = () => {
       !newErrors.name &&
       !newErrors.category &&
       !newErrors.schedule &&
+      !newErrors.snsInstagram &&
+      !newErrors.snsKakao &&
       newErrors.notices.every((n) => !n.title && !n.content) &&
       newErrors.items.every((i) => !i.name && !i.description && !i.price);
 
@@ -524,7 +545,7 @@ const BoothEditPage = () => {
     }
 
     // 8. sns
-    const currentSns = [form.snsKakao, form.snsInstagram].filter((v) => v && v.trim() !== '');
+    const currentSns = [form.snsInstagram, form.snsKakao].filter((v) => v && v.trim() !== '');
 
     formData.append('sns', JSON.stringify(currentSns));
 
@@ -539,7 +560,7 @@ const BoothEditPage = () => {
         left="back"
         right="save"
         onSave={handleSave}
-        saveDisabled={!isFormValid}
+        saveDisabled={!isFormValid || isAnyImageCompressing}
         onBack={handleBack}
       />
 
@@ -548,6 +569,7 @@ const BoothEditPage = () => {
           image={thumbnailImage}
           onChange={onThumbnailChange}
           onRemove={() => handleClickRemove(clearThumbnailImage)}
+          isLoading={isThumbnailCompressing}
         />
 
         <div className="flex w-full flex-col items-center gap-6 px-5 pt-5 pb-6">
@@ -721,6 +743,7 @@ const BoothEditPage = () => {
                     image={detailImage}
                     onChange={onDetailChange}
                     onRemove={() => handleClickRemove(clearDetailImage)}
+                    isLoading={isDetailCompressing}
                   />
                 </div>
 
@@ -750,8 +773,14 @@ const BoothEditPage = () => {
                       value={form.snsInstagram}
                       onChange={(value) => handleChange('snsInstagram', value)}
                       placeholder="https://www.instagram.com/"
+                      error={!!errors.snsInstagram}
                     />
                   </div>
+                  {errors.snsInstagram && (
+                    <p className={`${ERROR_TEXT_CLASS} -mt-1.5 pl-9.5`} style={ERROR_TEXT_STYLE}>
+                      {errors.snsInstagram}
+                    </p>
+                  )}
                   <div className="flex items-center gap-3 self-stretch">
                     <img src="/icons/logo-kakaotalkcolor.svg" className="rounded-md" />
                     <Input
@@ -759,8 +788,14 @@ const BoothEditPage = () => {
                       value={form.snsKakao}
                       onChange={(value) => handleChange('snsKakao', value)}
                       placeholder="http://pf.kakao.com/"
+                      error={!!errors.snsKakao}
                     />
                   </div>
+                  {errors.snsKakao && (
+                    <p className={`${ERROR_TEXT_CLASS} -mt-1.5 pl-9.5`} style={ERROR_TEXT_STYLE}>
+                      {errors.snsKakao}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -857,125 +892,18 @@ const BoothEditPage = () => {
               <Divider />
               <div className="flex w-full flex-col gap-10 self-stretch bg-zinc-50 px-5 py-6">
                 {items.map((item, idx) => (
-                  <div
+                  <ProductItem
                     key={item.id ?? item._tempId}
-                    className="flex w-full flex-col items-start gap-3"
-                  >
-                    {idx !== 0 && (
-                      <>
-                        <Divider />
-                        <div className="pt-5" />
-                      </>
-                    )}
-                    {/* 상태 */}
-                    <div className="flex items-center gap-1 self-stretch pb-5.5">
-                      <h3 className="flex items-start pr-2 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
-                        상태
-                      </h3>
-                      <div className="flex items-center gap-1.5">
-                        <Chip
-                          variant="state"
-                          text="판매중"
-                          isSelected={item.status === '판매중'}
-                          onClick={() => handleItemChange(idx, 'status', '판매중')}
-                        />
-                        <Chip
-                          variant="state"
-                          text="종료"
-                          isSelected={item.status === '종료'}
-                          onClick={() => handleItemChange(idx, 'status', '종료')}
-                        />
-                      </div>
-                    </div>
-
-                    {/* 이름 */}
-                    <div className="flex w-full items-start self-stretch">
-                      <h3 className="flex w-9 items-start pr-2 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
-                        이름
-                      </h3>
-                      <Input
-                        variant="square_white"
-                        value={item.name}
-                        onChange={(value) => handleItemChange(idx, 'name', value)}
-                        placeholder="이름을 입력해주세요"
-                        maxLength="15"
-                        error={!!errors.items[idx]?.name}
-                      />
-                    </div>
-                    {errors.items[idx]?.name && (
-                      <p className={`${ERROR_TEXT_CLASS} -mt-7 pl-8.5`} style={ERROR_TEXT_STYLE}>
-                        {errors.items[idx].name}
-                      </p>
-                    )}
-
-                    {/* 설명 */}
-                    <TextArea
-                      label="설명"
-                      value={item.description}
-                      onChange={(value) => handleItemChange(idx, 'description', value)}
-                      labelPosition="left"
-                      placeholder="설명을 입력해주세요"
-                      maxLength="45"
-                      error={!!errors.items[idx]?.description}
-                    />
-                    {errors.items[idx]?.description && (
-                      <p className={`${ERROR_TEXT_CLASS} -mt-7 pl-8.5`} style={ERROR_TEXT_STYLE}>
-                        {errors.items[idx].description}
-                      </p>
-                    )}
-
-                    {/* 가격 */}
-                    <div className="flex w-full items-start self-stretch pb-5.5">
-                      <h3 className="flex w-9 items-start pr-2 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
-                        가격
-                      </h3>
-                      <Input
-                        variant="square_white"
-                        value={item.price}
-                        onChange={(value) => {
-                          if (!/^[\d,]*$/.test(value)) {
-                            showToast('가격은 숫자로만 입력해주세요.', 'warn');
-                            return;
-                          }
-
-                          handleItemChange(idx, 'price', formatPrice(value));
-                        }}
-                        placeholder="가격을 입력해주세요"
-                        maxLength={PRICE_MAX_DIGITS}
-                        maxLengthCountMode="digits"
-                        error={!!errors.items[idx]?.price}
-                      />
-                    </div>
-                    {errors.items[idx]?.price && (
-                      <p className={`${ERROR_TEXT_CLASS} -mt-7 pl-8.5`} style={ERROR_TEXT_STYLE}>
-                        {errors.items[idx].price}
-                      </p>
-                    )}
-
-                    {/* 사진 */}
-                    <div className="flex w-full items-end justify-between self-stretch">
-                      <div className="flex items-start">
-                        <h2 className="flex w-9 pr-2 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
-                          사진
-                        </h2>
-                        <DetailImageUploader
-                          image={item.image}
-                          onChange={(file) => handleItemChange(idx, 'image', file)}
-                          onRemove={() =>
-                            handleClickRemove(() => handleItemChange(idx, 'image', null))
-                          }
-                        />
-                      </div>
-                      <Button
-                        variant="bg-pink"
-                        size="sm"
-                        circle="true"
-                        onClick={() => handleItemRemove(idx)}
-                      >
-                        삭제
-                      </Button>
-                    </div>
-                  </div>
+                    item={item}
+                    index={idx}
+                    error={errors.items[idx]}
+                    priceMaxDigits={PRICE_MAX_DIGITS}
+                    onChange={handleItemChange}
+                    onPriceChange={handleItemPriceChange}
+                    onRemoveItem={handleItemRemove}
+                    onRemoveImage={handleClickRemove}
+                    onCompressingChange={handleItemCompressingChange}
+                  />
                 ))}
                 <Button onClick={handleItemAdd} className="text-sm">
                   <img src="/icons/icon-addimage-white.svg" />

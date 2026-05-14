@@ -2,6 +2,7 @@
 //사용하는 쪽에서 import { useIsMobile } from "@/hooks"; 이렇게 불러와서 사용
 
 export { default as useImageUploader } from './useImageUploader.js';
+export { default as useImageCompression } from './useImageCompression.js';
 export { useInfiniteList, buildQueryParams } from './useInfiniteList.js';
 export { useInfiniteScroll } from './useInfiniteScroll.js';
 export { default as useScrollToTop } from './useScrollToTop.js';
