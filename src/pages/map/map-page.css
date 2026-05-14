@@ -99,7 +99,7 @@ svg {
 .building-layer [id^='EDUCATION_BUILDING'].is-active circle[fill='#E9F1EB'],
 .building-layer [id='WELCH_RYANG_AUDITORIUM'].is-active path[fill='#E9F1EB'],
 .building-layer [id='SENTENNIAL_MUSEUM'].is-active path[fill='#E9F1EB'] {
-  fill: #aad6b5 !important;
+  fill: #b8dbc1 !important;
 }
 .building-layer [id='STUDENT_UNION'].is-active *,
 .building-layer [id='HYUUT_GIL'].is-active *,
@@ -111,13 +111,13 @@ svg {
 .building-layer [id^='EDUCATION_BUILDING'].is-active *,
 .building-layer [id='WELCH_RYANG_AUDITORIUM'].is-active *,
 .building-layer [id='SENTENNIAL_MUSEUM'].is-active * {
-  stroke: #81b783 !important;
+  stroke: #97c198 !important;
 }
 
 /* SPORT_TRACK은 <path> 직접 요소 */
 .building-layer [id='SPORT_TRACK'].is-active {
-  fill: #aad6b5 !important;
-  stroke: #81b783 !important;
+  fill: #b8dbc1 !important;
+  stroke: #97c198 !important;
 }
 
 /* BOOTH active — #FEFCE8 배경, #FEE685 테두리, #FD9A00 숫자 */
