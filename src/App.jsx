@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
 // 레이아웃
@@ -29,7 +30,6 @@ import MyPage from '@/pages/my/MyPage';
 import ScrapPage from '@/pages/my/ScrapPage';
 
 // 지도
-import MapPage from '@/pages/map/MapPage';
 import BoothListSheet from '@/features/booth/BoothListSheet';
 import BoothDetailSheet from '@/features/booth/BoothDetailSheet';
 import ShowListSheet from '@/features/show/ShowListSheet';
@@ -37,12 +37,13 @@ import ShowDetailSheet from '@/features/show/ShowDetailSheet';
 import EtcSheet from '@/features/EtcSheet';
 import BarrierFreeSheet from '@/features/BarrierFreeSheet';
 
-// 관리자
-import AdminConfirmPage from '@/pages/admin/AdminConfirmPage';
-import MyBoothPage from '@/pages/admin/MyBoothPage';
-import MyShowPage from '@/pages/admin/MyShowPage';
-import BoothEditPage from '@/pages/admin/BoothEditPage';
-import ShowEditPage from '@/pages/admin/ShowEditPage';
+// 무거운 라우트: 코드 스플리팅 (지도 - react-zoom-pan-pinch / 관리자 페이지)
+const MapPage = lazy(() => import('@/pages/map/MapPage'));
+const AdminConfirmPage = lazy(() => import('@/pages/admin/AdminConfirmPage'));
+const MyBoothPage = lazy(() => import('@/pages/admin/MyBoothPage'));
+const MyShowPage = lazy(() => import('@/pages/admin/MyShowPage'));
+const BoothEditPage = lazy(() => import('@/pages/admin/BoothEditPage'));
+const ShowEditPage = lazy(() => import('@/pages/admin/ShowEditPage'));
 
 function App() {
   const showLoginSheet = useAuthStore((s) => s.showLoginSheet);
@@ -54,51 +55,50 @@ function App() {
 
   return (
     <main className="app">
-      <Routes>
-        {/* 네비게이션바 X */}
-        <Route path="search" element={<SearchPage />} />
+      <Suspense fallback={null}>
+        <Routes>
+          {/* 네비게이션바 X */}
+          <Route path="search" element={<SearchPage />} />
 
-        {/* 네비게이션바 O */}
-        <Route element={<NavigationBarLayout />}>
-          {/* 홈 */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/kakao-redirect" element={<KakaoRedirect />} />
-          <Route path="credit" element={<CreditPage />} />
+          {/* 네비게이션바 O */}
+          <Route element={<NavigationBarLayout />}>
+            {/* 홈 */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/kakao-redirect" element={<KakaoRedirect />} />
+            <Route path="credit" element={<CreditPage />} />
 
-          {/* 마이 */}
-          <Route path="my" element={<MyPage />} />
-          <Route
-            path="my/scrap"
-            element={isLoggedIn ? <ScrapPage /> : <Navigate to="/my" replace />}
-          />
+            {/* 마이 */}
+            <Route path="my" element={<MyPage />} />
+            <Route
+              path="my/scrap"
+              element={isLoggedIn ? <ScrapPage /> : <Navigate to="/my" replace />}
+            />
 
-          {/* 지도 */}
-          <Route path="map" element={<MapPage />}>
-            <Route path="booths" element={<BoothListSheet />} />
-            <Route path="booths/:id" element={<BoothDetailSheet />} />
-            <Route path="shows" element={<ShowListSheet />} />
-            <Route path="shows/:id" element={<ShowDetailSheet />} />
-            <Route path="etc" element={<EtcSheet />} />
-            <Route path="barrierfree" element={<BarrierFreeSheet />} />
+            {/* 지도 */}
+            <Route path="map" element={<MapPage />}>
+              <Route path="booths" element={<BoothListSheet />} />
+              <Route path="booths/:id" element={<BoothDetailSheet />} />
+              <Route path="shows" element={<ShowListSheet />} />
+              <Route path="shows/:id" element={<ShowDetailSheet />} />
+              <Route path="etc" element={<EtcSheet />} />
+              <Route path="barrierfree" element={<BarrierFreeSheet />} />
+            </Route>
+
+            <Route path="map/booths/:id/notice" element={<NoticePage />} />
+            <Route path="map/shows/:id/notice" element={<NoticePage />} />
           </Route>
 
-          <Route path="map/booths/:id/notice" element={<NoticePage />} />
-          <Route path="map/shows/:id/notice" element={<NoticePage />} />
-        </Route>
-
-        <Route
-          path="admin"
-          element={isLoggedIn ? <Outlet /> : <Navigate to="/my" replace />}
-        >
-          <Route path="confirm" element={<AdminConfirmPage />} />
-          <Route path="booth/:id" element={<MyBoothPage />} />
-          <Route path="booth/:id/edit" element={<BoothEditPage />} />
-          <Route path="booth/:id/notice" element={<NoticePage />} />
-          <Route path="show/:id" element={<MyShowPage />} />
-          <Route path="show/:id/edit" element={<ShowEditPage />} />
-          <Route path="show/:id/notice" element={<NoticePage />} />
-        </Route>
-      </Routes>
+          <Route path="admin" element={isLoggedIn ? <Outlet /> : <Navigate to="/my" replace />}>
+            <Route path="confirm" element={<AdminConfirmPage />} />
+            <Route path="booth/:id" element={<MyBoothPage />} />
+            <Route path="booth/:id/edit" element={<BoothEditPage />} />
+            <Route path="booth/:id/notice" element={<NoticePage />} />
+            <Route path="show/:id" element={<MyShowPage />} />
+            <Route path="show/:id/edit" element={<ShowEditPage />} />
+            <Route path="show/:id/notice" element={<NoticePage />} />
+          </Route>
+        </Routes>
+      </Suspense>
 
       {/* ⚙️ 전역 상태 관리 */}
       {/* 로딩 */}

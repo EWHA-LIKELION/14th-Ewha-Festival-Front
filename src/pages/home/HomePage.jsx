@@ -17,9 +17,11 @@ const HomePage = () => {
     <>
       {/* 축제 포스터 */}
       <img
-        className="w-full"
+        className="h-auto w-full"
         src="/images/home-poster.webp"
         alt="home-poster"
+        width={784}
+        height={1720}
         fetchPriority="high"
       />
       {/* 축준위 인스타 바로가기 */}
