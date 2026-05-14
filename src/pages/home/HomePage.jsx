@@ -18,7 +18,7 @@ const HomePage = () => {
       {/* 축제 포스터 */}
       <img
         className="w-full"
-        src="/images/home-poster.png"
+        src="/images/home-poster.webp"
         alt="home-poster"
         fetchPriority="high"
       />
