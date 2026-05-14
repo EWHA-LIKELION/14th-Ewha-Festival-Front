@@ -220,23 +220,16 @@ const ShowDetailSheet = () => {
                     SNS
                   </h3>
                   <div className="flex items-center gap-2.5">
-                    {snsLinks.instagram && (
-                      <img
-                        src="/icons/logo-instagramcolor.svg"
-                        className="h-7 w-7 cursor-pointer rounded-md"
-                        onClick={() => window.open(snsLinks.instagram, '_blank')}
-                      />
-                    )}
-
-                    {snsLinks.kakaotalk && (
-                      <img
-                        src="/icons/logo-kakaotalkcolor.svg"
-                        className="h-7 w-7 cursor-pointer rounded-md"
-                        onClick={() => window.open(snsLinks.kakaotalk, '_blank')}
-                      />
-                    )}
-
-                    {!snsLinks.instagram && !snsLinks.kakaotalk && (
+                    {snsLinks.length > 0 ? (
+                      snsLinks.map((sns) => (
+                        <img
+                          key={sns.url}
+                          src={sns.icon}
+                          className="h-7 w-7 cursor-pointer rounded-md"
+                          onClick={() => window.open(sns.url, '_blank')}
+                        />
+                      ))
+                    ) : (
                       <p className="text-sm leading-5 font-normal text-zinc-500">-</p>
                     )}
                   </div>

@@ -114,7 +114,7 @@ const ProductItem = ({
       )}
 
       {/* 가격 */}
-      <div className="flex w-full items-start self-stretch pb-5.5">
+      <div className="flex w-full items-start self-stretch">
         <h3 className="flex w-9 items-start pr-2 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
           가격
         </h3>
@@ -135,7 +135,7 @@ const ProductItem = ({
       )}
 
       {/* 사진 */}
-      <div className="flex w-full items-end justify-between self-stretch">
+      <div className="flex w-full items-end justify-between self-stretch pt-5.5">
         <div className="flex items-start">
           <h2 className="flex w-9 pr-2 text-sm leading-5 font-semibold tracking-normal text-zinc-800">
             사진

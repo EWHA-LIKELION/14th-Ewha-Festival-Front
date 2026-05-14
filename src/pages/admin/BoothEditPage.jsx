@@ -28,6 +28,7 @@ import Timepicker from '@/components/Timepicker';
 import Button from '@/components/Button';
 import { FESTIVAL_TIME } from '@/constants/time';
 import { resolveMediaUrl } from '@/utils/mediaUrl';
+import { isSnsUrl } from '@/utils/snsHelper';
 
 const ERROR_TEXT_CLASS = 'text-xs font-normal leading-4 font-normal tracking-0';
 const ERROR_TEXT_STYLE = {
@@ -391,6 +392,8 @@ const BoothEditPage = () => {
       name: '',
       category: '',
       schedule: '',
+      snsInstagram: '',
+      snsKakao: '',
       notices: [],
       items: [],
     };
@@ -399,6 +402,11 @@ const BoothEditPage = () => {
     if (selectedCategories.length === 0) newErrors.category = '카테고리를 1개 이상 선택해주세요.';
     if (!Object.values(schedule).some((d) => d.checked))
       newErrors.schedule = '운영 시간을 1개 이상 선택해주세요.';
+
+    if (form.snsInstagram.trim() && !isSnsUrl(form.snsInstagram))
+      newErrors.snsInstagram = '인스타그램 또는 카카오 URL을 입력해주세요.';
+    if (form.snsKakao.trim() && !isSnsUrl(form.snsKakao))
+      newErrors.snsKakao = '인스타그램 또는 카카오 URL을 입력해주세요.';
 
     newErrors.notices = notices.map((n) => ({
       title: !n.title.trim() ? '제목을 입력해주세요.' : '',
@@ -415,6 +423,8 @@ const BoothEditPage = () => {
       !newErrors.name &&
       !newErrors.category &&
       !newErrors.schedule &&
+      !newErrors.snsInstagram &&
+      !newErrors.snsKakao &&
       newErrors.notices.every((n) => !n.title && !n.content) &&
       newErrors.items.every((i) => !i.name && !i.description && !i.price);
 
@@ -535,7 +545,7 @@ const BoothEditPage = () => {
     }
 
     // 8. sns
-    const currentSns = [form.snsKakao, form.snsInstagram].filter((v) => v && v.trim() !== '');
+    const currentSns = [form.snsInstagram, form.snsKakao].filter((v) => v && v.trim() !== '');
 
     formData.append('sns', JSON.stringify(currentSns));
 
@@ -763,8 +773,14 @@ const BoothEditPage = () => {
                       value={form.snsInstagram}
                       onChange={(value) => handleChange('snsInstagram', value)}
                       placeholder="https://www.instagram.com/"
+                      error={!!errors.snsInstagram}
                     />
                   </div>
+                  {errors.snsInstagram && (
+                    <p className={`${ERROR_TEXT_CLASS} -mt-1.5 pl-9.5`} style={ERROR_TEXT_STYLE}>
+                      {errors.snsInstagram}
+                    </p>
+                  )}
                   <div className="flex items-center gap-3 self-stretch">
                     <img src="/icons/logo-kakaotalkcolor.svg" className="rounded-md" />
                     <Input
@@ -772,8 +788,14 @@ const BoothEditPage = () => {
                       value={form.snsKakao}
                       onChange={(value) => handleChange('snsKakao', value)}
                       placeholder="http://pf.kakao.com/"
+                      error={!!errors.snsKakao}
                     />
                   </div>
+                  {errors.snsKakao && (
+                    <p className={`${ERROR_TEXT_CLASS} -mt-1.5 pl-9.5`} style={ERROR_TEXT_STYLE}>
+                      {errors.snsKakao}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
