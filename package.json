@@ -15,6 +15,7 @@
     "@tanstack/react-query-devtools": "^5.100.1",
     "autoprefixer": "^10.4.23",
     "axios": "^1.13.2",
+    "browser-image-compression": "^2.0.2",
     "postcss": "^8.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

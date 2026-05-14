@@ -14,6 +14,7 @@ import { useMyProfile, useScrollToTop } from '@/hooks';
 import Header from '@/components/Header';
 import Button from '@/components/Button';
 import ImageCard from '@/components/Card/ImageCard';
+import { resolveMediaUrl } from '@/utils/mediaUrl';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -165,7 +166,7 @@ const MyPage = () => {
                 <ImageCard
                   key={scrap.id}
                   name={scrap.name}
-                  image={scrap.thumbnail}
+                  image={resolveMediaUrl(scrap.thumbnail)}
                   onClick={() => goScrapDetail(scrap.target_id)}
                 />
               ))}

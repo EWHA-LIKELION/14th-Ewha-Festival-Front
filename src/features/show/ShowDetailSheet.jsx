@@ -24,6 +24,7 @@ import Divider from '@/components/Divider';
 import NoticeCard from '@/components/Card/NoticeCard';
 import Tab from '@/components/Tab';
 import SetlistCard from '@/components/Card/SetlistCard';
+import { resolveMediaUrl } from '@/utils/mediaUrl';
 
 const ShowDetailSheet = () => {
   const { id } = useParams();
@@ -98,10 +99,10 @@ const ShowDetailSheet = () => {
           <>
             <Header left="back" />
             <img
-              src={show.thumbnail || '/images/default-image-large.png'}
+              src={resolveMediaUrl(show.thumbnail) || '/images/default-image-large.png'}
               className={`${show.thumbnail ? 'cursor-pointer' : 'cursor-default'} flex aspect-49/30 w-full items-center justify-center object-cover`}
               onClick={() => {
-                if (show.thumbnail) openImageModal(show.thumbnail);
+                if (show.thumbnail) openImageModal(resolveMediaUrl(show.thumbnail));
               }}
             />
           </>
@@ -197,7 +198,7 @@ const ShowDetailSheet = () => {
                           <img src="/icons/icon-eclipse-gray.svg" />
                           <button
                             className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
-                            onClick={() => openImageModal(show.roadview)}
+                            onClick={() => openImageModal(resolveMediaUrl(show.roadview))}
                           >
                             로드뷰
                           </button>

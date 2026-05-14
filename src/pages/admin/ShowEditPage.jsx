@@ -27,6 +27,7 @@ import TextArea from '@/components/Input/TextArea';
 import Timepicker from '@/components/Timepicker';
 import Button from '@/components/Button';
 import { FESTIVAL_TIME } from '@/constants/time';
+import { resolveMediaUrl } from '@/utils/mediaUrl';
 
 const ERROR_TEXT_CLASS = 'text-xs font-normal leading-4 font-normal tracking-0';
 const ERROR_TEXT_STYLE = {
@@ -89,6 +90,7 @@ const ShowEditPage = () => {
     image: detailImage,
     file: detailFile,
     isDeleted: isRoadviewDeleted,
+    isCompressing: isDetailCompressing,
     onSelectFile: onDetailChange,
     clearImage: clearDetailImage,
   } = useImageUploader(originData?.roadview);
@@ -97,6 +99,7 @@ const ShowEditPage = () => {
     image: thumbnailImage,
     file: thumbnailFile,
     isDeleted: isThumbnailDeleted,
+    isCompressing: isThumbnailCompressing,
     onSelectFile: onThumbnailChange,
     clearImage: clearThumbnailImage,
   } = useImageUploader(originData?.thumbnail);
@@ -113,17 +116,10 @@ const ShowEditPage = () => {
   useEffect(() => {
     if (!showData || !noticesData || originData) return;
 
-    const sanitizeUrl = (url) => {
-      if (!url) return url;
-      return url
-        .replace(/^http:\/\//, 'https://')
-        .replace(/[^:/?#]+(?=[/?#]|$)/g, (segment) => encodeURIComponent(segment));
-    };
-
     const safeData = {
       ...showData,
-      thumbnail: sanitizeUrl(showData.thumbnail),
-      roadview: sanitizeUrl(showData.roadview),
+      thumbnail: resolveMediaUrl(showData.thumbnail),
+      roadview: resolveMediaUrl(showData.roadview),
     };
 
     setOriginData(safeData);
@@ -493,7 +489,7 @@ const ShowEditPage = () => {
         left="back"
         right="save"
         onSave={handleSave}
-        saveDisabled={!isFormValid}
+        saveDisabled={!isFormValid || isThumbnailCompressing || isDetailCompressing}
         onBack={handleBack}
       />
 
@@ -502,6 +498,7 @@ const ShowEditPage = () => {
           image={thumbnailImage}
           onChange={onThumbnailChange}
           onRemove={() => handleClickRemove(clearThumbnailImage)}
+          isLoading={isThumbnailCompressing}
         />
 
         <div className="flex w-full flex-col items-center gap-6 px-5 pt-5 pb-6">
@@ -648,6 +645,7 @@ const ShowEditPage = () => {
                     image={detailImage}
                     onChange={onDetailChange}
                     onRemove={() => handleClickRemove(clearDetailImage)}
+                    isLoading={isDetailCompressing}
                   />
                 </div>
 
