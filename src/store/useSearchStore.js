@@ -24,7 +24,7 @@ const useSearchStore = create(
 
           // 중복 제거 (기존에 있으면 삭제)
           const filtered = state.recentSearches.filter((item) => item !== trimmed);
-          // 최상단에 추가 + 최대 10개 유지
+          // 최상단에 추가 + 최대 5개 유지
           return { recentSearches: [trimmed, ...filtered].slice(0, 5) };
         }),
 
@@ -36,6 +36,8 @@ const useSearchStore = create(
     }),
     {
       name: 'search-store',
+      // searchQuery는 저장하지 않음 (재방문 시 검색창 초기화)
+      partialize: (state) => ({ recentSearches: state.recentSearches }),
     },
   ),
 );
