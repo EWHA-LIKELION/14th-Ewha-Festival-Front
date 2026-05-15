@@ -57,12 +57,15 @@ const BoothCard = ({ booth, onClick }) => {
       </p>
 
       {/* 이미지 미리보기 */}
-      <div className="mt-2.5 flex items-center gap-2 p-0">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="scrollbar-hide mt-2.5 flex w-full items-center gap-2 overflow-x-auto overflow-y-hidden p-0"
+      >
         {/* 썸네일 */}
         <img
           src={resolveMediaUrl(thumbnail) || '/icons/default-image.svg'}
           alt={name}
-          className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
+          className="h-20 w-20 shrink-0 rounded-md border border-zinc-100 object-cover"
         />
 
         {/* 상품 이미지 (최대 3개) */}
@@ -72,7 +75,7 @@ const BoothCard = ({ booth, onClick }) => {
               key={idx}
               src={resolveMediaUrl(img)}
               alt={`${name} 상품 ${idx + 1}`}
-              className="h-20 w-20 rounded-md border border-zinc-100 object-cover"
+              className="h-20 w-20 shrink-0 rounded-md border border-zinc-100 object-cover"
             />
           ))}
       </div>
