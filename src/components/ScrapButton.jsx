@@ -48,6 +48,7 @@ const ScrapButton = ({
 
   const scrapQueryKey = type === 'show' ? ['myScrapShows'] : ['myScrapBooths'];
   const listQueryKey = type === 'show' ? ['shows'] : ['booths'];
+  const detailQueryKey = type === 'show' ? ['show', id] : ['booth', id];
 
   // TanStack Query useMutation으로 스크랩 토글
   const mutation = useMutation({
@@ -84,10 +85,12 @@ const ScrapButton = ({
       return { previousScrapped, previousCount };
     },
 
-    // 성공 시: 서버와 동기화
+    // 성공 시: 서버와 동기화 (모든 관련 캐시 무효화)
     onSuccess: (_data, _variables, context) => {
       queryClient.invalidateQueries({ queryKey: listQueryKey });
       queryClient.invalidateQueries({ queryKey: scrapQueryKey });
+      queryClient.invalidateQueries({ queryKey: detailQueryKey });
+      queryClient.invalidateQueries({ queryKey: ['searchResults'] });
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
 
       if (onToggle) onToggle(!context.previousScrapped);

@@ -24,6 +24,8 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
   const startYRef = useRef(0);
   const startHeightRef = useRef(0);
   const dragHeightRef = useRef(null);
+  const internalScrollRef = useRef(null);
+  const containerRef = scrollContainerRef || internalScrollRef;
 
   const handlePointerDown = useCallback(
     (e) => {
@@ -76,12 +78,14 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
   })();
 
   useEffect(() => {
-    const el = scrollContainerRef?.current;
+    const el = containerRef?.current;
     if (!el) return;
 
     let lastTouchY = null;
 
     const handleTouchStart = (e) => {
+      // touchstart 단계부터 막아야 외부(지도 라이브러리)가 팬 추적을 시작하지 않음
+      e.stopPropagation();
       lastTouchY = e.touches[0].clientY;
     };
 
@@ -123,11 +127,19 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
       }
     };
 
+    // Pointer Events도 함께 차단 (react-zoom-pan-pinch가 내부적으로 pointer 사용)
+    const stopPointer = (e) => {
+      e.stopPropagation();
+    };
+
     el.addEventListener('touchstart', handleTouchStart, { passive: true });
     el.addEventListener('touchmove', handleTouchMove, { passive: false });
     el.addEventListener('touchend', handleTouchEnd, { passive: true });
     el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
     el.addEventListener('wheel', handleWheel, { passive: false });
+    el.addEventListener('pointerdown', stopPointer);
+    el.addEventListener('pointermove', stopPointer);
+    el.addEventListener('pointerup', stopPointer);
 
     return () => {
       el.removeEventListener('touchstart', handleTouchStart);
@@ -135,8 +147,11 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
       el.removeEventListener('touchend', handleTouchEnd);
       el.removeEventListener('touchcancel', handleTouchEnd);
       el.removeEventListener('wheel', handleWheel);
+      el.removeEventListener('pointerdown', stopPointer);
+      el.removeEventListener('pointermove', stopPointer);
+      el.removeEventListener('pointerup', stopPointer);
     };
-  }, [scrollContainerRef]);
+  }, [containerRef]);
 
   return (
     <div
@@ -160,7 +175,7 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
 
       {/* 헤더 영역 padding */}
       <div
-        ref={scrollContainerRef}
+        ref={containerRef}
         className={`relative w-full flex-1 overflow-y-auto ${isFull ? 'pt-18' : ''}`}
         style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
       >
