@@ -10,19 +10,15 @@ import useFilterStore from '@/store/useFilterStore';
 import useLoadingStore from '@/store/useLoadingStore';
 import { useMyScrapShows } from '@/hooks';
 
-import FilterBar from '@/components/FilterBar';
-import Checkbox from '@/components/Checkbox';
-import DropDown from '@/components/DropDown';
 import ShowCard from '@/components/Card/ShowCard';
 
 const ScrapShow = () => {
   const navigate = useNavigate();
 
   const scrapShowFilters = useFilterStore((s) => s.filters.scrap_show);
-  const setFilter = useFilterStore((s) => s.setFilter);
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
-  const { shows, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { shows, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMyScrapShows(scrapShowFilters);
 
   const { showLoading, hideLoading } = useLoadingStore();
@@ -31,10 +27,6 @@ const ScrapShow = () => {
     else hideLoading();
     return () => hideLoading();
   }, [isLoading]);
-
-  const handleShowExcludeEndedChange = (value) => {
-    setFilter('scrap_show', 'excludeEnded', value);
-  };
 
   const goShowDetail = (scrapId) => {
     setSheetSize('full');
@@ -61,21 +53,6 @@ const ScrapShow = () => {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <FilterBar type="scrap_show" />
-        <div className="flex items-center justify-between text-sm font-normal text-zinc-500">
-          총 {totalCount}개
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              종료 제외
-              <Checkbox
-                isSelected={scrapShowFilters.excludeEnded}
-                onChange={handleShowExcludeEndedChange}
-              />
-            </div>
-            <DropDown type="scrap_show" />
-          </div>
-        </div>
-
         {/* 에러 */}
         {isError && (
           <div className="py-24 text-center text-zinc-300">데이터를 불러오는데 실패했습니다.</div>

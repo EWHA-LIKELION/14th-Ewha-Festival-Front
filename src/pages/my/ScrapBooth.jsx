@@ -10,19 +10,15 @@ import useFilterStore from '@/store/useFilterStore';
 import useLoadingStore from '@/store/useLoadingStore';
 import { useMyScrapBooths } from '@/hooks';
 
-import FilterBar from '@/components/FilterBar';
-import Checkbox from '@/components/Checkbox';
-import DropDown from '@/components/DropDown';
 import BoothCard from '@/components/Card/BoothCard';
 
 const ScrapBooth = () => {
   const navigate = useNavigate();
 
   const scrapBoothFilters = useFilterStore((s) => s.filters.scrap_booth);
-  const setFilter = useFilterStore((s) => s.setFilter);
   const setSheetSize = useBottomsheetStore((s) => s.setSheetSize);
 
-  const { booths, totalCount, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { booths, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMyScrapBooths(scrapBoothFilters);
 
   const { showLoading, hideLoading } = useLoadingStore();
@@ -31,10 +27,6 @@ const ScrapBooth = () => {
     else hideLoading();
     return () => hideLoading();
   }, [isLoading]);
-
-  const handleBoothExcludeEndedChange = (value) => {
-    setFilter('scrap_booth', 'excludeEnded', value);
-  };
 
   const goBoothDetail = (scrapId) => {
     setSheetSize('full');
@@ -63,21 +55,6 @@ const ScrapBooth = () => {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <FilterBar type="scrap_booth" />
-        <div className="flex items-center justify-between text-sm font-normal text-zinc-500">
-          총 {totalCount}개
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              종료 제외
-              <Checkbox
-                isSelected={scrapBoothFilters.excludeEnded}
-                onChange={handleBoothExcludeEndedChange}
-              />
-            </div>
-            <DropDown type="scrap_booth" />
-          </div>
-        </div>
-
         {/* 에러 */}
         {isError && (
           <div className="py-24 text-center text-zinc-300">데이터를 불러오는데 실패했습니다.</div>
