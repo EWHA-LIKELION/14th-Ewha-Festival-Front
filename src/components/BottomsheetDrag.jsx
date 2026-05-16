@@ -50,12 +50,14 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
         dragHeightRef.current = null;
         setDragHeight(null);
         setIsDragging(false);
-        document.removeEventListener('pointermove', handlePointerMove);
-        document.removeEventListener('pointerup', handlePointerUp);
+        // capture phase로 등록한 것은 capture phase로 제거해야 함
+        document.removeEventListener('pointermove', handlePointerMove, true);
+        document.removeEventListener('pointerup', handlePointerUp, true);
       };
 
-      document.addEventListener('pointermove', handlePointerMove);
-      document.addEventListener('pointerup', handlePointerUp);
+      // capture phase로 등록 → 스크롤 컨테이너의 stopPropagation보다 먼저 실행되어 드래그 추적이 끊기지 않음
+      document.addEventListener('pointermove', handlePointerMove, true);
+      document.addEventListener('pointerup', handlePointerUp, true);
     },
     [sheetSize, setSheetSize, setIsDragging],
   );
