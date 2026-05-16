@@ -96,9 +96,16 @@ const EtcSheet = () => {
       </div>
       <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
         {isFull && <Header left="back" center="title" centerTitle="기타시설" isSheet />}
-        <div className="flex flex-col gap-4 px-5 py-5">
-          <FilterBar type="etc" />
-          <p className="text-sm font-normal text-zinc-500">총 {filteredData.length}개</p>
+        <div className="flex flex-col gap-2 px-5 py-5">
+          {/* 상단 고정 영역 (full 모드에서 sticky) */}
+          <div
+            className={`flex flex-col gap-4 ${
+              isFull ? 'sticky top-0 z-10 -mx-5 -mt-5 bg-white px-5 pt-5 pb-2' : ''
+            }`}
+          >
+            <FilterBar type="etc" />
+            <p className="text-sm font-normal text-zinc-500">총 {filteredData.length}개</p>
+          </div>
           <div className="flex flex-col gap-10">
             {Object.entries(grouped).map(([location, items]) => (
               <div key={location} className="flex flex-col gap-2">

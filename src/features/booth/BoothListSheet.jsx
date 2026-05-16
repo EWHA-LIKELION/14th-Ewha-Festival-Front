@@ -82,10 +82,15 @@ const BoothListSheet = () => {
       </div>
       <BottomsheetDrag scrollContainerRef={scrollContainerRef}>
         {isFull && <Header center="search" />}
-        <div className="flex h-full flex-col gap-4 p-5">
-          <Tab tabs={['부스', '공연']} activeIndex={activeTabIndex} onChange={handleTabChange} />
-          <FilterBar type="booth" />
-          <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex min-h-full flex-col p-5">
+          {/* 상단 고정 영역 (full 모드에서 sticky) */}
+          <div
+            className={`flex flex-col gap-4 ${
+              isFull ? 'sticky top-0 z-10 -mx-5 -mt-5 bg-white px-5 pt-5' : ''
+            }`}
+          >
+            <Tab tabs={['부스', '공연']} activeIndex={activeTabIndex} onChange={handleTabChange} />
+            <FilterBar type="booth" />
             <div className="flex items-center justify-between text-sm font-normal text-zinc-500">
               총 {totalCount}개
               <div className="flex items-center gap-2">
@@ -99,7 +104,9 @@ const BoothListSheet = () => {
                 <DropDown type="booth" />
               </div>
             </div>
+          </div>
 
+          <div className="flex min-h-0 flex-1 flex-col">
             {/* 로딩 */}
             {isLoading && (
               <div className="flex h-full items-center justify-center">
