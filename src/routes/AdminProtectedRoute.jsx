@@ -7,12 +7,10 @@ const AdminProtectedRoute = ({ children, type }) => {
 
   if (isLoading) return null;
 
-  const targetId = Number(id);
-
   const hasPermission =
     type === 'booth'
-      ? myData?.managed_booths?.some((booth) => booth.id === targetId)
-      : myData?.managed_shows?.some((show) => show.id === targetId);
+      ? myData?.managed_booths?.some((booth) => booth.id === id)
+      : myData?.managed_shows?.some((show) => show.id === id);
 
   if (!hasPermission) {
     return <Navigate to="/admin/confirm" replace />;
