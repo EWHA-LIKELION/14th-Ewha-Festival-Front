@@ -1,6 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
+// 라우트
+import AdminProtectedRoute from '@/routes/AdminProtectedRoute';
+
 // 레이아웃
 import NavigationBarLayout from '@/layouts/NavigationBarLayout';
 
@@ -90,12 +93,42 @@ function App() {
 
           <Route path="admin" element={isLoggedIn ? <Outlet /> : <Navigate to="/my" replace />}>
             <Route path="confirm" element={<AdminConfirmPage />} />
-            <Route path="booth/:id" element={<MyBoothPage />} />
-            <Route path="booth/:id/edit" element={<BoothEditPage />} />
-            <Route path="booth/:id/notice" element={<NoticePage />} />
-            <Route path="show/:id" element={<MyShowPage />} />
-            <Route path="show/:id/edit" element={<ShowEditPage />} />
-            <Route path="show/:id/notice" element={<NoticePage />} />
+
+            <Route
+              path="booth/:id"
+              element={
+                <AdminProtectedRoute type="booth">
+                  <MyBoothPage />
+                </AdminProtectedRoute>
+              }
+            />
+
+            <Route
+              path="booth/:id/edit"
+              element={
+                <AdminProtectedRoute type="booth">
+                  <BoothEditPage />
+                </AdminProtectedRoute>
+              }
+            />
+
+            <Route
+              path="show/:id"
+              element={
+                <AdminProtectedRoute type="show">
+                  <MyShowPage />
+                </AdminProtectedRoute>
+              }
+            />
+
+            <Route
+              path="show/:id/edit"
+              element={
+                <AdminProtectedRoute type="show">
+                  <ShowEditPage />
+                </AdminProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </Suspense>
