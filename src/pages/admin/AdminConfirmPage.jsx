@@ -55,9 +55,13 @@ const AdminConfirmPage = () => {
     }
   };
 
+  const goMyPage = () => {
+    navigate(`/my`);
+  };
+
   return (
     <>
-      <Header left="back" center="title" centerTitle="관리자 인증하기" />
+      <Header left="back" center="title" centerTitle="관리자 인증하기" onBack={goMyPage} />
 
       <div className="flex flex-col items-start justify-between px-5 pt-23">
         <div className="flex flex-col items-start gap-3 self-stretch">
