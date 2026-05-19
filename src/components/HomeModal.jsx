@@ -1,11 +1,11 @@
 /**
- * HomeAlert 컴포넌트
+ * HomeModal 컴포넌트
  */
 
 import { useState } from 'react';
 import Checkbox from '@/components/Checkbox';
 
-const HomeAlert = ({ onClose }) => {
+const HomeModal = ({ onClose }) => {
   const [hide, setHide] = useState(false);
 
   const handleClose = () => {
@@ -50,4 +50,4 @@ const HomeAlert = ({ onClose }) => {
   );
 };
 
-export default HomeAlert;
+export default HomeModal;

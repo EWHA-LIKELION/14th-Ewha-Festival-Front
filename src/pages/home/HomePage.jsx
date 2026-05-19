@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import ImageCard from '@/components/Card/ImageCard';
 import { useScrollToTop } from '@/hooks';
 import { useEffect, useState } from 'react';
-import HomeAlert from '@/components/HomeAlert';
+import HomeModal from '@/components/HomeModal';
 
 const HomePage = () => {
   useScrollToTop();
@@ -30,7 +30,7 @@ const HomePage = () => {
     <>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <HomeAlert onClose={() => setShowModal(false)} />
+          <HomeModal onClose={() => setShowModal(false)} />
         </div>
       )}
 
