@@ -134,9 +134,30 @@ const MapPage = () => {
           const localScreenX = midX - rect.left;
           const localScreenY = midY - rect.top;
           const { positionX, positionY, scale } = savedTransform;
-          const originX = (localScreenX - positionX) / scale;
-          const originY = (localScreenY - positionY) / scale;
-          rotationOriginRef.current = { x: originX, y: originY };
+          const newOriginX = (localScreenX - positionX) / scale;
+          const newOriginY = (localScreenY - positionY) / scale;
+
+          // origin 변경 시 라이브러리의 translate를 보정해 시각적 점프 방지
+          const oldOrigin = rotationOriginRef.current;
+          const R = rotationRef.current;
+          if (oldOrigin && R !== 0) {
+            const Rrad = (R * Math.PI) / 180;
+            const cosR = Math.cos(Rrad);
+            const sinR = Math.sin(Rrad);
+            const dx = oldOrigin.x - newOriginX;
+            const dy = oldOrigin.y - newOriginY;
+            // (I - Rot(R)) * (dx, dy)
+            const compX = dx - (dx * cosR - dy * sinR);
+            const compY = dy - (dx * sinR + dy * cosR);
+            const newPosX = positionX + scale * compX;
+            const newPosY = positionY + scale * compY;
+            transformRef.current?.setTransform(newPosX, newPosY, scale, 0);
+            // savedTransform도 즉시 동기화 (다음 onTransformed 콜백 전 race condition 방지)
+            savedTransform.positionX = newPosX;
+            savedTransform.positionY = newPosY;
+          }
+
+          rotationOriginRef.current = { x: newOriginX, y: newOriginY };
           applyTransform();
         }
       }
