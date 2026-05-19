@@ -52,6 +52,7 @@ const MapPage = () => {
 
   const navigate = useNavigate();
   const buildingLayerRef = useRef(null);
+  const labelLayerRef = useRef(null);
   const poisLayerRef = useRef(null);
 
   const [activePOIId, setActivePOIId] = useState(null);
@@ -61,6 +62,8 @@ const MapPage = () => {
   const rotationRef = useRef(0); // 각도(deg)
   const rotationOriginRef = useRef(null); // { x, y } 로컬 좌표 or null
   const lastAngleRef = useRef(null);
+  // 라벨 카운터 회전을 위한 그룹 캐시 — [{ element, cx, cy }]
+  const labelGroupsRef = useRef([]);
 
   const applyTransform = useCallback(() => {
     const el = svgContentRef.current;
@@ -69,7 +72,13 @@ const MapPage = () => {
     if (origin) {
       el.style.transformOrigin = `${origin.x}px ${origin.y}px`;
     }
-    el.style.transform = `rotate(${rotationRef.current}deg)`;
+    const angle = rotationRef.current;
+    el.style.transform = `rotate(${angle}deg)`;
+    // 각 라벨 그룹에 카운터 회전 적용 → 지도는 돌아도 라벨은 똑바로
+    const counter = -angle;
+    labelGroupsRef.current.forEach(({ element, cx, cy }) => {
+      element.setAttribute('transform', `rotate(${counter} ${cx} ${cy})`);
+    });
   }, []);
 
   const getRotationState = useCallback(
@@ -110,6 +119,54 @@ const MapPage = () => {
     document.addEventListener('wheel', preventZoom, { passive: false });
     return () => document.removeEventListener('wheel', preventZoom);
   }, []);
+
+  // labelSvg 로드 후: mask 기준으로 라벨 path들을 <g>로 그룹화 → 회전 시 카운터 회전 적용
+  useEffect(() => {
+    if (!labelSvg) return;
+    const layer = labelLayerRef.current;
+    if (!layer) return;
+    const svg = layer.querySelector('svg');
+    if (!svg) return;
+
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const masks = Array.from(svg.querySelectorAll('mask'));
+    const groups = [];
+
+    masks.forEach((mask) => {
+      const x = parseFloat(mask.getAttribute('x'));
+      const y = parseFloat(mask.getAttribute('y'));
+      const w = parseFloat(mask.getAttribute('width'));
+      const h = parseFloat(mask.getAttribute('height'));
+      if (isNaN(x) || isNaN(y) || isNaN(w) || isNaN(h)) return;
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+
+      // mask의 다음 형제부터 다음 mask 전까지의 path들을 라벨로 묶음
+      const paths = [];
+      let next = mask.nextElementSibling;
+      while (next && next.tagName.toLowerCase() !== 'mask') {
+        if (next.tagName.toLowerCase() === 'path') paths.push(next);
+        next = next.nextElementSibling;
+      }
+      if (paths.length === 0) return;
+
+      const g = document.createElementNS(SVG_NS, 'g');
+      g.setAttribute('data-label', 'true');
+      // 시작 위치는 회전 없음
+      g.setAttribute('transform', `rotate(0 ${cx} ${cy})`);
+      paths[0].parentNode.insertBefore(g, paths[0]);
+      paths.forEach((p) => g.appendChild(p));
+      groups.push({ element: g, cx, cy });
+    });
+
+    labelGroupsRef.current = groups;
+    // 현재 회전 각도가 0이 아니면 즉시 반영
+    if (rotationRef.current !== 0) applyTransform();
+
+    return () => {
+      labelGroupsRef.current = [];
+    };
+  }, [labelSvg, applyTransform]);
 
   // 두 손가락 회전 제스처 (react-zoom-pan-pinch의 pinch zoom과 동시에 작동)
   useEffect(() => {
@@ -518,6 +575,7 @@ const MapPage = () => {
               style={{ pointerEvents: 'auto' }}
             />
             <div
+              ref={labelLayerRef}
               className="pointer-events-none absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
               dangerouslySetInnerHTML={{ __html: labelSvg }}
             />
