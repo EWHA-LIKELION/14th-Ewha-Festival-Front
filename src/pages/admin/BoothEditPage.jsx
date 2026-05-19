@@ -153,7 +153,7 @@ const BoothEditPage = () => {
       snsInstagram: snsArray[1] || '',
     });
     setSelectedCategories(boothData.category || []);
-    setIsOpen(boothData.is_ongoing);
+    setIsOpen(boothData.is_ongoing ?? null);
 
     const newSchedule = DAYS.reduce(
       (acc, day) => ({
