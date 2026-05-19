@@ -124,17 +124,19 @@ const MapPage = () => {
       }
     };
 
-    // passive: true → preventDefault 불가, react-zoom-pan-pinch의 pinch는 그대로 작동
-    el.addEventListener('touchstart', handleTouchStart, { passive: true });
-    el.addEventListener('touchmove', handleTouchMove, { passive: true });
-    el.addEventListener('touchend', handleTouchEnd, { passive: true });
-    el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+    // capture: true → 라이브러리(react-zoom-pan-pinch)가 stopPropagation 해도 먼저 잡음
+    // passive: true → preventDefault 불가, 라이브러리의 pinch zoom은 그대로 작동
+    el.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: true, capture: true });
+    el.addEventListener('touchend', handleTouchEnd, { passive: true, capture: true });
+    el.addEventListener('touchcancel', handleTouchEnd, { passive: true, capture: true });
 
     return () => {
-      el.removeEventListener('touchstart', handleTouchStart);
-      el.removeEventListener('touchmove', handleTouchMove);
-      el.removeEventListener('touchend', handleTouchEnd);
-      el.removeEventListener('touchcancel', handleTouchEnd);
+      // capture phase로 등록했으니 제거도 동일하게
+      el.removeEventListener('touchstart', handleTouchStart, { capture: true });
+      el.removeEventListener('touchmove', handleTouchMove, { capture: true });
+      el.removeEventListener('touchend', handleTouchEnd, { capture: true });
+      el.removeEventListener('touchcancel', handleTouchEnd, { capture: true });
     };
   }, []);
 
