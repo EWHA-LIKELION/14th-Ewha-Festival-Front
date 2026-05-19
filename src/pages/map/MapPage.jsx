@@ -59,6 +59,7 @@ const MapPage = () => {
 
   const [activePOIId, setActivePOIId] = useState(null);
   const [rotation, setRotation] = useState(0);
+  const [rotationOrigin, setRotationOrigin] = useState('50% 50%');
   const lastAngleRef = useRef(null);
 
   const matchEtc = useMatch('/map/etc');
@@ -103,6 +104,17 @@ const MapPage = () => {
     const handleTouchStart = (e) => {
       if (e.touches.length === 2) {
         lastAngleRef.current = getAngle(e.touches);
+
+        // 현재 화면 중심에 위치한 SVG 로컬 좌표를 회전 축으로 설정
+        const rect = mapRef.current?.getBoundingClientRect();
+        if (rect) {
+          const cx = rect.width / 2;
+          const cy = rect.height / 2;
+          const { positionX, positionY, scale } = savedTransform;
+          const originX = (cx - positionX) / scale;
+          const originY = (cy - positionY) / scale;
+          setRotationOrigin(`${originX}px ${originY}px`);
+        }
       }
     };
 
@@ -452,7 +464,7 @@ const MapPage = () => {
             style={{
               aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}`,
               transform: `rotate(${rotation}deg)`,
-              transformOrigin: 'center center',
+              transformOrigin: rotationOrigin,
             }}
           >
             <img src="/map/map-background.svg" alt="map-background" className="h-full w-full" />
