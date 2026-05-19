@@ -58,6 +58,8 @@ const MapPage = () => {
   const poisLayerRef = useRef(null);
 
   const [activePOIId, setActivePOIId] = useState(null);
+  const [rotation, setRotation] = useState(0);
+  const lastAngleRef = useRef(null);
 
   const matchEtc = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
@@ -85,6 +87,55 @@ const MapPage = () => {
     };
     document.addEventListener('wheel', preventZoom, { passive: false });
     return () => document.removeEventListener('wheel', preventZoom);
+  }, []);
+
+  // 두 손가락 회전 제스처 (react-zoom-pan-pinch의 pinch zoom과 동시에 작동)
+  useEffect(() => {
+    const el = mapRef.current;
+    if (!el) return;
+
+    const getAngle = (touches) => {
+      const dx = touches[1].clientX - touches[0].clientX;
+      const dy = touches[1].clientY - touches[0].clientY;
+      return (Math.atan2(dy, dx) * 180) / Math.PI;
+    };
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        lastAngleRef.current = getAngle(e.touches);
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length === 2 && lastAngleRef.current !== null) {
+        const currentAngle = getAngle(e.touches);
+        let delta = currentAngle - lastAngleRef.current;
+        // 각도 wrap 처리 (예: 179 → -179)
+        if (delta > 180) delta -= 360;
+        if (delta < -180) delta += 360;
+        setRotation((prev) => prev + delta);
+        lastAngleRef.current = currentAngle;
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (e.touches.length < 2) {
+        lastAngleRef.current = null;
+      }
+    };
+
+    // passive: true → preventDefault 불가, react-zoom-pan-pinch의 pinch는 그대로 작동
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: true });
+    el.addEventListener('touchend', handleTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+      el.removeEventListener('touchend', handleTouchEnd);
+      el.removeEventListener('touchcancel', handleTouchEnd);
+    };
   }, []);
 
   const goEtc = () => {
@@ -394,7 +445,14 @@ const MapPage = () => {
         }}
       >
         <TransformComponent wrapperClass="!w-full !h-dvh overflow-hidden">
-          <div className="relative h-dvh" style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}>
+          <div
+            className="relative h-dvh"
+            style={{
+              aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}`,
+              transform: `rotate(${rotation}deg)`,
+              transformOrigin: 'center center',
+            }}
+          >
             <img src="/map/map-background.svg" alt="map-background" className="h-full w-full" />
             <div
               ref={buildingLayerRef}
