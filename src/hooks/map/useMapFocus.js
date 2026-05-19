@@ -6,14 +6,24 @@ const TOP_OFFSET = 108;
 
 // 시트는 CSS상 height = SHEET_SNAP_HEIGHTS[size] + env(safe-area-inset-bottom) 로 렌더되므로
 // 가시 영역 하단 경계 계산에도 safe-area-inset-bottom 만큼을 더해야 함
+// 매 호출마다 임시 div를 body에 붙이고 getBoundingClientRect를 읽으면 강제 리플로우가 발생하므로 캐시
+// safe-area inset은 orientation 변경 시에만 바뀌므로 resize 이벤트로 무효화
+let safeAreaInsetBottomCache = null;
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', () => {
+    safeAreaInsetBottomCache = null;
+  });
+}
 const getSafeAreaInsetBottom = () => {
   if (typeof document === 'undefined') return 0;
+  if (safeAreaInsetBottomCache !== null) return safeAreaInsetBottomCache;
   const el = document.createElement('div');
   el.style.cssText =
     'position:fixed;visibility:hidden;bottom:0;left:0;height:env(safe-area-inset-bottom);';
   document.body.appendChild(el);
   const h = el.getBoundingClientRect().height;
   document.body.removeChild(el);
+  safeAreaInsetBottomCache = h;
   return h;
 };
 
