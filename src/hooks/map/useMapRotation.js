@@ -206,13 +206,15 @@ const useMapRotation = ({
   }, [mapRef, transformRef, savedTransform, rotationRef, rotationOriginRef, applyTransform]);
 
   // labelSvg 로드 후: 그룹화 수행 (이미 그룹화돼있으면 재사용)
+  // applyTransform을 무조건 호출 — 새 <g>는 rotate(0)으로 만들어지므로
+  // 현재 rotation에 맞춰 카운터 회전을 즉시 적용해야 라벨이 정방향 유지됨
   useEffect(() => {
     if (!labelSvg) return;
     ensureLabelGroups();
-    if (rotationRef.current !== 0) applyTransform();
+    applyTransform();
     // cleanup 없음 — dangerouslySetInnerHTML이 재할당될 때 DOM이 통째로 바뀌어
     // 다음 effect에서 ensureLabelGroups가 새로 그룹화함 (existing 체크로 idempotent)
-  }, [labelSvg, ensureLabelGroups, applyTransform, rotationRef]);
+  }, [labelSvg, ensureLabelGroups, applyTransform]);
 
   return { svgContentRef, labelLayerRef };
 };
