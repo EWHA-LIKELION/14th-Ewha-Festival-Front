@@ -50,9 +50,6 @@ const MapPage = () => {
   const setSearchQuery = useSearchStore((s) => s.setSearchQuery);
   const addRecentSearch = useSearchStore((s) => s.addRecentSearch);
 
-  const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
-    useMapFocus();
-
   const navigate = useNavigate();
   const buildingLayerRef = useRef(null);
   const poisLayerRef = useRef(null);
@@ -61,6 +58,13 @@ const MapPage = () => {
   const [rotation, setRotation] = useState(0);
   const [rotationOrigin, setRotationOrigin] = useState('50% 50%');
   const lastAngleRef = useRef(null);
+
+  // 회전 상태를 ref로 동기화 (focus 계산 시 최신 값을 참조하기 위함)
+  const rotationStateRef = useRef({ angle: 0, origin: null });
+  const getRotationState = useCallback(() => rotationStateRef.current, []);
+
+  const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
+    useMapFocus(getRotationState);
 
   const matchEtc = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
@@ -113,6 +117,10 @@ const MapPage = () => {
           const { positionX, positionY, scale } = savedTransform;
           const originX = (cx - positionX) / scale;
           const originY = (cy - positionY) / scale;
+          rotationStateRef.current = {
+            ...rotationStateRef.current,
+            origin: { x: originX, y: originY },
+          };
           setRotationOrigin(`${originX}px ${originY}px`);
         }
       }
@@ -125,7 +133,11 @@ const MapPage = () => {
         // 각도 wrap 처리 (예: 179 → -179)
         if (delta > 180) delta -= 360;
         if (delta < -180) delta += 360;
-        setRotation((prev) => prev + delta);
+        setRotation((prev) => {
+          const next = prev + delta;
+          rotationStateRef.current = { ...rotationStateRef.current, angle: next };
+          return next;
+        });
         lastAngleRef.current = currentAngle;
       }
     };
