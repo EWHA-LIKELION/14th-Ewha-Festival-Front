@@ -29,7 +29,7 @@ const HomeModal = ({ onClose }) => {
     : 'https://docs.google.com/forms/d/e/1FAIpQLSfN_gvAScpUIOqa0BmUI-ttAI_3BSDeNd4RGc9p4HAnKNuCUA/viewform';
 
   return (
-    <div className="shadow-down-sm flex h-114 w-80 flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl bg-white pb-4">
+    <div className="z-50 flex h-114 w-80 flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl bg-white pb-4">
       {link ? (
         <a href={link} target="_blank" rel="noopener noreferrer" className="block">
           <img src={imageSrc} alt="홈 화면 추가 안내" />
