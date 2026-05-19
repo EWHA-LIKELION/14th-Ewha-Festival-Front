@@ -30,3 +30,8 @@ export { default as useMapActiveSync } from './map/useMapActiveSync.js';
 export { default as useMapAssets } from './map/useMapAssets.js';
 export { default as useMapFilterSync } from './map/useMapFilterSync.js';
 export { default as useMapFocus } from './map/useMapFocus.js';
+export { default as useMapRotation } from './map/useMapRotation.js';
+export { default as useMapBuildingClick } from './map/useMapBuildingClick.js';
+export { default as useMapPOIClick } from './map/useMapPOIClick.js';
+export { default as useActivePOISync } from './map/useActivePOISync.js';
+export { default as useMapAutoFocus } from './map/useMapAutoFocus.js';

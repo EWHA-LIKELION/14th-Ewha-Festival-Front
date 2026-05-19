@@ -2,7 +2,7 @@
  * 지도
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet, useLocation } from 'react-router-dom';
@@ -15,12 +15,15 @@ import {
   useMapAssets,
   useMapActiveSync,
   useMapFilterSync,
+  useMapRotation,
+  useMapBuildingClick,
+  useMapPOIClick,
+  useActivePOISync,
+  useMapAutoFocus,
   useBoothDetail,
   useShowDetail,
 } from '@/hooks';
-import { BOOTH_LOCATION, SHOW_LOCATION, BUILDING_IDS } from '@/constants/building';
-import { POI_CATEGORIES } from '@/constants/category';
-import { getLabel, padNumber } from '@/utils/labelHelper';
+import { padNumber } from '@/utils/labelHelper';
 import {
   MAP_ZOOM_LEVELS,
   MAP_CLICK_ZOOM_SCALE,
@@ -51,47 +54,23 @@ const MapPage = () => {
   const addRecentSearch = useSearchStore((s) => s.addRecentSearch);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const buildingLayerRef = useRef(null);
-  const labelLayerRef = useRef(null);
   const poisLayerRef = useRef(null);
 
-  const [activePOIId, setActivePOIId] = useState(null);
-
-  // 회전 상태 — 매 프레임 React 재렌더링 피하려고 ref + 직접 DOM 조작으로 처리
-  const svgContentRef = useRef(null);
-  const rotationRef = useRef(0); // 각도(deg)
-  const rotationOriginRef = useRef(null); // { x, y } 로컬 좌표 or null
-  const lastAngleRef = useRef(null);
-  // 라벨 카운터 회전을 위한 그룹 캐시 — [{ element, cx, cy }]
-  const labelGroupsRef = useRef([]);
-
-  const applyTransform = useCallback(() => {
-    const el = svgContentRef.current;
-    if (!el) return;
-    const origin = rotationOriginRef.current;
-    if (origin) {
-      el.style.transformOrigin = `${origin.x}px ${origin.y}px`;
-    }
-    const angle = rotationRef.current;
-    el.style.transform = `rotate(${angle}deg)`;
-    // 각 라벨 그룹에 카운터 회전 적용 → 지도는 돌아도 라벨은 똑바로
-    const counter = -angle;
-    labelGroupsRef.current.forEach(({ element, cx, cy }) => {
-      element.setAttribute('transform', `rotate(${counter} ${cx} ${cy})`);
-    });
-  }, []);
+  // 회전 상태 — ref로 관리하여 매 프레임 React 재렌더링 회피
+  const rotationRef = useRef(0);
+  const rotationOriginRef = useRef(null);
 
   const getRotationState = useCallback(
-    () => ({
-      angle: rotationRef.current,
-      origin: rotationOriginRef.current,
-    }),
+    () => ({ angle: rotationRef.current, origin: rotationOriginRef.current }),
     [],
   );
 
   const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
     useMapFocus(getRotationState);
 
+  // 라우트 매칭
   const matchEtc = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
   const matchBooths = useMatch('/map/booths/*');
@@ -106,12 +85,31 @@ const MapPage = () => {
   const { data: boothDetail } = useBoothDetail(boothDetailId);
   const { data: showDetail } = useShowDetail(showDetailId);
 
-  const { pathname } = useLocation();
+  // 아티스트 데이(5/22) 또는 배리어프리 페이지 → artist 라벨/POI로 교체
+  const useArtistAssets = IS_ARTIST_DAY || !!matchBarrierFree;
 
-  const goList = () => {
-    setSheetSize('full');
-  };
+  // 지도 SVG 에셋
+  const { buildingSvg, labelSvg, poisSvg } = useMapAssets(useArtistAssets);
 
+  // 회전 제스처 + 라벨 카운터 회전
+  const { svgContentRef, labelLayerRef } = useMapRotation({
+    mapRef,
+    transformRef,
+    labelSvg,
+    savedTransform,
+    rotationRef,
+    rotationOriginRef,
+  });
+
+  // activePOIId 상태 + 정리 로직
+  const { activePOIId, setActivePOIId } = useActivePOISync({
+    searchQuery,
+    setSearchQuery,
+    pathname,
+    matchBoothDetail,
+  });
+
+  // Ctrl+Wheel 줌 차단 (브라우저 기본)
   useEffect(() => {
     const preventZoom = (e) => {
       if (e.ctrlKey) e.preventDefault();
@@ -119,155 +117,6 @@ const MapPage = () => {
     document.addEventListener('wheel', preventZoom, { passive: false });
     return () => document.removeEventListener('wheel', preventZoom);
   }, []);
-
-  // 두 손가락 회전 제스처 (react-zoom-pan-pinch의 pinch zoom과 동시에 작동)
-  useEffect(() => {
-    const el = mapRef.current;
-    if (!el) return;
-
-    const getAngle = (touches) => {
-      const dx = touches[1].clientX - touches[0].clientX;
-      const dy = touches[1].clientY - touches[0].clientY;
-      return (Math.atan2(dy, dx) * 180) / Math.PI;
-    };
-
-    const handleTouchStart = (e) => {
-      if (e.touches.length === 2) {
-        lastAngleRef.current = getAngle(e.touches);
-
-        // 두 손가락 중간점의 SVG 로컬 좌표를 회전 축으로 설정 (Google Maps 식 자연스러운 회전)
-        const rect = mapRef.current?.getBoundingClientRect();
-        if (rect) {
-          const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-          const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-          const localScreenX = midX - rect.left;
-          const localScreenY = midY - rect.top;
-          const { positionX, positionY, scale } = savedTransform;
-          const newOriginX = (localScreenX - positionX) / scale;
-          const newOriginY = (localScreenY - positionY) / scale;
-
-          // origin 변경 시 라이브러리의 translate를 보정해 시각적 점프 방지
-          const oldOrigin = rotationOriginRef.current;
-          const R = rotationRef.current;
-          if (oldOrigin && R !== 0) {
-            const Rrad = (R * Math.PI) / 180;
-            const cosR = Math.cos(Rrad);
-            const sinR = Math.sin(Rrad);
-            const dx = oldOrigin.x - newOriginX;
-            const dy = oldOrigin.y - newOriginY;
-            // (I - Rot(R)) * (dx, dy)
-            const compX = dx - (dx * cosR - dy * sinR);
-            const compY = dy - (dx * sinR + dy * cosR);
-            const newPosX = positionX + scale * compX;
-            const newPosY = positionY + scale * compY;
-            transformRef.current?.setTransform(newPosX, newPosY, scale, 0);
-            // savedTransform도 즉시 동기화 (다음 onTransformed 콜백 전 race condition 방지)
-            savedTransform.positionX = newPosX;
-            savedTransform.positionY = newPosY;
-          }
-
-          rotationOriginRef.current = { x: newOriginX, y: newOriginY };
-          applyTransform();
-        }
-      }
-    };
-
-    const handleTouchMove = (e) => {
-      if (e.touches.length === 2 && lastAngleRef.current !== null) {
-        const currentAngle = getAngle(e.touches);
-        let delta = currentAngle - lastAngleRef.current;
-        // 각도 wrap 처리 (예: 179 → -179)
-        if (delta > 180) delta -= 360;
-        if (delta < -180) delta += 360;
-        rotationRef.current += delta;
-        applyTransform();
-        lastAngleRef.current = currentAngle;
-      }
-    };
-
-    const handleTouchEnd = (e) => {
-      if (e.touches.length < 2) {
-        lastAngleRef.current = null;
-      }
-    };
-
-    // capture: true → 라이브러리(react-zoom-pan-pinch)가 stopPropagation 해도 먼저 잡음
-    // passive: true → preventDefault 불가, 라이브러리의 pinch zoom은 그대로 작동
-    el.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
-    el.addEventListener('touchmove', handleTouchMove, { passive: true, capture: true });
-    el.addEventListener('touchend', handleTouchEnd, { passive: true, capture: true });
-    el.addEventListener('touchcancel', handleTouchEnd, { passive: true, capture: true });
-
-    return () => {
-      // capture phase로 등록했으니 제거도 동일하게
-      el.removeEventListener('touchstart', handleTouchStart, { capture: true });
-      el.removeEventListener('touchmove', handleTouchMove, { capture: true });
-      el.removeEventListener('touchend', handleTouchEnd, { capture: true });
-      el.removeEventListener('touchcancel', handleTouchEnd, { capture: true });
-    };
-  }, []);
-
-  const goEtc = () => {
-    navigate('/map/etc');
-  };
-
-  const goBarrierFree = () => {
-    navigate('/map/barrierfree');
-  };
-
-  // 아티스트 데이(5/22) 또는 배리어프리 페이지 → artist 라벨/POI로 교체
-  const useArtistAssets = IS_ARTIST_DAY || !!matchBarrierFree;
-
-  // 지도 SVG 에셋
-  const { buildingSvg, labelSvg, poisSvg } = useMapAssets(useArtistAssets);
-
-  // labelSvg 로드 후: mask 기준으로 라벨 path들을 <g>로 그룹화 → 회전 시 카운터 회전 적용
-  useEffect(() => {
-    if (!labelSvg) return;
-    const layer = labelLayerRef.current;
-    if (!layer) return;
-    const svg = layer.querySelector('svg');
-    if (!svg) return;
-
-    const SVG_NS = 'http://www.w3.org/2000/svg';
-    const masks = Array.from(svg.querySelectorAll('mask'));
-    const groups = [];
-
-    masks.forEach((mask) => {
-      const x = parseFloat(mask.getAttribute('x'));
-      const y = parseFloat(mask.getAttribute('y'));
-      const w = parseFloat(mask.getAttribute('width'));
-      const h = parseFloat(mask.getAttribute('height'));
-      if (isNaN(x) || isNaN(y) || isNaN(w) || isNaN(h)) return;
-      const cx = x + w / 2;
-      const cy = y + h / 2;
-
-      // mask의 다음 형제부터 다음 mask 전까지의 path들을 라벨로 묶음
-      const paths = [];
-      let next = mask.nextElementSibling;
-      while (next && next.tagName.toLowerCase() !== 'mask') {
-        if (next.tagName.toLowerCase() === 'path') paths.push(next);
-        next = next.nextElementSibling;
-      }
-      if (paths.length === 0) return;
-
-      const g = document.createElementNS(SVG_NS, 'g');
-      g.setAttribute('data-label', 'true');
-      // 시작 위치는 회전 없음
-      g.setAttribute('transform', `rotate(0 ${cx} ${cy})`);
-      paths[0].parentNode.insertBefore(g, paths[0]);
-      paths.forEach((p) => g.appendChild(p));
-      groups.push({ element: g, cx, cy });
-    });
-
-    labelGroupsRef.current = groups;
-    // 현재 회전 각도가 0이 아니면 즉시 반영
-    if (rotationRef.current !== 0) applyTransform();
-
-    return () => {
-      labelGroupsRef.current = [];
-    };
-  }, [labelSvg, applyTransform]);
 
   // 아티스트 모드에서 GRASS_GROUND 등은 좌표를 override 해서 포커스
   const focusBuilding = useCallback(
@@ -282,19 +131,39 @@ const MapPage = () => {
     [useArtistAssets, moveFocusToBuilding, moveFocusToPoint],
   );
 
+  // POI를 active 상태로 만들고 해당 좌표로 focus 이동
+  const focusPOI = useCallback(
+    (poiId) => {
+      setActivePOIId(poiId);
+      if (!poiId || !poisLayerRef.current) return;
+      const el = poisLayerRef.current.querySelector(`[id="${poiId}"]`);
+      if (el && typeof el.getBBox === 'function') {
+        const bbox = el.getBBox();
+        const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
+        moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
+      }
+    },
+    [moveFocusToPoint, setActivePOIId],
+  );
+
   // booth ↔ etc ↔ show location 필터 동기화 + 페이지 이동 시 필터 복사
   useMapFilterSync({ boothLocation, etcLocation, showLocation, setFilter, pathname });
 
-  // 배리어프리 페이지 진입 시 building/booth/etc/show active 초기화 + GRASS_GROUND focus
-  // focus는 artist 좌표가 적용되도록 useArtistAssets 반영 후(렌더 사이클 이후) 호출
-  useEffect(() => {
-    if (!matchBarrierFree) return;
-    setFilter('booth', 'location', []);
-    setFilter('etc', 'location', []);
-    setFilter('show', 'location', []);
-    setActivePOIId(null);
-    focusBuilding('GRASS_GROUND');
-  }, [matchBarrierFree, setFilter, focusBuilding]);
+  // 페이지/상태 변화에 따른 자동 포커스
+  useMapAutoFocus({
+    matchBarrierFree,
+    boothDetail,
+    showDetail,
+    poisSvg,
+    isBoothPage,
+    isShowsPage,
+    boothLocation,
+    showLocation,
+    focusBuilding,
+    focusPOI,
+    setFilter,
+    setActivePOIId,
+  });
 
   // 지도 building/POI is-active 클래스를 앱 상태와 DOM 동기화
   useMapActiveSync({
@@ -314,191 +183,24 @@ const MapPage = () => {
     activePOIId,
   });
 
-  // POI를 active 상태로 만들고 해당 좌표로 focus 이동
-  // 부스 상세 페이지 진입, 시트 카드 클릭 등에서 호출
-  const focusPOI = useCallback(
-    (poiId) => {
-      setActivePOIId(poiId);
-      if (!poiId || !poisLayerRef.current) return;
-      const el = poisLayerRef.current.querySelector(`[id="${poiId}"]`);
-      if (el && typeof el.getBBox === 'function') {
-        const bbox = el.getBBox();
-        const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
-        moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
-      }
-    },
-    [moveFocusToPoint],
-  );
-
-  // 부스 상세 페이지(/map/booths/:id) 진입 시 해당 부스 POI active + 포커스 이동
-  useEffect(() => {
-    if (!boothDetail?.location || !poisSvg) return;
-    const { building, number } = boothDetail.location;
-    focusPOI(`${building}-BOOTH-${padNumber(number)}`);
-  }, [boothDetail, poisSvg, focusPOI]);
-
-  // 공연 상세 페이지(/map/shows/:id) 진입 시 해당 공연 building 포커스 이동
-  // (active 표시는 위 building is-active 동기화 useEffect가 showDetail 기반으로 처리)
-  useEffect(() => {
-    if (!showDetail?.location?.building) return;
-    focusBuilding(showDetail.location.building);
-  }, [showDetail, focusBuilding]);
-
-  // 부스/공연 목록 페이지에서 필터로 건물 1개만 선택된 경우 해당 건물로 포커스 이동
-  useEffect(() => {
-    const targetLocation = isBoothPage ? boothLocation : isShowsPage ? showLocation : null;
-    if (!targetLocation || targetLocation.length !== 1) return;
-    focusBuilding(targetLocation[0]);
-  }, [boothLocation, showLocation, isBoothPage, isShowsPage, focusBuilding]);
-
-  // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
-  // 단, 부스 상세 페이지에서는 검색어 없이도 active 유지
-  useEffect(() => {
-    if (searchQuery) return;
-    if (matchBoothDetail) return;
-    if (activePOIId?.includes('BOOTH')) setActivePOIId(null);
-  }, [searchQuery, activePOIId, matchBoothDetail]);
-
-  // BOOTH active 상태가 해제되면(다른 POI 클릭/건물 클릭/페이지 이동 등) 검색어 비우기
-  const prevWasBoothActiveRef = useRef(false);
-  useEffect(() => {
-    const isBoothActive = activePOIId?.includes('BOOTH') ?? false;
-    if (prevWasBoothActiveRef.current && !isBoothActive && searchQuery) {
-      setSearchQuery('');
-    }
-    prevWasBoothActiveRef.current = isBoothActive;
-  }, [activePOIId, searchQuery, setSearchQuery]);
-
-  // 페이지 이동으로 현재 POI 카테고리와 페이지가 맞지 않으면 activePOIId 해제
-  // pathname 변경 시에만 실행 (방금 set한 activePOIId를 같은 렌더에서 날리지 않도록)
-  const prevPathForPOIRef = useRef(pathname);
-  useEffect(() => {
-    const prev = prevPathForPOIRef.current;
-    prevPathForPOIRef.current = pathname;
-    if (prev === pathname || !activePOIId) return;
-    const isBoothPOI = activePOIId.includes('BOOTH');
-    if (isBoothPOI && !pathname.startsWith('/map/booths')) setActivePOIId(null);
-    else if (!isBoothPOI && pathname !== '/map/etc') setActivePOIId(null);
-  }, [pathname, activePOIId]);
-
-  // 🏢 Building 클릭 → 필터 location 토글
-  useEffect(() => {
-    if (!buildingLayerRef.current) return;
-
-    const buildingSelector = BUILDING_IDS.map((id) => `[id^="${id}"]`).join(',');
-
-    const handleClick = (e) => {
-      e.stopPropagation();
-      if (!(e.target instanceof SVGElement)) return;
-
-      const target = e.target.closest(buildingSelector);
-      if (!target) return;
-
-      const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
-      if (!normalizedId) return;
-
-      // 배리어프리 페이지에서는 모든 건물 클릭을 차단 (active/포커스 변경 없음)
-      if (matchBarrierFree) {
-        showToast('선택할 수 없는 항목입니다.', 'warn');
-        return;
-      }
-
-      const allowedLocations = isBoothPage
-        ? BOOTH_LOCATION
-        : isEtcPage
-          ? BOOTH_LOCATION
-          : isShowsPage
-            ? SHOW_LOCATION
-            : null;
-      if (allowedLocations && !allowedLocations.some((o) => o.value === normalizedId)) {
-        showToast('선택할 수 없는 항목입니다.', 'warn');
-        return;
-      }
-
-      setActivePOIId(null);
-      const isShowLocation = SHOW_LOCATION.some((o) => o.value === normalizedId);
-      if (isBoothPage) {
-        setFilter('booth', 'location', [normalizedId]);
-      } else if (isEtcPage) {
-        setFilter('etc', 'location', [normalizedId]);
-      } else if (isShowsPage) {
-        setFilter('show', 'location', [normalizedId]);
-      } else {
-        setFilter('booth', 'location', [normalizedId]);
-        setFilter('etc', 'location', [normalizedId]);
-        setFilter('show', 'location', isShowLocation ? [normalizedId] : []);
-      }
-
-      setSheetSize('medium');
-      focusBuilding(normalizedId);
-    };
-
-    const el = buildingLayerRef.current;
-    el.addEventListener('click', handleClick);
-    return () => el.removeEventListener('click', handleClick);
-  }, [
+  // 건물 클릭 핸들러
+  useMapBuildingClick({
+    buildingLayerRef,
     buildingSvg,
-    setFilter,
-    setSheetSize,
-    focusBuilding,
     isBoothPage,
     isEtcPage,
     isShowsPage,
     matchBarrierFree,
+    setFilter,
+    setSheetSize,
+    setActivePOIId,
+    focusBuilding,
     showToast,
-  ]);
+  });
 
-  // 🏠 Pois 클릭
-  useEffect(() => {
-    if (!poisLayerRef.current) return;
-
-    const selector = POI_CATEGORIES.map((cat) => `[id*="${cat}"]`).join(',');
-
-    const handleClick = (e) => {
-      e.stopPropagation();
-      if (!(e.target instanceof SVGElement)) return;
-
-      // Barrierfree 아이콘 → 배리어프리 페이지로 이동
-      // (focus는 matchBarrierFree useEffect에서 artist 좌표로 처리)
-      const barrierTarget = e.target.closest('[id="Barrierfree"]');
-      if (barrierTarget) {
-        navigate('/map/barrierfree');
-        return;
-      }
-
-      const target = e.target.closest(selector);
-      if (!target) return;
-
-      const category = POI_CATEGORIES.find((cat) => target.id.includes(cat));
-
-      setActivePOIId(target.id);
-      setFilter('booth', 'location', []);
-      setFilter('etc', 'location', []);
-      setFilter('show', 'location', []);
-
-      setSheetSize('medium');
-
-      const bbox = target.getBBox();
-      const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
-      moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
-
-      const location = BUILDING_IDS.find((id) => target.id.includes(id));
-      const number = parseInt(target.id.split(`${category}-`).pop(), 10);
-
-      if (category === 'BOOTH') {
-        const query = `${getLabel(location, BOOTH_LOCATION)}${number}`;
-        setSearchQuery(query);
-        addRecentSearch(query);
-        navigate('/map/booths');
-      } else {
-        navigate('/map/etc', { state: { selectedPOI: { category, location, number } } });
-      }
-    };
-
-    const el = poisLayerRef.current;
-    el.addEventListener('click', handleClick);
-    return () => el.removeEventListener('click', handleClick);
-  }, [
+  // POI 클릭 핸들러
+  useMapPOIClick({
+    poisLayerRef,
     poisSvg,
     moveFocusToPoint,
     navigate,
@@ -506,7 +208,13 @@ const MapPage = () => {
     setSheetSize,
     setSearchQuery,
     addRecentSearch,
-  ]);
+    setActivePOIId,
+    savedTransform,
+  });
+
+  const goList = () => setSheetSize('full');
+  const goEtc = () => navigate('/map/etc');
+  const goBarrierFree = () => navigate('/map/barrierfree');
 
   // 포커스는 항상 시트 medium 기준 (useMapFocus 참조)
   const initialPos = getInitialPosition(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2);
