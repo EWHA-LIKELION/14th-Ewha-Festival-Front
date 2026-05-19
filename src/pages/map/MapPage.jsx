@@ -55,13 +55,30 @@ const MapPage = () => {
   const poisLayerRef = useRef(null);
 
   const [activePOIId, setActivePOIId] = useState(null);
-  const [rotation, setRotation] = useState(0);
-  const [rotationOrigin, setRotationOrigin] = useState('50% 50%');
+
+  // 회전 상태 — 매 프레임 React 재렌더링 피하려고 ref + 직접 DOM 조작으로 처리
+  const svgContentRef = useRef(null);
+  const rotationRef = useRef(0); // 각도(deg)
+  const rotationOriginRef = useRef(null); // { x, y } 로컬 좌표 or null
   const lastAngleRef = useRef(null);
 
-  // 회전 상태를 ref로 동기화 (focus 계산 시 최신 값을 참조하기 위함)
-  const rotationStateRef = useRef({ angle: 0, origin: null });
-  const getRotationState = useCallback(() => rotationStateRef.current, []);
+  const applyTransform = useCallback(() => {
+    const el = svgContentRef.current;
+    if (!el) return;
+    const origin = rotationOriginRef.current;
+    if (origin) {
+      el.style.transformOrigin = `${origin.x}px ${origin.y}px`;
+    }
+    el.style.transform = `rotate(${rotationRef.current}deg)`;
+  }, []);
+
+  const getRotationState = useCallback(
+    () => ({
+      angle: rotationRef.current,
+      origin: rotationOriginRef.current,
+    }),
+    [],
+  );
 
   const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
     useMapFocus(getRotationState);
@@ -109,19 +126,18 @@ const MapPage = () => {
       if (e.touches.length === 2) {
         lastAngleRef.current = getAngle(e.touches);
 
-        // 현재 화면 중심에 위치한 SVG 로컬 좌표를 회전 축으로 설정
+        // 두 손가락 중간점의 SVG 로컬 좌표를 회전 축으로 설정 (Google Maps 식 자연스러운 회전)
         const rect = mapRef.current?.getBoundingClientRect();
         if (rect) {
-          const cx = rect.width / 2;
-          const cy = rect.height / 2;
+          const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+          const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+          const localScreenX = midX - rect.left;
+          const localScreenY = midY - rect.top;
           const { positionX, positionY, scale } = savedTransform;
-          const originX = (cx - positionX) / scale;
-          const originY = (cy - positionY) / scale;
-          rotationStateRef.current = {
-            ...rotationStateRef.current,
-            origin: { x: originX, y: originY },
-          };
-          setRotationOrigin(`${originX}px ${originY}px`);
+          const originX = (localScreenX - positionX) / scale;
+          const originY = (localScreenY - positionY) / scale;
+          rotationOriginRef.current = { x: originX, y: originY };
+          applyTransform();
         }
       }
     };
@@ -133,11 +149,8 @@ const MapPage = () => {
         // 각도 wrap 처리 (예: 179 → -179)
         if (delta > 180) delta -= 360;
         if (delta < -180) delta += 360;
-        setRotation((prev) => {
-          const next = prev + delta;
-          rotationStateRef.current = { ...rotationStateRef.current, angle: next };
-          return next;
-        });
+        rotationRef.current += delta;
+        applyTransform();
         lastAngleRef.current = currentAngle;
       }
     };
@@ -472,12 +485,9 @@ const MapPage = () => {
       >
         <TransformComponent wrapperClass="!w-full !h-dvh overflow-hidden">
           <div
+            ref={svgContentRef}
             className="relative h-dvh"
-            style={{
-              aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}`,
-              transform: `rotate(${rotation}deg)`,
-              transformOrigin: rotationOrigin,
-            }}
+            style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}
           >
             <img src="/map/map-background.svg" alt="map-background" className="h-full w-full" />
             <div
