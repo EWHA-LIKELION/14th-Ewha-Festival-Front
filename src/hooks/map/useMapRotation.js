@@ -181,6 +181,15 @@ const useMapRotation = ({
     if (rotationRef.current !== 0) applyTransform();
 
     return () => {
+      // 그룹화로 변경한 DOM을 원복 — 다음 effect 실행 시 path를 다시 찾을 수 있도록
+      groups.forEach(({ element }) => {
+        const parent = element.parentNode;
+        if (!parent) return;
+        while (element.firstChild) {
+          parent.insertBefore(element.firstChild, element);
+        }
+        parent.removeChild(element);
+      });
       labelGroupsRef.current = [];
     };
   }, [labelSvg, applyTransform, rotationRef]);
