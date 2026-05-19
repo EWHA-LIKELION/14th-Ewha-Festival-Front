@@ -2,7 +2,7 @@
  * 지도
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import './map-page.css';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { useNavigate, useMatch, Outlet, useLocation } from 'react-router-dom';
@@ -15,12 +15,15 @@ import {
   useMapAssets,
   useMapActiveSync,
   useMapFilterSync,
+  useMapRotation,
+  useMapBuildingClick,
+  useMapPOIClick,
+  useActivePOISync,
+  useMapAutoFocus,
   useBoothDetail,
   useShowDetail,
 } from '@/hooks';
-import { BOOTH_LOCATION, SHOW_LOCATION, BUILDING_IDS } from '@/constants/building';
-import { POI_CATEGORIES } from '@/constants/category';
-import { getLabel, padNumber } from '@/utils/labelHelper';
+import { padNumber } from '@/utils/labelHelper';
 import {
   MAP_ZOOM_LEVELS,
   MAP_CLICK_ZOOM_SCALE,
@@ -50,15 +53,24 @@ const MapPage = () => {
   const setSearchQuery = useSearchStore((s) => s.setSearchQuery);
   const addRecentSearch = useSearchStore((s) => s.addRecentSearch);
 
-  const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
-    useMapFocus();
-
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const buildingLayerRef = useRef(null);
   const poisLayerRef = useRef(null);
 
-  const [activePOIId, setActivePOIId] = useState(null);
+  // 회전 상태 — ref로 관리하여 매 프레임 React 재렌더링 회피
+  const rotationRef = useRef(0);
+  const rotationOriginRef = useRef(null);
 
+  const getRotationState = useCallback(
+    () => ({ angle: rotationRef.current, origin: rotationOriginRef.current }),
+    [],
+  );
+
+  const { mapRef, transformRef, moveFocusToPoint, moveFocusToBuilding, getInitialPosition } =
+    useMapFocus(getRotationState);
+
+  // 라우트 매칭
   const matchEtc = useMatch('/map/etc');
   const matchBarrierFree = useMatch('/map/barrierfree');
   const matchBooths = useMatch('/map/booths/*');
@@ -73,12 +85,31 @@ const MapPage = () => {
   const { data: boothDetail } = useBoothDetail(boothDetailId);
   const { data: showDetail } = useShowDetail(showDetailId);
 
-  const { pathname } = useLocation();
+  // 아티스트 데이(5/22) 또는 배리어프리 페이지 → artist 라벨/POI로 교체
+  const useArtistAssets = IS_ARTIST_DAY || !!matchBarrierFree;
 
-  const goList = () => {
-    setSheetSize('full');
-  };
+  // 지도 SVG 에셋
+  const { buildingSvg, labelSvg, poisSvg } = useMapAssets(useArtistAssets);
 
+  // 회전 제스처 + 라벨 카운터 회전
+  const { svgContentRef, labelLayerRef, resetRotation } = useMapRotation({
+    mapRef,
+    transformRef,
+    labelSvg,
+    savedTransform,
+    rotationRef,
+    rotationOriginRef,
+  });
+
+  // activePOIId 상태 + 정리 로직
+  const { activePOIId, setActivePOIId } = useActivePOISync({
+    searchQuery,
+    setSearchQuery,
+    pathname,
+    matchBoothDetail,
+  });
+
+  // Ctrl+Wheel 줌 차단 (브라우저 기본)
   useEffect(() => {
     const preventZoom = (e) => {
       if (e.ctrlKey) e.preventDefault();
@@ -86,20 +117,6 @@ const MapPage = () => {
     document.addEventListener('wheel', preventZoom, { passive: false });
     return () => document.removeEventListener('wheel', preventZoom);
   }, []);
-
-  const goEtc = () => {
-    navigate('/map/etc');
-  };
-
-  const goBarrierFree = () => {
-    navigate('/map/barrierfree');
-  };
-
-  // 아티스트 데이(5/22) 또는 배리어프리 페이지 → artist 라벨/POI로 교체
-  const useArtistAssets = IS_ARTIST_DAY || !!matchBarrierFree;
-
-  // 지도 SVG 에셋
-  const { buildingSvg, labelSvg, poisSvg } = useMapAssets(useArtistAssets);
 
   // 아티스트 모드에서 GRASS_GROUND 등은 좌표를 override 해서 포커스
   const focusBuilding = useCallback(
@@ -114,19 +131,40 @@ const MapPage = () => {
     [useArtistAssets, moveFocusToBuilding, moveFocusToPoint],
   );
 
+  // POI를 active 상태로 만들고 해당 좌표로 focus 이동
+  const focusPOI = useCallback(
+    (poiId) => {
+      setActivePOIId(poiId);
+      if (!poiId || !poisLayerRef.current) return;
+      const el = poisLayerRef.current.querySelector(`[id="${poiId}"]`);
+      if (el && typeof el.getBBox === 'function') {
+        const bbox = el.getBBox();
+        const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
+        moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
+      }
+    },
+    [moveFocusToPoint, setActivePOIId],
+  );
+
   // booth ↔ etc ↔ show location 필터 동기화 + 페이지 이동 시 필터 복사
   useMapFilterSync({ boothLocation, etcLocation, showLocation, setFilter, pathname });
 
-  // 배리어프리 페이지 진입 시 building/booth/etc/show active 초기화 + GRASS_GROUND focus
-  // focus는 artist 좌표가 적용되도록 useArtistAssets 반영 후(렌더 사이클 이후) 호출
-  useEffect(() => {
-    if (!matchBarrierFree) return;
-    setFilter('booth', 'location', []);
-    setFilter('etc', 'location', []);
-    setFilter('show', 'location', []);
-    setActivePOIId(null);
-    focusBuilding('GRASS_GROUND');
-  }, [matchBarrierFree, setFilter, focusBuilding]);
+  // 페이지/상태 변화에 따른 자동 포커스
+  useMapAutoFocus({
+    matchBarrierFree,
+    boothDetail,
+    showDetail,
+    poisSvg,
+    isBoothPage,
+    isShowsPage,
+    boothLocation,
+    showLocation,
+    focusBuilding,
+    focusPOI,
+    setFilter,
+    setActivePOIId,
+    resetRotation,
+  });
 
   // 지도 building/POI is-active 클래스를 앱 상태와 DOM 동기화
   useMapActiveSync({
@@ -146,191 +184,24 @@ const MapPage = () => {
     activePOIId,
   });
 
-  // POI를 active 상태로 만들고 해당 좌표로 focus 이동
-  // 부스 상세 페이지 진입, 시트 카드 클릭 등에서 호출
-  const focusPOI = useCallback(
-    (poiId) => {
-      setActivePOIId(poiId);
-      if (!poiId || !poisLayerRef.current) return;
-      const el = poisLayerRef.current.querySelector(`[id="${poiId}"]`);
-      if (el && typeof el.getBBox === 'function') {
-        const bbox = el.getBBox();
-        const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
-        moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
-      }
-    },
-    [moveFocusToPoint],
-  );
-
-  // 부스 상세 페이지(/map/booths/:id) 진입 시 해당 부스 POI active + 포커스 이동
-  useEffect(() => {
-    if (!boothDetail?.location || !poisSvg) return;
-    const { building, number } = boothDetail.location;
-    focusPOI(`${building}-BOOTH-${padNumber(number)}`);
-  }, [boothDetail, poisSvg, focusPOI]);
-
-  // 공연 상세 페이지(/map/shows/:id) 진입 시 해당 공연 building 포커스 이동
-  // (active 표시는 위 building is-active 동기화 useEffect가 showDetail 기반으로 처리)
-  useEffect(() => {
-    if (!showDetail?.location?.building) return;
-    focusBuilding(showDetail.location.building);
-  }, [showDetail, focusBuilding]);
-
-  // 부스/공연 목록 페이지에서 필터로 건물 1개만 선택된 경우 해당 건물로 포커스 이동
-  useEffect(() => {
-    const targetLocation = isBoothPage ? boothLocation : isShowsPage ? showLocation : null;
-    if (!targetLocation || targetLocation.length !== 1) return;
-    focusBuilding(targetLocation[0]);
-  }, [boothLocation, showLocation, isBoothPage, isShowsPage, focusBuilding]);
-
-  // 검색어가 비워지면(X 버튼/뒤로가기) BOOTH active 해제
-  // 단, 부스 상세 페이지에서는 검색어 없이도 active 유지
-  useEffect(() => {
-    if (searchQuery) return;
-    if (matchBoothDetail) return;
-    if (activePOIId?.includes('BOOTH')) setActivePOIId(null);
-  }, [searchQuery, activePOIId, matchBoothDetail]);
-
-  // BOOTH active 상태가 해제되면(다른 POI 클릭/건물 클릭/페이지 이동 등) 검색어 비우기
-  const prevWasBoothActiveRef = useRef(false);
-  useEffect(() => {
-    const isBoothActive = activePOIId?.includes('BOOTH') ?? false;
-    if (prevWasBoothActiveRef.current && !isBoothActive && searchQuery) {
-      setSearchQuery('');
-    }
-    prevWasBoothActiveRef.current = isBoothActive;
-  }, [activePOIId, searchQuery, setSearchQuery]);
-
-  // 페이지 이동으로 현재 POI 카테고리와 페이지가 맞지 않으면 activePOIId 해제
-  // pathname 변경 시에만 실행 (방금 set한 activePOIId를 같은 렌더에서 날리지 않도록)
-  const prevPathForPOIRef = useRef(pathname);
-  useEffect(() => {
-    const prev = prevPathForPOIRef.current;
-    prevPathForPOIRef.current = pathname;
-    if (prev === pathname || !activePOIId) return;
-    const isBoothPOI = activePOIId.includes('BOOTH');
-    if (isBoothPOI && !pathname.startsWith('/map/booths')) setActivePOIId(null);
-    else if (!isBoothPOI && pathname !== '/map/etc') setActivePOIId(null);
-  }, [pathname, activePOIId]);
-
-  // 🏢 Building 클릭 → 필터 location 토글
-  useEffect(() => {
-    if (!buildingLayerRef.current) return;
-
-    const buildingSelector = BUILDING_IDS.map((id) => `[id^="${id}"]`).join(',');
-
-    const handleClick = (e) => {
-      e.stopPropagation();
-      if (!(e.target instanceof SVGElement)) return;
-
-      const target = e.target.closest(buildingSelector);
-      if (!target) return;
-
-      const normalizedId = BUILDING_IDS.find((id) => target.id.startsWith(id));
-      if (!normalizedId) return;
-
-      // 배리어프리 페이지에서는 모든 건물 클릭을 차단 (active/포커스 변경 없음)
-      if (matchBarrierFree) {
-        showToast('선택할 수 없는 항목입니다.', 'warn');
-        return;
-      }
-
-      const allowedLocations = isBoothPage
-        ? BOOTH_LOCATION
-        : isEtcPage
-          ? BOOTH_LOCATION
-          : isShowsPage
-            ? SHOW_LOCATION
-            : null;
-      if (allowedLocations && !allowedLocations.some((o) => o.value === normalizedId)) {
-        showToast('선택할 수 없는 항목입니다.', 'warn');
-        return;
-      }
-
-      setActivePOIId(null);
-      const isShowLocation = SHOW_LOCATION.some((o) => o.value === normalizedId);
-      if (isBoothPage) {
-        setFilter('booth', 'location', [normalizedId]);
-      } else if (isEtcPage) {
-        setFilter('etc', 'location', [normalizedId]);
-      } else if (isShowsPage) {
-        setFilter('show', 'location', [normalizedId]);
-      } else {
-        setFilter('booth', 'location', [normalizedId]);
-        setFilter('etc', 'location', [normalizedId]);
-        setFilter('show', 'location', isShowLocation ? [normalizedId] : []);
-      }
-
-      setSheetSize('medium');
-      focusBuilding(normalizedId);
-    };
-
-    const el = buildingLayerRef.current;
-    el.addEventListener('click', handleClick);
-    return () => el.removeEventListener('click', handleClick);
-  }, [
+  // 건물 클릭 핸들러
+  useMapBuildingClick({
+    buildingLayerRef,
     buildingSvg,
-    setFilter,
-    setSheetSize,
-    focusBuilding,
     isBoothPage,
     isEtcPage,
     isShowsPage,
     matchBarrierFree,
+    setFilter,
+    setSheetSize,
+    setActivePOIId,
+    focusBuilding,
     showToast,
-  ]);
+  });
 
-  // 🏠 Pois 클릭
-  useEffect(() => {
-    if (!poisLayerRef.current) return;
-
-    const selector = POI_CATEGORIES.map((cat) => `[id*="${cat}"]`).join(',');
-
-    const handleClick = (e) => {
-      e.stopPropagation();
-      if (!(e.target instanceof SVGElement)) return;
-
-      // Barrierfree 아이콘 → 배리어프리 페이지로 이동
-      // (focus는 matchBarrierFree useEffect에서 artist 좌표로 처리)
-      const barrierTarget = e.target.closest('[id="Barrierfree"]');
-      if (barrierTarget) {
-        navigate('/map/barrierfree');
-        return;
-      }
-
-      const target = e.target.closest(selector);
-      if (!target) return;
-
-      const category = POI_CATEGORIES.find((cat) => target.id.includes(cat));
-
-      setActivePOIId(target.id);
-      setFilter('booth', 'location', []);
-      setFilter('etc', 'location', []);
-      setFilter('show', 'location', []);
-
-      setSheetSize('medium');
-
-      const bbox = target.getBBox();
-      const zoomScale = Math.max(savedTransform.scale, MAP_CLICK_ZOOM_SCALE);
-      moveFocusToPoint(bbox.x + bbox.width / 2, bbox.y + bbox.height / 2, zoomScale);
-
-      const location = BUILDING_IDS.find((id) => target.id.includes(id));
-      const number = parseInt(target.id.split(`${category}-`).pop(), 10);
-
-      if (category === 'BOOTH') {
-        const query = `${getLabel(location, BOOTH_LOCATION)}${number}`;
-        setSearchQuery(query);
-        addRecentSearch(query);
-        navigate('/map/booths');
-      } else {
-        navigate('/map/etc', { state: { selectedPOI: { category, location, number } } });
-      }
-    };
-
-    const el = poisLayerRef.current;
-    el.addEventListener('click', handleClick);
-    return () => el.removeEventListener('click', handleClick);
-  }, [
+  // POI 클릭 핸들러
+  useMapPOIClick({
+    poisLayerRef,
     poisSvg,
     moveFocusToPoint,
     navigate,
@@ -338,7 +209,13 @@ const MapPage = () => {
     setSheetSize,
     setSearchQuery,
     addRecentSearch,
-  ]);
+    setActivePOIId,
+    savedTransform,
+  });
+
+  const goList = () => setSheetSize('full');
+  const goEtc = () => navigate('/map/etc');
+  const goBarrierFree = () => navigate('/map/barrierfree');
 
   // 포커스는 항상 시트 medium 기준 (useMapFocus 참조)
   const initialPos = getInitialPosition(INITIAL_CENTER.x, INITIAL_CENTER.y, MAP_ZOOM_LEVELS.ZL2);
@@ -394,7 +271,11 @@ const MapPage = () => {
         }}
       >
         <TransformComponent wrapperClass="!w-full !h-dvh overflow-hidden">
-          <div className="relative h-dvh" style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}>
+          <div
+            ref={svgContentRef}
+            className="relative h-dvh"
+            style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}
+          >
             <img src="/map/map-background.svg" alt="map-background" className="h-full w-full" />
             <div
               ref={buildingLayerRef}
@@ -403,6 +284,7 @@ const MapPage = () => {
               style={{ pointerEvents: 'auto' }}
             />
             <div
+              ref={labelLayerRef}
               className="pointer-events-none absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
               dangerouslySetInnerHTML={{ __html: labelSvg }}
             />
