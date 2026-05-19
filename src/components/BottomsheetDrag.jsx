@@ -157,7 +157,7 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
 
   return (
     <div
-      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col bg-white ${
+      className={`reactive-width shadow-up-md fixed bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col bg-white select-none ${
         isFull ? 'rounded-none' : 'overflow-clip rounded-t-3xl'
       }`}
       style={{
