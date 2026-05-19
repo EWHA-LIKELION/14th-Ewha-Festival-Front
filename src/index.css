@@ -1,12 +1,6 @@
 @import 'tailwindcss';
 
-@font-face {
-  font-family: 'Pretendard Variable';
-  font-weight: 45 920;
-  font-style: normal;
-  font-display: swap;
-  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
-}
+/* Pretendard Variable 은 index.html 에서 CDN dynamic-subset (@font-face) 로 로드 */
 
 /* =====================
    Theme (Design Tokens)
