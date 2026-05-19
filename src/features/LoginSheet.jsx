@@ -9,7 +9,11 @@ const LoginSheet = () => {
   const closeLoginSheet = useAuthStore((s) => s.closeLoginSheet);
 
   const handleKakaoLogin = () => {
-    const state = import.meta.env.DEV ? 'local' : 'prod';
+    // state(로그인 후 리다이렉트 대상)는 빌드 모드(import.meta.env.DEV)가 아니라
+    // 런타임 hostname으로 판정 — 빌드가 development 모드로 나가도 프로덕션 도메인에선 항상 'prod'
+    const { hostname } = window.location;
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+    const state = isLocal ? 'local' : 'prod';
     window.location.href = `${import.meta.env.VITE_API_BASE_URL}/accounts/login/kakao/?state=${state}`;
   };
 
