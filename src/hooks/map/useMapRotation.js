@@ -25,7 +25,13 @@ const useMapRotation = ({
 
   // SVG label DOM에서 라벨 그룹을 만들고 캐시 (멱등 — 이미 만들어졌으면 재사용)
   const ensureLabelGroups = useCallback(() => {
-    if (labelGroupsRef.current.length > 0) return labelGroupsRef.current;
+    // 캐시된 element가 여전히 DOM에 연결돼 있으면 재사용
+    if (labelGroupsRef.current.length > 0 && labelGroupsRef.current[0].element.isConnected) {
+      return labelGroupsRef.current;
+    }
+    // SVG가 교체된 경우 캐시 무효화 (배리어프리 ↔ 일반 라벨 전환 등)
+    labelGroupsRef.current = [];
+
     const layer = labelLayerRef.current;
     if (!layer) return [];
     const svg = layer.querySelector('svg');
@@ -89,8 +95,8 @@ const useMapRotation = ({
     const angle = rotationRef.current;
     el.style.transform = `rotate(${angle}deg)`;
 
-    // 라벨 그룹이 비어있으면 즉석에서 채움 (타이밍 문제 fallback)
-    const groups = labelGroupsRef.current.length > 0 ? labelGroupsRef.current : ensureLabelGroups();
+    // 항상 ensureLabelGroups로 검증 — labelSvg 교체로 캐시가 분리(detached) 됐을 때 즉시 재생성
+    const groups = ensureLabelGroups();
 
     // 지도 회전을 상쇄해 라벨은 항상 정방향
     const counter = -angle;
