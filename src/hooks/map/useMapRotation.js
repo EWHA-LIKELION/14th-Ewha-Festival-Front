@@ -23,6 +23,62 @@ const useMapRotation = ({
   // 라벨 카운터 회전을 위한 그룹 캐시 — [{ element, cx, cy }]
   const labelGroupsRef = useRef([]);
 
+  // SVG label DOM에서 라벨 그룹을 만들고 캐시 (멱등 — 이미 만들어졌으면 재사용)
+  const ensureLabelGroups = useCallback(() => {
+    if (labelGroupsRef.current.length > 0) return labelGroupsRef.current;
+    const layer = labelLayerRef.current;
+    if (!layer) return [];
+    const svg = layer.querySelector('svg');
+    if (!svg) return [];
+
+    // 이미 그룹화된 <g data-label>이 있으면 재사용 (StrictMode/리렌더 대비)
+    const existing = Array.from(svg.querySelectorAll('g[data-label]'));
+    if (existing.length > 0) {
+      const groups = existing
+        .map((g) => {
+          const m = g
+            .getAttribute('transform')
+            ?.match(/rotate\([^)]*?\s+([\d.-]+)\s+([\d.-]+)\)/);
+          if (!m) return null;
+          return { element: g, cx: parseFloat(m[1]), cy: parseFloat(m[2]) };
+        })
+        .filter(Boolean);
+      labelGroupsRef.current = groups;
+      return groups;
+    }
+
+    // 새로 그룹화 — mask 기준으로 인접 path들을 묶음
+    const masks = Array.from(svg.querySelectorAll('mask'));
+    const groups = [];
+    masks.forEach((mask) => {
+      const x = parseFloat(mask.getAttribute('x'));
+      const y = parseFloat(mask.getAttribute('y'));
+      const w = parseFloat(mask.getAttribute('width'));
+      const h = parseFloat(mask.getAttribute('height'));
+      if (isNaN(x) || isNaN(y) || isNaN(w) || isNaN(h)) return;
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+
+      const paths = [];
+      let next = mask.nextElementSibling;
+      while (next && next.tagName.toLowerCase() !== 'mask') {
+        if (next.tagName.toLowerCase() === 'path') paths.push(next);
+        next = next.nextElementSibling;
+      }
+      if (paths.length === 0) return;
+
+      const g = document.createElementNS(SVG_NS, 'g');
+      g.setAttribute('data-label', 'true');
+      g.setAttribute('transform', `rotate(0 ${cx} ${cy})`);
+      paths[0].parentNode.insertBefore(g, paths[0]);
+      paths.forEach((p) => g.appendChild(p));
+      groups.push({ element: g, cx, cy });
+    });
+
+    labelGroupsRef.current = groups;
+    return groups;
+  }, []);
+
   const applyTransform = useCallback(() => {
     const el = svgContentRef.current;
     if (!el) return;
@@ -32,12 +88,16 @@ const useMapRotation = ({
     }
     const angle = rotationRef.current;
     el.style.transform = `rotate(${angle}deg)`;
+
+    // 라벨 그룹이 비어있으면 즉석에서 채움 (타이밍 문제 fallback)
+    const groups = labelGroupsRef.current.length > 0 ? labelGroupsRef.current : ensureLabelGroups();
+
     // 지도 회전을 상쇄해 라벨은 항상 정방향
     const counter = -angle;
-    labelGroupsRef.current.forEach(({ element, cx, cy }) => {
+    groups.forEach(({ element, cx, cy }) => {
       element.setAttribute('transform', `rotate(${counter} ${cx} ${cy})`);
     });
-  }, [rotationRef, rotationOriginRef]);
+  }, [rotationRef, rotationOriginRef, ensureLabelGroups]);
 
   // 두 손가락 회전 제스처
   useEffect(() => {
@@ -68,7 +128,6 @@ const useMapRotation = ({
       const rotatedLocalY = (localScreenY - positionY) / scale;
 
       // 회전 역변환 (실제 SVG 로컬 좌표를 얻기 위함)
-      // 회전이 적용된 상태에서 화면 미드포인트의 진짜 로컬 좌표는 Rot(-R)을 한번 더 적용해야 함
       const oldOrigin = rotationOriginRef.current;
       const R = rotationRef.current;
       let newOriginX, newOriginY;
@@ -140,59 +199,14 @@ const useMapRotation = ({
     };
   }, [mapRef, transformRef, savedTransform, rotationRef, rotationOriginRef, applyTransform]);
 
-  // labelSvg 로드 후: mask 기준으로 라벨 path들을 <g>로 그룹화
+  // labelSvg 로드 후: 그룹화 수행 (이미 그룹화돼있으면 재사용)
   useEffect(() => {
     if (!labelSvg) return;
-    const layer = labelLayerRef.current;
-    if (!layer) return;
-    const svg = layer.querySelector('svg');
-    if (!svg) return;
-
-    const masks = Array.from(svg.querySelectorAll('mask'));
-    const groups = [];
-
-    masks.forEach((mask) => {
-      const x = parseFloat(mask.getAttribute('x'));
-      const y = parseFloat(mask.getAttribute('y'));
-      const w = parseFloat(mask.getAttribute('width'));
-      const h = parseFloat(mask.getAttribute('height'));
-      if (isNaN(x) || isNaN(y) || isNaN(w) || isNaN(h)) return;
-      const cx = x + w / 2;
-      const cy = y + h / 2;
-
-      // mask의 다음 형제부터 다음 mask 전까지의 path들을 라벨로 묶음
-      const paths = [];
-      let next = mask.nextElementSibling;
-      while (next && next.tagName.toLowerCase() !== 'mask') {
-        if (next.tagName.toLowerCase() === 'path') paths.push(next);
-        next = next.nextElementSibling;
-      }
-      if (paths.length === 0) return;
-
-      const g = document.createElementNS(SVG_NS, 'g');
-      g.setAttribute('data-label', 'true');
-      g.setAttribute('transform', `rotate(0 ${cx} ${cy})`);
-      paths[0].parentNode.insertBefore(g, paths[0]);
-      paths.forEach((p) => g.appendChild(p));
-      groups.push({ element: g, cx, cy });
-    });
-
-    labelGroupsRef.current = groups;
+    ensureLabelGroups();
     if (rotationRef.current !== 0) applyTransform();
-
-    return () => {
-      // 그룹화로 변경한 DOM을 원복 — 다음 effect 실행 시 path를 다시 찾을 수 있도록
-      groups.forEach(({ element }) => {
-        const parent = element.parentNode;
-        if (!parent) return;
-        while (element.firstChild) {
-          parent.insertBefore(element.firstChild, element);
-        }
-        parent.removeChild(element);
-      });
-      labelGroupsRef.current = [];
-    };
-  }, [labelSvg, applyTransform, rotationRef]);
+    // cleanup 없음 — dangerouslySetInnerHTML이 재할당될 때 DOM이 통째로 바뀌어
+    // 다음 effect에서 ensureLabelGroups가 새로 그룹화함 (existing 체크로 idempotent)
+  }, [labelSvg, ensureLabelGroups, applyTransform, rotationRef]);
 
   return { svgContentRef, labelLayerRef };
 };
