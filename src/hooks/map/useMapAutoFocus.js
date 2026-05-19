@@ -22,16 +22,20 @@ const useMapAutoFocus = ({
   focusPOI,
   setFilter,
   setActivePOIId,
+  resetRotation,
 }) => {
   // 배리어프리 페이지 진입 시
+  // 회전 상태를 0으로 초기화 후 포커스 이동 — 라벨 SVG 교체와 회전이 겹치면
+  // 카운터 회전 타이밍이 꼬이므로 진입 시점에 깔끔한 초기 상태로 리셋
   useEffect(() => {
     if (!matchBarrierFree) return;
+    resetRotation();
     setFilter('booth', 'location', []);
     setFilter('etc', 'location', []);
     setFilter('show', 'location', []);
     setActivePOIId(null);
     focusBuilding('GRASS_GROUND');
-  }, [matchBarrierFree, setFilter, setActivePOIId, focusBuilding]);
+  }, [matchBarrierFree, resetRotation, setFilter, setActivePOIId, focusBuilding]);
 
   // 부스 상세 페이지 진입 시
   useEffect(() => {

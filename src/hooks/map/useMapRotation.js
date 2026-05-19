@@ -215,7 +215,15 @@ const useMapRotation = ({
     applyTransform();
   }, [labelSvg, ensureLabelGroups, applyTransform]);
 
-  return { svgContentRef, labelLayerRef };
+  // 회전값을 0으로 초기화 — 배리어프리 진입처럼 라벨 SVG가 교체되는 경로에서
+  // 회전 상태가 라벨/포커스 계산을 복잡하게 만들기 때문에 진입 시 리셋
+  const resetRotation = useCallback(() => {
+    rotationRef.current = 0;
+    rotationOriginRef.current = null;
+    applyTransform();
+  }, [rotationRef, rotationOriginRef, applyTransform]);
+
+  return { svgContentRef, labelLayerRef, resetRotation };
 };
 
 export default useMapRotation;

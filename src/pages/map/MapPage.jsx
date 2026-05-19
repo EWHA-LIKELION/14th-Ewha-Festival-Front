@@ -92,7 +92,7 @@ const MapPage = () => {
   const { buildingSvg, labelSvg, poisSvg } = useMapAssets(useArtistAssets);
 
   // 회전 제스처 + 라벨 카운터 회전
-  const { svgContentRef, labelLayerRef } = useMapRotation({
+  const { svgContentRef, labelLayerRef, resetRotation } = useMapRotation({
     mapRef,
     transformRef,
     labelSvg,
@@ -163,6 +163,7 @@ const MapPage = () => {
     focusPOI,
     setFilter,
     setActivePOIId,
+    resetRotation,
   });
 
   // 지도 building/POI is-active 클래스를 앱 상태와 DOM 동기화
