@@ -5,22 +5,9 @@
 import Footer from '@/components/Footer';
 import ImageCard from '@/components/Card/ImageCard';
 import { useScrollToTop } from '@/hooks';
-import { useEffect, useState } from 'react';
-import HomeModal from '@/components/HomeModal';
 
 const HomePage = () => {
   useScrollToTop();
-
-  const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    const hiddenDate = localStorage.getItem('hide');
-    const today = new Date().toDateString();
-
-    if (hiddenDate !== today) {
-      setShowModal(true);
-    }
-  }, []);
 
   const goFestivalInstagram = () => {
     window.open('https://www.instagram.com/ewha_festa/', '_blank');
@@ -28,12 +15,6 @@ const HomePage = () => {
 
   return (
     <>
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <HomeModal onClose={() => setShowModal(false)} />
-        </div>
-      )}
-
       {/* 축제 포스터 */}
       <img
         className="h-auto w-full"

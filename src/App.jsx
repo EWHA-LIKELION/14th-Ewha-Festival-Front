@@ -20,6 +20,8 @@ import ImageModal from '@/components/ImageModal';
 import useFilterSheetStore from '@/store/useFilterSheetStore';
 import FilterSheet from '@/features/FilterSheet';
 import Loading from '@/components/Loading';
+import HomeModal from '@/components/HomeModal';
+import useHomeModal from '@/hooks/useHomeModal';
 
 // 홈 & 기타 페이지
 import HomePage from '@/pages/home/HomePage';
@@ -55,6 +57,7 @@ function App() {
   const { type, text, isOpen, closeToast } = useToastStore();
   const { alert, closeAlert } = useAlertStore();
   const { image: modalImage, closeImageModal } = useImageModalStore();
+  const { showHomeModal, closeHomeModal } = useHomeModal();
 
   return (
     <main className="app">
@@ -163,6 +166,18 @@ function App() {
               onCancel={alert.onCancel || closeAlert}
               onConfirm={alert.onConfirm}
             />
+          </div>
+        </>
+      )}
+
+      {/* HomeModal */}
+      {showHomeModal && (
+        <>
+          <div className="fixed inset-0 z-40">
+            <Scrim />
+          </div>
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <HomeModal onClose={closeHomeModal} />
           </div>
         </>
       )}
