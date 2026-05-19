@@ -5,7 +5,7 @@
  * - SVG mask 기준으로 라벨 path들을 <g>로 그룹화하여 카운터 회전 적용
  */
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -205,15 +205,14 @@ const useMapRotation = ({
     };
   }, [mapRef, transformRef, savedTransform, rotationRef, rotationOriginRef, applyTransform]);
 
-  // labelSvg 로드 후: 그룹화 수행 (이미 그룹화돼있으면 재사용)
-  // applyTransform을 무조건 호출 — 새 <g>는 rotate(0)으로 만들어지므로
-  // 현재 rotation에 맞춰 카운터 회전을 즉시 적용해야 라벨이 정방향 유지됨
-  useEffect(() => {
+  // labelSvg 로드 후: 그룹화 수행 + 카운터 회전 적용
+  // useLayoutEffect — commit 직후 paint 이전에 동기 실행되어
+  // dangerouslySetInnerHTML 교체 후 풀려보이는 중간 paint를 막음
+  // (useEffect는 paint 이후 실행이라 한 프레임 라벨이 회전 풀린 채로 깜빡임)
+  useLayoutEffect(() => {
     if (!labelSvg) return;
     ensureLabelGroups();
     applyTransform();
-    // cleanup 없음 — dangerouslySetInnerHTML이 재할당될 때 DOM이 통째로 바뀌어
-    // 다음 effect에서 ensureLabelGroups가 새로 그룹화함 (existing 체크로 idempotent)
   }, [labelSvg, ensureLabelGroups, applyTransform]);
 
   return { svgContentRef, labelLayerRef };
