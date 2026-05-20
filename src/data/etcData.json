@@ -38,6 +38,7 @@
   { "category": "DISH", "location": "SPORT_TRACK", "number": 1 },
   { "category": "DISH", "location": "SPORT_TRACK", "number": 2 },
   { "category": "FOOD", "location": "SPORT_TRACK", "number": 1 },
+  { "category": "STUFF", "location": "SPORT_TRACK", "number": 1 },
   { "category": "TRASH", "location": "SPORT_TRACK", "number": 1 },
   { "category": "TRASH", "location": "SPORT_TRACK", "number": 2 },
   { "category": "TRASH", "location": "SPORT_TRACK", "number": 3 }
