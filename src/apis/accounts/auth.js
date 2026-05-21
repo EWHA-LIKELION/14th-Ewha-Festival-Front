@@ -1,5 +1,5 @@
 /**
- * 로그인, 로그아웃 (쿠키 기반)
+ * 로그인, 로그아웃, 토큰 재발급 (쿠키 기반)
  */
 
 import api from '@/apis/api';
@@ -21,8 +21,22 @@ export const logout = async () => {
   }
 };
 
+/**
+ * Access Token 재발급
+ * 쿠키에 담긴 Refresh Token으로 새 Access Token을 발급받습니다.
+ * 요청 바디는 없으며, 응답의 Set-Cookie로 access/refresh 토큰이 갱신됩니다.
+ *
+ * 보통은 응답 인터셉터(api.js)가 401 발생 시 자동으로 호출하므로
+ * 컴포넌트에서 직접 호출할 일은 거의 없습니다.
+ */
+export const refresh = async () => {
+  const { data } = await api.post('/accounts/refresh/');
+  return data;
+};
+
 const AuthAPI = {
   logout,
+  refresh,
 };
 
 export default AuthAPI;
