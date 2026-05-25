@@ -7,6 +7,7 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: '/14th-Ewha-Festival-Front/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
