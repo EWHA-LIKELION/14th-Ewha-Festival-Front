@@ -4,7 +4,7 @@
 
 import BottomsheetScrim from '@/components/BottomsheetScrim';
 import useAuthStore from '@/store/useAuthStore';
-import { asset } from '@/utils/assetPath';
+import logoKakaotalkLogin from '@/assets/icons/logo-kakaotalk-login.svg';
 
 const LoginSheet = () => {
   const closeLoginSheet = useAuthStore((s) => s.closeLoginSheet);
@@ -31,7 +31,7 @@ const LoginSheet = () => {
           className="mb-3 flex w-full items-center justify-center gap-2.5 rounded-lg bg-[#FEE500] px-5 py-3"
           onClick={handleKakaoLogin}
         >
-          <img src={asset('/icons/logo-kakaotalk-login.svg')} alt="kakaotalk-logo" />
+          <img src={logoKakaotalkLogin} alt="kakaotalk-logo" />
           <p className="text-base font-medium text-black/85">카카오 로그인</p>
         </button>
       </div>

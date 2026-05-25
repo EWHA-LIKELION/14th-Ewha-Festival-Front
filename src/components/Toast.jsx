@@ -3,15 +3,16 @@
  */
 
 import { useState, useEffect } from 'react';
-import { asset } from '@/utils/assetPath';
+import iconGreenCheck from '@/assets/icons/icon-greencheck.svg';
+import iconAlertRed from '@/assets/icons/icon-alert-red.svg';
 
 const Toast = ({ type = 'check', text = '' }) => {
   return (
     <div className="backdrop-blur-token-lg flex w-full items-center gap-2 rounded-lg bg-black/50 px-5 py-3">
       {type === 'check' ? (
-        <img src={asset('/icons/icon-greencheck.svg')} />
+        <img src={iconGreenCheck} />
       ) : (
-        <img src={asset('/icons/icon-alert-red.svg')} />
+        <img src={iconAlertRed} />
       )}
       <p className="text-sm leading-5 font-medium tracking-normal text-white">{text}</p>
     </div>

@@ -2,7 +2,7 @@
  * Alert 컴포넌트 ( variant: delete-삭제(기본), confirm-확인, error-오류)
  */
 
-import { asset } from '@/utils/assetPath';
+import iconAlert from '@/assets/icons/icon-alert.svg';
 
 const Alert = ({
   variant = 'delete',
@@ -21,7 +21,7 @@ const Alert = ({
         className={`flex flex-col items-center justify-center gap-2 ${isDelete || isError ? 'p-0' : 'p-4'}`}
       >
         {/* 아이콘은 삭제/오류인 경우만 */}
-        {(isDelete || isError) && <img src={asset('/icons/icon-alert.svg')} />}
+        {(isDelete || isError) && <img src={iconAlert} />}
 
         {/* 타이틀 */}
         <h2 className="mt-0.5 text-center text-lg leading-6 font-semibold tracking-normal text-zinc-800">

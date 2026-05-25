@@ -15,7 +15,8 @@ import { BOOTH_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
 import { formatScheduleDate } from '@/utils/dateHelper';
 import { mapSnsUrls } from '@/utils/snsHelper';
-import { asset } from '@/utils/assetPath';
+import defaultImageLarge from '@/assets/images/default-image-large.png';
+import iconEclipseGray from '@/assets/icons/icon-eclipse-gray.svg';
 
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import Header from '@/components/Header';
@@ -88,7 +89,7 @@ const BoothDetailSheet = () => {
           <>
             <Header left="back" />
             <img
-              src={resolveMediaUrl(booth.thumbnail) || asset('/images/default-image-large.png')}
+              src={resolveMediaUrl(booth.thumbnail) || defaultImageLarge}
               className={`${booth.thumbnail ? 'cursor-pointer' : 'cursor-default'} flex aspect-49/30 w-full items-center justify-center object-cover`}
               onClick={() => {
                 if (booth.thumbnail) openImageModal(resolveMediaUrl(booth.thumbnail));
@@ -124,7 +125,7 @@ const BoothDetailSheet = () => {
 
                     {booth.is_ongoing !== undefined && (
                       <>
-                        {categoryText && <img src={asset('/icons/icon-eclipse-gray.svg')} />}
+                        {categoryText && <img src={iconEclipseGray} />}
                         <Badge state={booth.is_ongoing ? 'operating' : 'closed'} size="md" />
                       </>
                     )}
@@ -184,7 +185,7 @@ const BoothDetailSheet = () => {
 
                       {booth.roadview && (
                         <>
-                          <img src={asset('/icons/icon-eclipse-gray.svg')} />
+                          <img src={iconEclipseGray} />
                           <button
                             className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
                             onClick={() => openImageModal(resolveMediaUrl(booth.roadview))}

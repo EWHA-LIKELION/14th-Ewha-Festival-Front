@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { asset } from '@/utils/assetPath';
+
+import mapBuilding from '@/assets/map/map-building.svg';
+import mapLabel from '@/assets/map/map-label.svg';
+import mapArtistLabel from '@/assets/map/map-artist-label.svg';
+import mapPois from '@/assets/map/map-pois.svg';
+import mapArtistPois from '@/assets/map/map-artist-pois.svg';
 
 /**
  * 지도 SVG 에셋 fetch
@@ -12,18 +17,14 @@ const useMapAssets = (useArtistAssets) => {
   const [poisSvg, setPoisSvg] = useState('');
 
   useEffect(() => {
-    fetch(asset('/map/map-building.svg'))
+    fetch(mapBuilding)
       .then((res) => res.text())
       .then(setBuildingSvg);
   }, []);
 
   useEffect(() => {
-    const labelUrl = useArtistAssets
-      ? asset('/map/map-artist-label.svg')
-      : asset('/map/map-label.svg');
-    const poisUrl = useArtistAssets
-      ? asset('/map/map-artist-pois.svg')
-      : asset('/map/map-pois.svg');
+    const labelUrl = useArtistAssets ? mapArtistLabel : mapLabel;
+    const poisUrl = useArtistAssets ? mapArtistPois : mapPois;
     fetch(labelUrl)
       .then((res) => res.text())
       .then(setLabelSvg);

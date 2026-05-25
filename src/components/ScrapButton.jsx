@@ -7,7 +7,8 @@ import { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuthStore from '@/store/useAuthStore';
 import { BoothAPI, ShowAPI } from '@/apis';
-import { asset } from '@/utils/assetPath';
+import iconScrapActive from '@/assets/icons/icon-scrap-active.svg';
+import iconScrap from '@/assets/icons/icon-scrap.svg';
 
 const ScrapButton = ({
   id,
@@ -134,7 +135,7 @@ const ScrapButton = ({
     >
       {/* 상태에 따라 아이콘 변경 */}
       <img
-        src={isScrapped ? asset('/icons/icon-scrap-active.svg') : asset('/icons/icon-scrap.svg')}
+        src={isScrapped ? iconScrapActive : iconScrap}
         alt="scrap"
         className={mutation.isPending ? 'opacity-50' : ''}
       />

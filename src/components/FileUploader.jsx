@@ -4,7 +4,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useImageUploader } from '@/hooks';
-import { asset } from '@/utils/assetPath';
+import iconAddImage from '@/assets/icons/icon-addimage.svg';
+import iconXmarkBlack from '@/assets/icons/icon-xmarkblack.svg';
+import defaultImageLarge from '@/assets/images/default-image-large.png';
 
 const useImagePreview = (image) => {
   const [previewUrl, setPreviewUrl] = useState('');
@@ -52,7 +54,7 @@ export const DetailImageUploader = ({ image, onChange, onRemove, isLoading = fal
           <img src={previewUrl} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <img src={asset('/icons/icon-addimage.svg')} />
+            <img src={iconAddImage} />
           </div>
         )}
       </div>
@@ -69,7 +71,7 @@ export const DetailImageUploader = ({ image, onChange, onRemove, isLoading = fal
             onChange?.(null);
           }}
         >
-          <img src={asset('/icons/icon-xmarkblack.svg')} alt="삭제" width="16" height="16" />
+          <img src={iconXmarkBlack} alt="삭제" width="16" height="16" />
         </button>
       )}
     </div>
@@ -93,7 +95,7 @@ export const ThumbnailImageUploader = ({ image, onChange, onRemove, isLoading = 
         }}
       />
       <img
-        src={previewUrl || asset('/images/default-image-large.png')}
+        src={previewUrl || defaultImageLarge}
         className="absolute inset-0 h-full w-full object-cover"
       />
       {isLoading && (

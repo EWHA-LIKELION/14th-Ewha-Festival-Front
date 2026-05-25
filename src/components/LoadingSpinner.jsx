@@ -3,7 +3,8 @@
  */
 
 import { useState, useEffect } from 'react';
-import { asset } from '@/utils/assetPath';
+import loadingSpinner from '@/assets/icons/loading-spinner.svg';
+import loadingTail from '@/assets/icons/loading-tail.svg';
 
 const LoadingSpinner = () => {
   const [dots, setDots] = useState(1);
@@ -28,7 +29,7 @@ const LoadingSpinner = () => {
     <div className="flex flex-col items-center gap-4">
       <div className="relative inline-block h-15 w-15">
         <img
-          src={asset('/icons/loading-spinner.svg')}
+          src={loadingSpinner}
           alt="loading-spinner"
           width={60}
           height={60}
@@ -36,7 +37,7 @@ const LoadingSpinner = () => {
           style={{ transform: `rotate(${rotation}deg)` }}
         />
         <img
-          src={asset('/icons/loading-tail.svg')}
+          src={loadingTail}
           alt="loading-tail"
           width={377}
           height={6}

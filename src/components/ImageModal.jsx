@@ -2,7 +2,7 @@
  * ImageModal 컴포넌트
  */
 
-import { asset } from '@/utils/assetPath';
+import iconXmarkWhite from '@/assets/icons/icon-xmarkwhite.svg';
 
 const ImageModal = ({ image, onClose }) => {
   return (
@@ -15,7 +15,7 @@ const ImageModal = ({ image, onClose }) => {
         onClick={onClose}
         className="reactive-width absolute top-16 z-50 flex justify-end pr-6"
       >
-        <img src={asset('/icons/icon-xmarkwhite.svg')} alt="닫기" width="20" height="20" />
+        <img src={iconXmarkWhite} alt="닫기" width="20" height="20" />
       </button>
       <div className="reactive-width relative" onClick={(e) => e.stopPropagation()}>
         {/* 이미지 */}

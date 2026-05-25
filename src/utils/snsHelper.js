@@ -2,11 +2,12 @@
  * SNS URL 매핑 유틸리티
  */
 
-import { asset } from '@/utils/assetPath';
+import logoInstagramColor from '@/assets/icons/logo-instagramcolor.svg';
+import logoKakaotalkColor from '@/assets/icons/logo-kakaotalkcolor.svg';
 
 const SNS_PLATFORMS = [
-  { type: 'instagram', keyword: 'insta', icon: asset('/icons/logo-instagramcolor.svg') },
-  { type: 'kakaotalk', keyword: 'kakao', icon: asset('/icons/logo-kakaotalkcolor.svg') },
+  { type: 'instagram', keyword: 'insta', icon: logoInstagramColor },
+  { type: 'kakaotalk', keyword: 'kakao', icon: logoKakaotalkColor },
 ];
 
 /**

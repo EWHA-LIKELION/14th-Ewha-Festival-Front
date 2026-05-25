@@ -13,6 +13,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    // SVG는 CSS mask-image()로도 쓰이므로 data URL 인라인 금지(파일 URL 유지)
+    assetsInlineLimit: (filePath) => (filePath.endsWith('.svg') ? 0 : undefined),
+  },
   server: {
     // 로컬 개발 환경에서만 HTTPS 활성화 (.pem 파일이 있을 때만)
     https:

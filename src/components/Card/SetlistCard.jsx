@@ -3,13 +3,13 @@
  */
 
 import React from 'react';
-import { asset } from '@/utils/assetPath';
+import iconSetlist from '@/assets/icons/icon-setlist.svg';
 
 const SetlistCard = ({ setlist }) => {
   return (
     <div className="flex w-full items-center justify-start rounded-xl border border-zinc-200 bg-white p-4">
       <div className="flex items-center gap-2.5">
-        <img src={asset('/icons/icon-setlist.svg')} />
+        <img src={iconSetlist} />
         <h2 className="line-clamp-1 overflow-hidden text-sm leading-5 font-medium tracking-normal text-ellipsis text-zinc-800">
           {setlist}
         </h2>

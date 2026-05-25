@@ -2,7 +2,11 @@
  * Footer 컴포넌트
  */
 import { useNavigate } from 'react-router-dom';
-import { asset } from '@/utils/assetPath';
+import footerBackground from '@/assets/images/footer-background.webp';
+import logoLikelion from '@/assets/icons/logo-likelion.svg';
+import logoInstagram from '@/assets/icons/logo-instagram.svg';
+import logoKakaotalk from '@/assets/icons/logo-kakaotalk.svg';
+import logoGithub from '@/assets/icons/logo-github.svg';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -24,7 +28,7 @@ const Footer = () => {
   return (
     <div
       className="relative inset-0 w-full overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: `url(${asset('/images/footer-background.webp')})` }}
+      style={{ backgroundImage: `url(${footerBackground})` }}
     >
       {/* 컨텐츠 */}
       <div className="relative z-10 flex w-full flex-col items-center gap-4 py-5 text-center text-lime-700">
@@ -37,16 +41,16 @@ const Footer = () => {
         <p className="text-xs font-normal">멋쟁이사자처럼 14기 | LIKELION EWHA 14th</p>
         <div className="flex justify-center gap-4">
           <button onClick={goLikelionWebsite}>
-            <img src={asset('/icons/logo-likelion.svg')} alt="likelion-website" />
+            <img src={logoLikelion} alt="likelion-website" />
           </button>
           <button onClick={goLikelionInstagram}>
-            <img src={asset('/icons/logo-instagram.svg')} alt="likelion-instagram" />
+            <img src={logoInstagram} alt="likelion-instagram" />
           </button>
           <button onClick={goLikelionKakaotalk}>
-            <img src={asset('/icons/logo-kakaotalk.svg')} alt="likelion-kakaotalk" />
+            <img src={logoKakaotalk} alt="likelion-kakaotalk" />
           </button>
           <button onClick={goLikelionGithub}>
-            <img src={asset('/icons/logo-github.svg')} alt="likelion-github" />
+            <img src={logoGithub} alt="likelion-github" />
           </button>
         </div>
         <p className="text-xs font-normal whitespace-nowrap text-black/25">
