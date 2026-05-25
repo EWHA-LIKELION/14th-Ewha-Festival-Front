@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
+import { asset } from '@/utils/assetPath';
 
 const TextAreaSend = ({ placeholder, onSend }) => {
   const [value, setValue] = useState('');
@@ -54,7 +55,7 @@ const TextAreaSend = ({ placeholder, onSend }) => {
 
       {hasValue && (
         <img
-          src="/icons/icon-send.svg"
+          src={asset('/icons/icon-send.svg')}
           onClick={handleSend}
           className="absolute right-3 bottom-2 cursor-pointer"
         />

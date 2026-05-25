@@ -15,6 +15,7 @@ import Header from '@/components/Header';
 import Button from '@/components/Button';
 import ImageCard from '@/components/Card/ImageCard';
 import { resolveMediaUrl } from '@/utils/mediaUrl';
+import { asset } from '@/utils/assetPath';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -157,7 +158,7 @@ const MyPage = () => {
           <div className="flex justify-between px-5" onClick={goScrap}>
             <h1>스크랩북({myData?.scrap_count ?? 0})</h1>
             <button className="p-2">
-              <img src="/icons/icon-chevronright.svg" alt="chevron-right" />
+              <img src={asset('/icons/icon-chevronright.svg')} alt="chevron-right" />
             </button>
           </div>
           {(myData?.recent_scraps?.length ?? 0) > 0 ? (
@@ -218,7 +219,7 @@ const MyPage = () => {
             <h1>관리자 인증하기</h1>
           </div>
           <button className="p-2" onClick={goAdminConfirm}>
-            <img src="/icons/icon-chevronright.svg" alt="chevron-right" />
+            <img src={asset('/icons/icon-chevronright.svg')} alt="chevron-right" />
           </button>
         </div>
         {/* 축준위 문의 버튼 */}
@@ -227,7 +228,7 @@ const MyPage = () => {
             variant="bg-white"
             circle
             shadow
-            leftIcon="/icons/logo-kakaotalk.svg"
+            leftIcon={asset('/icons/logo-kakaotalk.svg')}
             iconAlt="kakaotalk"
             onClick={goFestivalKakaotalk}
           >

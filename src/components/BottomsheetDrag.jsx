@@ -5,6 +5,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import { SHEET_SNAP_HEIGHTS as SNAP_HEIGHTS } from '@/constants/bottomsheet';
+import { asset } from '@/utils/assetPath';
 
 const FULL_THRESHOLD = (SNAP_HEIGHTS.large + window.innerHeight) / 2;
 
@@ -191,7 +192,7 @@ const BottomsheetDrag = ({ children, scrollContainerRef }) => {
               onClick={() => setSheetSize('medium')}
               className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-emerald-600 px-5 py-2.5 text-base leading-6 font-medium text-white"
             >
-              <img src="/icons/icon-map-pin.svg" alt="map" />
+              <img src={asset('/icons/icon-map-pin.svg')} alt="map" />
               지도보기
             </button>
           </div>

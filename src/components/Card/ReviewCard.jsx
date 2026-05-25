@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { asset } from '@/utils/assetPath';
 
 const ReviewCard = ({ name, review, ago, showDelete = false, onClick }) => {
   return (
@@ -15,7 +16,7 @@ const ReviewCard = ({ name, review, ago, showDelete = false, onClick }) => {
           <div className="flex w-full items-center justify-end px-2.5 pt-2.5">
             {showDelete && (
               <button onClick={onClick}>
-                <img src="/icons/icon-trash.svg" alt="삭제" width="20" height="20" />
+                <img src={asset('/icons/icon-trash.svg')} alt="삭제" width="20" height="20" />
               </button>
             )}
           </div>

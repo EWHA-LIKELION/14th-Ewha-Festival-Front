@@ -17,6 +17,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from '@/components/SearchBar';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
+import { asset } from '@/utils/assetPath';
 
 const Header = ({
   left = 'none', // back, logo
@@ -85,7 +86,7 @@ const Header = ({
         )}
         {left === 'logo' && (
           <img
-            src="/images/logo-liberte.png"
+            src={asset('/images/logo-liberte.png')}
             alt="logo"
             className="h-7.5 pl-2"
             onClick={() => navigate('/')}

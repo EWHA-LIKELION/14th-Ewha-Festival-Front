@@ -14,6 +14,7 @@ import { BOOTH_LOCATION } from '@/constants/building';
 import { getLabel, padNumber } from '@/utils/labelHelper';
 import { formatScheduleDate } from '@/utils/dateHelper';
 import { mapSnsUrls } from '@/utils/snsHelper';
+import { asset } from '@/utils/assetPath';
 
 import Header from '@/components/Header';
 import ScrapButton from '@/components/ScrapButton';
@@ -93,7 +94,7 @@ const MyBoothPage = () => {
     <>
       <Header left="back" right="edit" background="white" onEdit={goEditPage} onBack={goMyPage} />
       <img
-        src={resolveMediaUrl(booth.thumbnail || '/images/default-image-large.png')}
+        src={resolveMediaUrl(booth.thumbnail) || asset('/images/default-image-large.png')}
         className={`${booth.thumbnail ? 'cursor-pointer' : 'cursor-default'} mt-18 flex aspect-49/30 w-full items-center justify-center object-cover`}
         onClick={() => {
           if (booth.thumbnail) openImageModal(resolveMediaUrl(booth.thumbnail));
@@ -126,7 +127,7 @@ const MyBoothPage = () => {
 
                 {booth.is_ongoing !== undefined && (
                   <>
-                    {categoryText && <img src="/icons/icon-eclipse-gray.svg" />}
+                    {categoryText && <img src={asset('/icons/icon-eclipse-gray.svg')} />}
                     <Badge state={booth.is_ongoing ? 'operating' : 'closed'} size="md" />
                   </>
                 )}
@@ -181,7 +182,7 @@ const MyBoothPage = () => {
 
                   {booth.roadview && (
                     <>
-                      <img src="/icons/icon-eclipse-gray.svg" />
+                      <img src={asset('/icons/icon-eclipse-gray.svg')} />
                       <button
                         className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
                         onClick={() => openImageModal(resolveMediaUrl(booth.roadview))}

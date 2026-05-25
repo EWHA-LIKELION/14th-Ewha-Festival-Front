@@ -15,6 +15,7 @@ import { SHOW_LOCATION } from '@/constants/building';
 import { getLabel } from '@/utils/labelHelper';
 import { formatScheduleDate } from '@/utils/dateHelper';
 import { mapSnsUrls } from '@/utils/snsHelper';
+import { asset } from '@/utils/assetPath';
 
 import BottomsheetDrag from '@/components/BottomsheetDrag';
 import Header from '@/components/Header';
@@ -99,7 +100,7 @@ const ShowDetailSheet = () => {
           <>
             <Header left="back" />
             <img
-              src={resolveMediaUrl(show.thumbnail) || '/images/default-image-large.png'}
+              src={resolveMediaUrl(show.thumbnail) || asset('/images/default-image-large.png')}
               className={`${show.thumbnail ? 'cursor-pointer' : 'cursor-default'} flex aspect-49/30 w-full items-center justify-center object-cover`}
               onClick={() => {
                 if (show.thumbnail) openImageModal(resolveMediaUrl(show.thumbnail));
@@ -135,7 +136,7 @@ const ShowDetailSheet = () => {
 
                     {show.is_ongoing !== undefined && (
                       <>
-                        {categoryText && <img src="/icons/icon-eclipse-gray.svg" />}
+                        {categoryText && <img src={asset('/icons/icon-eclipse-gray.svg')} />}
                         <Badge state={getShowState(show.is_ongoing)} size="md" />
                       </>
                     )}
@@ -195,7 +196,7 @@ const ShowDetailSheet = () => {
 
                       {show.roadview && (
                         <>
-                          <img src="/icons/icon-eclipse-gray.svg" />
+                          <img src={asset('/icons/icon-eclipse-gray.svg')} />
                           <button
                             className="text-sm leading-5 font-medium tracking-normal text-zinc-800 underline decoration-solid underline-offset-2"
                             onClick={() => openImageModal(resolveMediaUrl(show.roadview))}
