@@ -8,6 +8,7 @@ import Button from '@/components/Button';
 import useSearchStore from '@/store/useSearchStore';
 import useBottomsheetStore from '@/store/useBottomsheetStore';
 import { useSearch } from '@/hooks';
+import { asset } from '@/utils/assetPath';
 
 const SearchBar = ({ isMap = false }) => {
   const navigate = useNavigate();
@@ -78,14 +79,14 @@ const SearchBar = ({ isMap = false }) => {
         onBlur={() => setIsFocused(false)}
       />
       <Button
-        leftIcon="/icons/icon-search.svg"
+        leftIcon={asset('/icons/icon-search.svg')}
         variant={!(isFocused || searchQuery) ? 'text-gray' : 'text-black'}
         size="md"
         onClick={handleSearch}
         className="absolute top-1/2 right-2.5 -translate-y-1/2"
       />
       <Button
-        leftIcon="/icons/icon-chevronleft.svg"
+        leftIcon={asset('/icons/icon-chevronleft.svg')}
         variant="text-black"
         size="md"
         onMouseDown={(e) => e.preventDefault()}
@@ -95,7 +96,7 @@ const SearchBar = ({ isMap = false }) => {
         }`}
       />
       <Button
-        leftIcon="/icons/icon-xmarkgrey.svg"
+        leftIcon={asset('/icons/icon-xmarkgrey.svg')}
         variant="text-grey"
         size="md"
         iconColor

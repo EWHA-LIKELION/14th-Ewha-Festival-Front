@@ -4,6 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useImageUploader } from '@/hooks';
+import { asset } from '@/utils/assetPath';
 
 const useImagePreview = (image) => {
   const [previewUrl, setPreviewUrl] = useState('');
@@ -51,7 +52,7 @@ export const DetailImageUploader = ({ image, onChange, onRemove, isLoading = fal
           <img src={previewUrl} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <img src="/icons/icon-addimage.svg" />
+            <img src={asset('/icons/icon-addimage.svg')} />
           </div>
         )}
       </div>
@@ -68,7 +69,7 @@ export const DetailImageUploader = ({ image, onChange, onRemove, isLoading = fal
             onChange?.(null);
           }}
         >
-          <img src="/icons/icon-xmarkblack.svg" alt="삭제" width="16" height="16" />
+          <img src={asset('/icons/icon-xmarkblack.svg')} alt="삭제" width="16" height="16" />
         </button>
       )}
     </div>
@@ -92,7 +93,7 @@ export const ThumbnailImageUploader = ({ image, onChange, onRemove, isLoading = 
         }}
       />
       <img
-        src={previewUrl || '/images/default-image-large.png'}
+        src={previewUrl || asset('/images/default-image-large.png')}
         className="absolute inset-0 h-full w-full object-cover"
       />
       {isLoading && (

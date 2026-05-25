@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { asset } from '@/utils/assetPath';
 
 const Carousel = ({ items = [] }) => {
   const navigate = useNavigate();
@@ -119,10 +120,10 @@ const Carousel = ({ items = [] }) => {
       {/* 버튼 레이어 */}
       <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-between px-4">
         <button onClick={handlePrev} className="pointer-events-auto">
-          <img src="/icons/icon-back.svg" alt="back" />
+          <img src={asset('/icons/icon-back.svg')} alt="back" />
         </button>
         <button onClick={handleNext} className="pointer-events-auto">
-          <img src="/icons/icon-forward.svg" alt="forward" />
+          <img src={asset('/icons/icon-forward.svg')} alt="forward" />
         </button>
       </div>
     </div>

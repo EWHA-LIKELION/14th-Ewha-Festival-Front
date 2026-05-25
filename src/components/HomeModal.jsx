@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import Checkbox from '@/components/Checkbox';
+import { asset } from '@/utils/assetPath';
 
 const HomeModal = ({ onClose }) => {
   const [hide, setHide] = useState(false);
@@ -22,7 +23,9 @@ const HomeModal = ({ onClose }) => {
 
   const isOldBanner = now <= deadline;
 
-  const imageSrc = isOldBanner ? '/icons/home-modal-1.svg' : '/icons/home-modal-2.svg';
+  const imageSrc = isOldBanner
+    ? asset('/icons/home-modal-1.svg')
+    : asset('/icons/home-modal-2.svg');
 
   const link = isOldBanner
     ? null

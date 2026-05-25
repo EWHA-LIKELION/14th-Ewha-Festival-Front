@@ -29,6 +29,7 @@ import Button from '@/components/Button';
 import { FESTIVAL_TIME } from '@/constants/time';
 import { resolveMediaUrl } from '@/utils/mediaUrl';
 import { isSnsUrl } from '@/utils/snsHelper';
+import { asset } from '@/utils/assetPath';
 
 const ERROR_TEXT_CLASS = 'text-xs font-normal leading-4 font-normal tracking-0';
 const ERROR_TEXT_STYLE = {
@@ -767,7 +768,7 @@ const BoothEditPage = () => {
                     SNS 링크
                   </h2>
                   <div className="flex items-center gap-3 self-stretch">
-                    <img src="/icons/logo-instagramcolor.svg" className="rounded-md" />
+                    <img src={asset('/icons/logo-instagramcolor.svg')} className="rounded-md" />
                     <Input
                       variant="square_white"
                       value={form.snsInstagram}
@@ -782,7 +783,7 @@ const BoothEditPage = () => {
                     </p>
                   )}
                   <div className="flex items-center gap-3 self-stretch">
-                    <img src="/icons/logo-kakaotalkcolor.svg" className="rounded-md" />
+                    <img src={asset('/icons/logo-kakaotalkcolor.svg')} className="rounded-md" />
                     <Input
                       variant="square_white"
                       value={form.snsKakao}
@@ -821,7 +822,7 @@ const BoothEditPage = () => {
                     ])
                   }
                 >
-                  <img src="/icons/icon-addimage-white.svg" />
+                  <img src={asset('/icons/icon-addimage-white.svg')} />
                 </Button>
 
                 {notices.map((notice, idx) => (
@@ -906,7 +907,7 @@ const BoothEditPage = () => {
                   />
                 ))}
                 <Button onClick={handleItemAdd} className="text-sm">
-                  <img src="/icons/icon-addimage-white.svg" />
+                  <img src={asset('/icons/icon-addimage-white.svg')} />
                 </Button>
               </div>
             </div>

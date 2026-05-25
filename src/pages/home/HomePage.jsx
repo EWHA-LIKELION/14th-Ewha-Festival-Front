@@ -5,6 +5,7 @@
 import Footer from '@/components/Footer';
 import ImageCard from '@/components/Card/ImageCard';
 import { useScrollToTop } from '@/hooks';
+import { asset } from '@/utils/assetPath';
 
 const HomePage = () => {
   useScrollToTop();
@@ -18,7 +19,7 @@ const HomePage = () => {
       {/* 축제 포스터 */}
       <img
         className="h-auto w-full"
-        src="/images/home-poster.webp"
+        src={asset('/images/home-poster.webp')}
         alt="home-poster"
         width={784}
         height={1720}
@@ -33,15 +34,15 @@ const HomePage = () => {
         <p className="text-base font-bold">축제준비위원회 공지 바로가기</p>
         <img
           className="absolute right-7 bottom-0"
-          src="/icons/logo-festival-pic.svg"
+          src={asset('/icons/logo-festival-pic.svg')}
           alt="logo-festival"
         />
       </button>
       {/* Booth */}
       <div className="flex flex-col gap-12 pt-20 pb-24">
         <div className="flex flex-col items-center">
-          <img className="h-12.5 w-12.5" src="/icons/icon-star.svg" alt="star" />
-          <img className="pt-4 pb-8" src="/icons/icon-booth.svg" alt="booth" />
+          <img className="h-12.5 w-12.5" src={asset('/icons/icon-star.svg')} alt="star" />
+          <img className="pt-4 pb-8" src={asset('/icons/icon-booth.svg')} alt="booth" />
           <p className="text-center text-xs font-normal text-zinc-500">
             다채로운 부스가 학교 곳곳에서 펼쳐집니다.
             <br />
@@ -54,13 +55,13 @@ const HomePage = () => {
           <div className="flex gap-3 overflow-hidden">
             <img
               className="h-45 w-full rounded-r-xl object-cover"
-              src="/images/home-booth-1.webp"
+              src={asset('/images/home-booth-1.webp')}
               alt="booth-image"
               loading="lazy"
             />
             <img
               className="h-45 w-full rounded-l-xl object-cover"
-              src="/images/home-booth-2.webp"
+              src={asset('/images/home-booth-2.webp')}
               alt="booth-image"
               loading="lazy"
             />
@@ -68,13 +69,13 @@ const HomePage = () => {
           <div className="flex gap-3 overflow-hidden">
             <img
               className="h-45 w-full rounded-r-xl object-cover"
-              src="/images/home-booth-3.webp"
+              src={asset('/images/home-booth-3.webp')}
               alt="booth-image"
               loading="lazy"
             />
             <img
               className="h-45 w-full rounded-l-xl object-cover"
-              src="/images/home-booth-4.webp"
+              src={asset('/images/home-booth-4.webp')}
               alt="booth-image"
               loading="lazy"
             />
@@ -84,9 +85,9 @@ const HomePage = () => {
       {/* Events */}
       <div
         className="relative inset-0 flex flex-col items-center gap-10 overflow-hidden bg-cover bg-center py-[4.44rem]"
-        style={{ backgroundImage: 'url(/images/home-event-bg.webp)' }}
+        style={{ backgroundImage: `url(${asset('/images/home-event-bg.webp')})` }}
       >
-        <img className="h-12.5 w-39.5" src="/icons/icon-event.svg" alt="event" />
+        <img className="h-12.5 w-39.5" src={asset('/icons/icon-event.svg')} alt="event" />
         <div className="flex flex-col gap-5 text-center text-xs font-normal text-white">
           <p>
             이화 비빔밥 한 숟갈 먹고,
@@ -112,11 +113,11 @@ const HomePage = () => {
       {/* Performance */}
       <div className="flex flex-col gap-10 py-24">
         <div className="flex flex-col items-center">
-          <img src="/icons/icon-performance.svg" alt="performance" />
+          <img src={asset('/icons/icon-performance.svg')} alt="performance" />
           <div className="flex gap-1 pt-4 pb-8">
-            <img className="h-7.5 w-7.5" src="/icons/icon-star.svg" alt="star" />
-            <img className="h-7.5 w-7.5" src="/icons/icon-star.svg" alt="star" />
-            <img className="h-7.5 w-7.5" src="/icons/icon-star.svg" alt="star" />
+            <img className="h-7.5 w-7.5" src={asset('/icons/icon-star.svg')} alt="star" />
+            <img className="h-7.5 w-7.5" src={asset('/icons/icon-star.svg')} alt="star" />
+            <img className="h-7.5 w-7.5" src={asset('/icons/icon-star.svg')} alt="star" />
           </div>
           <p className="text-center text-xs font-normal text-zinc-500">
             이화의 무대를 빛낼 벗들과 아티스트의 공연이 진행됩니다.
@@ -130,13 +131,13 @@ const HomePage = () => {
           <div className="flex gap-3 overflow-hidden">
             <img
               className="h-43.25 w-full rounded-r-xl object-cover"
-              src="/images/home-performance-1.webp"
+              src={asset('/images/home-performance-1.webp')}
               alt="performance-image"
               loading="lazy"
             />
             <img
               className="h-43.25 w-full rounded-l-xl object-cover"
-              src="/images/home-performance-2.webp"
+              src={asset('/images/home-performance-2.webp')}
               alt="performance-image"
               loading="lazy"
             />
@@ -144,13 +145,13 @@ const HomePage = () => {
           <div className="flex gap-3 overflow-hidden">
             <img
               className="h-39.75 w-full rounded-r-xl object-cover"
-              src="/images/home-performance-3.webp"
+              src={asset('/images/home-performance-3.webp')}
               alt="performance-image"
               loading="lazy"
             />
             <img
               className="h-39.75 w-full rounded-l-xl object-cover"
-              src="/images/home-performance-4.webp"
+              src={asset('/images/home-performance-4.webp')}
               alt="performance-image"
               loading="lazy"
             />

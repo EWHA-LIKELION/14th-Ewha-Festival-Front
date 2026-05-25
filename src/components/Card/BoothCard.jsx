@@ -5,6 +5,7 @@
 import Badge from '@/components/Badge';
 import ScrapButton from '@/components/ScrapButton';
 import { resolveMediaUrl } from '@/utils/mediaUrl';
+import { asset } from '@/utils/assetPath';
 
 const BoothCard = ({ booth, onClick }) => {
   if (!booth) return null;
@@ -63,7 +64,7 @@ const BoothCard = ({ booth, onClick }) => {
       >
         {/* 썸네일 */}
         <img
-          src={resolveMediaUrl(thumbnail) || '/icons/default-image.svg'}
+          src={resolveMediaUrl(thumbnail) || asset('/icons/default-image.svg')}
           alt={name}
           className="h-20 w-20 shrink-0 rounded-md border border-zinc-100 object-cover"
         />
