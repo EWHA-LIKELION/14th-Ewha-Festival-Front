@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="ko">
   <head>
+    <!-- GitHub Pages SPA Routing -->
+    <script>
+      const redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    </script>
+
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
