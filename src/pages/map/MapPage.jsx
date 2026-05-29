@@ -24,7 +24,10 @@ import {
   useShowDetail,
 } from '@/hooks';
 import { padNumber } from '@/utils/labelHelper';
-import { asset } from '@/utils/assetPath';
+import iconMapEtc from '@/assets/icons/icon-map-etc.svg';
+import iconMapBarrierFree from '@/assets/icons/icon-map-barrierfree.svg';
+import iconMapList from '@/assets/icons/icon-map-list.svg';
+import mapBackground from '@/assets/map/map-background.svg';
 import {
   MAP_ZOOM_LEVELS,
   MAP_CLICK_ZOOM_SCALE,
@@ -229,7 +232,7 @@ const MapPage = () => {
           className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchEtc ? 'bg-red-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
-            src={asset('/icons/icon-map-etc.svg')}
+            src={iconMapEtc}
             alt="etc"
             className={`h-4 w-4 shrink-0 ${matchEtc ? 'brightness-0 invert' : ''}`}
           />
@@ -240,7 +243,7 @@ const MapPage = () => {
           className={`shadow-down-lg flex items-center gap-1.5 rounded-full px-4 py-2 text-sm leading-5 font-medium transition-all duration-200 ${matchBarrierFree ? 'bg-teal-400 text-white' : 'bg-white text-zinc-800'}`}
         >
           <img
-            src={asset('/icons/icon-map-barrierfree.svg')}
+            src={iconMapBarrierFree}
             alt="barrierfree"
             className={`h-4 w-4 shrink-0 ${matchBarrierFree ? 'brightness-0 invert' : ''}`}
           />
@@ -277,7 +280,7 @@ const MapPage = () => {
             className="relative h-dvh"
             style={{ aspectRatio: `${SVG_WIDTH} / ${SVG_HEIGHT}` }}
           >
-            <img src={asset('/map/map-background.svg')} alt="map-background" className="h-full w-full" />
+            <img src={mapBackground} alt="map-background" className="h-full w-full" />
             <div
               ref={buildingLayerRef}
               className="building-layer absolute inset-0 [&>svg]:h-full [&>svg]:w-full"
@@ -310,7 +313,7 @@ const MapPage = () => {
             onClick={goList}
             className="shadow-down-lg flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-base leading-6 font-medium text-emerald-600"
           >
-            <img src={asset('/icons/icon-map-list.svg')} alt="list" />
+            <img src={iconMapList} alt="list" />
             목록보기
           </button>
         </div>

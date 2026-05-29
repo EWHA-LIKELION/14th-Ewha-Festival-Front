@@ -3,7 +3,8 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
-import { asset } from '@/utils/assetPath';
+
+import iconChevronDown from '@/assets/icons/icon-chevrondown.svg';
 
 export const Accordion = ({ title, time, isUpdate = false, content }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,7 @@ export const Accordion = ({ title, time, isUpdate = false, content }) => {
       >
         <div className="text-left">{title}</div>
         <div className={`shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-          <img src={asset('/icons/icon-chevrondown.svg')} alt="chevron" width="20" height="20" />
+          <img src={iconChevronDown} alt="chevron" width="20" height="20" />
         </div>
       </button>
       <div
@@ -69,7 +70,7 @@ export const AdminAccordion = ({ title, children }) => {
         >
           {title}
           <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-            <img src={asset('/icons/icon-chevrondown.svg')} alt="chevron" width="20" height="20" />
+            <img src={iconChevronDown} alt="chevron" width="20" height="20" />
           </div>
         </button>
       </div>

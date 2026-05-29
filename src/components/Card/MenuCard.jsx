@@ -10,7 +10,7 @@
 import React from 'react';
 import Divider from '@/components/Divider';
 import Badge from '@/components/Badge';
-import { asset } from '@/utils/assetPath';
+import defaultImage from '@/assets/images/default-image.png';
 
 const MenuCard = ({ name, description, price, image, isSelling = true, onImageClick }) => {
   const isDefaultImage = !image;
@@ -40,7 +40,7 @@ const MenuCard = ({ name, description, price, image, isSelling = true, onImageCl
           </h3>
         </div>
         <img
-          src={image || asset('/images/default-image.png')}
+          src={image || defaultImage}
           className={`${image ? 'cursor-pointer' : 'cursor-default'} flex aspect-square h-22 w-22 items-center justify-center rounded-md border border-zinc-100 object-cover object-center`}
         />
       </div>

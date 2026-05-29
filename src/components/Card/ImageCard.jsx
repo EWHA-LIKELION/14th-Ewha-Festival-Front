@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { asset } from '@/utils/assetPath';
+import defaultImage from '@/assets/images/default-image.png';
 
 const ImageCard = ({ image, name, onClick }) => {
   return (
@@ -12,7 +12,7 @@ const ImageCard = ({ image, name, onClick }) => {
       className="flex w-21 shrink-0 cursor-pointer flex-col items-start gap-1.5"
     >
       <img
-        src={image || asset('/images/default-image.png')}
+        src={image || defaultImage}
         alt={name}
         className="flex h-21 w-21 flex-col items-start rounded-lg border border-zinc-100 object-cover object-center"
       />

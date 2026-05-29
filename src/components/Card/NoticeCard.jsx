@@ -3,11 +3,12 @@
  */
 
 import React from 'react';
-import { asset } from '@/utils/assetPath';
+import iconNotice from '@/assets/icons/icon-notice.svg';
+import iconInstagramGray from '@/assets/icons/icon-instagram-gray.svg';
 
 const ICON = {
-  notice: asset('/icons/icon-notice.svg'),
-  instagram: asset('/icons/icon-instagram-gray.svg'),
+  notice: iconNotice,
+  instagram: iconInstagramGray,
 };
 
 const NoticeCard = ({ title, variant = 'notice', onClick, style }) => {

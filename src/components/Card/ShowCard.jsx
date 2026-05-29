@@ -5,7 +5,7 @@
 import Badge from '@/components/Badge';
 import ScrapButton from '@/components/ScrapButton';
 import { resolveMediaUrl } from '@/utils/mediaUrl';
-import { asset } from '@/utils/assetPath';
+import defaultImage from '@/assets/icons/default-image.svg';
 
 const ShowCard = ({ show, onClick }) => {
   if (!show) return null;
@@ -33,7 +33,7 @@ const ShowCard = ({ show, onClick }) => {
     >
       {/* 공연 이미지 */}
       <img
-        src={resolveMediaUrl(thumbnail) || asset('/icons/default-image.svg')}
+        src={resolveMediaUrl(thumbnail) || defaultImage}
         alt={name}
         className="flex aspect-square h-20 w-20 items-center justify-center rounded-md border border-zinc-100 object-cover"
       />

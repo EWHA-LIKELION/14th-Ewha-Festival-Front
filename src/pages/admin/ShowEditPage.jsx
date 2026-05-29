@@ -29,7 +29,9 @@ import Button from '@/components/Button';
 import { FESTIVAL_TIME } from '@/constants/time';
 import { resolveMediaUrl } from '@/utils/mediaUrl';
 import { isSnsUrl } from '@/utils/snsHelper';
-import { asset } from '@/utils/assetPath';
+import logoInstagramColor from '@/assets/icons/logo-instagramcolor.svg';
+import logoKakaotalkColor from '@/assets/icons/logo-kakaotalkcolor.svg';
+import iconAddImageWhite from '@/assets/icons/icon-addimage-white.svg';
 
 const ERROR_TEXT_CLASS = 'text-xs font-normal leading-4 font-normal tracking-0';
 const ERROR_TEXT_STYLE = {
@@ -680,7 +682,7 @@ const ShowEditPage = () => {
                     SNS 링크
                   </h2>
                   <div className="flex items-center gap-3 self-stretch">
-                    <img src={asset('/icons/logo-instagramcolor.svg')} className="rounded-md" />
+                    <img src={logoInstagramColor} className="rounded-md" />
                     <Input
                       variant="square_white"
                       value={form.snsInstagram}
@@ -695,7 +697,7 @@ const ShowEditPage = () => {
                     </p>
                   )}
                   <div className="flex items-center gap-3 self-stretch">
-                    <img src={asset('/icons/logo-kakaotalkcolor.svg')} className="rounded-md" />
+                    <img src={logoKakaotalkColor} className="rounded-md" />
                     <Input
                       variant="square_white"
                       value={form.snsKakao}
@@ -734,7 +736,7 @@ const ShowEditPage = () => {
                     ])
                   }
                 >
-                  <img src={asset('/icons/icon-addimage-white.svg')} />
+                  <img src={iconAddImageWhite} />
                 </Button>
 
                 {notices.map((notice, idx) => (
@@ -835,7 +837,7 @@ const ShowEditPage = () => {
                   </div>
                 ))}
                 <Button onClick={handleSetlistAdd} className="text-sm">
-                  <img src={asset('/icons/icon-addimage-white.svg')} />
+                  <img src={iconAddImageWhite} />
                 </Button>
               </div>
             </div>
