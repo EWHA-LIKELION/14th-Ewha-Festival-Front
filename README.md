@@ -65,7 +65,6 @@
   <img width="30%" src="https://github.com/user-attachments/assets/d3ad6b99-c2d2-4f4d-9172-6994cb9f45a5" />
   <img width="30%" src="https://github.com/user-attachments/assets/e3e0d2a6-c99a-4f2a-8bcd-88a3c3f04975" />
   <img width="30%" src="https://github.com/user-attachments/assets/d2f068f2-ee46-45ec-9ae3-692858ea630a" />
-
 </p>
 
 ### 👉 접속만 하면
@@ -81,6 +80,11 @@
 - **부스 & 공연 관리** — 부스 및 공연 관리자가 실시간으로 정보를 수정할 수 있어요.
 
 <br />
+
+## 🎥 기능 영상
+<video src="./videos/demo.mp4" width="100%" controls autoplay muted loop>
+  브라우저가 비디오 태그를 지원하지 않습니다.
+</video>
 
 ## 🛠 기술 스택
 
