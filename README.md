@@ -82,9 +82,9 @@
 <br />
 
 ## 🎥 기능 영상
-<video src="./videos/demo.mp4" width="100%" controls autoplay muted loop>
-  브라우저가 비디오 태그를 지원하지 않습니다.
-</video>
+https://github.com/user-attachments/assets/ce15fe16-8417-406e-890e-6dd799b25f4c
+
+<br />
 
 ## 🛠 기술 스택
 
